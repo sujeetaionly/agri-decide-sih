@@ -1,0 +1,16 @@
+crop_id,crop_name,season,optimal_sowing_start,optimal_sowing_end,late_cutoff_date,harvest_month
+SOYBEAN,Soybean,Kharif,06-15,07-10,07-25,Oct
+MAIZE,Maize,Kharif,06-15,07-15,07-30,Sep-Oct
+JOWAR,Jowar,Kharif,07-01,07-30,08-15,Oct-Nov
+BAJRA,Bajra,Kharif,06-20,07-15,07-30,Sep-Oct
+WHEAT,Wheat,Rabi,11-01,11-25,12-15,Mar
+TUR,Tur,Kharif,06-15,07-15,07-30,Dec-Jan
+MOONG,Moong,Kharif,06-20,07-10,07-25,Sep
+URAD,Urad,Kharif,06-20,07-10,07-25,Sep
+GRAM,Gram,Rabi,10-15,11-10,11-25,Feb
+COTTON,Cotton,Kharif,05-25,06-25,07-10,Nov-Dec
+GROUNDNUT,Groundnut,Kharif,06-15,07-10,07-25,Oct
+SUNFLOWER,Sunflower,Rabi,10-01,10-30,11-15,Feb
+SUGARCANE,Sugarcane,Adsali/Suru,01-15,02-28,03-15,Dec-Jan
+ONION,Onion,Rabi,10-15,11-15,12-01,Feb-Mar
+TOMATO,Tomato,Rabi,09-15,10-15,11-01,Jan-Feb
