@@ -1,0 +1,24 @@
+Crop,Season,Sowing_Start,Sowing_End,Harvest_Start,Harvest_End,Duration_Days,Water_Requirement_mm,Soil_Type,Recommended_Varieties_Pune,Agronomic_Source
+Soybean,Kharif,15-Jun,15-Jul,25-Sep,25-Oct,100,450-550,Medium to deep black soil,JS-335 / JS-9305 / Phule Kalyani (DS-228) / Phule Agrani,MPKV Rahuri / ICAR-CRIDA Pune Contingency Plan
+Bajra,Kharif,20-Jun,15-Jul,15-Sep,15-Oct,85,350-400,Light to medium well-drained,Shraddha (RHRBH-8609) / Saburi (RHRBH-8924) / Phule Mahashakti,MPKV Rahuri / ICAR-CRIDA
+Maize,Kharif,15-Jun,15-Jul,20-Sep,25-Oct,105,500-600,Medium to heavy well-drained,Ganga-11 / Deccan-103 / Rajarshi / Phule Maharshi,MPKV Rahuri
+Maize,Rabi,15-Oct,15-Nov,15-Feb,15-Mar,115,450-550,Medium to heavy well-drained,Rajarshi / African Tall (Fodder) / Pioneer 30V92,MPKV Rahuri
+Tur,Kharif,15-Jun,10-Jul,15-Dec,15-Jan,170,600-650,Medium to deep black soil,Vipula / BDN-711 / Rajeshwari / Phule Rajeshwari,MPKV Rahuri / ICAR-CRIDA
+Moong,Kharif,15-Jun,10-Jul,20-Aug,15-Sep,70,350-400,Medium black fertile soil,Vaibhav / BPMR-145 / Phule Chetan (PKV Green-2),MPKV Rahuri
+Urad,Kharif,15-Jun,10-Jul,25-Aug,20-Sep,75,350-400,Medium to heavy black soil,TPU-4 / TAU-1 / Phule Udid-1,MPKV Rahuri
+Groundnut,Kharif,15-Jun,15-Jul,15-Oct,15-Nov,115,500-600,Sandy loam to light black soil,JL-24 (Phule Pragati) / JL-501 / Phule Unnati / TAG-24,MPKV Rahuri
+Groundnut,Summer,15-Jan,15-Feb,01-May,30-May,120,600-700,Light well-drained sandy loam,TAG-24 / TG-26 / Phule RHRG-6083 / Phule Unnati,MPKV Rahuri
+Sunflower,Kharif,01-Jul,31-Jul,01-Oct,31-Oct,90,400-500,Medium to deep black soil,Modern / SS-56 / Phule Bhaskar / KBSH-44,MPKV Rahuri
+Sunflower,Rabi,01-Oct,15-Nov,10-Jan,15-Feb,95,350-450,Medium to deep moisture retentive soil,Phule Bhaskar / KBSH-1 / MSFH-17,MPKV Rahuri
+Cotton,Kharif,15-Jun,10-Jul,15-Nov,15-Jan,160,650-750,Deep black cotton soil,Bt Hybrids / Phule-688 / Phule Dhanwantary,MPKV Rahuri / ICAR-CICR
+Jowar,Rabi,15-Sep,15-Oct,15-Jan,15-Feb,120,400-500,Medium to deep black soil (Vertisols),M-35-1 (Maldandi) / Phule Yashodha / Phule Anuradha / Phule Revati / Phule Vasudha,MPKV Rahuri / ICAR-IIMR
+Gram,Rabi,01-Oct,15-Nov,15-Jan,15-Mar,105,350-450,Medium to deep moisture retentive black soil,Vijay / Digvijay / Phule Vikram / Vishal / Kripa (Kabuli),MPKV Rahuri
+Wheat,Rabi,01-Nov,30-Nov,15-Feb,15-Mar,115,450-550,Deep fertile clay-loam to black soil,HD-2189 / NIAW-301 (Trimbak) / Phule Samadhan / Netravati / MACS-6222,MPKV Rahuri / ICAR-IIWBR
+Onion,Kharif,15-Jun,15-Jul,15-Oct,15-Nov,110,500-600,Well drained rich loam to light black,Baswant-780 / Phule Samarth / N-53 / Agrifound Dark Red,ICAR-DOGR Rajgurunagar Pune / NHB
+Onion,Late_Kharif,15-Aug,15-Sep,15-Jan,15-Feb,120,550-650,Well drained fertile loam,Phule Samarth / Bhima Red / Bhima Super,ICAR-DOGR Rajgurunagar Pune
+Onion,Rabi,15-Oct,30-Nov,15-Apr,30-May,130,600-700,Deep sandy loam to clay loam,Bhima Kiran / Bhima Shakti / N-2-4-1 / Phule Safed,ICAR-DOGR Rajgurunagar Pune / NHB
+Tomato,Kharif,15-Jun,15-Jul,15-Sep,15-Nov,120,600-700,Well drained fertile sandy loam,Abhinav / Shivam / Phule Raja / Rohini / Vaishali,MPKV Rahuri / IIHR
+Tomato,Rabi,15-Oct,15-Nov,15-Jan,15-Apr,130,600-750,Well drained rich organic loam,Abhinav / US-440 / Arka Rakshak / Phule Raja,MPKV Rahuri / IIHR
+Sugarcane,Adsali,15-Jul,15-Aug,15-Nov,15-Feb,510,2200-2500,Deep fertile well-drained heavy black soil,CoM-0265 (Phule-265) / Co-86032 (Nira) / VSI-434,Vasantdada Sugar Institute (VSI) Pune / MPKV
+Sugarcane,Pre_Seasonal,15-Oct,15-Nov,15-Dec,15-Mar,435,1800-2000,Deep fertile heavy black soil,Co-86032 / CoM-0265 / MS-10001,VSI Pune / MPKV
+Sugarcane,Suru,15-Jan,28-Feb,15-Dec,15-Feb,365,1500-1700,Deep fertile well-drained loam,Co-86032 / CoC-671 / Co-94012 (Phule Savitri),VSI Pune / MPKV
