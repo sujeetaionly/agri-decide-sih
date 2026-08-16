@@ -1,0 +1,127 @@
+{
+    "rmse": 5.4977,
+    "rmse_log_space": 0.0746,
+    "rmse_standard_crops_avg": 0.5673,
+    "mae": 1.6801,
+    "r2": 0.9918,
+    "r2_log_space": 0.9947,
+    "best_params": {
+        "subsample": 0.9,
+        "reg_lambda": 1,
+        "reg_alpha": 0.1,
+        "n_estimators": 700,
+        "min_child_weight": 1,
+        "max_depth": 4,
+        "learning_rate": 0.05,
+        "gamma": 0,
+        "colsample_bytree": 0.8
+    },
+    "per_crop_metrics": {
+        "BAJRA": {
+            "rmse": 0.8106,
+            "mae": 0.6039,
+            "mape_pct": 6.86,
+            "n_samples": 26
+        },
+        "COTTON": {
+            "rmse": 0.4258,
+            "mae": 0.3436,
+            "mape_pct": 6.4,
+            "n_samples": 67
+        },
+        "GRAM": {
+            "rmse": 0.411,
+            "mae": 0.3261,
+            "mape_pct": 6.49,
+            "n_samples": 24
+        },
+        "GROUNDNUT": {
+            "rmse": 0.4935,
+            "mae": 0.366,
+            "mape_pct": 6.96,
+            "n_samples": 23
+        },
+        "JOWAR": {
+            "rmse": 0.57,
+            "mae": 0.4874,
+            "mape_pct": 7.86,
+            "n_samples": 26
+        },
+        "MAIZE": {
+            "rmse": 1.3078,
+            "mae": 0.9999,
+            "mape_pct": 5.72,
+            "n_samples": 54
+        },
+        "MOONG": {
+            "rmse": 0.2023,
+            "mae": 0.1698,
+            "mape_pct": 5.35,
+            "n_samples": 16
+        },
+        "ONION": {
+            "rmse": 4.0554,
+            "mae": 3.1849,
+            "mape_pct": 7.28,
+            "n_samples": 25
+        },
+        "SOYBEAN": {
+            "rmse": 0.5363,
+            "mae": 0.4024,
+            "mape_pct": 5.82,
+            "n_samples": 89
+        },
+        "SUGARCANE": {
+            "rmse": 23.3262,
+            "mae": 18.882,
+            "mape_pct": 7.02,
+            "n_samples": 26
+        },
+        "SUNFLOWER": {
+            "rmse": 0.3789,
+            "mae": 0.3156,
+            "mape_pct": 7.62,
+            "n_samples": 25
+        },
+        "TOMATO": {
+            "rmse": 3.6938,
+            "mae": 2.6418,
+            "mape_pct": 4.62,
+            "n_samples": 26
+        },
+        "TUR": {
+            "rmse": 0.4317,
+            "mae": 0.3171,
+            "mape_pct": 6.97,
+            "n_samples": 37
+        },
+        "URAD": {
+            "rmse": 0.2809,
+            "mae": 0.2159,
+            "mape_pct": 8.65,
+            "n_samples": 12
+        },
+        "WHEAT": {
+            "rmse": 0.9591,
+            "mae": 0.7683,
+            "mape_pct": 7.89,
+            "n_samples": 24
+        }
+    },
+    "feature_importance": {
+        "crop_id_encoded": 0.921,
+        "water_level": 0.0368,
+        "sowing_delay_days": 0.0175,
+        "soil_type_encoded": 0.015,
+        "prev_crop_match": 0.0098
+    },
+    "training_info": {
+        "n_samples_total": 2500,
+        "n_train": 2000,
+        "n_test": 500,
+        "n_crops": 15,
+        "target_transform": "log1p",
+        "cv_folds": 5,
+        "search_iterations": 50
+    }
+}
