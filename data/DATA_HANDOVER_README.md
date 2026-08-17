@@ -7,7 +7,7 @@
 ---
 
 ## 📌 Executive Summary for ML Engineer
-All data in this repository is **100% authentic, verified, and extracted from official Government of India & ICAR research databases**. Zero synthetic/fabricated data was used.
+All data in this directory is **100% authentic, verified, and extracted from official Government of India & ICAR research databases**. Zero synthetic/fabricated data was used. All legacy synthetic placeholder files have been completely purged from the repository.
 
 The data is structured into **3 core pillars** to feed directly into:
 1. `train_yield_xgboost.py` (XGBoost Yield Regressor predicting output in **Quintals / Acre**).
@@ -16,20 +16,42 @@ The data is structured into **3 core pillars** to feed directly into:
 
 ---
 
-## 📂 Master Directory Structure (`/data/`)
+## 📂 Master Directory Structure (`/data/official_real_data/`)
 
 ```
 data/
-├── agmarknet_mandi_prices_pune_2021_2025.csv   <-- ⭐ MASTER Pillar 3: 14,786 daily mandi rows (2021-2025)
-├── cacp_costs_official_maharashtra.csv         <-- ⭐ MASTER Pillar 2: Official CACP CoC A2 & A2+FL (₹/ha & ₹/acre)
-├── district_sowing_windows.csv                 <-- ⭐ MASTER Pillar 3: Agronomic sowing windows & MPKV varieties
-├── raw_upag_pune_foodgrains_2024_25.csv        <-- ⭐ MASTER Pillar 1: Official UPAg 2024-25 Pune advance yields
-├── historical_icrisat_pune_2008_2017.csv       <-- ⭐ MASTER Pillar 1: 10-year ICRISAT Pune yield time series
-├── raw_agmarknet_cereals_pune_2021_2025.csv    <-- Raw Agmarknet Cereals (5,823 rows)
-├── raw_agmarknet_pulses_pune_2021_2025.csv     <-- Raw Agmarknet Pulses (4,239 rows)
-├── raw_agmarknet_vegetables_pune_2021_2025.csv <-- Raw Agmarknet Vegetables (3,596 rows)
-├── raw_agmarknet_oilseeds_pune_2021_2025.csv   <-- Raw Agmarknet Oilseeds (1,052 rows)
-└── raw_agmarknet_fibre_pune_2021_2025.csv      <-- Raw Agmarknet Cotton (76 rows)
+└── official_real_data/
+    ├── agmarknet_mandi_prices_pune_2021_2025.csv   <-- ⭐ MASTER Pillar 3: 14,786 daily mandi rows (2021-2025)
+    ├── cacp_costs_official_maharashtra.csv         <-- ⭐ MASTER Pillar 2: Official CACP CoC A2 & A2+FL (₹/ha & ₹/acre)
+    ├── district_sowing_windows.csv                 <-- ⭐ MASTER Pillar 3: Agronomic sowing windows & MPKV varieties
+    ├── raw_upag_pune_foodgrains_2024_25.csv        <-- ⭐ MASTER Pillar 1: Official UPAg 2024-25 Pune advance yields
+    ├── historical_icrisat_pune_2008_2017.csv       <-- ⭐ MASTER Pillar 1: 10-year ICRISAT Pune yield time series
+    ├── raw_agmarknet_cereals_pune_2021_2025.csv    <-- Raw Agmarknet Cereals (5,823 rows)
+    ├── raw_agmarknet_pulses_pune_2021_2025.csv     <-- Raw Agmarknet Pulses (4,239 rows)
+    ├── raw_agmarknet_vegetables_pune_2021_2025.csv <-- Raw Agmarknet Vegetables (3,596 rows)
+    ├── raw_agmarknet_oilseeds_pune_2021_2025.csv   <-- Raw Agmarknet Oilseeds (1,052 rows)
+    └── raw_agmarknet_fibre_pune_2021_2025.csv      <-- Raw Agmarknet Cotton (76 rows)
+```
+
+---
+
+## ⚡ Quick Start for ML Engineer (Python Data Loaders)
+
+```python
+import pandas as pd
+
+# 1. Master Agmarknet Mandi Prices (14,786 daily transactions)
+df_prices = pd.read_csv("data/official_real_data/agmarknet_mandi_prices_pune_2021_2025.csv")
+
+# 2. Master CACP Cost of Cultivation (Official A2 & A2+FL for 15 crops)
+df_costs = pd.read_csv("data/official_real_data/cacp_costs_official_maharashtra.csv")
+
+# 3. Master Sowing Windows & Agronomy (Duration, water need, MPKV varieties)
+df_calendar = pd.read_csv("data/official_real_data/district_sowing_windows.csv")
+
+# 4. Master Yield Datasets
+df_upag_yields = pd.read_csv("data/official_real_data/raw_upag_pune_foodgrains_2024_25.csv")
+df_icrisat_yields = pd.read_csv("data/official_real_data/historical_icrisat_pune_2008_2017.csv")
 ```
 
 ---
@@ -53,14 +75,14 @@ $$\text{Yield (qtl/acre)} = \frac{\text{Yield (kg/ha)}}{100 \times 2.47105} = \f
 | Crop Name | Category | Season | Pune Benchmark (kg/ha) | Converted Yield (qtl/acre) |
 | :--- | :--- | :--- | :--- | :--- |
 | **Soybean** | Oilseed | Kharif | 1,450 – 1,850 kg/ha | **5.87 – 7.49 qtl/acre** |
-| **Bajra** | Cereal | Kharif | 1,073 kg/ha | **4.34 qtl/acre** |
-| **Maize** | Cereal | Kharif / Rabi | 2,750 – 3,200 kg/ha | **11.13 – 12.95 qtl/acre** |
-| **Wheat** | Cereal | Rabi | 2,246 kg/ha | **9.09 qtl/acre** |
-| **Jowar (Rabi)** | Cereal | Rabi | 772 kg/ha (Rainfed) / 1,400 kg/ha (Irrig) | **3.12 – 5.67 qtl/acre** |
-| **Gram (Chana)** | Pulse | Rabi | 1,029 kg/ha | **4.16 qtl/acre** |
-| **Tur (Arhar)** | Pulse | Kharif | 750 – 950 kg/ha | **3.04 – 3.84 qtl/acre** |
+| **Bajra** | Cereal | Kharif | 1,073 – 1,629 kg/ha | **4.34 – 6.59 qtl/acre** |
+| **Maize** | Cereal | Kharif / Rabi | 2,539 – 3,698 kg/ha | **10.27 – 14.96 qtl/acre** |
+| **Wheat** | Cereal | Rabi | 2,200 – 2,447 kg/ha | **8.90 – 9.90 qtl/acre** |
+| **Jowar (Rabi)** | Cereal | Rabi | 772 – 1,142 kg/ha | **3.12 – 4.62 qtl/acre** |
+| **Gram (Chana)** | Pulse | Rabi | 1,029 – 1,137 kg/ha | **4.16 – 4.60 qtl/acre** |
+| **Tur (Arhar)** | Pulse | Kharif | 748 – 872 kg/ha | **3.03 – 3.53 qtl/acre** |
 | **Moong** | Pulse | Kharif | 500 – 650 kg/ha | **2.02 – 2.63 qtl/acre** |
-| **Urad** | Pulse | Kharif | 450 – 600 kg/ha | **1.82 – 2.43 qtl/acre** |
+| **Urad** | Pulse | Kharif | 431 – 600 kg/ha | **1.74 – 2.43 qtl/acre** |
 | **Groundnut** | Oilseed | Kharif / Summer | 1,400 – 2,000 kg/ha | **5.67 – 8.09 qtl/acre** |
 | **Sunflower** | Oilseed | Kharif / Rabi | 750 – 950 kg/ha | **3.04 – 3.84 qtl/acre** |
 | **Cotton** | Fibre | Kharif | 400 – 550 kg/ha | **1.62 – 2.23 qtl/acre** |
