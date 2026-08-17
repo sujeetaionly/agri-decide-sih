@@ -1,0 +1,22 @@
+district,market_name,crop_id,crop_name,year,month_num,modal_price_qtl,min_price_qtl,max_price_qtl
+Pune,Baramati,SOYBEAN,Soybean,2025,10,4750.0,4400.0,5100.0
+Pune,Baramati,SOYBEAN,Soybean,2025,11,4600.0,4300.0,4900.0
+Pune,Baramati,SOYBEAN,Soybean,2025,12,4550.0,4200.0,4800.0
+Pune,Baramati,MAIZE,Maize,2025,10,2150.0,1950.0,2300.0
+Pune,Baramati,MAIZE,Maize,2025,11,2100.0,1900.0,2250.0
+Pune,Baramati,TUR,Tur / Arhar,2025,12,7400.0,6900.0,7800.0
+Pune,Baramati,TUR,Tur / Arhar,2026,1,7200.0,6800.0,7600.0
+Pune,Baramati,COTTON,Cotton,2025,11,6500.0,6100.0,6900.0
+Pune,Baramati,COTTON,Cotton,2025,12,6350.0,6000.0,6700.0
+Pune,Baramati,BAJRA,Bajra,2025,10,2500.0,2250.0,2700.0
+Pune,Baramati,MOONG,Moong,2025,9,7600.0,7100.0,8100.0
+Pune,Baramati,MOONG,Moong,2025,10,7450.0,7000.0,7900.0
+Pune,Baramati,GROUNDNUT,Groundnut,2025,11,5900.0,5500.0,6300.0
+Pune,Baramati,WHEAT,Wheat,2026,3,2350.0,2150.0,2500.0
+Pune,Baramati,GRAM,Gram / Chana,2026,3,5600.0,5200.0,5900.0
+Pune,Baramati,JOWAR,Jowar,2025,10,2950.0,2700.0,3200.0
+Pune,Baramati,URAD,Urad,2025,10,7200.0,6700.0,7600.0
+Pune,Baramati,SUNFLOWER,Sunflower,2025,10,6250.0,5800.0,6600.0
+Pune,Baramati,SUGARCANE,Sugarcane,2025,12,320.0,300.0,340.0
+Pune,Baramati,ONION,Onion,2025,10,2100.0,1400.0,2800.0
+Pune,Baramati,TOMATO,Tomato,2025,10,1800.0,1100.0,2500.0
