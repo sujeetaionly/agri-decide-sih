@@ -47,6 +47,11 @@ Thumbs.db
 .env.test.local
 .env.production.local
 
+# Databases
+*.db
+*.sqlite3
+*.sqlite
+
 # ML Artifacts (Large weights)
 *.h5
 *.tflite
