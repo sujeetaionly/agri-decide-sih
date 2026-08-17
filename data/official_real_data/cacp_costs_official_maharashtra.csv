@@ -1,0 +1,16 @@
+crop_id,crop_name,season,cacp_report_source,cacp_a2_inr_per_ha,cacp_a2_fl_inr_per_ha,operational_cost_a2_inr_per_acre,total_cost_a2_fl_inr_per_acre
+SOYBEAN,Soybean,Kharif,"CACP Kharif 2024-25 (Para 5.11)",47969,52571,19412,21275
+WHEAT,Wheat,Rabi,"CACP Rabi 2024-25 (Para 5.10)",40976,50655,16582,20500
+GRAM,Gram (Chickpea),Rabi,"CACP Rabi 2024-25 (Para 5.12)",33274,39163,13465,15849
+TUR,Tur (Pigeon Pea),Kharif,"CACP Kharif 2024-25 (Para 5.10)",60383,74254,24436,30050
+MOONG,Moong,Kharif,"CACP Kharif 2024-25 (Para 5.10)",34633,42156,14015,17060
+URAD,Urad,Kharif,"CACP Kharif 2024-25 (Para 5.10)",30151,38423,12202,15549
+BAJRA,Bajra,Kharif,"CACP Kharif 2024-25 (Para 5.9)",42661,56723,17264,22955
+SUGARCANE,Sugarcane,Annual,"CACP Sugar Season 2024-25 (Para 5.8)",140981,165308,57053,66897
+GROUNDNUT,Groundnut,Kharif,"CACP Kharif 2024-25 (Para 5.11)",75000,98574,30351,39891
+PADDY,Paddy (Rice),Kharif,"CACP Kharif 2024-25 (Para 5.9)",64000,79888,25900,32330
+COTTON,Cotton,Kharif,"CACP Kharif 2024-25 (Para 5.12)",65000,78000,26300,31565
+MAIZE,Maize,Kharif,"CACP Kharif 2024-25 (Para 5.9)",45000,55000,18211,22258
+SUNFLOWER,Sunflower,Kharif,"CACP Kharif 2024-25 (Para 5.11)",32500,38500,13152,15580
+ONION,Onion,Kharif/Rabi,"ICAR-DOGR Pune / NHB Norms",102000,128000,41278,51800
+TOMATO,Tomato,Kharif/Rabi,"NHB / MPKV Rahuri Norms",128500,160500,52002,64952
