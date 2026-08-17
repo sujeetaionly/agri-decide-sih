@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 13 99 27;
+    --primary-container: 46 125 50;
+    --on-primary: 255 255 255;
+    --background: 245 252 237;
+    --on-background: 23 29 20;
+    --surface-lowest: 255 255 255;
+    --surface-low: 239 246 231;
+    --surface-container: 233 240 225;
+    --outline: 112 122 108;
+    --outline-variant: 191 202 186;
+  }
+
+  * {
+    border-color: #dee5d6;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #171d14;
+    background-color: #f5fced;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  /* Hindi Devanagari line-height & font safeguards */
+  :lang(hi) {
+    line-height: 1.65;
+  }
+}
+
+@layer utilities {
+  /* Tactile Button Feedback */
+  .btn-tactile {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .btn-tactile:active {
+    transform: translateY(2px);
+    box-shadow: none !important;
+  }
+
+  /* Custom Safe Scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Material Symbols Font rendering */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    user-select: none;
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .material-symbols-outlined.fill {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+}
+
+/* Sound Wave Animation for Voice Assistant */
+@keyframes soundwave {
+  0%, 100% {
+    height: 12px;
+  }
+  50% {
+    height: 44px;
+  }
+}
+
+.animate-soundwave-1 {
+  animation: soundwave 0.8s ease-in-out infinite alternate;
+}
+.animate-soundwave-2 {
+  animation: soundwave 1.1s ease-in-out infinite alternate 0.15s;
+}
+.animate-soundwave-3 {
+  animation: soundwave 0.7s ease-in-out infinite alternate 0.3s;
+}
+.animate-soundwave-4 {
+  animation: soundwave 1.2s ease-in-out infinite alternate 0.45s;
+}
+.animate-soundwave-5 {
+  animation: soundwave 0.9s ease-in-out infinite alternate 0.6s;
+}
+
+/* Subtle background agricultural pattern */
+.pattern-bg {
+  background-color: #f5fced;
+  background-image: radial-gradient(#dee5d6 1.2px, transparent 1.2px), radial-gradient(#dee5d6 1.2px, #f5fced 1.2px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+}
