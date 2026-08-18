@@ -99,7 +99,7 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-56">
+    <div className="space-y-6 animate-fadeIn pb-2">
       
       {/* Header */}
       <div className="space-y-2">
@@ -244,7 +244,7 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
       </div>
 
       {/* INLINE ACTION BUTTONS (Full-Width Glorious Pills) */}
-      <div className="space-y-3 pt-4 pb-6">
+      <div className="space-y-3 pt-3 pb-2">
         <button
           onClick={() => {
             triggerHaptic('medium');

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { HomeTopAppBar } from '../components/home/HomeTopAppBar';
 import { HomeBottomNav, NavTab } from '../components/home/HomeBottomNav';
-import { triggerHaptic, formatCurrencyINR, formatIndicDate } from '../lib/utils';
+import { triggerHaptic, formatCurrencyINR, formatIndicDate, formatIndicDateTime } from '../lib/utils';
 import { speakText } from '../lib/speech';
 
 interface SavedCropAnalysis {
@@ -81,7 +81,7 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
             total_cost_per_acre: 19412.0,
             expected_yield_qtl_per_acre: 9.5,
             soil_type: 'काली मिट्टी',
-            created_at: '18 अगस्त 2026',
+            created_at: '2026-08-18T10:30:00Z',
           },
         ]);
       } finally {
@@ -160,8 +160,9 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
                         <h3 className="text-xl font-bold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
                           {cropName}
                         </h3>
-                        <span className="text-xs text-stone-500 font-medium">
-                          {soilName}
+                        <span className="text-xs text-stone-500 font-medium flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[13px]">schedule</span>
+                          {formatIndicDateTime(item.created_at)}
                         </span>
                       </div>
                     </div>
@@ -198,13 +199,9 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
                     </div>
                   </div>
 
-                  {/* Footer Row: Clean Date & Working Cost */}
-                  <div className="flex items-center justify-between text-xs text-stone-500 dark:text-stone-400 font-medium pt-2 border-t border-stone-200 dark:border-stone-800 px-1">
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm text-stone-400">calendar_month</span>
-                      <span>दिनांक: {formatIndicDate(item.created_at)}</span>
-                    </span>
-                    <span>लागत: {formatCurrencyINR(item.total_cost_per_acre)}/एकड़</span>
+                  {/* Footer Row: Clean Cost */}
+                  <div className="text-xs text-stone-500 dark:text-stone-400 font-medium pt-2 border-t border-stone-200 dark:border-stone-800 px-1">
+                    <span>लागत: {formatCurrencyINR(item.total_cost_per_acre)} / एकड़</span>
                   </div>
                 </div>
               );

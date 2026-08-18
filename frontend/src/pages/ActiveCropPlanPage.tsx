@@ -36,12 +36,12 @@ export const ActiveCropPlanPage: React.FC<ActiveCropPlanPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col pt-16 pb-24 font-body">
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col pt-16 pb-20 font-body">
       {/* 1. Top Status Bar */}
       <HomeTopAppBar />
 
       {/* 2. Main Content */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-2 pb-6 animate-fadeIn">
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-2 pb-2 animate-fadeIn">
         {/* 120-Day Action Plan Component */}
         <MilestoneCalendarStep onReturnHome={onGoToHome} />
       </main>
