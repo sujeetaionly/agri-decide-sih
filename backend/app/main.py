@@ -1,0 +1,55 @@
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from backend.app.core.config import settings
+from backend.app.core.database import Base, engine
+from backend.app.api.v1.farm_routes import router as farm_router
+from backend.app.api.v1.crop_routes import router as crop_router
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize database tables on application start
+    Base.metadata.create_all(bind=engine)
+    yield
+
+app = FastAPI(
+    title="AGRI-DECIDE API",
+    description="AI-Based Crop Recommendation Engine & Decision Support System (SIH PS #24)",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# Setup CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Register API routers
+app.include_router(farm_router, prefix=settings.API_V1_STR)
+app.include_router(crop_router, prefix=settings.API_V1_STR)
+
+@app.get("/")
+def root():
+    return {
+        "project": "AGRI-DECIDE",
+        "description": "AI-Based Crop Recommendation Engine for Farmers",
+        "status": "online",
+        "docs_url": "/docs",
+        "version": settings.VERSION
+    }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy",
+        "database": "connected"
+    }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=8000, reload=True)
