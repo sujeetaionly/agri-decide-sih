@@ -54,7 +54,7 @@ def test_endpoint_2_farmer_profile():
     assert data["status"] == "success"
     assert "FARMER-" in data["farmer_id"]
 
-def test_endpoint_3_crop_recommendation():
+def test_endpoint_3_crop_recommendation_with_cacp_costs():
     payload = {
         "planned_sowing_date": "2027-06-25",
         "candidate_crops": ["BAJRA", "MOONG", "GROUNDNUT", "SOYBEAN"],
@@ -82,6 +82,15 @@ def test_endpoint_3_crop_recommendation():
     assert len(top["why_recommended"]) >= 2
     assert len(data["comparison_matrix"]) >= 2
 
+    # Verify itemized CACP cost breakdown
+    assert "cost_breakdown" in top
+    assert top["cost_breakdown"] is not None
+    cb = top["cost_breakdown"]
+    assert cb["seed_cost"] > 0
+    assert cb["fertilizer_cost"] > 0
+    assert cb["labour_cost"] > 0
+    assert cb["operational_cost_a2_inr_per_acre"] > 0
+
 def test_endpoint_4_what_if_simulate():
     payload = {
         "sowing_delay_days": 15,
@@ -106,7 +115,7 @@ def test_endpoint_5_crop_calendar():
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "success"
-    assert data["crop_name"] == "Bajra"
+    assert "बाजरा" in data["crop_name"] or "Bajra" in data["crop_name"]
     assert len(data["milestones"]) >= 3
     assert data["milestones"][0]["day_offset"] == 0
 
@@ -123,3 +132,37 @@ def test_auxiliary_geo_locations():
     data = response.json()
     assert data["status"] == "success"
     assert len(data["states"]) >= 2
+
+def test_geo_detect_language():
+    # Maharashtra coordinates
+    response = client.get("/api/v1/geo/detect-language?lat=18.5204&lon=73.8567")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "success"
+    assert data["detected_state"] == "Maharashtra"
+    assert any(lang["code"] == "mr" for lang in data["suggested_languages"])
+
+def test_farmer_history_and_save():
+    save_payload = {
+        "farmer_id": "TEST-FARMER-1",
+        "planned_sowing_date": "2027-06-25",
+        "total_land_acres": 2.5,
+        "soil_type": "BLACK",
+        "water_source": "WELL",
+        "top_recommended_crop": "SOYBEAN",
+        "crop_name_hi": "सोयाबीन",
+        "crop_name_mr": "सोयाबीन",
+        "expected_yield_qtl_per_acre": 9.5,
+        "total_cost_per_acre": 19412.0,
+        "expected_profit_per_acre": 24500.0,
+        "match_score": 94.0
+    }
+    save_resp = client.post("/api/v1/farmer/save-analysis", json=save_payload)
+    assert save_resp.status_code == 201
+
+    history_resp = client.get("/api/v1/farmer/TEST-FARMER-1/history")
+    assert history_resp.status_code == 200
+    hist_data = history_resp.json()
+    assert hist_data["total_records"] >= 1
+    assert hist_data["history"][0]["top_recommended_crop"] == "SOYBEAN"
+    assert hist_data["history"][0]["expected_profit_per_acre"] == 24500.0

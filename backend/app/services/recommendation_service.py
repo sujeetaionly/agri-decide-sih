@@ -3,6 +3,8 @@ Recommendation Service:
 Orchestrates multi-crop evaluation, suitability scoring, CACP economics,
 sowing window analysis, explainable reasoning generation, and comparison matrices.
 """
+import os
+import pandas as pd
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
 
@@ -17,41 +19,68 @@ from backend.app.services.sowing_window_service import evaluate_sowing_window
 from backend.app.models_ml.yield_predictor import predict_crop_yield
 from backend.app.models_ml.price_forecaster import get_harvest_mandi_price
 
-# Fallback CACP Costs per Acre if DB records are not yet seeded
+# Load CACP Itemized Cost Breakdown from CSV
+CACP_CSV_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "..", "..", "data", "official_real_data", "cacp_itemized_costs_pune.csv"
+)
+
+ITEMIZED_CACP_COSTS: Dict[str, Dict[str, float]] = {}
+
+if os.path.exists(CACP_CSV_PATH):
+    try:
+        df_cacp = pd.read_csv(CACP_CSV_PATH)
+        for _, row in df_cacp.iterrows():
+            cid = str(row["crop_id"]).upper().strip()
+            ITEMIZED_CACP_COSTS[cid] = {
+                "seed_cost": float(row.get("seed_cost", 1500.0)),
+                "fertilizer_cost": float(row.get("fertilizer_cost", 2500.0)),
+                "pesticide_cost": float(row.get("pesticide_cost", 1000.0)),
+                "machinery_rental_cost": float(row.get("machinery_rental_cost", 2500.0)),
+                "labour_cost": float(row.get("labour_cost", 4000.0)),
+                "irrigation_electricity_cost": float(row.get("irrigation_electricity_cost", 800.0)),
+                "operational_cost_a2_inr_per_acre": float(row.get("operational_cost_a2_inr_per_acre", 15000.0)),
+                "family_labor_cost_per_acre": float(row.get("family_labor_cost_per_acre", 3000.0)),
+                "total_cost_a2_fl_inr_per_acre": float(row.get("total_cost_a2_fl_inr_per_acre", 18000.0)),
+            }
+    except Exception as e:
+        print(f"[WARN] Error loading CACP itemized CSV: {e}")
+
+# Fallback CACP Costs per Acre if CSV or DB records are not available
 DEFAULT_CACP_COSTS = {
-    "SOYBEAN": 28800.0,
-    "MAIZE": 26300.0,
-    "TUR": 24300.0,
-    "COTTON": 40300.0,
-    "BAJRA": 18800.0,
-    "MOONG": 20300.0,
-    "GROUNDNUT": 32300.0,
-    "WHEAT": 24500.0,
-    "GRAM": 19500.0,
-    "JOWAR": 21000.0,
-    "URAD": 20000.0,
-    "SUNFLOWER": 25000.0,
-    "SUGARCANE": 68000.0,
-    "ONION": 45000.0,
-    "TOMATO": 52000.0
+    "SOYBEAN": 19412.0,
+    "MAIZE": 18211.0,
+    "TUR": 24436.0,
+    "COTTON": 26300.0,
+    "BAJRA": 17264.0,
+    "MOONG": 14015.0,
+    "GROUNDNUT": 30351.0,
+    "WHEAT": 16582.0,
+    "GRAM": 13465.0,
+    "JOWAR": 16000.0,
+    "URAD": 12202.0,
+    "SUNFLOWER": 13152.0,
+    "SUGARCANE": 57053.0,
+    "ONION": 41278.0,
+    "TOMATO": 52002.0
 }
 
+# Clean Pure Indic Names (No Hybrid English Clutter)
 CROP_NAMES = {
-    "SOYBEAN": {"en": "Soybean (JS-335)", "hi": "सोयाबीन (जेएस-335)", "duration": 95, "category": "OILSEED"},
-    "MAIZE": {"en": "Maize (Hybrid HQPM-1)", "hi": "मक्का (एचक्यूपीएम-1)", "duration": 105, "category": "CEREAL"},
-    "TUR": {"en": "Tur / Arhar (BDN-711)", "hi": "अरहर / तुअर (बीडीएन-711)", "duration": 180, "category": "PULSE"},
-    "COTTON": {"en": "Cotton (Bt Hybrid)", "hi": "कपास (बीटी हाइब्रिड)", "duration": 160, "category": "FIBRE"},
-    "BAJRA": {"en": "Bajra (Pearl Millet - HHB 67)", "hi": "बाजरा (एचएचबी 67)", "duration": 85, "category": "CEREAL"},
-    "MOONG": {"en": "Moong (Green Gram - IPM 205-7)", "hi": "मूंग (ग्रीन ग्राम - विराट)", "duration": 70, "category": "PULSE"},
-    "GROUNDNUT": {"en": "Groundnut (TG-37A)", "hi": "मूंगफली (टीजी-37ए)", "duration": 120, "category": "OILSEED"},
-    "WHEAT": {"en": "Wheat (HD-2967)", "hi": "गेहूं (एचडी-2967)", "duration": 125, "category": "CEREAL"},
-    "GRAM": {"en": "Gram / Chana (Digvijay)", "hi": "चना (दिग्विजय)", "duration": 110, "category": "PULSE"},
-    "JOWAR": {"en": "Jowar / Sorghum (CSH-16)", "hi": "ज्वार (सीएसएच-16)", "duration": 100, "category": "CEREAL"},
-    "URAD": {"en": "Urad (Black Gram - TAU-1)", "hi": "उड़द (टीएयू-1)", "duration": 75, "category": "PULSE"},
-    "SUNFLOWER": {"en": "Sunflower (KBSH-53)", "hi": "सूरजमुखी (केबीएसएच-53)", "duration": 90, "category": "OILSEED"},
-    "SUGARCANE": {"en": "Sugarcane (Co-86032)", "hi": "गन्ना (को-86032)", "duration": 360, "category": "COMMERCIAL"},
-    "ONION": {"en": "Onion (Bhima Super)", "hi": "प्याज (भीमा सुपर)", "duration": 120, "category": "HORTICULTURE"},
-    "TOMATO": {"en": "Tomato (Abhinav)", "hi": "टमाटर (अभिनव)", "duration": 130, "category": "HORTICULTURE"},
+    "SOYBEAN": {"en": "Soybean", "hi": "सोयाबीन", "mr": "सोयाबीन", "duration": 95, "category": "OILSEED"},
+    "MAIZE": {"en": "Maize", "hi": "मक्का", "mr": "मका", "duration": 105, "category": "CEREAL"},
+    "TUR": {"en": "Tur", "hi": "अरहर", "mr": "तूर", "duration": 180, "category": "PULSE"},
+    "COTTON": {"en": "Cotton", "hi": "कपास", "mr": "कापूस", "duration": 160, "category": "FIBRE"},
+    "BAJRA": {"en": "Bajra", "hi": "बाजरा", "mr": "बाजरी", "duration": 85, "category": "CEREAL"},
+    "MOONG": {"en": "Moong", "hi": "मूंग", "mr": "मूग", "duration": 70, "category": "PULSE"},
+    "GROUNDNUT": {"en": "Groundnut", "hi": "मूंगफली", "mr": "भुईमूग", "duration": 120, "category": "OILSEED"},
+    "WHEAT": {"en": "Wheat", "hi": "गेहूं", "mr": "गहू", "duration": 125, "category": "CEREAL"},
+    "GRAM": {"en": "Gram", "hi": "चना", "mr": "हरभरा", "duration": 110, "category": "PULSE"},
+    "JOWAR": {"en": "Jowar", "hi": "ज्वार", "mr": "ज्वारी", "duration": 100, "category": "CEREAL"},
+    "URAD": {"en": "Urad", "hi": "उड़द", "mr": "उडीद", "duration": 75, "category": "PULSE"},
+    "SUNFLOWER": {"en": "Sunflower", "hi": "सूरजमुखी", "mr": "सूर्यफूल", "duration": 90, "category": "OILSEED"},
+    "SUGARCANE": {"en": "Sugarcane", "hi": "गन्ना", "mr": "ऊस", "duration": 360, "category": "COMMERCIAL"},
+    "ONION": {"en": "Onion", "hi": "प्याज", "mr": "कांदा", "duration": 120, "category": "HORTICULTURE"},
+    "TOMATO": {"en": "Tomato", "hi": "टमाटर", "mr": "टोमॅटो", "duration": 130, "category": "HORTICULTURE"},
 }
 
 def generate_why_recommended(
@@ -66,36 +95,33 @@ def generate_why_recommended(
     suitability_pct: float
 ) -> List[str]:
     """
-    Generates explainable, localized rationale bullets for why this crop ranks #1.
+    Generates explainable, localized rationale bullets in pure Indic language.
     """
     crop_info = CROP_NAMES.get(crop_id, {"en": crop_id, "hi": crop_id, "duration": 90, "category": "CEREAL"})
     bullets = []
 
-    # 1. Soil Match Bullet
     soil_names = {
-        "BLACK": "काली मिट्टी (Black Soil)",
-        "LOAM": "दोमट मिट्टी (Loam Soil)",
-        "RED": "लाल मिट्टी (Red Soil)",
-        "SANDY": "बलुई मिट्टी (Sandy Soil)"
+        "BLACK": "काली मिट्टी",
+        "LOAM": "दोमट मिट्टी",
+        "RED": "लाल मिट्टी",
+        "SANDY": "बलुई मिट्टी",
+        "CLAY": "चिकनी मिट्टी"
     }
     soil_desc = soil_names.get(soil_type.upper(), "दोमट मिट्टी")
-    bullets.append(f"{soil_desc} और खरीफ जलवायु के साथ {round(suitability_pct)}% सर्वोत्तम कृषि अनुकूलता।")
+    bullets.append(f"{soil_desc} और स्थानीय मौसम के साथ {round(suitability_pct)}% सबसे उत्तम कृषि अनुकूलता।")
 
-    # 2. Duration and Water
     water_desc = "पर्याप्त" if water_capacity.upper() in ["MEDIUM", "HIGH"] else "सीमित"
-    bullets.append(f"{crop_info['duration']} दिनों की अवधि और {water_source} से {water_desc} पानी में सुरक्षित पैदावार।")
+    bullets.append(f"{crop_info['duration']} दिनों की फसल अवधि में {water_source} से {water_desc} पानी में सुरक्षित पैदावार।")
 
-    # 3. Budget Fit
     if working_capital >= adjusted_cost:
-        bullets.append(f"कम लागत (₹{int(adjusted_cost):,}/एकड़) आपके ₹{int(working_capital):,} के बजट में पूर्णतः अनुकूल।")
+        bullets.append(f"अनुमानित लागत (₹{int(adjusted_cost):,}/एकड़) आपके ₹{int(working_capital):,} के बजट में पूर्णतः सुरक्षित।")
     else:
-        bullets.append(f"लागत ₹{int(adjusted_cost):,}/एकड़ के साथ अधिकतम लाभ अनुपात।")
+        bullets.append(f"लागत ₹{int(adjusted_cost):,}/एकड़ के साथ सर्वाधिक शुद्ध मुनाफा।")
 
-    # 4. Crop rotation
     if previous_crop and previous_crop.upper() in ["WHEAT", "RICE", "MAIZE"] and crop_info["category"] in ["PULSE", "OILSEED"]:
-        bullets.append(f"{previous_crop.title()} के बाद दलहन/तिलहन फसल चक्र (Crop Rotation) से भूमि उर्वरता में वृद्धि।")
+        bullets.append(f"पिछली फसल के बाद दलहन/तिलहन फसल चक्र से खेत की उर्वरा शक्ति में वृद्धि।")
     else:
-        bullets.append("क्षेत्रीय मंडी में सुलभ मांग और न्यूनतम मूल्य जोखिम।")
+        bullets.append("क्षेत्रीय कृषि मंडी में सुलभ मांग और स्थिर भाव।")
 
     return bullets
 
@@ -115,8 +141,7 @@ def recommend_crops_engine(
     db: Optional[Session] = None
 ) -> Dict[str, Any]:
     """
-    Core Recommendation Engine.
-    Evaluates candidate crops, calculates CACP economics, yields, and ranks them.
+    Core Recommendation Engine with itemized CACP cost breakdowns and pure Indic output.
     """
     # 1. Resolve candidate crop list
     if not candidate_crops or len(candidate_crops) == 0:
@@ -127,12 +152,11 @@ def recommend_crops_engine(
     else:
         active_candidates = [c.upper().strip() for c in candidate_crops]
 
-    # Clean list of available crops
     valid_candidates = [c for c in active_candidates if c in CROP_NAMES]
     if not valid_candidates:
         valid_candidates = ["SOYBEAN", "MAIZE", "TUR", "COTTON"]
 
-    # 2. Evaluate Sowing Window for first candidate / district general
+    # 2. Evaluate Sowing Window
     overall_sowing_eval = evaluate_sowing_window(planned_sowing_date)
     effective_sowing_delay = overall_sowing_eval["sowing_delay_days"] + sowing_delay_override
 
@@ -140,21 +164,28 @@ def recommend_crops_engine(
 
     for crop_id in valid_candidates:
         crop_info = CROP_NAMES[crop_id]
-        
-        # 3. Sowing window evaluation for specific crop
-        sowing_eval = evaluate_sowing_window(planned_sowing_date)
         sowing_status_text = "Optimal" if effective_sowing_delay <= 0 else ("Moderate" if effective_sowing_delay <= 15 else "Late")
 
-        # 4. CACP Cost
-        base_cacp = DEFAULT_CACP_COSTS.get(crop_id, 25000.0)
-        if db:
-            cost_rec = db.query(CropCostCACP).filter(CropCostCACP.crop_id == crop_id).first()
-            if cost_rec:
-                base_cacp = cost_rec.total_cost_per_acre
+        # 3. Itemized CACP Cost Breakdown
+        cost_breakdown_dict = ITEMIZED_CACP_COSTS.get(crop_id)
+        if not cost_breakdown_dict:
+            base_cost = DEFAULT_CACP_COSTS.get(crop_id, 20000.0)
+            cost_breakdown_dict = {
+                "seed_cost": round(base_cost * 0.10, 2),
+                "fertilizer_cost": round(base_cost * 0.20, 2),
+                "pesticide_cost": round(base_cost * 0.08, 2),
+                "machinery_rental_cost": round(base_cost * 0.15, 2),
+                "labour_cost": round(base_cost * 0.35, 2),
+                "irrigation_electricity_cost": round(base_cost * 0.07, 2),
+                "operational_cost_a2_inr_per_acre": base_cost,
+                "family_labor_cost_per_acre": round(base_cost * 0.20, 2),
+                "total_cost_a2_fl_inr_per_acre": round(base_cost * 1.20, 2),
+            }
 
+        base_cacp = cost_breakdown_dict["operational_cost_a2_inr_per_acre"]
         adj_cost = calculate_adjusted_cost(base_cacp, owns_tractor, owns_sprayer)
 
-        # 5. ML Yield Prediction
+        # 4. ML Yield Prediction
         yield_pred = predict_crop_yield(
             crop_id=crop_id,
             soil_type=soil_type,
@@ -165,7 +196,7 @@ def recommend_crops_engine(
         )
         exp_yield = yield_pred["expected_yield"]
 
-        # 6. Price Forecast
+        # 5. Price Forecast
         price_info = get_harvest_mandi_price(
             crop_id=crop_id,
             harvest_month=10,
@@ -173,14 +204,13 @@ def recommend_crops_engine(
         )
         fc_price = price_info["forecasted_price_per_qtl"]
 
-        # 7. Economics
+        # 6. Economics
         gross_rev = calculate_gross_revenue(exp_yield, fc_price)
         net_profit = calculate_net_profit(gross_rev, adj_cost)
         profit_per_day = calculate_net_profit_per_day(net_profit, crop_info["duration"])
 
-        # 8. Suitability % Calculation
+        # 7. Suitability % Calculation
         score = 80.0
-        # Soil fit
         if soil_type.upper() == "BLACK" and crop_id in ["SOYBEAN", "COTTON", "TUR", "MAIZE"]:
             score += 10.0
         elif soil_type.upper() in ["SANDY", "RED"] and crop_id in ["BAJRA", "MOONG", "GROUNDNUT"]:
@@ -188,20 +218,17 @@ def recommend_crops_engine(
         elif soil_type.upper() == "SANDY" and crop_id in ["COTTON", "SOYBEAN"]:
             score -= 15.0
 
-        # Water fit
         if water_capacity_level.upper() == "LOW" and crop_id in ["BAJRA", "MOONG", "TUR"]:
             score += 8.0
         elif water_capacity_level.upper() == "LOW" and crop_id in ["COTTON", "SUGARCANE"]:
             score -= 20.0
 
-        # Sowing delay penalty
         if effective_sowing_delay > 10:
             if crop_id in ["MOONG", "BAJRA"]:
-                score += 5.0  # short duration advantage
+                score += 5.0
             else:
                 score -= min(25.0, effective_sowing_delay * 0.8)
 
-        # Crop rotation bonus
         if previous_season_crop and previous_season_crop.upper() in ["WHEAT", "RICE", "MAIZE"] and crop_info["category"] in ["PULSE", "OILSEED"]:
             score += 6.0
 
@@ -211,11 +238,13 @@ def recommend_crops_engine(
             "crop_id": crop_id,
             "crop_name_en": crop_info["en"],
             "crop_name_hi": crop_info["hi"],
+            "crop_name_mr": crop_info.get("mr", crop_info["hi"]),
             "suitability_pct": suitability_pct,
             "duration_days": crop_info["duration"],
             "expected_yield_qtl_per_acre": exp_yield,
             "yield_range_qtl": yield_pred["yield_range"],
             "total_cost_inr_per_acre": adj_cost,
+            "cost_breakdown": cost_breakdown_dict,
             "forecasted_mandi_price_inr_per_qtl": fc_price,
             "expected_net_profit_per_acre_inr": net_profit,
             "net_profit_per_day_inr": profit_per_day,
@@ -224,7 +253,7 @@ def recommend_crops_engine(
             "sort_score": (suitability_pct * 0.5) + (profit_per_day * 0.5)
         })
 
-    # Sort crops by composite sort score descending
+    # Sort crops by composite score descending
     evaluated_crops.sort(key=lambda x: x["sort_score"], reverse=True)
 
     top_crop = evaluated_crops[0]
@@ -244,11 +273,13 @@ def recommend_crops_engine(
         "crop_id": top_crop["crop_id"],
         "crop_name_en": top_crop["crop_name_en"],
         "crop_name_hi": top_crop["crop_name_hi"],
+        "crop_name_mr": top_crop["crop_name_mr"],
         "suitability_pct": top_crop["suitability_pct"],
         "duration_days": top_crop["duration_days"],
         "expected_yield_qtl_per_acre": top_crop["expected_yield_qtl_per_acre"],
         "yield_range_qtl": top_crop["yield_range_qtl"],
         "total_cost_inr_per_acre": top_crop["total_cost_inr_per_acre"],
+        "cost_breakdown": top_crop["cost_breakdown"],
         "forecasted_mandi_price_inr_per_qtl": top_crop["forecasted_mandi_price_inr_per_qtl"],
         "expected_net_profit_per_acre_inr": top_crop["expected_net_profit_per_acre_inr"],
         "net_profit_per_day_inr": top_crop["net_profit_per_day_inr"],
@@ -256,16 +287,17 @@ def recommend_crops_engine(
         "why_recommended": why_bullets
     }
 
-    # Format Comparison Matrix (Top 4 candidate crops)
     comparison_matrix = []
     for item in evaluated_crops[:4]:
         comparison_matrix.append({
             "crop_id": item["crop_id"],
-            "crop_name_en": item["crop_name_en"].split(" (")[0],
-            "crop_name_hi": item["crop_name_hi"].split(" (")[0],
+            "crop_name_en": item["crop_name_en"],
+            "crop_name_hi": item["crop_name_hi"],
+            "crop_name_mr": item["crop_name_mr"],
             "suitability_pct": item["suitability_pct"],
             "sowing_window_status": item["sowing_window_status"],
             "total_cost_inr_per_acre": item["total_cost_inr_per_acre"],
+            "cost_breakdown": item["cost_breakdown"],
             "expected_yield_qtl_per_acre": item["expected_yield_qtl_per_acre"],
             "forecasted_mandi_price_inr_per_qtl": item["forecasted_mandi_price_inr_per_qtl"],
             "expected_net_profit_per_acre_inr": item["expected_net_profit_per_acre_inr"],
