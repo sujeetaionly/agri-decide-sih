@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useWizard } from '../../context/WizardContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { formatCurrencyINR, triggerHaptic } from '../../lib/utils';
@@ -62,40 +63,53 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
     window.open(url, '_blank');
   };
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn overflow-y-auto print:p-0 print:bg-white print:static print:overflow-visible">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn overflow-y-auto print:p-0 print:bg-white print:static print:overflow-visible print:block">
       
-      {/* Inline Print Media Stylesheet to guarantee pristine A4 print output */}
+      {/* Strict Print CSS: Collapses root DOM so EXACTLY 1 A4 Page is generated with ZERO blank pages */}
       <style>{`
         @media print {
           @page {
             size: A4 portrait;
-            margin: 10mm 12mm;
+            margin: 8mm 10mm;
           }
-          body {
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: auto !important;
+            min-height: 0 !important;
             background: #ffffff !important;
             color: #111111 !important;
+            overflow: visible !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
-          body * {
-            visibility: hidden;
+          #root {
+            display: none !important;
           }
-          #printable-slip-container, #printable-slip-container * {
-            visibility: visible;
+          #printable-slip-modal-backdrop {
+            position: static !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: #ffffff !important;
+            display: block !important;
+            overflow: visible !important;
+            width: 100% !important;
+            height: auto !important;
           }
           #printable-slip-container {
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
+            position: relative !important;
             width: 100% !important;
             max-width: 100% !important;
             margin: 0 !important;
-            padding: 20px !important;
+            padding: 14px !important;
             box-shadow: none !important;
             border: 2px solid #0F381E !important;
             background: #ffffff !important;
-            border-radius: 12px !important;
+            border-radius: 8px !important;
+            page-break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           .no-print {
             display: none !important;
@@ -105,19 +119,19 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
 
       <div
         id="printable-slip-container"
-        className="w-full max-w-lg bg-white text-stone-900 rounded-3xl p-6 shadow-2xl space-y-4 border-2 border-stone-300 print:max-w-none print:border-2 print:border-[#0F381E] print:p-6 print:rounded-2xl"
+        className="w-full max-w-lg bg-white text-stone-900 rounded-3xl p-6 shadow-2xl space-y-3.5 border-2 border-stone-300 print:max-w-none print:border-2 print:border-[#0F381E] print:p-4 print:rounded-xl"
       >
         
         {/* Official Header Banner */}
-        <div className="border-b-2 border-emerald-700/40 pb-3 text-center space-y-1">
-          <div className="flex items-center justify-between text-xs font-bold text-emerald-800 pb-1 border-b border-stone-200">
+        <div className="border-b-2 border-emerald-700/40 pb-2.5 text-center space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-bold text-emerald-800 pb-1 border-b border-stone-200">
             <span>भारत सरकार • कृषि एवं किसान कल्याण मंत्रालय</span>
             <span className="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded font-mono">
               प्रमाणित पर्ची #{crop.crop_id}-2026
             </span>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-1">
             <h2 className="text-2xl font-black font-headline text-emerald-900">
               डिजिटल किसान कृषि सलाह पर्ची
             </h2>
@@ -125,13 +139,13 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
               कृषि-वाइज़ एआई (Agri-Decide) • CACP एवं ICAR वैज्ञानिक मानकों पर आधारित
             </p>
             <p className="text-[11px] text-stone-500 pt-0.5">
-              दिनांक: {todayFormatted} • कार्यक्षेत्र: पुणे, महाराष्ट्र • खरीफ मौसम 2026
+              दिनांक: {todayFormatted} • कार्यक्षेत्र: पुणे, महाराष्ट्र • खरीफ मौसम २०२६
             </p>
           </div>
         </div>
 
         {/* Section 1: Farmer & Land Profile */}
-        <div className="bg-stone-50 p-3.5 rounded-2xl border border-stone-300 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        <div className="bg-stone-50 p-3 rounded-xl border border-stone-300 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
           <div>
             <span className="text-stone-500 block text-[10px] font-medium">खेत का आकार</span>
             <span className="font-bold text-stone-900 text-sm">{farmData.landAcres || 2.5} एकड़</span>
@@ -151,7 +165,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
         </div>
 
         {/* Section 2: Recommended Crop Decision Hero */}
-        <div className="bg-emerald-50/80 border-2 border-emerald-600 p-4 rounded-2xl space-y-2.5">
+        <div className="bg-emerald-50/80 border-2 border-emerald-600 p-3.5 rounded-xl space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-black text-emerald-900 uppercase tracking-wider">
               सर्वोत्तम अनुशंसित फसल (Top AI Choice)
@@ -171,8 +185,8 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
           </div>
           
           {/* Key Financial & Yield Scorecards */}
-          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-emerald-300 text-center">
-            <div className="bg-white p-2 rounded-xl border border-emerald-200">
+          <div className="grid grid-cols-3 gap-2 pt-1.5 border-t border-emerald-300 text-center">
+            <div className="bg-white p-2 rounded-lg border border-emerald-200">
               <span className="text-stone-500 block text-[10px] font-bold">अनुमानित शुद्ध लाभ</span>
               <span className="font-black text-emerald-700 text-sm block my-0.5">
                 {formatCurrencyINR(crop.expected_net_profit_per_acre_inr)}
@@ -180,7 +194,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
               <span className="text-[9px] text-stone-400">/ एकड़</span>
             </div>
 
-            <div className="bg-white p-2 rounded-xl border border-emerald-200">
+            <div className="bg-white p-2 rounded-lg border border-emerald-200">
               <span className="text-stone-500 block text-[10px] font-bold">अनुमानित कुल लागत</span>
               <span className="font-black text-amber-800 text-sm block my-0.5">
                 {formatCurrencyINR(crop.total_cost_inr_per_acre)}
@@ -188,7 +202,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
               <span className="text-[9px] text-stone-400">/ एकड़</span>
             </div>
 
-            <div className="bg-white p-2 rounded-xl border border-emerald-200">
+            <div className="bg-white p-2 rounded-lg border border-emerald-200">
               <span className="text-stone-500 block text-[10px] font-bold">अनुमानित पैदावार</span>
               <span className="font-black text-blue-800 text-sm block my-0.5">
                 {crop.expected_yield_qtl_per_acre}
@@ -200,9 +214,9 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
 
         {/* Section 3: Itemized CACP Cost Breakdown */}
         {crop.cost_breakdown && (
-          <div className="space-y-1.5 text-xs">
+          <div className="space-y-1 text-xs">
             <div className="flex items-center justify-between">
-              <h4 className="font-black text-stone-800 text-xs">
+              <h4 className="font-black text-stone-800 text-[11px]">
                 मदवार लागत विवरण (CACP आधिकारिक मानक प्रति एकड़):
               </h4>
               <span className="text-[10px] text-stone-500 font-semibold">
@@ -210,40 +224,69 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-stone-50 p-3 rounded-2xl border border-stone-300 text-xs">
-              <div className="bg-white p-2 rounded-xl border border-stone-200">
-                <span className="text-stone-500 block text-[10px]">बीज खर्च</span>
-                <span className="font-bold text-stone-800">{formatCurrencyINR(crop.cost_breakdown.seed_cost)}</span>
+            <div className="grid grid-cols-3 gap-1.5 bg-stone-50 p-2.5 rounded-xl border border-stone-300 text-xs">
+              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
+                <span className="text-stone-500 block text-[9px]">बीज</span>
+                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.seed_cost)}</span>
               </div>
-              <div className="bg-white p-2 rounded-xl border border-stone-200">
-                <span className="text-stone-500 block text-[10px]">खाद व उर्वरक</span>
-                <span className="font-bold text-stone-800">{formatCurrencyINR(crop.cost_breakdown.fertilizer_cost)}</span>
+              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
+                <span className="text-stone-500 block text-[9px]">खाद व उर्वरक</span>
+                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.fertilizer_cost)}</span>
               </div>
-              <div className="bg-white p-2 rounded-xl border border-stone-200">
-                <span className="text-stone-500 block text-[10px]">कीटनाशक व सुरक्षा</span>
-                <span className="font-bold text-stone-800">{formatCurrencyINR(crop.cost_breakdown.pesticide_cost)}</span>
+              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
+                <span className="text-stone-500 block text-[9px]">कीटनाशक</span>
+                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.pesticide_cost)}</span>
               </div>
-              <div className="bg-white p-2 rounded-xl border border-stone-200">
-                <span className="text-stone-500 block text-[10px]">जुताई व मशीनरी</span>
-                <span className="font-bold text-stone-800">{formatCurrencyINR(crop.cost_breakdown.machinery_rental_cost)}</span>
+              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
+                <span className="text-stone-500 block text-[9px]">जुताई/मशीनरी</span>
+                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.machinery_rental_cost)}</span>
               </div>
-              <div className="bg-white p-2 rounded-xl border border-stone-200">
-                <span className="text-stone-500 block text-[10px]">श्रम व मजदूरी</span>
-                <span className="font-bold text-stone-800">{formatCurrencyINR(crop.cost_breakdown.labour_cost)}</span>
+              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
+                <span className="text-stone-500 block text-[9px]">मजदूरी</span>
+                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.labour_cost)}</span>
               </div>
-              <div className="bg-white p-2 rounded-xl border border-stone-200">
-                <span className="text-stone-500 block text-[10px]">सिंचाई व बिजली</span>
-                <span className="font-bold text-stone-800">{formatCurrencyINR(crop.cost_breakdown.irrigation_electricity_cost)}</span>
+              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
+                <span className="text-stone-500 block text-[9px]">सिंचाई/बिजली</span>
+                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.irrigation_electricity_cost)}</span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Section 4: Official Verification & Helpline Footer */}
-        <div className="pt-2 border-t border-stone-300 flex items-center justify-between text-[11px] text-stone-600">
+        {/* Section 4: 120-Day Action Schedule Summary (Table) */}
+        <div className="space-y-1 text-xs">
+          <h4 className="font-black text-stone-800 text-[11px]">
+            १२०-दिवसीय कार्य-योजना समय-सारणी:
+          </h4>
+          <div className="grid grid-cols-5 gap-1 text-[10px] text-center bg-stone-50 p-2 rounded-xl border border-stone-300">
+            <div className="bg-white p-1 rounded border border-stone-200">
+              <span className="font-bold text-emerald-800 block">दिन ०</span>
+              <span className="text-[9px] text-stone-600 block">बुवाई व उपचार</span>
+            </div>
+            <div className="bg-white p-1 rounded border border-stone-200">
+              <span className="font-bold text-emerald-800 block">दिन २१</span>
+              <span className="text-[9px] text-stone-600 block">निराई-गुड़ाई</span>
+            </div>
+            <div className="bg-white p-1 rounded border border-stone-200">
+              <span className="font-bold text-emerald-800 block">दिन ४५</span>
+              <span className="text-[9px] text-stone-600 block">फूल व कीट</span>
+            </div>
+            <div className="bg-white p-1 rounded border border-stone-200">
+              <span className="font-bold text-emerald-800 block">दिन ७५</span>
+              <span className="text-[9px] text-stone-600 block">दाना पोषण</span>
+            </div>
+            <div className="bg-white p-1 rounded border border-stone-200">
+              <span className="font-bold text-emerald-800 block">दिन ९५</span>
+              <span className="text-[9px] text-stone-600 block">कटाई व भंडारण</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 5: Official Verification & Helpline Footer */}
+        <div className="pt-2 border-t border-stone-300 flex items-center justify-between text-[10px] text-stone-600">
           <div>
             <p className="font-bold text-emerald-900">किसान हेल्पलाइन: 1800-180-1551 (टोल-फ्री २४x७)</p>
-            <p className="text-[10px] text-stone-500">कृषि निर्णय सहायता प्रणाली द्वारा डिजिटल रूप से उत्पन्न</p>
+            <p className="text-[9px] text-stone-500">कृषि निर्णय सहायता प्रणाली (Agri-Decide AI) द्वारा सत्यापित</p>
           </div>
           <div className="text-right">
             <span className="inline-block border border-emerald-600 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">
@@ -253,13 +296,13 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
         </div>
 
         {/* Modal Action Buttons (Screen Only - Hidden During Print) */}
-        <div className="space-y-2 pt-3 border-t border-stone-200 no-print">
+        <div className="space-y-2 pt-2 border-t border-stone-200 no-print">
           <button
             onClick={handlePrint}
             className="w-full py-3.5 px-5 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-sm shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">print</span>
-            <span>सलाह पर्ची प्रिंट / पीडीएफ डाउनलोड करें (A4)</span>
+            <span>सलाह पर्ची प्रिंट / पीडीएफ डाउनलोड करें (1 पृष्ठ A4)</span>
           </button>
 
           <button
@@ -272,7 +315,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
 
           <button
             onClick={onClose}
-            className="w-full py-2 text-stone-500 hover:text-stone-800 text-xs font-bold text-center cursor-pointer"
+            className="w-full py-1.5 text-stone-500 hover:text-stone-800 text-xs font-bold text-center cursor-pointer"
           >
             बंद करें
           </button>
@@ -281,4 +324,6 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
