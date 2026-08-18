@@ -67,8 +67,18 @@ class PriceForecaster:
     seasonal projections. Falls back to hardcoded historical averages.
     """
 
-    def __init__(self, data_path: str = r"D:\Coding\AGRI-DECIDE\data\agmarknet_mandi_prices_pune.csv"):
-        self.data_path = data_path
+    def __init__(self, data_path: Optional[str] = None):
+        if data_path is None:
+            project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            for candidate in [
+                os.path.join(project_dir, "data", "official_real_data", "agmarknet_mandi_prices_pune_2021_2025.csv"),
+                os.path.join(project_dir, "data", "agmarknet_mandi_prices_pune_2021_2025.csv"),
+                os.path.join(project_dir, "data", "agmarknet_mandi_prices_pune.csv"),
+            ]:
+                if os.path.exists(candidate):
+                    data_path = candidate
+                    break
+        self.data_path = data_path or ""
         self.avg_prices: Dict[str, float] = {}
         self.seasonal_indices: Dict[str, Dict[int, float]] = {}
         self._load_data()

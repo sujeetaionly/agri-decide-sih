@@ -49,8 +49,18 @@ class SensitivityRecalculator:
     and net profit per acre.
     """
 
-    def __init__(self, cacp_path: str = r"D:\Coding\AGRI-DECIDE\data\cacp_costs_pune.csv"):
-        self.cacp_path = cacp_path
+    def __init__(self, cacp_path: Optional[str] = None):
+        if cacp_path is None:
+            project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            for candidate in [
+                os.path.join(project_dir, "data", "official_real_data", "cacp_itemized_costs_pune.csv"),
+                os.path.join(project_dir, "data", "official_real_data", "cacp_costs_official_maharashtra.csv"),
+                os.path.join(project_dir, "data", "cacp_costs_pune.csv"),
+            ]:
+                if os.path.exists(candidate):
+                    cacp_path = candidate
+                    break
+        self.cacp_path = cacp_path or ""
         self.costs: Dict[str, float] = {}
         self._load_costs()
 
