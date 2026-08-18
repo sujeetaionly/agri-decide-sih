@@ -95,34 +95,35 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* 1. Single Top App Bar with Audio Button */}
       <HomeTopAppBar />
 
-      {/* 2. Main Dashboard (2 Key Cards Only) */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-16 pb-4 space-y-4 animate-fadeIn">
+      {/* 2. Main Dashboard (2 Key Cards Perfectly Balanced) */}
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-20 pb-28 flex flex-col justify-center space-y-5 animate-fadeIn">
         
         {/* Welcome Greeting */}
-        <div className="pt-2">
-          <h1 className="text-2xl font-black font-headline tracking-tight text-[#1A1C18] dark:text-[#E2E3DC]">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 rounded-full text-xs font-bold border border-emerald-500/20">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>खरीफ मौसम २०२६ • पुणे, महाराष्ट्र</span>
+          </div>
+          <h1 className="text-2xl font-black font-headline tracking-tight text-[#1A1C18] dark:text-[#E2E3DC] pt-1">
             {t('greeting')}
           </h1>
-          <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
-            पुणे, महाराष्ट्र • खरीफ मौसम 2026
-          </p>
         </div>
 
-        {/* CARD 1: PRIMARY ACTION - Large CTA to Start Recommendation */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F381E] via-[#164E28] to-[#1E6B37] text-white p-6 shadow-xl space-y-4">
-          <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none" />
-          <div className="absolute right-4 top-4 text-white/20 text-6xl select-none font-bold">
+        {/* CARD 1: PRIMARY ACTION - AI Crop Recommendation Hero */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F381E] via-[#164E28] to-[#1E6B37] text-white p-6 shadow-xl space-y-5">
+          <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-white/5 rounded-full blur-xl pointer-events-none" />
+          <div className="absolute right-4 top-4 text-white/15 text-7xl select-none font-bold">
             🌾
           </div>
 
-          <div className="space-y-2 relative z-10">
+          <div className="space-y-2.5 relative z-10">
             <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold text-emerald-200">
               एआई फसल सलाहकार
             </span>
             <h2 className="text-2xl font-black font-headline leading-snug">
               {t('homeHeroTitle')}
             </h2>
-            <p className="text-xs text-emerald-100/90 leading-relaxed max-w-[260px]">
+            <p className="text-xs text-emerald-100/90 leading-relaxed max-w-[280px]">
               {t('homeHeroSub')}
             </p>
           </div>
@@ -138,7 +139,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         {/* CARD 2: RECENT ANALYSIS SUMMARY */}
-        <div className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3">
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-700 dark:text-emerald-300">
@@ -160,12 +161,12 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {recentAnalysis ? (
             <div className="space-y-3">
-              <div className="bg-stone-50 dark:bg-stone-900/60 rounded-2xl p-3.5 flex items-center justify-between">
+              <div className="bg-stone-50 dark:bg-stone-900/60 rounded-2xl p-4 flex items-center justify-between">
                 <div>
                   <span className="text-[11px] text-stone-400 block font-medium">
                     सुझाई गई फसल ({recentAnalysis.landArea} एकड़)
                   </span>
-                  <span className="text-lg font-black text-primary font-headline">
+                  <span className="text-xl font-black text-primary font-headline">
                     {recentAnalysis.cropName}
                   </span>
                 </div>
@@ -186,7 +187,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               <button
                 onClick={handleOpenPrevious}
-                className="w-full py-3 px-4 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <span>{t('viewFullReport')}</span>
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
