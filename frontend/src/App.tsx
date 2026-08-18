@@ -221,7 +221,6 @@ const AppContent: React.FC = () => {
       {viewMode === 'settings' && (
         <SettingsPage
           onGoToHome={handleReturnHome}
-          onStartNewRecommendation={handleStartWizard}
           onOpenMyCrops={handleOpenMyCrops}
           onChangeLanguage={handleChangeLanguage}
           onSignOut={handleSignOut}
