@@ -291,7 +291,7 @@ export const RecommendationsStep: React.FC = () => {
           onClick={handleProceedToWhatIf}
           className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>मौसम व जोखिम जांचें (What-If)</span>
+          <span>मौसम व जोखिम जांचें</span>
           <span className="material-symbols-outlined text-xl">arrow_forward</span>
         </button>
       </div>

@@ -62,9 +62,9 @@ export const WizardPage: React.FC<WizardPageProps> = ({
             {t('appName')}
           </span>
 
-          <div className="flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>ऑनलाइन जुड़े हैं</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-800 text-[11px] font-semibold text-stone-600 dark:text-stone-300">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>ऑनलाइन</span>
           </div>
         </div>
 

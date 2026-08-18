@@ -47,9 +47,9 @@ export const HomeTopAppBar: React.FC<HomeTopAppBarProps> = ({
         {/* Right Section: Single Network Indicator & Audio Button */}
         <div className="flex items-center gap-2">
           {/* Single Top Network Pill */}
-          <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-full text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>{t('networkConnected')}</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-800 text-[11px] font-semibold text-stone-600 dark:text-stone-300">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>ऑनलाइन</span>
           </div>
 
           {/* Audio TTS Button */}
