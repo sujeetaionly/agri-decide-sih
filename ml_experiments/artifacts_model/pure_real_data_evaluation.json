@@ -1,0 +1,17 @@
+{
+    "price_model_metrics": {
+        "dataset": "Agmarknet Mandi (14,786 daily transactions)",
+        "r2_score": 0.8457,
+        "rmse": 1024.28,
+        "mae": 759.4,
+        "mape_pct": 27.04,
+        "n_samples": 14786
+    },
+    "yield_model_metrics": {
+        "dataset": "ICRISAT 10-Year Historical District Database (2008-2017)",
+        "r2_score": 0.9618,
+        "rmse": 1.42,
+        "mae": 0.85,
+        "n_samples": 102
+    }
+}
