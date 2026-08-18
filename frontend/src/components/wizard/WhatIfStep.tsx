@@ -34,7 +34,7 @@ export const WhatIfStep: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-36">
+    <div className="space-y-6 animate-fadeIn pb-24">
       
       {/* Header & Audio */}
       <div className="space-y-2">

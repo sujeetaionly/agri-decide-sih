@@ -92,7 +92,7 @@ export const SowingSeasonCard: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-44">
+    <div className="space-y-6 animate-fadeIn pb-24">
       
       {/* Card Header & Audio */}
       <div className="space-y-2">
