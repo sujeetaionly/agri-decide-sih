@@ -99,7 +99,7 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-40">
+    <div className="space-y-6 animate-fadeIn pb-56">
       
       {/* Header */}
       <div className="space-y-2">
@@ -155,41 +155,45 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
       </div>
 
       {/* Vertical Milestone Timeline */}
-      <div className="space-y-4 relative pl-4 border-l-2 border-primary/30 ml-3">
+      <div className="space-y-6 relative pl-6 ml-3 border-l-2 border-emerald-500/40">
         {MILESTONES.map((m, idx) => {
           const isDone = completedSteps.includes(m.day);
           const isSpeakingThis = activeSpeakingIdx === idx;
 
           return (
-            <div key={m.day} className="relative space-y-2">
-              {/* Timeline Indicator Dot */}
+            <div key={m.day} className="relative">
+              {/* Timeline Indicator Dot centered exactly on the vertical line (x = -13px) */}
               <button
                 type="button"
                 onClick={() => handleToggleComplete(m.day)}
-                className={`absolute -left-[25px] top-1 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                className={`absolute -left-[37px] top-4 w-6 h-6 rounded-full flex items-center justify-center transition-all cursor-pointer z-10 ${
                   isDone
-                    ? 'bg-primary text-white ring-4 ring-primary/20 shadow-sm'
-                    : 'bg-white dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-700 text-transparent shadow-sm'
+                    ? 'bg-emerald-600 text-white ring-4 ring-emerald-500/20 shadow-sm'
+                    : 'bg-white dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 text-transparent hover:border-emerald-500 shadow-sm'
                 }`}
+                title={isDone ? 'पूर्ण' : 'अपूर्ण'}
               >
                 <span className="material-symbols-outlined text-xs">check</span>
               </button>
 
               {/* Milestone Card */}
-              <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-4.5 shadow-md hover:shadow-lg transition-all space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-xs font-extrabold px-2.5 py-0.5 rounded-md">
+              <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-md hover:shadow-lg transition-all space-y-3">
+                
+                {/* Header: Day Number + Prominent Calendar Date + Voice button */}
+                <div className="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-stone-800">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 text-xs font-black px-2.5 py-0.5 rounded-lg border border-emerald-500/20">
                       दिन {m.day}
                     </span>
-                    <span className="text-xs font-bold text-primary">
-                      {m.badge}
+                    <span className="text-xs font-bold text-stone-700 dark:text-stone-300 flex items-center gap-1">
+                      <span className="material-symbols-outlined text-sm text-stone-400">event</span>
+                      <span>{m.date}</span>
                     </span>
                   </div>
 
                   <button
                     onClick={() => handleSpeakMilestone(idx, m)}
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-all ${
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-all cursor-pointer ${
                       isSpeakingThis
                         ? 'bg-primary text-white animate-pulse'
                         : 'bg-stone-100 dark:bg-stone-800 text-stone-600 hover:text-primary'
@@ -200,45 +204,62 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
                   </button>
                 </div>
 
-                <h4 className="font-bold text-sm text-[#1A1C18] dark:text-[#E2E3DC] leading-snug">
-                  {m.title}
-                </h4>
+                {/* Stage Category Badge & Action Title */}
+                <div className="space-y-1">
+                  <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 block">
+                    • {m.badge}
+                  </span>
+                  <h4 className="font-bold text-base text-[#1A1C18] dark:text-[#E2E3DC] leading-snug">
+                    {m.title}
+                  </h4>
+                </div>
 
-                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed">
+                {/* Action Instructions */}
+                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed bg-stone-50 dark:bg-stone-900/50 p-3 rounded-2xl border border-stone-200/70 dark:border-stone-800">
                   {m.desc}
                 </p>
 
-                <div className="flex items-center justify-between pt-1 border-t border-stone-100 dark:border-stone-800 text-[11px] text-stone-500">
-                  <span>दिनांक: {m.date}</span>
+                {/* Footer: Mark Complete Action */}
+                <div className="flex items-center justify-end pt-1">
                   <button
+                    type="button"
                     onClick={() => handleToggleComplete(m.day)}
-                    className={`font-semibold ${isDone ? 'text-primary' : 'text-stone-400'}`}
+                    className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cursor-pointer ${
+                      isDone
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200'
+                    }`}
                   >
-                    {isDone ? '✓ कार्य पूर्ण' : 'कार्य पूरा चिह्नित करें'}
+                    <span className="material-symbols-outlined text-sm">
+                      {isDone ? 'check_circle' : 'radio_button_unchecked'}
+                    </span>
+                    <span>{isDone ? '✓ कार्य पूर्ण हो गया' : 'कार्य पूरा चिह्नित करें'}</span>
                   </button>
                 </div>
+
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* STICKY BOTTOM ACTIONS */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto space-y-2 bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
+      {/* COMPACT STICKY BOTTOM ACTIONS (Single Row Bar) */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex items-center gap-2.5 bg-gradient-to-t from-surface-light via-surface-light/95 to-transparent dark:from-surface-dark dark:via-surface-dark/95 pt-4 pb-2">
         <button
           onClick={() => {
             triggerHaptic('medium');
             setIsPrintModalOpen(true);
           }}
-          className="w-full py-3.5 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+          className="flex-1 py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-extrabold text-xs shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-lg">download</span>
+          <span className="material-symbols-outlined text-base">download</span>
           <span>{t('printPdfBtn')}</span>
         </button>
 
         <button
           onClick={handleWhatsAppShare}
-          className="w-full py-3 px-4 rounded-full bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+          className="py-3.5 px-4 rounded-2xl bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer"
+          title={t('shareWhatsappBtn')}
         >
           <span className="material-symbols-outlined text-base text-emerald-600">share</span>
           <span>{t('shareWhatsappBtn')}</span>
