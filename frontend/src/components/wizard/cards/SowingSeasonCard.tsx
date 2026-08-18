@@ -1,61 +1,95 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useWizard } from '../../../context/WizardContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { triggerHaptic } from '../../../lib/utils';
 import { speakText } from '../../../lib/speech';
 
+type TimingChoice = 'THIS_WEEK' | 'NEXT_MONTH' | 'CUSTOM_DATE';
+
 export const SowingSeasonCard: React.FC = () => {
   const { farmData, updateFarmData, fetchRecommendations, isLoadingRecommendation, prevCard } = useWizard();
   const { language, t } = useLanguage();
 
-  const isSelectedAny = farmData.season !== null;
-
-  const SEASONS = [
-    {
-      id: 'KHARIF',
-      date: '2026-06-25',
-      title: t('seasonKharif'),
-      desc: 'सोयाबीन, मक्का, बाजरा, कपास, मूंगफली व तुअर हेतु उपयुक्त',
-      icon: 'rainy',
-      iconBg: 'bg-emerald-500/15 text-emerald-600',
-    },
-    {
-      id: 'RABI',
-      date: '2026-10-20',
-      title: t('seasonRabi'),
-      desc: 'गेहूं, चना, सरसों, प्याज व सूरजमुखी हेतु उपयुक्त',
-      icon: 'ac_unit',
-      iconBg: 'bg-blue-500/15 text-blue-600',
-    },
-    {
-      id: 'ZAID',
-      date: '2026-02-15',
-      title: t('seasonZaid'),
-      desc: 'मूंग, उड़द, सब्जियां व चारे की फसलें',
-      icon: 'wb_sunny',
-      iconBg: 'bg-amber-500/15 text-amber-600',
-    },
-  ];
-
-  const handleSelectSeason = (seasonId: string, date: string) => {
-    triggerHaptic('medium');
-    updateFarmData({ season: seasonId, plannedSowingDate: date });
+  const [selectedTiming, setSelectedTiming] = useState<TimingChoice | null>(null);
+  
+  // Format today's date + offsets for ISO format (YYYY-MM-DD)
+  const getOffsetDateIso = (daysAhead: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + daysAhead);
+    return d.toISOString().split('T')[0];
   };
+
+  const [customDate, setCustomDate] = useState<string>(
+    farmData.plannedSowingDate || getOffsetDateIso(14)
+  );
+
+  const handleSelectTiming = (timing: TimingChoice) => {
+    triggerHaptic('medium');
+    setSelectedTiming(timing);
+
+    if (timing === 'THIS_WEEK') {
+      const date = getOffsetDateIso(3);
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: date });
+    } else if (timing === 'NEXT_MONTH') {
+      const date = getOffsetDateIso(25);
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: date });
+    } else if (timing === 'CUSTOM_DATE') {
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: customDate });
+    }
+  };
+
+  const handleCustomDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomDate(val);
+    updateFarmData({ season: 'KHARIF', plannedSowingDate: val });
+  };
+
+  const isSelectedAny = selectedTiming !== null && (selectedTiming !== 'CUSTOM_DATE' || Boolean(customDate));
 
   const handleAudio = () => {
     triggerHaptic('light');
-    const selectedObj = SEASONS.find((s) => s.id === farmData.season);
-    const msg = isSelectedAny
-      ? `${t('card5Title')}। वर्तमान चयन ${selectedObj?.title || ''} है।`
-      : `${t('card5Title')}। ${t('card5Sub')}`;
+    let msg = `${t('card5Title')}। ${t('card5Sub')}। `;
+    if (selectedTiming === 'THIS_WEEK') msg += 'वर्तमान चयन: इसी हफ्ते।';
+    else if (selectedTiming === 'NEXT_MONTH') msg += 'वर्तमान चयन: अगले एक महीने में।';
+    else if (selectedTiming === 'CUSTOM_DATE') msg += `वर्तमान चयन: तारीख ${customDate}।`;
     speakText(msg, language);
   };
 
   const handleSubmit = () => {
-    if (!isSelectedAny) return;
+    if (!isSelectedAny || isLoadingRecommendation) return;
     triggerHaptic('success');
     fetchRecommendations();
   };
+
+  const TIMING_OPTIONS: {
+    id: TimingChoice;
+    title: string;
+    sub: string;
+    icon: string;
+    iconBg: string;
+  }[] = [
+    {
+      id: 'THIS_WEEK',
+      title: t('sowingTimingWeek'),
+      sub: 'तुरंत बुवाई की तैयारी के लिए मौसम अनुसार सलाह',
+      icon: 'bolt',
+      iconBg: 'bg-emerald-500/15 text-emerald-600',
+    },
+    {
+      id: 'NEXT_MONTH',
+      title: t('sowingTimingMonth'),
+      sub: 'मानसूनी बारिश के आगमन अनुसार योजना',
+      icon: 'calendar_month',
+      iconBg: 'bg-blue-500/15 text-blue-600',
+    },
+    {
+      id: 'CUSTOM_DATE',
+      title: t('sowingTimingCustomDate'),
+      sub: 'कैलेंडर से अपनी सुविधानुसार तारीख चुनें',
+      icon: 'edit_calendar',
+      iconBg: 'bg-amber-500/15 text-amber-600',
+    },
+  ];
 
   return (
     <div className="space-y-6 animate-fadeIn pb-44">
@@ -83,41 +117,66 @@ export const SowingSeasonCard: React.FC = () => {
         </p>
       </div>
 
-      {/* Season Selection List */}
+      {/* Sowing Timing Options List */}
       <div className="space-y-3.5">
-        {SEASONS.map((s) => {
-          const isSelected = farmData.season === s.id;
+        {TIMING_OPTIONS.map((opt) => {
+          const isSelected = selectedTiming === opt.id;
           return (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => handleSelectSeason(s.id, s.date)}
-              className={`w-full text-left p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center ${
+            <div
+              key={opt.id}
+              onClick={() => handleSelectTiming(opt.id)}
+              className={`p-5 rounded-3xl border-2 transition-all cursor-pointer space-y-3 active:scale-[0.99] shadow-sm ${
                 isSelected
                   ? 'bg-primary/10 border-primary shadow-md ring-2 ring-primary/30'
                   : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
               }`}
             >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${s.iconBg}`}>
-                <span className="material-symbols-outlined text-3xl">{s.icon}</span>
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${opt.iconBg}`}>
+                  <span className="material-symbols-outlined text-3xl">{opt.icon}</span>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
+                      {opt.title}
+                    </h3>
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isSelected ? 'border-primary bg-primary text-white' : 'border-stone-400'
+                    }`}>
+                      {isSelected && <span className="material-symbols-outlined text-xs">check</span>}
+                    </div>
+                  </div>
+                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
+                    {opt.sub}
+                  </p>
+                </div>
               </div>
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
-                    {s.title}
-                  </h3>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                    isSelected ? 'border-primary bg-primary text-white' : 'border-stone-400'
-                  }`}>
-                    {isSelected && <span className="material-symbols-outlined text-xs">check</span>}
-                  </div>
+              {/* Friendly Visual Calendar Picker for Option 3 */}
+              {opt.id === 'CUSTOM_DATE' && isSelected && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="mt-3 pt-3 border-t border-primary/20 space-y-2 bg-white dark:bg-[#151813] p-3.5 rounded-2xl animate-fadeIn"
+                >
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300">
+                    📅 बुवाई की अनुमानित तारीख चुनें:
+                  </label>
+                  <input
+                    type="date"
+                    value={customDate}
+                    onChange={handleCustomDateChange}
+                    className="w-full py-3 px-4 rounded-xl border-2 border-primary/40 bg-stone-50 dark:bg-stone-900 text-[#1A1C18] dark:text-[#E2E3DC] font-bold text-base focus:border-primary focus:outline-none shadow-sm cursor-pointer"
+                  />
+                  {customDate && (
+                    <div className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1.5 pt-1">
+                      <span className="material-symbols-outlined text-base">check_circle</span>
+                      <span>चयनित तारीख: {new Date(customDate).toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
-                  {s.desc}
-                </p>
-              </div>
-            </button>
+              )}
+            </div>
           );
         })}
       </div>

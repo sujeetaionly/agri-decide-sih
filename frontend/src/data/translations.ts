@@ -470,36 +470,36 @@ export const translations: TranslationDictionary = {
     gu: 'અન્ય / પડતર જમીન',
   },
 
-  // Card 5: Season & Planned Sowing
+  // Card 5: When will you sow?
   card5Title: {
-    en: 'In which season are you planning to sow?',
-    hi: 'आप किस मौसम में बुवाई की तैयारी कर रहे हैं?',
-    mr: 'तुम्ही कोणत्या हंगामात पेरणी करणार आहात?',
-    gu: 'તમે કઈ ઋતુમાં વાવણી કરવા માંગો છો?',
+    en: 'When will you sow in your field?',
+    hi: 'आप खेत में बुवाई कब करेंगे?',
+    mr: 'तुम्ही शेतात पेरणी कधी करणार आहात?',
+    gu: 'તમે ખેતરમાં વાવણી ક્યારે કરશો?',
   },
   card5Sub: {
-    en: 'Select the season to match with monsoon forecast.',
-    hi: 'बुवाई का मौसम चुनें ताकि सही मानसूनी समय चुना जा सके।',
-    mr: 'पेरणीचा हंगाम निवडा.',
-    gu: 'વાવણીની ઋતુ પસંદ કરો.',
+    en: 'Select your sowing timeframe or pick a date to match weather forecasts.',
+    hi: 'बुवाई का समय चुनें ताकि मानसूनी बारिश और तापमान के अनुसार सटीक सलाह मिल सके।',
+    mr: 'पेरणीची वेळ निवडा जेणेकरून पावसाच्या अंदाजानुसार योग्य सल्ला मिळेल.',
+    gu: 'વાવણીનો સમય પસંદ કરો જેથી વરસાદના આધારે યોગ્ય સલાહ મળી શકે.',
   },
-  seasonKharif: {
-    en: 'Kharif (Monsoon)',
-    hi: 'खरीफ (बारिश का मौसम - जून/जुलाई)',
-    mr: 'खरीप (पावसाळी - जून/जुलै)',
-    gu: 'ખરીફ (ચોમાસુ - જૂન/જુલાઈ)',
+  sowingTimingWeek: {
+    en: 'This Week (Next 7 Days)',
+    hi: 'इसी हफ्ते (अगले ७ दिनों में)',
+    mr: 'याच आठवड्यात (पुढील ७ दिवसांत)',
+    gu: 'આ જ અઠવાડિયે (આગામી ૭ દિવસમાં)',
   },
-  seasonRabi: {
-    en: 'Rabi (Winter)',
-    hi: 'रबी (सर्दी का मौसम - अक्टूबर/नवंबर)',
-    mr: 'रब्बी (हिवाळी - ऑक्टोबर/नोव्हेंबर)',
-    gu: 'રવિ (શિયાળુ - ઓક્ટોબર/નવેમ્બર)',
+  sowingTimingMonth: {
+    en: 'Within the Next Month',
+    hi: 'अगले एक महीने में',
+    mr: 'पुढील एका महिन्यात',
+    gu: 'આગામી એક મહિનામાં',
   },
-  seasonZaid: {
-    en: 'Summer (Zaid)',
-    hi: 'जायद (गर्मी का मौसम - फरवरी/मार्च)',
-    mr: 'उन्हाळी (फेब्रुवारी/मार्च)',
-    gu: 'જાયદ (ઉનાળુ - ફેબ્રુઆરી/માર્ચ)',
+  sowingTimingCustomDate: {
+    en: 'Pick Date (Around which date will you sow?)',
+    hi: 'तारीख चुनें (किस तारीख के आस-पास बुवाई करोगे?)',
+    mr: 'तारीख निवडा (कोणत्या तारखेच्या आसपास पेरणी करणार?)',
+    gu: 'તારીખ પસંદ કરો (કઈ તારીખની આસપાસ વાવણી કરશો?)',
   },
   seeRecommendations: {
     en: 'Show AI Recommendations',
