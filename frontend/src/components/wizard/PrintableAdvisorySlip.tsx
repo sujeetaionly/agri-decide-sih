@@ -51,6 +51,39 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
   const waterName = farmData.waterSource === 'CANAL' ? 'नहर' : farmData.waterSource === 'BOREWELL' ? 'ट्यूबवेल' : farmData.waterSource === 'RAINFED' ? 'बारिश (वर्षा आधारित)' : 'कुआं';
   const todayFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
+  const MILESTONES = [
+    {
+      day: 0,
+      stage: 'बुवाई व बीज उपचार',
+      date: '25 जून 2026',
+      action: 'बीज को ट्राइकोडर्मा (4 ग्राम/किग्रा) से उपचारित कर 3-4 सेमी गहराई और 45 सेमी कतार दूरी पर बुवाई करें।',
+    },
+    {
+      day: 21,
+      stage: 'निराई-गुड़ाई',
+      date: '16 जुलाई 2026',
+      action: 'खुरपी से पहली निराई करें या उपयुक्त खरपतवार नाशक का छिड़काव करें। पौधों की उचित छंटाई करें।',
+    },
+    {
+      day: 45,
+      stage: 'फूल व कीट निगरानी',
+      date: '09 अगस्त 2026',
+      action: 'खेत में नमी बनाए रखें। तना छेदक/सुंडी की निगरानी हेतु फेरोमोन ट्रैप लगाएं व नीम तेल छिड़कें।',
+    },
+    {
+      day: 75,
+      stage: 'दाना भराव व पोषण',
+      date: '08 सितंबर 2026',
+      action: 'दानों के अच्छे भराव हेतु 00:52:34 घुलनशील उर्वरक (10 ग्राम/लीटर) का छिड़काव करें।',
+    },
+    {
+      day: 95,
+      stage: 'कटाई व भंडारण',
+      date: '28 सितंबर 2026',
+      action: 'फलियां सुनहरी भूरी होने पर कटाई करें। दानों को धूप में सुखाकर 12% से कम नमी पर सुरक्षित बोरियों में रखें।',
+    },
+  ];
+
   const handlePrint = () => {
     triggerHaptic('success');
     window.print();
@@ -102,7 +135,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
             width: 100% !important;
             max-width: 100% !important;
             margin: 0 !important;
-            padding: 14px !important;
+            padding: 16px !important;
             box-shadow: none !important;
             border: 2px solid #0F381E !important;
             background: #ffffff !important;
@@ -119,203 +152,127 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
 
       <div
         id="printable-slip-container"
-        className="w-full max-w-lg bg-white text-stone-900 rounded-3xl p-6 shadow-2xl space-y-3.5 border-2 border-stone-300 print:max-w-none print:border-2 print:border-[#0F381E] print:p-4 print:rounded-xl"
+        className="w-full max-w-lg bg-white text-stone-900 rounded-3xl p-6 shadow-2xl space-y-4 border-2 border-stone-300 print:max-w-none print:border-2 print:border-[#0F381E] print:p-4 print:rounded-xl"
       >
         
-        {/* Official Header Banner */}
-        <div className="border-b-2 border-emerald-700/40 pb-2.5 text-center space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-bold text-emerald-800 pb-1 border-b border-stone-200">
-            <span>भारत सरकार • कृषि एवं किसान कल्याण मंत्रालय</span>
-            <span className="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded font-mono">
-              प्रमाणित पर्ची #{crop.crop_id}-2026
-            </span>
+        {/* Clean Header */}
+        <div className="border-b-2 border-primary/30 pb-3 text-center space-y-1">
+          <div className="inline-block bg-primary/10 text-primary font-bold text-xs px-3 py-0.5 rounded-full mb-1">
+            कृषि-वाइज़ एआई (Agri-Decide)
           </div>
+          <h2 className="text-2xl font-black font-headline text-[#1A1C18]">
+            डिजिटल कृषि सलाह पर्ची
+          </h2>
+          <p className="text-xs text-stone-500">
+            दिनांक: {todayFormatted} • पुणे, महाराष्ट्र • खरीफ मौसम 2026
+          </p>
+        </div>
 
-          <div className="pt-1">
-            <h2 className="text-2xl font-black font-headline text-emerald-900">
-              डिजिटल किसान कृषि सलाह पर्ची
-            </h2>
-            <p className="text-xs text-stone-600 font-medium">
-              कृषि-वाइज़ एआई (Agri-Decide) • CACP एवं ICAR वैज्ञानिक मानकों पर आधारित
-            </p>
-            <p className="text-[11px] text-stone-500 pt-0.5">
-              दिनांक: {todayFormatted} • कार्यक्षेत्र: पुणे, महाराष्ट्र • खरीफ मौसम २०२६
-            </p>
+        {/* Farmer & Plot Summary */}
+        <div className="bg-stone-50 p-3 rounded-2xl border border-stone-200 grid grid-cols-3 gap-2 text-xs text-center">
+          <div>
+            <span className="text-stone-400 block text-[10px] font-medium">खेत का आकार</span>
+            <span className="font-bold text-stone-800 text-sm">{farmData.landAcres || 2.5} एकड़</span>
+          </div>
+          <div>
+            <span className="text-stone-400 block text-[10px] font-medium">मिट्टी का प्रकार</span>
+            <span className="font-bold text-stone-800 text-sm">{soilName}</span>
+          </div>
+          <div>
+            <span className="text-stone-400 block text-[10px] font-medium">सिंचाई सुविधा</span>
+            <span className="font-bold text-stone-800 text-sm">{waterName}</span>
           </div>
         </div>
 
-        {/* Section 1: Farmer & Land Profile */}
-        <div className="bg-stone-50 p-3 rounded-xl border border-stone-300 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-          <div>
-            <span className="text-stone-500 block text-[10px] font-medium">खेत का आकार</span>
-            <span className="font-bold text-stone-900 text-sm">{farmData.landAcres || 2.5} एकड़</span>
-          </div>
-          <div>
-            <span className="text-stone-500 block text-[10px] font-medium">मिट्टी का प्रकार</span>
-            <span className="font-bold text-stone-900 text-sm">{soilName}</span>
-          </div>
-          <div>
-            <span className="text-stone-500 block text-[10px] font-medium">सिंचाई सुविधा</span>
-            <span className="font-bold text-stone-900 text-sm">{waterName}</span>
-          </div>
-          <div>
-            <span className="text-stone-500 block text-[10px] font-medium">बुवाई मौसम</span>
-            <span className="font-bold text-stone-900 text-sm">खरीफ 2026</span>
-          </div>
-        </div>
-
-        {/* Section 2: Recommended Crop Decision Hero */}
-        <div className="bg-emerald-50/80 border-2 border-emerald-600 p-3.5 rounded-xl space-y-2">
+        {/* Recommended Crop Decision Card */}
+        <div className="bg-emerald-50/80 border-2 border-emerald-600/40 p-4 rounded-2xl space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-emerald-900 uppercase tracking-wider">
-              सर्वोत्तम अनुशंसित फसल (Top AI Choice)
-            </span>
-            <span className="text-xs bg-emerald-700 text-white font-extrabold px-2.5 py-0.5 rounded-full">
-              {Math.round(crop.suitability_pct)}% अनुकूलता स्कोर
-            </span>
-          </div>
-
-          <div className="flex items-baseline justify-between">
             <h3 className="text-2xl font-black text-emerald-950 font-headline">
               🌾 {cropName}
             </h3>
-            <span className="text-xs font-bold text-emerald-800">
+            <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
               फसल अवधि: {crop.duration_days} दिन
             </span>
           </div>
           
           {/* Key Financial & Yield Scorecards */}
-          <div className="grid grid-cols-3 gap-2 pt-1.5 border-t border-emerald-300 text-center">
-            <div className="bg-white p-2 rounded-lg border border-emerald-200">
+          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-emerald-200 text-center">
+            <div className="bg-white p-2.5 rounded-xl border border-emerald-200">
               <span className="text-stone-500 block text-[10px] font-bold">अनुमानित शुद्ध लाभ</span>
               <span className="font-black text-emerald-700 text-sm block my-0.5">
                 {formatCurrencyINR(crop.expected_net_profit_per_acre_inr)}
               </span>
-              <span className="text-[9px] text-stone-400">/ एकड़</span>
+              <span className="text-[10px] text-stone-400">/ एकड़</span>
             </div>
 
-            <div className="bg-white p-2 rounded-lg border border-emerald-200">
+            <div className="bg-white p-2.5 rounded-xl border border-emerald-200">
               <span className="text-stone-500 block text-[10px] font-bold">अनुमानित कुल लागत</span>
               <span className="font-black text-amber-800 text-sm block my-0.5">
                 {formatCurrencyINR(crop.total_cost_inr_per_acre)}
               </span>
-              <span className="text-[9px] text-stone-400">/ एकड़</span>
+              <span className="text-[10px] text-stone-400">/ एकड़</span>
             </div>
 
-            <div className="bg-white p-2 rounded-lg border border-emerald-200">
+            <div className="bg-white p-2.5 rounded-xl border border-emerald-200">
               <span className="text-stone-500 block text-[10px] font-bold">अनुमानित पैदावार</span>
               <span className="font-black text-blue-800 text-sm block my-0.5">
                 {crop.expected_yield_qtl_per_acre}
               </span>
-              <span className="text-[9px] text-stone-400">क्विंटल / एकड़</span>
+              <span className="text-[10px] text-stone-400">क्विंटल / एकड़</span>
             </div>
           </div>
         </div>
 
-        {/* Section 3: Itemized CACP Cost Breakdown */}
-        {crop.cost_breakdown && (
-          <div className="space-y-1 text-xs">
-            <div className="flex items-center justify-between">
-              <h4 className="font-black text-stone-800 text-[11px]">
-                मदवार लागत विवरण (CACP आधिकारिक मानक प्रति एकड़):
-              </h4>
-              <span className="text-[10px] text-stone-500 font-semibold">
-                कुल: {formatCurrencyINR(crop.total_cost_inr_per_acre)}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-1.5 bg-stone-50 p-2.5 rounded-xl border border-stone-300 text-xs">
-              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
-                <span className="text-stone-500 block text-[9px]">बीज</span>
-                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.seed_cost)}</span>
-              </div>
-              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
-                <span className="text-stone-500 block text-[9px]">खाद व उर्वरक</span>
-                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.fertilizer_cost)}</span>
-              </div>
-              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
-                <span className="text-stone-500 block text-[9px]">कीटनाशक</span>
-                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.pesticide_cost)}</span>
-              </div>
-              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
-                <span className="text-stone-500 block text-[9px]">जुताई/मशीनरी</span>
-                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.machinery_rental_cost)}</span>
-              </div>
-              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
-                <span className="text-stone-500 block text-[9px]">मजदूरी</span>
-                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.labour_cost)}</span>
-              </div>
-              <div className="bg-white p-1.5 rounded-lg border border-stone-200 text-center">
-                <span className="text-stone-500 block text-[9px]">सिंचाई/बिजली</span>
-                <span className="font-bold text-stone-800 text-xs">{formatCurrencyINR(crop.cost_breakdown.irrigation_electricity_cost)}</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Section 4: 120-Day Action Schedule Summary (Table) */}
-        <div className="space-y-1 text-xs">
-          <h4 className="font-black text-stone-800 text-[11px]">
-            १२०-दिवसीय कार्य-योजना समय-सारणी:
+        {/* 120-Day Action Schedule & Milestones (What to do on the field) */}
+        <div className="space-y-2">
+          <h4 className="font-black text-stone-800 text-xs flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-sm text-primary">calendar_month</span>
+            <span>फसल कार्य-योजना (बुवाई से कटाई तक के मुख्य चरण):</span>
           </h4>
-          <div className="grid grid-cols-5 gap-1 text-[10px] text-center bg-stone-50 p-2 rounded-xl border border-stone-300">
-            <div className="bg-white p-1 rounded border border-stone-200">
-              <span className="font-bold text-emerald-800 block">दिन ०</span>
-              <span className="text-[9px] text-stone-600 block">बुवाई व उपचार</span>
-            </div>
-            <div className="bg-white p-1 rounded border border-stone-200">
-              <span className="font-bold text-emerald-800 block">दिन २१</span>
-              <span className="text-[9px] text-stone-600 block">निराई-गुड़ाई</span>
-            </div>
-            <div className="bg-white p-1 rounded border border-stone-200">
-              <span className="font-bold text-emerald-800 block">दिन ४५</span>
-              <span className="text-[9px] text-stone-600 block">फूल व कीट</span>
-            </div>
-            <div className="bg-white p-1 rounded border border-stone-200">
-              <span className="font-bold text-emerald-800 block">दिन ७५</span>
-              <span className="text-[9px] text-stone-600 block">दाना पोषण</span>
-            </div>
-            <div className="bg-white p-1 rounded border border-stone-200">
-              <span className="font-bold text-emerald-800 block">दिन ९५</span>
-              <span className="text-[9px] text-stone-600 block">कटाई व भंडारण</span>
-            </div>
+
+          <div className="space-y-2">
+            {MILESTONES.map((m) => (
+              <div key={m.day} className="bg-stone-50 p-2.5 rounded-xl border border-stone-200 text-xs space-y-1">
+                <div className="flex items-center justify-between font-bold">
+                  <span className="text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded-md">
+                    दिन {m.day} • {m.stage}
+                  </span>
+                  <span className="text-stone-600 font-semibold text-[11px]">{m.date}</span>
+                </div>
+                <p className="text-stone-700 text-[11px] leading-relaxed pl-0.5">
+                  {m.action}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Section 5: Official Verification & Helpline Footer */}
-        <div className="pt-2 border-t border-stone-300 flex items-center justify-between text-[10px] text-stone-600">
-          <div>
-            <p className="font-bold text-emerald-900">किसान हेल्पलाइन: 1800-180-1551 (टोल-फ्री २४x७)</p>
-            <p className="text-[9px] text-stone-500">कृषि निर्णय सहायता प्रणाली (Agri-Decide AI) द्वारा सत्यापित</p>
-          </div>
-          <div className="text-right">
-            <span className="inline-block border border-emerald-600 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-bold">
-              ✓ डिजिटल सत्यापित
-            </span>
-          </div>
+        {/* Clean Footer: Helpline */}
+        <div className="pt-2 border-t border-stone-200 text-center text-xs text-stone-500 font-medium">
+          किसान कॉल सेंटर हेल्पलाइन: <strong className="text-stone-800">1800-180-1551</strong> (टोल-फ्री २४x७)
         </div>
 
         {/* Modal Action Buttons (Screen Only - Hidden During Print) */}
-        <div className="space-y-2 pt-2 border-t border-stone-200 no-print">
+        <div className="space-y-2.5 pt-2 no-print">
           <button
             onClick={handlePrint}
-            className="w-full py-3.5 px-5 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-sm shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-4 px-6 rounded-full bg-primary hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">print</span>
-            <span>सलाह पर्ची प्रिंट / पीडीएफ डाउनलोड करें (1 पृष्ठ A4)</span>
+            <span>पर्ची प्रिंट / डाउनलोड करें (PDF)</span>
           </button>
 
           <button
             onClick={handleWhatsAppShare}
-            className="w-full py-3 px-5 rounded-full bg-white border-2 border-stone-300 text-stone-800 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+            className="w-full py-3 px-6 rounded-full bg-white border-2 border-stone-300 text-stone-800 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
           >
             <span className="material-symbols-outlined text-base text-emerald-600">share</span>
-            <span>व्हाट्सएप पर साझा करें</span>
+            <span>व्हाट्सएप पर भेजें</span>
           </button>
 
           <button
             onClick={onClose}
-            className="w-full py-1.5 text-stone-500 hover:text-stone-800 text-xs font-bold text-center cursor-pointer"
+            className="w-full py-1.5 text-stone-400 hover:text-stone-700 text-xs font-bold text-center cursor-pointer"
           >
             बंद करें
           </button>
