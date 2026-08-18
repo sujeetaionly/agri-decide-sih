@@ -105,7 +105,7 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 px-3 py-1 rounded-full">
-            कार्य-योजना (120-Day Timeline)
+            १२०-दिवसीय फसल कार्य-योजना
           </span>
 
           <button
