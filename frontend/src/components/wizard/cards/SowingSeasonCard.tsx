@@ -181,25 +181,13 @@ export const SowingSeasonCard: React.FC = () => {
         })}
       </div>
 
-      {/* Sticky Bottom Action Bar with Back & Submit (Disabled until selected) */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex gap-3 bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
-        <button
-          type="button"
-          onClick={() => {
-            triggerHaptic('light');
-            prevCard();
-          }}
-          className="w-1/3 py-4 px-4 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-1"
-        >
-          <span className="material-symbols-outlined text-lg">arrow_back</span>
-          <span>{t('back')}</span>
-        </button>
-
+      {/* Sticky Bottom Action Bar with Submit (Disabled until selected) */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
         <button
           type="button"
           onClick={handleSubmit}
           disabled={!isSelectedAny || isLoadingRecommendation}
-          className={`w-2/3 py-4 px-6 rounded-full font-extrabold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
+          className={`w-full py-4 px-6 rounded-full font-extrabold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
             isSelectedAny && !isLoadingRecommendation
               ? 'bg-amber-400 hover:bg-amber-300 text-stone-950 active:scale-[0.98] cursor-pointer'
               : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
@@ -211,6 +199,7 @@ export const SowingSeasonCard: React.FC = () => {
             <>
               <span className="material-symbols-outlined text-xl">psychology_alt</span>
               <span>{t('seeRecommendations')}</span>
+              <span className="material-symbols-outlined text-lg">arrow_forward</span>
             </>
           )}
         </button>

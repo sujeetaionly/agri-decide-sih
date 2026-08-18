@@ -87,7 +87,7 @@ export const FarmSizeCard: React.FC = () => {
 
         <div className="flex items-center justify-center gap-2 text-center text-sm font-bold text-primary">
           <span className="material-symbols-outlined text-xl">landscape</span>
-          <span>इकाई: एकड़ (Acres)</span>
+          <span>इकाई: एकड़</span>
         </div>
 
         {!isValid && inputVal.length > 0 && (

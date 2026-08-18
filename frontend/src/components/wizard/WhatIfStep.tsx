@@ -40,7 +40,7 @@ export const WhatIfStep: React.FC = () => {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
-            जोखिम सिमुलेटर (What-If Risk Engine)
+            जोखिम व मौसम सिमुलेटर
           </span>
           <button
             onClick={handleAudio}
@@ -160,21 +160,11 @@ export const WhatIfStep: React.FC = () => {
       </div>
 
       {/* Sticky Bottom Action */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex gap-3">
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
         <button
-          onClick={() => {
-            triggerHaptic('light');
-            prevCard();
-          }}
-          className="w-1/3 py-4 px-4 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-1"
-        >
-          <span className="material-symbols-outlined text-lg">arrow_back</span>
-          <span>{t('back')}</span>
-        </button>
-
-        <button
+          type="button"
           onClick={handleProceed}
-          className="w-2/3 py-4 px-6 rounded-full bg-primary text-on-primary font-bold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>{t('chooseAndPlanBtn')}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>

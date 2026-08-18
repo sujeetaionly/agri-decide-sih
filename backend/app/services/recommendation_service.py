@@ -116,8 +116,9 @@ def generate_why_recommended(
         "CANAL": "नहर",
         "RAINFED": "बारिश"
     }
-    ws_hindi = water_source_names.get(water_source.upper(), "सिंचाई")
-    water_desc = "पर्याप्त" if water_capacity.upper() in ["MEDIUM", "HIGH"] else "सीमित"
+    ws_key = str(water_source).upper().strip() if water_source else "WELL"
+    ws_hindi = water_source_names.get(ws_key, "कुआं")
+    water_desc = "पर्याप्त" if str(water_capacity).upper().strip() in ["MEDIUM", "HIGH"] else "सीमित"
     bullets.append(f"{crop_info['duration']} दिनों की फसल अवधि में {ws_hindi} से {water_desc} पानी में सुरक्षित पैदावार।")
 
     if working_capital >= adjusted_cost:

@@ -70,7 +70,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
             भारत सरकार • स्मार्ट कृषि निर्णय प्रणाली
           </div>
           <h2 className="text-xl font-bold font-headline text-primary">
-            डिजिटल कृषि सलाह पर्ची (Krishi Advisory Slip)
+            डिजिटल कृषि सलाह पर्ची
           </h2>
           <p className="text-[11px] text-stone-500">
             दिनांक: {new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' })} • जिला: पुणे, महाराष्ट्र
@@ -81,15 +81,19 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
         <div className="bg-stone-50 p-3.5 rounded-2xl border border-stone-200 grid grid-cols-2 gap-2 text-xs">
           <div>
             <span className="text-stone-500 block">खेत का आकार:</span>
-            <span className="font-bold text-stone-800">{farmData.landAcres} एकड़</span>
+            <span className="font-bold text-stone-800">{farmData.landAcres || 2.5} एकड़</span>
           </div>
           <div>
             <span className="text-stone-500 block">मिट्टी का प्रकार:</span>
-            <span className="font-bold text-stone-800">{farmData.soilType === 'BLACK' ? 'काली मिट्टी' : 'दोमट मिट्टी'}</span>
+            <span className="font-bold text-stone-800">
+              {farmData.soilType === 'BLACK' ? 'काली मिट्टी' : farmData.soilType === 'RED' ? 'लाल मिट्टी' : farmData.soilType === 'SANDY' ? 'बलुई मिट्टी' : farmData.soilType === 'CLAY' ? 'चिकनी मिट्टी' : 'दोमट मिट्टी'}
+            </span>
           </div>
           <div>
             <span className="text-stone-500 block">सिंचाई सुविधा:</span>
-            <span className="font-bold text-stone-800">मध्यम सिंचाई (कुआं)</span>
+            <span className="font-bold text-stone-800">
+              {farmData.waterSource === 'CANAL' ? 'नहर' : farmData.waterSource === 'BOREWELL' ? 'ट्यूबवेल' : farmData.waterSource === 'RAINFED' ? 'बारिश (वर्षा आधारित)' : 'कुआं'}
+            </span>
           </div>
           <div>
             <span className="text-stone-500 block">मौसम:</span>
@@ -101,7 +105,9 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
         <div className="bg-emerald-50 border-2 border-emerald-600/40 p-4 rounded-2xl space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-800 uppercase">सर्वोत्तम अनुशंसित फसल</span>
-            <span className="text-xs bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-md">94% मैच</span>
+            <span className="text-xs bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-md">
+              {Math.round(crop.suitability_pct)}% मैच
+            </span>
           </div>
           <h3 className="text-2xl font-extrabold text-emerald-900">{cropName}</h3>
           
@@ -116,7 +122,7 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
             </div>
             <div>
               <span className="text-stone-500 block text-[10px]">पैदावार</span>
-              <span className="font-bold text-blue-800">{crop.expected_yield_qtl_per_acre} qtl</span>
+              <span className="font-bold text-blue-800">{crop.expected_yield_qtl_per_acre} क्विंटल</span>
             </div>
           </div>
         </div>

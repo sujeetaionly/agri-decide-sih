@@ -269,7 +269,7 @@ export const RecommendationsStep: React.FC = () => {
                   <div className="flex items-center gap-3 text-xs text-stone-500 font-medium">
                     <span>लागत: {formatCurrencyINR(alt.total_cost_inr_per_acre)}</span>
                     <span>•</span>
-                    <span>पैदावार: {alt.expected_yield_qtl_per_acre} qtl</span>
+                    <span>पैदावार: {alt.expected_yield_qtl_per_acre} क्विंटल</span>
                   </div>
                 </div>
 
