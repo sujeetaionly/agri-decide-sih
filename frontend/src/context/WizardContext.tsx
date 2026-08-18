@@ -2,14 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { triggerHaptic } from '../lib/utils';
 
 export interface FarmQuestionnaireState {
-  landAcres: number;
+  landAcres: number | null;
   landUnit: 'ACRE' | 'BIGHA' | 'GUNTHA';
-  soilType: string; // 'BLACK', 'LOAM', 'RED', 'SANDY', 'CLAY'
-  waterCapacity: string; // 'HIGH', 'MEDIUM', 'LOW'
-  waterSource: string; // 'CANAL', 'WELL', 'BOREWELL', 'RAINFED'
-  previousCrop: string; // 'WHEAT', 'GRAM', 'PADDY', 'SOYBEAN', 'COTTON', 'OTHER'
-  season: string; // 'KHARIF', 'RABI', 'ZAID'
-  plannedSowingDate: string;
+  soilType: string | null; // 'BLACK', 'LOAM', 'RED', 'SANDY', 'CLAY'
+  waterCapacity: string | null; // 'HIGH', 'MEDIUM', 'LOW'
+  waterSource: string | null; // 'CANAL', 'WELL', 'BOREWELL', 'RAINFED'
+  previousCrop: string | null; // 'WHEAT', 'GRAM', 'PADDY', 'SOYBEAN', 'COTTON', 'OTHER'
+  season: string | null; // 'KHARIF', 'RABI', 'ZAID'
+  plannedSowingDate: string | null;
 }
 
 export interface CACPItemizedCost {
@@ -74,15 +74,16 @@ interface WizardContextType {
   resetWizard: () => void;
 }
 
+// Strictly null defaults so NO options on any step are preselected
 const DEFAULT_FARM_DATA: FarmQuestionnaireState = {
-  landAcres: 2.5,
+  landAcres: null,
   landUnit: 'ACRE',
-  soilType: 'BLACK',
-  waterCapacity: 'MEDIUM',
-  waterSource: 'WELL',
-  previousCrop: 'WHEAT',
-  season: 'KHARIF',
-  plannedSowingDate: '2026-06-25',
+  soilType: null,
+  waterCapacity: null,
+  waterSource: null,
+  previousCrop: null,
+  season: null,
+  plannedSowingDate: null,
 };
 
 const DEFAULT_TOP_RECOMMENDATION: RecommendedCrop = {
@@ -114,7 +115,7 @@ const DEFAULT_TOP_RECOMMENDATION: RecommendedCrop = {
     'काली मिट्टी और मानसूनी मौसम के साथ 94% सबसे उत्तम कृषि अनुकूलता।',
     '95 दिनों की कम अवधि में कुएं से मध्यम पानी में सुरक्षित पैदावार।',
     'अनुमानित लागत (₹19,412/एकड़) के साथ सर्वाधिक शुद्ध मुनाफा।',
-    'पिछली गेहूं की फसल के बाद दलहन/तिलहन फसल चक्र से खेत की उर्वरता में वृद्धि।'
+    'पिछली गेहूं की फसल के बाद दलहन/तिलहन फसल चक्र से खेत की उर्वरता में वृद्धि।',
   ],
 };
 
@@ -181,25 +182,12 @@ const WizardContext = createContext<WizardContextType | undefined>(undefined);
 
 export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentCard, setCurrentCard] = useState<number>(1);
-  const [farmData, setFarmData] = useState<FarmQuestionnaireState>(() => {
-    try {
-      const saved = localStorage.getItem('krishi_farm_data');
-      return saved ? JSON.parse(saved) : DEFAULT_FARM_DATA;
-    } catch {
-      return DEFAULT_FARM_DATA;
-    }
-  });
+  const [farmData, setFarmData] = useState<FarmQuestionnaireState>(DEFAULT_FARM_DATA);
 
   const [topRecommendation, setTopRecommendation] = useState<RecommendedCrop | null>(DEFAULT_TOP_RECOMMENDATION);
   const [comparisonMatrix, setComparisonMatrix] = useState<ComparisonCropItem[]>(DEFAULT_COMPARISON_MATRIX);
   const [selectedCropId, setSelectedCropId] = useState<string>('SOYBEAN');
   const [isLoadingRecommendation, setIsLoadingRecommendation] = useState<boolean>(false);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('krishi_farm_data', JSON.stringify(farmData));
-    } catch {}
-  }, [farmData]);
 
   // Android Hardware Back Gesture integration
   useEffect(() => {
@@ -238,13 +226,13 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          total_land_acres: farmData.landAcres,
-          soil_type: farmData.soilType,
-          water_source: farmData.waterSource,
-          water_capacity_level: farmData.waterCapacity,
+          total_land_acres: farmData.landAcres || 2.5,
+          soil_type: farmData.soilType || 'BLACK',
+          water_source: farmData.waterSource || 'WELL',
+          water_capacity_level: farmData.waterCapacity || 'MEDIUM',
           working_capital_inr: 80000.0,
-          previous_season_crop: farmData.previousCrop,
-          planned_sowing_date: farmData.plannedSowingDate,
+          previous_season_crop: farmData.previousCrop || 'WHEAT',
+          planned_sowing_date: farmData.plannedSowingDate || '2026-06-25',
         }),
       });
 
@@ -261,7 +249,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               profitPerAcre: data.top_recommendation.expected_net_profit_per_acre_inr,
               yieldQtl: data.top_recommendation.expected_yield_qtl_per_acre,
               date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
-              landArea: farmData.landAcres,
+              landArea: farmData.landAcres || 2.5,
             })
           );
         }

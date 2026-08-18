@@ -9,6 +9,8 @@ export const SoilTypeCard: React.FC = () => {
   const { farmData, updateFarmData, nextCard, prevCard } = useWizard();
   const { language, t } = useLanguage();
 
+  const isSelectedAny = farmData.soilType !== null;
+
   const handleSelectSoil = (soilId: string) => {
     triggerHaptic('medium');
     updateFarmData({ soilType: soilId });
@@ -17,30 +19,21 @@ export const SoilTypeCard: React.FC = () => {
   const handleAudio = () => {
     triggerHaptic('light');
     const selectedSoilObj = soilTypesList.find((s) => s.id === farmData.soilType);
-    const soilName = selectedSoilObj ? selectedSoilObj.name[language] || selectedSoilObj.name.hi : 'काली मिट्टी';
-    const msg = `${t('card2Title')}। ${t('card2Sub')}। वर्तमान चयन ${soilName} है।`;
+    const soilName = selectedSoilObj ? selectedSoilObj.name[language] || selectedSoilObj.name.hi : 'कोई नहीं';
+    const msg = isSelectedAny
+      ? `${t('card2Title')}। वर्तमान चयन ${soilName} है।`
+      : `${t('card2Title')}। ${t('card2Sub')}`;
     speakText(msg, language);
   };
 
-  const getSoilColorGradient = (soilId: string) => {
-    switch (soilId) {
-      case 'BLACK':
-        return 'from-[#2b2b2b] to-[#121212] text-amber-100';
-      case 'LOAM':
-        return 'from-[#654321] to-[#3d2817] text-amber-50';
-      case 'RED':
-        return 'from-[#932727] to-[#591414] text-red-50';
-      case 'SANDY':
-        return 'from-[#b89770] to-[#785b3c] text-stone-900';
-      case 'CLAY':
-        return 'from-[#543d2b] to-[#2e2016] text-stone-100';
-      default:
-        return 'from-stone-600 to-stone-800 text-white';
-    }
+  const handleContinue = () => {
+    if (!isSelectedAny) return;
+    triggerHaptic('success');
+    nextCard();
   };
 
   return (
-    <div className="space-y-5 animate-fadeIn pb-48">
+    <div className="space-y-6 animate-fadeIn pb-48">
       
       {/* Card Header & Audio */}
       <div className="space-y-2">
@@ -61,83 +54,89 @@ export const SoilTypeCard: React.FC = () => {
           {t('card2Title')}
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
-          {t('card2Sub')}
+          नीचे दिए गए बड़े फोटो कार्ड देखकर अपने खेत की मिट्टी से मिलती-जुलती मिट्टी चुनें।
         </p>
       </div>
 
-      {/* Soil Cards List with Real Photographs & Texture Backdrops */}
-      <div className="space-y-3">
+      {/* Big Soil Cards List (Upper: Image, Lower: Info) */}
+      <div className="space-y-5">
         {soilTypesList.map((soil) => {
           const isSelected = farmData.soilType === soil.id;
           const soilName = soil.name[language] || soil.name.hi;
           const soilDesc = soil.description[language] || soil.description.hi;
-          const gradient = getSoilColorGradient(soil.id);
 
           return (
-            <button
+            <div
               key={soil.id}
-              type="button"
               onClick={() => handleSelectSoil(soil.id)}
-              className={`w-full text-left p-3.5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-3.5 items-center relative overflow-hidden ${
+              className={`w-full rounded-3xl border-2 transition-all cursor-pointer overflow-hidden shadow-sm active:scale-[0.99] ${
                 isSelected
-                  ? 'bg-primary/10 border-primary shadow-md ring-2 ring-primary/30'
-                  : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
+                  ? 'bg-primary/5 border-primary shadow-lg ring-4 ring-primary/25'
+                  : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/50'
               }`}
             >
-              {/* Real Photographic Image Thumbnail with Color Fallback */}
-              <div className={`relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-inner bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+              {/* UPPER PART: Prominent Large Soil Image Banner */}
+              <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-stone-900">
                 <img
                   src={soil.imageUrl}
                   alt={soilName}
-                  className="w-full h-full object-cover relative z-10"
-                  onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                  }}
+                  className="w-full h-full object-cover"
                 />
-                {/* Fallback Icon Texture */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-40">
-                  <span className="material-symbols-outlined text-3xl">landscape</span>
+
+                {/* Moisture Retention Badge */}
+                <div className="absolute top-3 right-3 bg-black/65 text-white backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold shadow-md flex items-center gap-1 border border-white/20">
+                  <span className="material-symbols-outlined text-sm text-blue-400">water_drop</span>
+                  <span>नमी: {soil.waterRetention.split(' ')[0]}</span>
                 </div>
 
+                {/* Selection Indicator Overlay */}
                 {isSelected && (
-                  <div className="absolute inset-0 bg-primary/40 z-20 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-white text-2xl drop-shadow">check_circle</span>
+                  <div className="absolute inset-0 bg-primary/20 backdrop-blur-[1px] flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center shadow-xl">
+                      <span className="material-symbols-outlined text-3xl">check</span>
+                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Text Description */}
-              <div className="flex-1 min-w-0 pr-1">
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <h3 className="text-base font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
+              {/* LOWER PART: Soil Information & Suitable Crops */}
+              <div className="p-5 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-extrabold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
                     {soilName}
                   </h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 flex-shrink-0">
-                    नमी: {soil.waterRetention.split(' ')[0]}
-                  </span>
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                    isSelected ? 'border-primary bg-primary text-white' : 'border-stone-400'
+                  }`}>
+                    {isSelected && <span className="material-symbols-outlined text-xs">check</span>}
+                  </div>
                 </div>
-                <p className="text-xs text-stone-600 dark:text-stone-400 line-clamp-2 leading-relaxed">
+
+                <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
                   {soilDesc}
                 </p>
-                <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                  {soil.suitableCrops.slice(0, 3).map((crop) => (
+
+                <div className="pt-1.5 border-t border-stone-100 dark:border-stone-800 flex items-center gap-1.5 flex-wrap">
+                  <span className="text-[11px] font-bold text-stone-500 mr-1">उपयुक्त फसलें:</span>
+                  {soil.suitableCrops.map((crop) => (
                     <span
                       key={crop}
-                      className="text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/20"
+                      className="text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-500/20"
                     >
                       {crop}
                     </span>
                   ))}
                 </div>
               </div>
-            </button>
+            </div>
           );
         })}
       </div>
 
-      {/* Sticky Bottom Action Bar with Back & Continue */}
+      {/* Sticky Bottom Action Bar with Back & Continue (Disabled until selected) */}
       <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex gap-3 bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
         <button
+          type="button"
           onClick={() => {
             triggerHaptic('light');
             prevCard();
@@ -149,11 +148,14 @@ export const SoilTypeCard: React.FC = () => {
         </button>
 
         <button
-          onClick={() => {
-            triggerHaptic('success');
-            nextCard();
-          }}
-          className="w-2/3 py-4 px-6 rounded-full bg-primary text-on-primary font-bold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          type="button"
+          onClick={handleContinue}
+          disabled={!isSelectedAny}
+          className={`w-2/3 py-4 px-6 rounded-full font-bold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
+            isSelectedAny
+              ? 'bg-primary text-on-primary active:scale-[0.98] cursor-pointer'
+              : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
+          }`}
         >
           <span>{t('continue')} (पानी की व्यवस्था)</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>

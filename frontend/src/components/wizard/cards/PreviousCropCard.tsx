@@ -8,6 +8,8 @@ export const PreviousCropCard: React.FC = () => {
   const { farmData, updateFarmData, nextCard, prevCard } = useWizard();
   const { language, t } = useLanguage();
 
+  const isSelectedAny = farmData.previousCrop !== null;
+
   const CROPS = [
     { id: 'WHEAT', title: t('cropWheat'), category: 'अनाज (Cereal)', icon: 'grain', iconBg: 'bg-amber-500/15 text-amber-600' },
     { id: 'GRAM', title: t('cropGram'), category: 'दलहन (Pulse)', icon: 'spa', iconBg: 'bg-emerald-500/15 text-emerald-600' },
@@ -25,12 +27,20 @@ export const PreviousCropCard: React.FC = () => {
   const handleAudio = () => {
     triggerHaptic('light');
     const selectedObj = CROPS.find((c) => c.id === farmData.previousCrop);
-    const msg = `${t('card4Title')}। ${t('card4Sub')}। वर्तमान चयन ${selectedObj?.title || 'गेहूं'} है।`;
+    const msg = isSelectedAny
+      ? `${t('card4Title')}। वर्तमान चयन ${selectedObj?.title || ''} है।`
+      : `${t('card4Title')}। ${t('card4Sub')}`;
     speakText(msg, language);
   };
 
+  const handleContinue = () => {
+    if (!isSelectedAny) return;
+    triggerHaptic('success');
+    nextCard();
+  };
+
   return (
-    <div className="space-y-6 animate-fadeIn pb-36">
+    <div className="space-y-6 animate-fadeIn pb-44">
       
       {/* Card Header & Audio */}
       <div className="space-y-2">
@@ -56,7 +66,7 @@ export const PreviousCropCard: React.FC = () => {
       </div>
 
       {/* 2-Column Crop Tiles Grid */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3.5">
         {CROPS.map((c) => {
           const isSelected = farmData.previousCrop === c.id;
           return (
@@ -71,7 +81,7 @@ export const PreviousCropCard: React.FC = () => {
               }`}
             >
               {isSelected && (
-                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center">
+                <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center">
                   <span className="material-symbols-outlined text-xs">check</span>
                 </div>
               )}
@@ -91,9 +101,10 @@ export const PreviousCropCard: React.FC = () => {
         })}
       </div>
 
-      {/* Sticky Bottom Action Bar with Back & Continue */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex gap-3">
+      {/* Sticky Bottom Action Bar with Back & Continue (Disabled until selected) */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex gap-3 bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
         <button
+          type="button"
           onClick={() => {
             triggerHaptic('light');
             prevCard();
@@ -105,11 +116,14 @@ export const PreviousCropCard: React.FC = () => {
         </button>
 
         <button
-          onClick={() => {
-            triggerHaptic('success');
-            nextCard();
-          }}
-          className="w-2/3 py-4 px-6 rounded-full bg-primary text-on-primary font-bold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          type="button"
+          onClick={handleContinue}
+          disabled={!isSelectedAny}
+          className={`w-2/3 py-4 px-6 rounded-full font-bold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
+            isSelectedAny
+              ? 'bg-primary text-on-primary active:scale-[0.98] cursor-pointer'
+              : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
+          }`}
         >
           <span>{t('continue')} (बुवाई का मौसम)</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>

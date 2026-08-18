@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useWizard } from '../../../context/WizardContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { triggerHaptic } from '../../../lib/utils';
@@ -8,21 +8,38 @@ export const FarmSizeCard: React.FC = () => {
   const { farmData, updateFarmData, nextCard } = useWizard();
   const { language, t } = useLanguage();
 
-  const QUICK_ACRES = [1, 2, 2.5, 3, 5, 10];
+  const [inputVal, setInputVal] = useState<string>(
+    farmData.landAcres !== null ? String(farmData.landAcres) : ''
+  );
 
-  const handleSelectArea = (acres: number) => {
-    triggerHaptic('medium');
-    updateFarmData({ landAcres: acres });
+  const parsedArea = parseFloat(inputVal);
+  const isValid = !isNaN(parsedArea) && parsedArea > 0 && parsedArea <= 500;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInputVal(val);
+    const num = parseFloat(val);
+    if (!isNaN(num) && num > 0) {
+      updateFarmData({ landAcres: num });
+    } else {
+      updateFarmData({ landAcres: null });
+    }
   };
 
   const handleAudio = () => {
     triggerHaptic('light');
-    const msg = `${t('card1Title')}। ${t('card1Sub')}। वर्तमान चयन ${farmData.landAcres} एकड़ है।`;
+    const msg = `${t('card1Title')}। कृपया अपने खेत का आकार कीबोर्ड से टाइप करें।`;
     speakText(msg, language);
   };
 
+  const handleContinue = () => {
+    if (!isValid) return;
+    triggerHaptic('success');
+    nextCard();
+  };
+
   return (
-    <div className="space-y-6 animate-fadeIn pb-36">
+    <div className="space-y-6 animate-fadeIn pb-44">
       
       {/* Card Header & Audio */}
       <div className="space-y-2">
@@ -43,77 +60,54 @@ export const FarmSizeCard: React.FC = () => {
           {t('card1Title')}
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
-          {t('card1Sub')}
+          नीचे दिए गए बॉक्स में अपने खेत का कुल रकबा (एकड़ में) कीबोर्ड द्वारा दर्ज करें।
         </p>
       </div>
 
-      {/* Primary Visual Area Display */}
-      <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/20 rounded-3xl p-6 text-center space-y-3 shadow-sm">
-        <span className="text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
+      {/* Main Direct Keyboard Input Box */}
+      <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/30 rounded-3xl p-6 shadow-sm space-y-4">
+        <label className="block text-xs font-bold text-stone-600 dark:text-stone-300 uppercase tracking-wider text-center">
           कुल जमीन (खेत का आकार)
-        </span>
-        <div className="flex items-baseline justify-center gap-2">
-          <span className="text-5xl font-extrabold text-primary font-headline">
-            {farmData.landAcres}
-          </span>
-          <span className="text-xl font-bold text-stone-700 dark:text-stone-300">
-            {t('acre')}
-          </span>
-        </div>
-      </div>
-
-      {/* Quick Select Preset Tiles */}
-      <div className="space-y-2">
-        <label className="text-xs font-bold text-stone-700 dark:text-stone-300 block">
-          जल्दी चुनें:
         </label>
-        <div className="grid grid-cols-3 gap-3">
-          {QUICK_ACRES.map((val) => {
-            const isSelected = farmData.landAcres === val;
-            return (
-              <button
-                key={val}
-                type="button"
-                onClick={() => handleSelectArea(val)}
-                className={`py-3.5 px-2 rounded-2xl border-2 font-bold text-sm transition-all active:scale-95 ${
-                  isSelected
-                    ? 'bg-primary text-white border-primary shadow-md ring-2 ring-primary/30'
-                    : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 hover:border-primary/40'
-                }`}
-              >
-                {val} {t('acre')}
-              </button>
-            );
-          })}
+
+        <div className="relative flex items-center justify-center max-w-xs mx-auto">
+          <input
+            type="number"
+            inputMode="decimal"
+            step="0.1"
+            min="0.1"
+            max="500"
+            value={inputVal}
+            onChange={handleChange}
+            placeholder="उदा. 2.5"
+            className="w-full text-center py-5 px-4 rounded-2xl bg-stone-50 dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-[#1A1C18] dark:text-[#E2E3DC] font-extrabold text-3xl focus:border-primary focus:bg-white dark:focus:bg-[#1A1E17] focus:outline-none shadow-inner tracking-wider"
+            autoFocus
+          />
         </div>
+
+        <div className="flex items-center justify-center gap-2 text-center text-sm font-bold text-primary">
+          <span className="material-symbols-outlined text-xl">landscape</span>
+          <span>इकाई: एकड़ (Acres)</span>
+        </div>
+
+        {!isValid && inputVal.length > 0 && (
+          <p className="text-xs text-center text-red-500 font-semibold">
+            कृपया ०.१ से अधिक मान्य संख्या दर्ज करें।
+          </p>
+        )}
       </div>
 
-      {/* Range Slider for Custom Sizing */}
-      <div className="space-y-2 bg-stone-50 dark:bg-stone-900/60 p-4 rounded-2xl border border-stone-200/80 dark:border-stone-800">
-        <div className="flex justify-between text-xs font-bold text-stone-600 dark:text-stone-400">
-          <span>०.५ एकड़</span>
-          <span>कस्टम साइज बदलें</span>
-          <span>२५ एकड़</span>
-        </div>
-        <input
-          type="range"
-          min="0.5"
-          max="25"
-          step="0.5"
-          value={farmData.landAcres}
-          onChange={(e) => updateFarmData({ landAcres: parseFloat(e.target.value) })}
-          className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-primary"
-        />
-      </div>
-
-      {/* Sticky Bottom Action */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto">
+      {/* Sticky Bottom Action Bar with Disabled State until input is entered */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
         <button
-          onClick={() => {
-            triggerHaptic('success');
-            nextCard();
-          }}
-          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-bold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          type="button"
+          onClick={handleContinue}
+          disabled={!isValid}
+          className={`w-full py-4 px-6 rounded-full font-bold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
+            isValid
+              ? 'bg-primary text-on-primary active:scale-[0.98] cursor-pointer'
+              : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
+          }`}
         >
           <span>{t('continue')} (मिट्टी का प्रकार)</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>
