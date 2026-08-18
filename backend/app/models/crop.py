@@ -70,7 +70,14 @@ class RecommendationLog(Base):
     farmer_id = Column(String(50), ForeignKey("farmers.farmer_id"), nullable=True)
     planned_sowing_date = Column(String(20), nullable=False)
     top_recommended_crop = Column(String(30), nullable=False)
+    total_land_acres = Column(Float, nullable=True, default=1.0)
+    soil_type = Column(String(50), nullable=True, default="BLACK")
+    water_source = Column(String(50), nullable=True, default="WELL")
+    expected_yield_qtl_per_acre = Column(Float, nullable=True, default=9.5)
+    total_cost_per_acre = Column(Float, nullable=True, default=19412.0)
     expected_profit_per_acre = Column(Float, nullable=False)
+    match_score = Column(Float, nullable=True, default=90.0)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     farmer = relationship("Farmer", back_populates="recommendations")
+

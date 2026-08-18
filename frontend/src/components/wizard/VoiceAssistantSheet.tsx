@@ -27,7 +27,7 @@ export const VoiceAssistantSheet: React.FC<VoiceAssistantSheetProps> = ({
 
       session = startVoiceRecognition(
         language === 'en' ? 'en' : 'hi',
-        (text, isFinal) => {
+        (text: string, isFinal: boolean) => {
           setTranscript(text);
           if (isFinal) {
             // Auto match common crops
@@ -43,7 +43,7 @@ export const VoiceAssistantSheet: React.FC<VoiceAssistantSheetProps> = ({
             }
           }
         },
-        (err) => {
+        (err: any) => {
           console.warn('Voice recognition:', err);
         },
         () => {

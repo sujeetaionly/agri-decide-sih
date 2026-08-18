@@ -1,7 +1,7 @@
 """
 Database Seed Script:
 Populates PostgreSQL / SQLite database with complete benchmark datasets:
-1. 15 Master Crops (with names in EN/HI/MR, durations, water requirements)
+1. 15 Master Crops (with pure localized Indic names)
 2. Official CACP Cultivation Cost breakdown per acre
 3. Historical Mandi Wholesale Prices from Agmarknet
 4. District Sowing Windows (ICAR benchmarks)
@@ -13,9 +13,9 @@ from backend.app.models.crop import Crop, CropCostCACP, MandiPriceHistorical, Di
 SEED_CROPS = [
     {
         "crop_id": "SOYBEAN",
-        "crop_name_en": "Soybean (JS-335)",
-        "crop_name_hi": "सोयाबीन (जेएस-335)",
-        "crop_name_mr": "सोयाबीन (जेएस-३३५)",
+        "crop_name_en": "Soybean",
+        "crop_name_hi": "सोयाबीन",
+        "crop_name_mr": "सोयाबीन",
         "category": "OILSEED",
         "duration_days_standard": 95,
         "water_requirement_mm": 500.0,
@@ -23,9 +23,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "MAIZE",
-        "crop_name_en": "Maize (Hybrid HQPM-1)",
-        "crop_name_hi": "मक्का (एचक्यूपीएम-1)",
-        "crop_name_mr": "मका (एचक्यूपीएम-१)",
+        "crop_name_en": "Maize",
+        "crop_name_hi": "मक्का",
+        "crop_name_mr": "मका",
         "category": "CEREAL",
         "duration_days_standard": 105,
         "water_requirement_mm": 600.0,
@@ -33,9 +33,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "TUR",
-        "crop_name_en": "Tur / Arhar (BDN-711)",
-        "crop_name_hi": "तुअर / अरहर (बीडीएन-711)",
-        "crop_name_mr": "तूर (बीडीएन-७११)",
+        "crop_name_en": "Tur",
+        "crop_name_hi": "अरहर",
+        "crop_name_mr": "तूर",
         "category": "PULSE",
         "duration_days_standard": 180,
         "water_requirement_mm": 450.0,
@@ -43,9 +43,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "COTTON",
-        "crop_name_en": "Cotton (Bt Hybrid)",
-        "crop_name_hi": "कपास (बीटी हाइब्रिड)",
-        "crop_name_mr": "कापूस (बीटी संकरित)",
+        "crop_name_en": "Cotton",
+        "crop_name_hi": "कपास",
+        "crop_name_mr": "कापूस",
         "category": "FIBRE",
         "duration_days_standard": 160,
         "water_requirement_mm": 700.0,
@@ -53,9 +53,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "BAJRA",
-        "crop_name_en": "Bajra (Pearl Millet - HHB 67)",
-        "crop_name_hi": "बाजरा (एचएचबी 67)",
-        "crop_name_mr": "बाजरी (एचएचबी ६७)",
+        "crop_name_en": "Bajra",
+        "crop_name_hi": "बाजरा",
+        "crop_name_mr": "बाजरी",
         "category": "CEREAL",
         "duration_days_standard": 85,
         "water_requirement_mm": 350.0,
@@ -63,9 +63,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "MOONG",
-        "crop_name_en": "Moong (Green Gram - IPM 205-7)",
-        "crop_name_hi": "मूंग (विराट - आईपीएम 205-7)",
-        "crop_name_mr": "मूग (विराट)",
+        "crop_name_en": "Moong",
+        "crop_name_hi": "मूंग",
+        "crop_name_mr": "मूग",
         "category": "PULSE",
         "duration_days_standard": 70,
         "water_requirement_mm": 300.0,
@@ -73,9 +73,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "GROUNDNUT",
-        "crop_name_en": "Groundnut (TG-37A)",
-        "crop_name_hi": "मूंगफली (टीजी-37ए)",
-        "crop_name_mr": "भुईमूग (टीजी-३७ए)",
+        "crop_name_en": "Groundnut",
+        "crop_name_hi": "मूंगफली",
+        "crop_name_mr": "भुईमूग",
         "category": "OILSEED",
         "duration_days_standard": 120,
         "water_requirement_mm": 550.0,
@@ -83,9 +83,9 @@ SEED_CROPS = [
     },
     {
         "crop_id": "WHEAT",
-        "crop_name_en": "Wheat (HD-2967)",
-        "crop_name_hi": "गेहूं (एचडी-2967)",
-        "crop_name_mr": "गहू (एचडी-२९६७)",
+        "crop_name_en": "Wheat",
+        "crop_name_hi": "गेहूं",
+        "crop_name_mr": "गहू",
         "category": "CEREAL",
         "duration_days_standard": 125,
         "water_requirement_mm": 450.0,
@@ -93,19 +93,19 @@ SEED_CROPS = [
     },
     {
         "crop_id": "GRAM",
-        "crop_name_en": "Gram / Chana (Digvijay)",
-        "crop_name_hi": "चना (दिग्विजय)",
-        "crop_name_mr": "हरभरा (दिग्विजय)",
+        "crop_name_en": "Gram",
+        "crop_name_hi": "चना",
+        "crop_name_mr": "हरभरा",
         "category": "PULSE",
         "duration_days_standard": 110,
-        "water_requirement_mm": 300.0,
+        "water_requirement_mm": 350.0,
         "suitable_soil_types": "BLACK,LOAM"
     },
     {
         "crop_id": "JOWAR",
-        "crop_name_en": "Jowar / Sorghum (CSH-16)",
-        "crop_name_hi": "ज्वार (सीएसएच-16)",
-        "crop_name_mr": "ज्वारी (सीएसएच-१६)",
+        "crop_name_en": "Jowar",
+        "crop_name_hi": "ज्वार",
+        "crop_name_mr": "ज्वारी",
         "category": "CEREAL",
         "duration_days_standard": 100,
         "water_requirement_mm": 400.0,
@@ -113,29 +113,29 @@ SEED_CROPS = [
     },
     {
         "crop_id": "URAD",
-        "crop_name_en": "Urad (Black Gram - TAU-1)",
-        "crop_name_hi": "उड़द (टीएयू-1)",
-        "crop_name_mr": "उडीद (टीएयू-१)",
+        "crop_name_en": "Urad",
+        "crop_name_hi": "उड़द",
+        "crop_name_mr": "उडीद",
         "category": "PULSE",
         "duration_days_standard": 75,
-        "water_requirement_mm": 320.0,
-        "suitable_soil_types": "BLACK,LOAM"
+        "water_requirement_mm": 350.0,
+        "suitable_soil_types": "LOAM,BLACK"
     },
     {
         "crop_id": "SUNFLOWER",
-        "crop_name_en": "Sunflower (KBSH-53)",
-        "crop_name_hi": "सूरजमुखी (केबीएसएच-53)",
-        "crop_name_mr": "सूर्यफूल (केबीएसएच-५३)",
+        "crop_name_en": "Sunflower",
+        "crop_name_hi": "सूरजमुखी",
+        "crop_name_mr": "सूर्यफूल",
         "category": "OILSEED",
         "duration_days_standard": 90,
-        "water_requirement_mm": 480.0,
-        "suitable_soil_types": "BLACK,LOAM,RED"
+        "water_requirement_mm": 400.0,
+        "suitable_soil_types": "LOAM,BLACK"
     },
     {
         "crop_id": "SUGARCANE",
-        "crop_name_en": "Sugarcane (Co-86032)",
-        "crop_name_hi": "गन्ना (को-86032)",
-        "crop_name_mr": "ऊस (को-८६०३२)",
+        "crop_name_en": "Sugarcane",
+        "crop_name_hi": "गन्ना",
+        "crop_name_mr": "ऊस",
         "category": "COMMERCIAL",
         "duration_days_standard": 360,
         "water_requirement_mm": 1800.0,
@@ -143,110 +143,138 @@ SEED_CROPS = [
     },
     {
         "crop_id": "ONION",
-        "crop_name_en": "Onion (Bhima Super)",
-        "crop_name_hi": "प्याज (भीमा सुपर)",
-        "crop_name_mr": "कांदा (भीमा सुपर)",
+        "crop_name_en": "Onion",
+        "crop_name_hi": "प्याज",
+        "crop_name_mr": "कांदा",
         "category": "HORTICULTURE",
         "duration_days_standard": 120,
-        "water_requirement_mm": 600.0,
-        "suitable_soil_types": "LOAM,BLACK,RED"
+        "water_requirement_mm": 500.0,
+        "suitable_soil_types": "LOAM,SANDY"
     },
     {
         "crop_id": "TOMATO",
-        "crop_name_en": "Tomato (Abhinav)",
-        "crop_name_hi": "टमाटर (अभिनव)",
-        "crop_name_mr": "टोमॅटो (अभिनव)",
+        "crop_name_en": "Tomato",
+        "crop_name_hi": "टमाटर",
+        "crop_name_mr": "टोमॅटो",
         "category": "HORTICULTURE",
         "duration_days_standard": 130,
-        "water_requirement_mm": 650.0,
-        "suitable_soil_types": "LOAM,RED,BLACK"
+        "water_requirement_mm": 600.0,
+        "suitable_soil_types": "LOAM,BLACK,RED"
     }
 ]
 
-# Official CACP Cultivation Cost breakdown per acre (in ₹)
+# Official CACP Cost of Cultivation (per acre INR benchmarks)
 SEED_CACP_COSTS = [
-    {"crop_id": "SOYBEAN", "seed": 4200, "fert": 5800, "pest": 3200, "mach": 5500, "labour": 8100, "irri": 2000, "total": 28800.0},
-    {"crop_id": "MAIZE", "seed": 3500, "fert": 6200, "pest": 2400, "mach": 5200, "labour": 7200, "irri": 1800, "total": 26300.0},
-    {"crop_id": "TUR", "seed": 2200, "fert": 4800, "pest": 3800, "mach": 4500, "labour": 7500, "irri": 1500, "total": 24300.0},
-    {"crop_id": "COTTON", "seed": 3800, "fert": 7500, "pest": 6800, "mach": 5800, "labour": 14200, "irri": 2200, "total": 40300.0},
-    {"crop_id": "BAJRA", "seed": 1800, "fert": 3800, "pest": 1600, "mach": 4200, "labour": 6200, "irri": 1200, "total": 18800.0},
-    {"crop_id": "MOONG", "seed": 2400, "fert": 3600, "pest": 2800, "mach": 4000, "labour": 6300, "irri": 1200, "total": 20300.0},
-    {"crop_id": "GROUNDNUT", "seed": 6500, "fert": 5200, "pest": 3100, "mach": 5400, "labour": 10300, "irri": 1800, "total": 32300.0},
-    {"crop_id": "WHEAT", "seed": 3200, "fert": 5400, "pest": 2100, "mach": 4800, "labour": 6800, "irri": 2200, "total": 24500.0},
-    {"crop_id": "GRAM", "seed": 2800, "fert": 3500, "pest": 2600, "mach": 3900, "labour": 5500, "irri": 1200, "total": 19500.0},
-    {"crop_id": "JOWAR", "seed": 2000, "fert": 4200, "pest": 1900, "mach": 4400, "labour": 7100, "irri": 1400, "total": 21000.0},
-    {"crop_id": "URAD", "seed": 2300, "fert": 3500, "pest": 2700, "mach": 4100, "labour": 6200, "irri": 1200, "total": 20000.0},
-    {"crop_id": "SUNFLOWER", "seed": 2900, "fert": 5100, "pest": 2800, "mach": 4900, "labour": 7700, "irri": 1600, "total": 25000.0},
-    {"crop_id": "SUGARCANE", "seed": 12000, "fert": 16000, "pest": 5000, "mach": 9000, "labour": 21000, "irri": 5000, "total": 68000.0},
-    {"crop_id": "ONION", "seed": 5500, "fert": 9500, "pest": 4800, "mach": 6200, "labour": 16000, "irri": 3000, "total": 45000.0},
-    {"crop_id": "TOMATO", "seed": 6500, "fert": 11000, "pest": 7200, "mach": 6500, "labour": 17800, "irri": 3000, "total": 52000.0}
+    {"crop_id": "SOYBEAN", "seed_cost": 2250.0, "fertilizer_cost": 2450.0, "pesticide_cost": 1350.0, "machinery_rental_cost": 1950.0, "labour_cost": 2850.0, "irrigation_electricity_cost": 394.0, "total_cost_per_acre": 19412.0},
+    {"crop_id": "MAIZE", "seed_cost": 1950.0, "fertilizer_cost": 3250.0, "pesticide_cost": 850.0, "machinery_rental_cost": 2650.0, "labour_cost": 3950.0, "irrigation_electricity_cost": 543.0, "total_cost_per_acre": 18211.0},
+    {"crop_id": "TUR", "seed_cost": 1150.0, "fertilizer_cost": 2450.0, "pesticide_cost": 1650.0, "machinery_rental_cost": 3100.0, "labour_cost": 4850.0, "irrigation_electricity_cost": 845.0, "total_cost_per_acre": 24436.0},
+    {"crop_id": "COTTON", "seed_cost": 2150.0, "fertilizer_cost": 3850.0, "pesticide_cost": 2650.0, "machinery_rental_cost": 2950.0, "labour_cost": 5450.0, "irrigation_electricity_cost": 780.0, "total_cost_per_acre": 26300.0},
+    {"crop_id": "BAJRA", "seed_cost": 750.0, "fertilizer_cost": 1950.0, "pesticide_cost": 450.0, "machinery_rental_cost": 2100.0, "labour_cost": 3450.0, "irrigation_electricity_cost": 490.0, "total_cost_per_acre": 17264.0},
+    {"crop_id": "MOONG", "seed_cost": 1250.0, "fertilizer_cost": 1650.0, "pesticide_cost": 950.0, "machinery_rental_cost": 2350.0, "labour_cost": 3650.0, "irrigation_electricity_cost": 605.0, "total_cost_per_acre": 14015.0},
+    {"crop_id": "GROUNDNUT", "seed_cost": 4850.0, "fertilizer_cost": 2950.0, "pesticide_cost": 1250.0, "machinery_rental_cost": 3450.0, "labour_cost": 5450.0, "irrigation_electricity_cost": 969.0, "total_cost_per_acre": 30351.0},
+    {"crop_id": "WHEAT", "seed_cost": 1850.0, "fertilizer_cost": 3100.0, "pesticide_cost": 650.0, "machinery_rental_cost": 4200.0, "labour_cost": 4550.0, "irrigation_electricity_cost": 2232.0, "total_cost_per_acre": 16582.0},
+    {"crop_id": "GRAM", "seed_cost": 2100.0, "fertilizer_cost": 1850.0, "pesticide_cost": 950.0, "machinery_rental_cost": 2250.0, "labour_cost": 2950.0, "irrigation_electricity_cost": 639.0, "total_cost_per_acre": 13465.0},
+    {"crop_id": "JOWAR", "seed_cost": 800.0, "fertilizer_cost": 2100.0, "pesticide_cost": 600.0, "machinery_rental_cost": 2200.0, "labour_cost": 3200.0, "irrigation_electricity_cost": 500.0, "total_cost_per_acre": 16000.0},
+    {"crop_id": "URAD", "seed_cost": 1150.0, "fertilizer_cost": 1550.0, "pesticide_cost": 850.0, "machinery_rental_cost": 1950.0, "labour_cost": 3450.0, "irrigation_electricity_cost": 525.0, "total_cost_per_acre": 12202.0},
+    {"crop_id": "SUNFLOWER", "seed_cost": 950.0, "fertilizer_cost": 1350.0, "pesticide_cost": 450.0, "machinery_rental_cost": 950.0, "labour_cost": 1450.0, "irrigation_electricity_cost": 219.0, "total_cost_per_acre": 13152.0},
+    {"crop_id": "SUGARCANE", "seed_cost": 6850.0, "fertilizer_cost": 8950.0, "pesticide_cost": 2450.0, "machinery_rental_cost": 5200.0, "labour_cost": 12450.0, "irrigation_electricity_cost": 2465.0, "total_cost_per_acre": 57053.0},
+    {"crop_id": "ONION", "seed_cost": 3850.0, "fertilizer_cost": 5450.0, "pesticide_cost": 2850.0, "machinery_rental_cost": 3850.0, "labour_cost": 8950.0, "irrigation_electricity_cost": 1355.0, "total_cost_per_acre": 41278.0},
+    {"crop_id": "TOMATO", "seed_cost": 4650.0, "fertilizer_cost": 6850.0, "pesticide_cost": 3950.0, "machinery_rental_cost": 4150.0, "labour_cost": 10250.0, "irrigation_electricity_cost": 1716.0, "total_cost_per_acre": 52002.0}
 ]
 
 # Sowing Windows
 SEED_SOWING_WINDOWS = [
-    {"district": "Pune", "crop_id": "SOYBEAN", "optimal_start": "06-15", "optimal_end": "07-05", "late_cutoff": "07-20"},
-    {"district": "Pune", "crop_id": "MAIZE", "optimal_start": "06-10", "optimal_end": "07-10", "late_cutoff": "07-25"},
-    {"district": "Pune", "crop_id": "TUR", "optimal_start": "06-15", "optimal_end": "07-10", "late_cutoff": "07-25"},
-    {"district": "Pune", "crop_id": "COTTON", "optimal_start": "06-01", "optimal_end": "06-25", "late_cutoff": "07-10"},
-    {"district": "Pune", "crop_id": "BAJRA", "optimal_start": "06-15", "optimal_end": "07-15", "late_cutoff": "07-30"},
-    {"district": "Pune", "crop_id": "MOONG", "optimal_start": "06-15", "optimal_end": "07-10", "late_cutoff": "07-25"},
-    {"district": "Pune", "crop_id": "GROUNDNUT", "optimal_start": "06-15", "optimal_end": "07-05", "late_cutoff": "07-20"},
-    {"district": "Jaipur", "crop_id": "BAJRA", "optimal_start": "06-25", "optimal_end": "07-15", "late_cutoff": "07-30"},
-    {"district": "Jaipur", "crop_id": "MOONG", "optimal_start": "06-25", "optimal_end": "07-15", "late_cutoff": "07-30"},
-    {"district": "Jaipur", "crop_id": "GROUNDNUT", "optimal_start": "06-20", "optimal_end": "07-10", "late_cutoff": "07-25"},
-    {"district": "Jaipur", "crop_id": "SOYBEAN", "optimal_start": "06-25", "optimal_end": "07-10", "late_cutoff": "07-20"}
+    {"crop_id": "SOYBEAN", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-15", "optimal_end_date": "07-10", "late_cutoff_date": "07-25"},
+    {"crop_id": "MAIZE", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-15", "optimal_end_date": "07-15", "late_cutoff_date": "07-30"},
+    {"crop_id": "TUR", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-15", "optimal_end_date": "07-15", "late_cutoff_date": "07-30"},
+    {"crop_id": "COTTON", "district": "Pune", "season": "Kharif", "optimal_start_date": "05-25", "optimal_end_date": "06-25", "late_cutoff_date": "07-10"},
+    {"crop_id": "BAJRA", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-20", "optimal_end_date": "07-15", "late_cutoff_date": "07-30"},
+    {"crop_id": "MOONG", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-20", "optimal_end_date": "07-10", "late_cutoff_date": "07-25"},
+    {"crop_id": "GROUNDNUT", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-15", "optimal_end_date": "07-10", "late_cutoff_date": "07-25"},
+    {"crop_id": "WHEAT", "district": "Pune", "season": "Rabi", "optimal_start_date": "11-01", "optimal_end_date": "11-25", "late_cutoff_date": "12-15"},
+    {"crop_id": "GRAM", "district": "Pune", "season": "Rabi", "optimal_start_date": "10-15", "optimal_end_date": "11-10", "late_cutoff_date": "11-25"},
+    {"crop_id": "JOWAR", "district": "Pune", "season": "Kharif", "optimal_start_date": "07-01", "optimal_end_date": "07-30", "late_cutoff_date": "08-15"},
+    {"crop_id": "URAD", "district": "Pune", "season": "Kharif", "optimal_start_date": "06-20", "optimal_end_date": "07-10", "late_cutoff_date": "07-25"},
+    {"crop_id": "SUNFLOWER", "district": "Pune", "season": "Rabi", "optimal_start_date": "10-01", "optimal_end_date": "10-30", "late_cutoff_date": "11-15"},
+    {"crop_id": "SUGARCANE", "district": "Pune", "season": "Annual", "optimal_start_date": "01-15", "optimal_end_date": "02-28", "late_cutoff_date": "03-15"},
+    {"crop_id": "ONION", "district": "Pune", "season": "Rabi", "optimal_start_date": "10-15", "optimal_end_date": "11-15", "late_cutoff_date": "12-01"},
+    {"crop_id": "TOMATO", "district": "Pune", "season": "Rabi", "optimal_start_date": "09-15", "optimal_end_date": "10-15", "late_cutoff_date": "11-01"}
 ]
 
 def seed_database():
-    """Seeds the database with initial benchmark datasets."""
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
+
     try:
-        # Seed Crops
-        for crop_data in SEED_CROPS:
-            existing = db.query(Crop).filter(Crop.crop_id == crop_data["crop_id"]).first()
+        # 1. Seed Crops
+        for c in SEED_CROPS:
+            existing = db.query(Crop).filter(Crop.crop_id == c["crop_id"]).first()
             if not existing:
-                db.add(Crop(**crop_data))
+                crop = Crop(
+                    crop_id=c["crop_id"],
+                    crop_name_en=c["crop_name_en"],
+                    crop_name_hi=c["crop_name_hi"],
+                    crop_name_mr=c["crop_name_mr"],
+                    category=c["category"],
+                    duration_days_standard=c["duration_days_standard"],
+                    water_requirement_mm=c["water_requirement_mm"],
+                    suitable_soil_types=c["suitable_soil_types"]
+                )
+                db.add(crop)
+            else:
+                existing.crop_name_hi = c["crop_name_hi"]
+                existing.crop_name_mr = c["crop_name_mr"]
+
         db.commit()
 
-        # Seed CACP Costs
-        for cost_data in SEED_CACP_COSTS:
-            existing = db.query(CropCostCACP).filter(CropCostCACP.crop_id == cost_data["crop_id"]).first()
+        # 2. Seed CACP Costs
+        for cost in SEED_CACP_COSTS:
+            existing = db.query(CropCostCACP).filter(
+                CropCostCACP.crop_id == cost["crop_id"],
+                CropCostCACP.state == "Maharashtra"
+            ).first()
+
             if not existing:
-                db.add(CropCostCACP(
-                    crop_id=cost_data["crop_id"],
+                cacp = CropCostCACP(
+                    crop_id=cost["crop_id"],
                     state="Maharashtra",
                     district="Pune",
-                    seed_cost=cost_data["seed"],
-                    fertilizer_cost=cost_data["fert"],
-                    pesticide_cost=cost_data["pest"],
-                    machinery_rental_cost=cost_data["mach"],
-                    labour_cost=cost_data["labour"],
-                    irrigation_electricity_cost=cost_data["irri"],
-                    total_cost_per_acre=cost_data["total"]
-                ))
+                    seed_cost=cost["seed_cost"],
+                    fertilizer_cost=cost["fertilizer_cost"],
+                    pesticide_cost=cost["pesticide_cost"],
+                    machinery_rental_cost=cost["machinery_rental_cost"],
+                    labour_cost=cost["labour_cost"],
+                    irrigation_electricity_cost=cost["irrigation_electricity_cost"],
+                    total_cost_per_acre=cost["total_cost_per_acre"]
+                )
+                db.add(cacp)
+
         db.commit()
 
-        # Seed Sowing Windows
-        for win in SEED_SOWING_WINDOWS:
+        # 3. Seed Sowing Windows
+        for sw in SEED_SOWING_WINDOWS:
             existing = db.query(DistrictSowingWindow).filter(
-                DistrictSowingWindow.district == win["district"],
-                DistrictSowingWindow.crop_id == win["crop_id"]
+                DistrictSowingWindow.crop_id == sw["crop_id"],
+                DistrictSowingWindow.district == sw["district"]
             ).first()
+
             if not existing:
-                db.add(DistrictSowingWindow(
-                    district=win["district"],
-                    crop_id=win["crop_id"],
-                    season="Kharif",
-                    optimal_start_date=win["optimal_start"],
-                    optimal_end_date=win["optimal_end"],
-                    late_cutoff_date=win["late_cutoff"]
-                ))
+                window = DistrictSowingWindow(
+                    crop_id=sw["crop_id"],
+                    district=sw["district"],
+                    season=sw["season"],
+                    optimal_start_date=sw["optimal_start_date"],
+                    optimal_end_date=sw["optimal_end_date"],
+                    late_cutoff_date=sw["late_cutoff_date"]
+                )
+                db.add(window)
+
         db.commit()
         print("[SUCCESS] Database successfully seeded with 15 crops, CACP cost breakdowns, and sowing windows!")
+
     except Exception as e:
         db.rollback()
-        print(f"[ERROR] Error seeding database: {e}")
+        print(f"[ERROR] Database seeding failed: {e}")
     finally:
         db.close()
 
