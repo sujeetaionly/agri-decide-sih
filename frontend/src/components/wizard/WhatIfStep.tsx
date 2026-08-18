@@ -34,42 +34,44 @@ export const WhatIfStep: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-24">
+    <div className="space-y-5 animate-fadeIn pb-36">
       
-      {/* Header & Audio */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
-            जोखिम व मौसम सिमुलेटर
-          </span>
+      {/* Clean Title & Description Header with Proper Hierarchy */}
+      <div className="space-y-2 pb-2">
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
+            मौसम व बाजार जोखिम सिमुलेशन
+          </h2>
+
           <button
+            type="button"
             onClick={handleAudio}
-            className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 active:scale-95"
+            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
           >
             <span className="material-symbols-outlined text-base">volume_up</span>
             <span>{t('listen')}</span>
           </button>
         </div>
-
-        <h2 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug">
-          मौसम या बाजार भाव बदलने पर क्या होगा?
-        </h2>
-        <p className="text-xs text-stone-500 dark:text-stone-400">
-          नीचे दिए गए स्लाइडर्स को बदलकर देखें कि कम बारिश में फसल कितनी सुरक्षित रहेगी।
+        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
+          स्लाइडर बदलकर देखें कि कम बारिश या भाव में बदलाव होने पर {cropName} कितनी सुरक्षित रहेगी।
         </p>
       </div>
 
       {/* Interactive Sliders Card */}
-      <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-5">
+      <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-2xs space-y-5">
         
         {/* Rainfall Deficit Slider */}
         <div className="space-y-2.5">
           <div className="flex justify-between items-center text-xs font-bold">
             <span className="flex items-center gap-1.5 text-[#1A1C18] dark:text-[#E2E3DC]">
-              <span className="material-symbols-outlined text-lg text-blue-600">rainy</span>
+              <span className="material-symbols-outlined text-lg text-emerald-700 dark:text-emerald-400">rainy</span>
               <span>मानसूनी बारिश का बदलाव:</span>
             </span>
-            <span className={`px-3 py-1 rounded-xl text-xs font-bold font-mono ${rainfallOffset < 0 ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
+            <span className={`px-3 py-1 rounded-xl text-xs font-black font-mono border ${
+              rainfallOffset < 0
+                ? 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700'
+                : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-500/30'
+            }`}>
               {rainfallOffset > 0 ? `+${rainfallOffset}%` : `${rainfallOffset}%`}
             </span>
           </div>
@@ -84,26 +86,30 @@ export const WhatIfStep: React.FC = () => {
               triggerHaptic('light');
               setRainfallOffset(parseInt(e.target.value));
             }}
-            className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-primary"
+            className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-emerald-700"
           />
 
           <div className="flex justify-between text-[11px] text-stone-500 font-semibold">
-            <span>-35% (सूखा / कम बारिश)</span>
+            <span>-35% (कम बारिश)</span>
             <span>0% (सामान्य)</span>
             <span>+25% (अधिक बारिश)</span>
           </div>
         </div>
 
-        <div className="h-px bg-stone-100 dark:bg-stone-800" />
+        <div className="h-px bg-stone-200 dark:bg-stone-800" />
 
         {/* Mandi Price Shock Slider */}
         <div className="space-y-2.5">
           <div className="flex justify-between items-center text-xs font-bold">
             <span className="flex items-center gap-1.5 text-[#1A1C18] dark:text-[#E2E3DC]">
-              <span className="material-symbols-outlined text-lg text-amber-600">trending_down</span>
+              <span className="material-symbols-outlined text-lg text-emerald-700 dark:text-emerald-400">trending_down</span>
               <span>मंडी भाव में उतार-चढ़ाव:</span>
             </span>
-            <span className={`px-3 py-1 rounded-xl text-xs font-bold font-mono ${priceOffset < 0 ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
+            <span className={`px-3 py-1 rounded-xl text-xs font-black font-mono border ${
+              priceOffset < 0
+                ? 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700'
+                : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-500/30'
+            }`}>
               {priceOffset > 0 ? `+${priceOffset}%` : `${priceOffset}%`}
             </span>
           </div>
@@ -118,21 +124,21 @@ export const WhatIfStep: React.FC = () => {
               triggerHaptic('light');
               setPriceOffset(parseInt(e.target.value));
             }}
-            className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-primary"
+            className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-emerald-700"
           />
 
           <div className="flex justify-between text-[11px] text-stone-500 font-semibold">
             <span>-25% (भाव में गिरावट)</span>
             <span>0% (वर्तमान भाव)</span>
-            <span>+25% (भाव में उछाल)</span>
+            <span>+25% (भाव में तेजी)</span>
           </div>
         </div>
       </div>
 
-      {/* Harmonized Signature Simulation Outcome Hero Card */}
-      <div className="rounded-3xl border-2 border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B] shadow-sm overflow-hidden animate-fadeIn">
+      {/* Harmonized Simulation Outcome Hero Card */}
+      <div className="rounded-3xl border-2 border-stone-300 dark:border-stone-700 bg-white dark:bg-[#1E231B] shadow-lg overflow-hidden animate-fadeIn">
         {/* Top Card Banner */}
-        <div className="bg-primary text-on-primary px-5 py-3 flex items-center justify-between">
+        <div className="bg-emerald-700 text-white px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 font-bold text-xs">
             <span className="material-symbols-outlined text-base text-amber-300">analytics</span>
             <span>सिमुलेशन परिणाम ({cropName})</span>
@@ -144,30 +150,30 @@ export const WhatIfStep: React.FC = () => {
 
         {/* Card Body */}
         <div className="p-5 space-y-4">
-          {/* 2-Column Balanced Scorecard */}
+          {/* 2-Column Balanced Neutral Scorecard */}
           <div className="grid grid-cols-2 gap-3">
             {/* Yield Metric */}
-            <div className="bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 rounded-2xl p-3 text-center">
-              <span className="text-[11px] font-bold text-blue-800 dark:text-blue-300 block leading-tight">
+            <div className="bg-stone-100/70 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700 rounded-2xl p-3 text-center shadow-2xs">
+              <span className="text-[11px] font-bold text-stone-600 dark:text-stone-400 block leading-tight">
                 संशोधित पैदावार
               </span>
-              <span className="text-2xl font-black text-blue-700 dark:text-blue-400 block my-0.5">
+              <span className="text-2xl font-black text-stone-900 dark:text-stone-100 block my-0.5">
                 {simYield}
               </span>
-              <span className="text-[10px] text-blue-600 dark:text-blue-500 font-medium">
+              <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">
                 {t('quintalPerAcre')}
               </span>
             </div>
 
             {/* Profit Metric */}
-            <div className="bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-3 text-center">
-              <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 block leading-tight">
+            <div className="bg-stone-100/70 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700 rounded-2xl p-3 text-center shadow-2xs">
+              <span className="text-[11px] font-bold text-stone-600 dark:text-stone-400 block leading-tight">
                 संशोधित शुद्ध लाभ
               </span>
               <span className="text-2xl font-black text-emerald-700 dark:text-emerald-400 block my-0.5">
                 {formatCurrencyINR(simProfit)}
               </span>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">
+              <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">
                 {t('perAcre')}
               </span>
             </div>
@@ -175,7 +181,7 @@ export const WhatIfStep: React.FC = () => {
 
           {/* AI Guidance Callout */}
           <div className="bg-stone-50 dark:bg-stone-900/60 p-3.5 rounded-2xl border border-stone-200 dark:border-stone-800 flex items-start gap-2.5 text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
-            <span className="material-symbols-outlined text-base text-primary flex-shrink-0 mt-0.5">psychology_alt</span>
+            <span className="material-symbols-outlined text-base text-emerald-700 dark:text-emerald-400 flex-shrink-0 mt-0.5">psychology_alt</span>
             <span>
               {rainfallOffset < 0
                 ? `${Math.abs(rainfallOffset)}% कम बारिश होने पर भी ${cropName} अन्य फसलों की तुलना में न्यूनतम जोखिम के साथ सबसे सुरक्षित लाभ सुनिश्चित करती है।`
@@ -185,12 +191,24 @@ export const WhatIfStep: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky Bottom Action */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
+      {/* True Progressive Blur Layer with Gradient Mask */}
+      <div
+        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-28"
+        style={{
+          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
+          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
+        }}
+      />
+
+      {/* Floating Action Bar with Proceed CTA */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2">
         <button
           type="button"
           onClick={handleProceed}
-          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-4 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-black text-base shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>{t('chooseAndPlanBtn')}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>

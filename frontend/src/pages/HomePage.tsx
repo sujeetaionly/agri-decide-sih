@@ -100,8 +100,8 @@ export const HomePage: React.FC<HomePageProps> = ({
         
         {/* Welcome Greeting */}
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 rounded-full text-xs font-bold border border-emerald-500/20">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 dark:bg-stone-800/80 text-stone-700 dark:text-stone-300 rounded-full text-xs font-bold border border-stone-200 dark:border-stone-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-600" />
             <span>खरीफ मौसम २०२६ • पुणे, महाराष्ट्र</span>
           </div>
           <h1 className="text-2xl font-black font-headline tracking-tight text-[#1A1C18] dark:text-[#E2E3DC] pt-1">
@@ -117,7 +117,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           <div className="space-y-2.5 relative z-10">
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold text-emerald-200">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/15 backdrop-blur-md rounded-full text-xs font-bold text-emerald-100">
               <span className="material-symbols-outlined text-sm [font-variation-settings:'FILL'_1]">psychology_alt</span>
               <span>एआई फसल सलाहकार</span>
             </span>
@@ -140,10 +140,10 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         {/* CARD 2: RECENT ANALYSIS SUMMARY */}
-        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3.5">
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300/90 dark:border-stone-700 rounded-3xl p-5 shadow-sm space-y-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-700 dark:text-emerald-300">
+              <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center text-emerald-800 dark:text-emerald-300">
                 <span className="material-symbols-outlined text-lg">history</span>
               </div>
               <h3 className="text-sm font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
@@ -153,7 +153,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
             <button
               onClick={handleAudioCard}
-              className="text-stone-400 hover:text-primary transition-colors p-1"
+              className="text-stone-400 hover:text-emerald-800 transition-colors p-1 cursor-pointer"
               title="आवाज सुनें"
             >
               <span className="material-symbols-outlined text-lg">volume_up</span>
@@ -162,20 +162,20 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {recentAnalysis ? (
             <div className="space-y-3">
-              <div className="bg-stone-50 dark:bg-stone-900/60 rounded-2xl p-4 flex items-center justify-between">
+              <div className="bg-stone-50/90 dark:bg-stone-900/60 rounded-2xl p-4 flex items-center justify-between border-2 border-stone-200/90 dark:border-stone-700/90 shadow-2xs">
                 <div>
-                  <span className="text-[11px] text-stone-400 block font-medium">
+                  <span className="text-[11px] text-stone-500 dark:text-stone-400 block font-medium">
                     सुझाई गई फसल ({recentAnalysis.landArea} एकड़)
                   </span>
-                  <span className="text-xl font-black text-primary font-headline">
+                  <span className="text-xl font-black text-stone-900 dark:text-stone-100 font-headline">
                     {recentAnalysis.cropName}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[11px] text-stone-400 block font-medium">
+                  <span className="text-[11px] text-stone-500 dark:text-stone-400 block font-medium">
                     {t('estimatedProfit')}
                   </span>
-                  <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-base font-extrabold text-emerald-800 dark:text-emerald-300">
                     {formatCurrencyINR(recentAnalysis.profitPerAcre)} / एकड़
                   </span>
                 </div>
@@ -188,7 +188,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               <button
                 onClick={handleOpenPrevious}
-                className="w-full py-3.5 px-4 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-xl bg-white dark:bg-stone-800/90 border-2 border-stone-300 dark:border-stone-700 hover:border-emerald-600/40 text-stone-900 dark:text-stone-100 font-bold text-xs shadow-xs hover:shadow-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <span>{t('viewFullReport')}</span>
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -201,6 +201,54 @@ export const HomePage: React.FC<HomePageProps> = ({
               </p>
             </div>
           )}
+        </div>
+
+        {/* CARD 3: HOW IT WORKS / 3-STEP ADVISORY GUIDE */}
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300/90 dark:border-stone-700 rounded-3xl p-5 shadow-sm space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center text-emerald-800 dark:text-emerald-300">
+                <span className="material-symbols-outlined text-lg">info</span>
+              </div>
+              <h3 className="text-sm font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
+                {t('howItWorksTitle')}
+              </h3>
+            </div>
+
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-full text-[11px] font-bold border border-stone-300 dark:border-stone-700 shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+              <span>{t('offlineReadyBadge')}</span>
+            </span>
+          </div>
+
+          <div className="space-y-2.5">
+            <div className="flex items-start gap-3 p-3 rounded-2xl bg-stone-50/80 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 shadow-2xs">
+              <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                १
+              </span>
+              <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                {t('howItWorksStep1')}
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3 p-3 rounded-2xl bg-stone-50/80 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 shadow-2xs">
+              <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                २
+              </span>
+              <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                {t('howItWorksStep2')}
+              </p>
+            </div>
+
+            <div className="flex items-start gap-3 p-3 rounded-2xl bg-stone-50/80 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 shadow-2xs">
+              <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                ३
+              </span>
+              <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                {t('howItWorksStep3')}
+              </p>
+            </div>
+          </div>
         </div>
 
       </main>

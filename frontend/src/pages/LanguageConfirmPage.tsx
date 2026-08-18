@@ -60,6 +60,7 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
     switch (l) {
       case 'mr': return 'मराठी';
       case 'gu': return 'ગુજરાતી';
+      case 'raj': return 'राजस्थानी';
       case 'en': return 'English';
       default: return 'हिंदी';
     }
@@ -72,15 +73,15 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
       <div className="flex items-center justify-between pt-4">
         <button
           onClick={handleChange}
-          className="flex items-center gap-1 text-sm font-semibold text-primary active:scale-95"
+          className="flex items-center gap-1 text-sm font-semibold text-emerald-800 dark:text-emerald-200 active:scale-95 cursor-pointer"
         >
           <span className="material-symbols-outlined text-lg">arrow_back</span>
           <span>{getTranslation('back', language)}</span>
         </button>
         <button
           onClick={handlePlayVoice}
-          className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full border border-primary/30 transition-all ${
-            isSpeaking ? 'bg-primary text-white animate-pulse' : 'bg-primary/10 text-primary'
+          className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-500/30 transition-all cursor-pointer ${
+            isSpeaking ? 'bg-emerald-700 text-white animate-pulse' : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200'
           }`}
         >
           <span className="material-symbols-outlined text-base">volume_up</span>
@@ -89,29 +90,31 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
       </div>
 
       {/* Confirmation Hero Card */}
-      <div className="my-auto text-center space-y-6">
-        <div className="w-24 h-24 rounded-full bg-primary/15 border-2 border-primary/30 flex items-center justify-center mx-auto text-primary shadow-inner">
-          <span className="material-symbols-outlined text-5xl animate-bounce">check_circle</span>
+      <div className="my-auto w-full bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-7 shadow-md text-center space-y-5">
+        <div className="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-700 dark:text-emerald-300 shadow-sm">
+          <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">check_circle</span>
         </div>
 
-        <div className="space-y-3">
-          <h2 className="text-2xl font-bold font-headline leading-tight">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] tracking-tight">
             {getTranslation('confirmLangTitle', language)}
           </h2>
-          <div className="inline-block bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full text-base font-bold text-primary">
-            {getLanguageDisplayName(language)}
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 rounded-full text-sm font-bold border border-emerald-500/20">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>{getLanguageDisplayName(language)}</span>
           </div>
-          <p className="text-base text-stone-700 dark:text-stone-300 leading-relaxed px-4">
-            {getTranslation('confirmLangMessage', language)}
-          </p>
         </div>
+
+        <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed font-medium px-2">
+          {getTranslation('confirmLangMessage', language)}
+        </p>
       </div>
 
       {/* Action Buttons */}
       <div className="space-y-3 pb-6">
         <button
           onClick={handleYes}
-          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-bold text-base shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          className="w-full py-4 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>{getTranslation('confirmLangYes', language)}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>
@@ -119,9 +122,10 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
 
         <button
           onClick={handleChange}
-          className="w-full py-3.5 px-6 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200 font-semibold text-sm active:scale-[0.98]"
+          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 hover:border-emerald-600/40 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-sm hover:shadow-md active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5"
         >
-          {getTranslation('confirmLangChange', language)}
+          <span className="material-symbols-outlined text-base text-stone-500">translate</span>
+          <span>{getTranslation('confirmLangChange', language)}</span>
         </button>
       </div>
     </div>

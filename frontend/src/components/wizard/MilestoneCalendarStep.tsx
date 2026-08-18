@@ -99,31 +99,28 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-2">
+    <div className="space-y-5 animate-fadeIn pb-12">
       
-      {/* Header */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 px-3 py-1 rounded-full">
-            कृषि कार्य-योजना
-          </span>
+      {/* Clean Title & Description Header with Proper Hierarchy */}
+      <div className="space-y-2 pb-2">
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
+            {t('planTitle')}
+          </h2>
 
           <button
+            type="button"
             onClick={() => {
               triggerHaptic('light');
               speakText(`${t('planTitle')}। ${t('planSubtitle')}`, language);
             }}
-            className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 active:scale-95"
+            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
           >
             <span className="material-symbols-outlined text-base">volume_up</span>
             <span>{t('listen')}</span>
           </button>
         </div>
-
-        <h2 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug">
-          {t('planTitle')}
-        </h2>
-        <p className="text-xs text-stone-500 dark:text-stone-400">
+        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
           {t('planSubtitle')}
         </p>
       </div>

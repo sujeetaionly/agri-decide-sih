@@ -169,11 +169,16 @@ export const PreviousCropCard: React.FC = () => {
     setVoiceSession(session);
   };
 
+  const selectedCropObjs = CROPS.filter((c) => selectedList.includes(c.id));
+  const selectedTitles = selectedCropObjs.map((c) =>
+    language === 'mr' ? c.titleMr : language === 'gu' ? c.titleGu : c.title
+  );
+
   const handleAudio = () => {
     triggerHaptic('light');
     const msg = isSelectedAny
-      ? `${t('card4Title')}। वर्तमान चयन ${selectedList.length} फसलें हैं।`
-      : `${t('card4Title')}। ${t('card4Sub')}। आप बोलकर या नीचे दिए गए कार्ड छूकर एक से अधिक फसलें चुन सकते हैं।`;
+      ? `${t('card4Title')}। वर्तमान चयन ${selectedTitles.join(', ')} है।`
+      : `${t('card4Title')}। फसल चक्र अपनाने से जमीन की उपजाऊ शक्ति और पोषण संतुलित रहता है।`;
     speakText(msg, language);
   };
 
@@ -183,29 +188,31 @@ export const PreviousCropCard: React.FC = () => {
     nextCard();
   };
 
+  const handleBack = () => {
+    triggerHaptic('light');
+    prevCard();
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn pb-24">
       
-      {/* Card Header & Audio */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
-            {t('stepOf')} ४ / ५
-          </span>
+      {/* Question Title & Reassurance Subtitle with Audio */}
+      <div className="space-y-2 pb-1">
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="text-xl sm:text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
+            {t('card4Title')}
+          </h2>
           <button
+            type="button"
             onClick={handleAudio}
-            className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20 active:scale-95"
+            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
           >
             <span className="material-symbols-outlined text-base">volume_up</span>
             <span>{t('listen')}</span>
           </button>
         </div>
-
-        <h2 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug">
-          {t('card4Title')}
-        </h2>
-        <p className="text-xs text-stone-500 dark:text-stone-400">
-          एक या एक से अधिक फसलें चुन सकते हैं।
+        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
+          फसल चक्र (Crop Rotation) से जमीन की उपजाऊ शक्ति और पोषण संतुलित रहता है।
         </p>
       </div>
 
@@ -214,101 +221,116 @@ export const PreviousCropCard: React.FC = () => {
         <button
           type="button"
           onClick={handleToggleVoice}
-          className={`w-full p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between text-left active:scale-[0.98] shadow-sm cursor-pointer ${
+          className={`w-full py-3 px-4 rounded-2xl border-2 transition-all flex items-center justify-between cursor-pointer ${
             isListening
-              ? 'bg-red-50 dark:bg-red-950/40 border-red-500 ring-2 ring-red-500/30 text-red-700 dark:text-red-300 animate-pulse'
-              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 hover:border-primary/40'
+              ? 'bg-red-50 dark:bg-red-950/40 border-red-500 text-red-700 dark:text-red-300 shadow-md animate-pulse'
+              : 'bg-white dark:bg-[#1E231B] border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-emerald-600'
           }`}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                isListening
-                  ? 'bg-red-500 text-white shadow-md'
-                  : 'bg-primary/10 text-primary'
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                isListening ? 'bg-red-600 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300'
               }`}
             >
-              <span className="material-symbols-outlined text-xl">
-                {isListening ? 'graphic_eq' : 'mic'}
+              <span className="material-symbols-outlined text-lg">
+                {isListening ? 'mic' : 'mic_none'}
               </span>
             </div>
 
             <div>
-              <h3 className="text-sm font-bold font-headline">
+              <h3 className="text-xs font-bold font-headline">
                 {isListening ? 'सुन रहे हैं... फसल बोलें' : 'बोलकर फसल चुनें'}
               </h3>
             </div>
           </div>
 
-          <span className="text-xs font-semibold text-stone-400 dark:text-stone-500">
+          <span className="text-[11px] font-semibold text-stone-400 dark:text-stone-500">
             {isListening ? '● सक्रिय' : 'माइक दबाएं'}
           </span>
         </button>
 
         {transcriptFeedback && (
-          <div className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2 border border-emerald-500/30 animate-fadeIn">
+          <div className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 border border-emerald-500/30 animate-fadeIn">
             <span className="material-symbols-outlined text-base text-emerald-600">record_voice_over</span>
             <span className="truncate">पहचाना गया: "{transcriptFeedback}"</span>
           </div>
         )}
       </div>
 
-      {/* 2-Column Crop Tiles Grid with Multi-Select Checkboxes */}
-      <div className="grid grid-cols-2 gap-3.5">
+      {/* Clean 2-Column Crop Selection Tiles (No Meaningless Icons) */}
+      <div className="grid grid-cols-2 gap-3">
         {CROPS.map((c) => {
           const isSelected = selectedList.includes(c.id);
           const cropTitle = language === 'mr' ? c.titleMr : (language === 'gu' ? c.titleGu : c.title);
 
           return (
-            <div
+            <button
               key={c.id}
+              type="button"
               onClick={() => handleToggleCrop(c.id)}
-              className={`p-4 rounded-3xl border-2 transition-all cursor-pointer flex flex-col items-center text-center relative active:scale-[0.98] shadow-sm ${
+              className={`h-14 px-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between text-left active:scale-[0.98] shadow-2xs ${
                 isSelected
-                  ? 'bg-primary/10 border-primary shadow-md ring-2 ring-primary/30'
-                  : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
+                  ? 'bg-emerald-50/60 dark:bg-emerald-950/40 border-emerald-700 dark:border-emerald-500 shadow-md ring-2 ring-emerald-700/20'
+                  : 'bg-white dark:bg-[#1E231B] border-stone-300 dark:border-stone-700 hover:border-emerald-600/50'
               }`}
             >
-              {/* Checkbox Indicator */}
-              <div className="absolute top-3 right-3">
-                <div
-                  className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
-                    isSelected
-                      ? 'bg-primary border-primary text-white'
-                      : 'border-stone-300 dark:border-stone-600 bg-transparent'
-                  }`}
-                >
-                  {isSelected && <span className="material-symbols-outlined text-sm font-bold">check</span>}
-                </div>
-              </div>
-
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-2 mt-1 shadow-sm ${c.iconBg}`}>
-                <span className="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_1]">{c.icon}</span>
-              </div>
-
-              <h3 className="text-base font-bold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
+              <span className="text-sm font-extrabold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
                 {cropTitle}
-              </h3>
-            </div>
+              </span>
+
+              <div
+                className={`w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                  isSelected
+                    ? 'bg-emerald-700 border-emerald-700 text-white'
+                    : 'border-stone-400 dark:border-stone-500 bg-transparent'
+                }`}
+              >
+                {isSelected && <span className="material-symbols-outlined text-xs font-black">check</span>}
+              </div>
+            </button>
           );
         })}
       </div>
 
-      {/* Sticky Bottom Action Bar with Continue (Disabled until selected) */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={!isSelectedAny}
-          className={`w-full py-4 px-6 rounded-full font-bold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
-            isSelectedAny
-              ? 'bg-primary text-on-primary active:scale-[0.98] cursor-pointer'
-              : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
-          }`}
-        >
-          <span>{t('continue')}</span>
-          <span className="material-symbols-outlined text-lg">arrow_forward</span>
-        </button>
+      {/* True Progressive Blur Layer with Gradient Mask */}
+      <div
+        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-28"
+        style={{
+          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
+          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
+        }}
+      />
+
+      {/* Action Buttons Floating on top of Progressive Blur */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="py-3.5 px-5 rounded-full bg-white/95 dark:bg-[#1E231B]/95 backdrop-blur-sm border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-md hover:shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-base">arrow_back</span>
+            <span>{t('back')}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleContinue}
+            disabled={!isSelectedAny}
+            className={`flex-1 py-3.5 px-6 rounded-full font-extrabold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
+              isSelectedAny
+                ? 'bg-emerald-700 hover:bg-emerald-800 text-white active:scale-[0.98] cursor-pointer'
+                : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
+            }`}
+          >
+            <span>{t('continue')}</span>
+            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          </button>
+        </div>
       </div>
     </div>
   );

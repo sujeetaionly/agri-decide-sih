@@ -56,10 +56,10 @@ export const translations: Record<string, TranslationStrings> = {
   // 4 Bottom Navigation Tabs
   navHome: {
     en: 'Home',
-    hi: 'मुख्य पृष्ठ',
-    mr: 'मुख्य पृष्ठ',
-    gu: 'મુખ્ય પૃષ્ઠ',
-    raj: 'मुख्य पृष्ठ',
+    hi: 'होम',
+    mr: 'होम',
+    gu: 'હોમ',
+    raj: 'होम',
   },
   navMyCrop: {
     en: 'My Crop',
@@ -122,18 +122,18 @@ export const translations: Record<string, TranslationStrings> = {
 
   // Language Page Title Aliases
   chooseLanguageTitle: {
-    en: 'Choose Your Language',
-    hi: 'अपनी भाषा चुनें',
-    mr: 'आपली भाषा निवडा',
-    gu: 'તમારી ભાષા પસંદ કરો',
-    raj: 'आपणी भाषा चुणो',
+    en: 'Which language do you prefer?',
+    hi: 'आप कौन सी भाषा पसंद करते हैं?',
+    mr: 'तुम्हाला कोणती भाषा आवडते?',
+    gu: 'તમે કઈ ભાષા પસંદ કરો છો?',
+    raj: 'आप कौन सी भाषा पसंद करो हो?',
   },
   chooseLanguageSub: {
-    en: 'Select the language you are most comfortable with for all instructions.',
-    hi: 'सभी जानकारी और आवाज अपनी पसंदीदा भाषा में प्राप्त करने के लिए नीचे दिए गए विकल्पों में से एक चुनें।',
-    mr: 'सर्व माहिती आणि आवाज आपल्या पसंतीच्या भाषेत मिळवण्यासाठी खालील पर्यायांमधून एक निवडा.',
-    gu: 'તમામ માહિતી અને અવાજ તમારી પસંદગીની ભાષામાં મેળવવા માટે નીચેના વિકલ્પોમાંથી એક પસંદ કરો.',
-    raj: 'सगळी जानकारी अर आवाज आपणी भाषा में सुणबा सारू नीचे दियोड़ा विकल्पां सूं चुणो।',
+    en: 'Choose your preferred language to continue.',
+    hi: 'कृषि-वाइज़ का उपयोग करने के लिए अपनी पसंदीदा भाषा चुनें।',
+    mr: 'कृषी-वाइज वापरण्यासाठी आपली पसंतीची भाषा निवडा.',
+    gu: 'કૃષિ-વાઇઝ વાપરવા માટે તમારી પસંદગીની ભાષા પસંદ કરો.',
+    raj: 'कृषि-वाइज़ चलाबा सारू आपरी मनपसंद भाषा चुणो।',
   },
   // Onboarding Screen 1: Language Select
   langTitle: {
@@ -220,18 +220,18 @@ export const translations: Record<string, TranslationStrings> = {
 
   // Onboarding Screen 4: Login & Guest
   loginTitle: {
-    en: 'Farmer Login',
-    hi: 'किसान लॉगिन',
-    mr: 'शेतकरी लॉगिन',
-    gu: 'ખેડૂત લૉગિન',
-    raj: 'किसान लॉगिन',
+    en: 'Login',
+    hi: 'लॉगिन',
+    mr: 'लॉगिन',
+    gu: 'લૉગિન',
+    raj: 'लॉगिन',
   },
   loginSubtitle: {
-    en: 'Enter your 10-digit mobile number for secure advisory reports.',
-    hi: 'सुरक्षित कृषि सलाह और इतिहास के लिए अपना १० अंकों का मोबाइल नंबर दर्ज करें।',
-    mr: 'सुरक्षित कृषी सल्ला आणि इतिहासासाठी आपला १० अंकी मोबाईल नंबर टाका.',
-    gu: 'સુરક્ષિત કૃષિ સલાહ અને ઇતિહાસ માટે તમારો ૧૦ અંકનો મોબાઇલ નંબર દાખલ કરો.',
-    raj: 'सुरक्षित कृषि सलाह सारू आपरो १० अंका रो मोबाइल नंबर लगाओ।',
+    en: 'Enter your mobile number to get started',
+    hi: 'शुरू करने के लिए अपना मोबाइल नंबर दर्ज करें',
+    mr: 'सुरू करण्यासाठी आपला मोबाईल नंबर टाका',
+    gu: 'શરૂ કરવા માટે તમારો મોબાઇલ નંબર દાખલ કરો',
+    raj: 'शुरू करबा सारू आपरो मोबाइल नंबर लगाओ',
   },
   sendOtp: {
     en: 'Send OTP',
@@ -298,12 +298,84 @@ export const translations: Record<string, TranslationStrings> = {
     gu: 'સંપૂર્ણ યોજના જુઓ',
     raj: 'पूरी योजना देखो',
   },
+  offlineReadyBadge: {
+    en: '100% Offline Ready',
+    hi: '100% ऑफ़लाइन उपलब्ध',
+    mr: '100% ऑफलाइन उपलब्ध',
+    gu: '100% ઑફલાઇન ઉપલબ્ધ',
+    raj: '100% ऑफ़लाइन उपलब्ध',
+  },
+  howItWorksTitle: {
+    en: 'How Krishi-Wise Works',
+    hi: 'यह कैसे काम करता है',
+    mr: 'हे कसे कार्य करते',
+    gu: 'આ કેવી રીતે કાર્ય કરે છે',
+    raj: 'यो कियां काम करे है',
+  },
+  howItWorksStep1: {
+    en: 'Enter farm details: Soil, water & previous crop',
+    hi: 'खेत की स्थिति दर्ज करें: मिट्टी, पानी और पिछली फसल',
+    mr: 'शेताची माहिती भरा: माती, पाणी आणि मागील पीक',
+    gu: 'ખેતરની માહિતી દાખલ કરો: જમીન, પાણી અને અગાઉનો પાક',
+    raj: 'खेत री स्थिति लगाओ: माटी, पाणी अर पहली री फसल',
+  },
+  howItWorksStep2: {
+    en: 'Get AI recommendations with profit & cost breakdown',
+    hi: 'AI से सही फसल जानें: सटीक पैदावार, लागत व शुद्ध मुनाफा',
+    mr: 'AI कडून योग्य पीक जाणून घ्या: अचूक उत्पादन, खर्च व नफा',
+    gu: 'AI પાસેથી યોગ્ય પાક જાણો: સચોટ ઉપજ, ખર્ચ અને નફો',
+    raj: 'AI सूं सही फसल जानो: पैदावार, लागत अर शुद्ध नफो',
+  },
+  howItWorksStep3: {
+    en: 'Download 1-page printable advisory slip for field use',
+    hi: '1-पेज सलाह पर्ची लें: प्रिंट करें या व्हाट्सएप पर साझा करें',
+    mr: '1-पानाचा सल्ला पत्रक घ्या: प्रिंट करा किंवा व्हॉट्सॲपवर शेअर करा',
+    gu: '1-પેજ સલાહ સ્લિપ મેળવો: પ્રિન્ટ કરો અથવા વ્હોટ્સએપ પર શેર કરો',
+    raj: '1-पेज सलाह पर्ची ल्यो: प्रिंट करो या व्हाट्सएप पर भेजो',
+  },
   noPreviousAnalysis: {
     en: 'No previous analysis saved yet.',
     hi: 'अभी तक कोई पिछला विश्लेषण सुरक्षित नहीं है।',
     mr: 'अजून कोणतेही मागील विश्लेषण जतन केलेले नाही.',
     gu: 'હજુ સુધી કોઈ પાછલું વિશ્લેષણ સાચવેલ નથી.',
     raj: 'हजी तक कोई पिछलो विश्लेषण सुरक्षित कोनी।',
+  },
+
+  // Wizard Steps Names
+  wizardStep1Name: {
+    en: 'Farm Size',
+    hi: 'खेत का आकार',
+    mr: 'शेताचा आकार',
+    gu: 'ખેતરનું કદ',
+    raj: 'खेत रो आकार',
+  },
+  wizardStep2Name: {
+    en: 'Soil Type',
+    hi: 'मिट्टी का प्रकार',
+    mr: 'मातीचा प्रकार',
+    gu: 'જમીનનો પ્રકાર',
+    raj: 'माटी रो प्रकार',
+  },
+  wizardStep3Name: {
+    en: 'Water Source',
+    hi: 'सिंचाई का साधन',
+    mr: 'पाण्याचा स्रोत',
+    gu: 'પાણીનો સ્ત્રોત',
+    raj: 'पाणी रो साधन',
+  },
+  wizardStep4Name: {
+    en: 'Previous Crop',
+    hi: 'पिछली फसल',
+    mr: 'मागील पीक',
+    gu: 'અગાઉનો પાક',
+    raj: 'पहली री फसल',
+  },
+  wizardStep5Name: {
+    en: 'Sowing Timing',
+    hi: 'बुवाई का समय',
+    mr: 'पेरणीची वेळ',
+    gu: 'વાવણીનો સમય',
+    raj: 'बुवाई रो टेम',
   },
 
   // Wizard Card 1: Land Area
@@ -414,11 +486,11 @@ export const translations: Record<string, TranslationStrings> = {
     raj: 'अगला एक महीना में',
   },
   sowingTimingCustomDate: {
-    en: 'Pick Date (Around which date will you sow?)',
-    hi: 'तारीख चुनें (किस तारीख के आस-पास बुवाई करोगे?)',
-    mr: 'तारीख निवडा (कोणत्या तारखेच्या आसपास पेरणी करणार?)',
-    gu: 'તારીખ પસંદ કરો (કઈ તારીખની આસપાસ વાવણી કરશો?)',
-    raj: 'तारीख चुणो (किस तारीख रे आसपास बुवाई करोला?)',
+    en: 'Pick a Specific Date',
+    hi: 'निश्चित तारीख चुनें',
+    mr: 'विशिष्ट तारीख निवडा',
+    gu: 'ચોક્કસ તારીખ પસંદ કરો',
+    raj: 'निश्चित तारीख चुणो',
   },
   seeRecommendations: {
     en: 'Show AI Recommendations',

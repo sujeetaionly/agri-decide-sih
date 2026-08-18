@@ -85,19 +85,30 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Header */}
-      <div className="pt-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+      {/* Top Branding Bar with Constant Standard Sizing */}
+      <div className="pt-2 pb-2 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 border border-emerald-500/30 flex items-center justify-center shadow-sm">
             <span className="material-symbols-outlined text-2xl">agriculture</span>
           </div>
-          <span className="font-bold text-lg text-primary">{t('appName')}</span>
+          <div>
+            <span className="font-black text-base text-emerald-900 dark:text-emerald-100 tracking-tight block">
+              Agri-Decide
+            </span>
+            <span className="text-[11px] text-stone-500 dark:text-stone-400 font-bold block -mt-0.5">
+              कृषि-वाइज़
+            </span>
+          </div>
         </div>
 
         <button
+          type="button"
           onClick={handlePlayVoice}
-          className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-primary/30 transition-all ${
-            isSpeaking ? 'bg-primary text-white animate-pulse' : 'bg-primary/10 text-primary'
+          aria-label="Listen"
+          className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full transition-all cursor-pointer ${
+            isSpeaking
+              ? 'bg-emerald-700 text-white animate-pulse'
+              : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 hover:bg-emerald-100'
           }`}
         >
           <span className="material-symbols-outlined text-base">volume_up</span>
@@ -105,14 +116,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         </button>
       </div>
 
-      {/* Main Login Card */}
-      <div className="my-auto space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
+      {/* Main Login Elevated Card - Refined Hierarchy & Alignment */}
+      <div className="my-auto w-full max-w-sm mx-auto bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-7 shadow-md space-y-6">
+        
+        {/* Title Section with Balanced Center Alignment */}
+        <div className="text-center space-y-1.5">
+          <h1 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] tracking-tight">
             {t('loginTitle')}
           </h1>
-          <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
-            {t('loginSubtitle')}
+          <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
+            अपनी पहचान प्रमाणित करें
           </p>
         </div>
 
@@ -124,15 +137,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         )}
 
         {!isOtpSent ? (
-          <form onSubmit={handleSendOtp} className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300">
+          <form onSubmit={handleSendOtp} className="space-y-5">
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 pl-1">
                 {t('mobileNumberLabel')}
               </label>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 px-3.5 py-4 bg-stone-100 dark:bg-stone-800 rounded-2xl border-2 border-stone-200 dark:border-stone-700 select-none">
-                  <span className="text-lg">🇮🇳</span>
-                  <span className="font-extrabold text-stone-700 dark:text-stone-200 text-base">+91</span>
+
+              {/* Integrated Prefix Input with Seamless Alignment & No Overflow */}
+              <div className="flex items-center w-full h-14 rounded-2xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/60 focus-within:border-emerald-600 focus-within:bg-white dark:focus-within:bg-[#1E231B] focus-within:ring-2 focus-within:ring-emerald-600/20 transition-all overflow-hidden shadow-sm">
+                <div className="flex-shrink-0 h-full px-3.5 text-xs font-extrabold text-stone-600 dark:text-stone-400 select-none border-r border-stone-200 dark:border-stone-700 bg-stone-100/70 dark:bg-stone-800/60 flex items-center gap-1.5">
+                  <span className="text-[11px] text-stone-400 font-bold tracking-wide">IN</span>
+                  <span className="text-stone-700 dark:text-stone-200 font-bold">+91</span>
                 </div>
                 <input
                   type="tel"
@@ -141,22 +156,19 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                   placeholder="98765 43210"
-                  className="flex-1 px-4 py-4 rounded-2xl bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 text-[#1A1C18] dark:text-[#E2E3DC] font-extrabold text-xl tracking-wider focus:border-primary focus:outline-none shadow-sm"
+                  className="min-w-0 flex-1 h-full px-3.5 bg-transparent text-[#1A1C18] dark:text-[#E2E3DC] font-extrabold text-lg tracking-wider focus:outline-none placeholder:text-stone-300 dark:placeholder:text-stone-600"
                   autoFocus
                 />
               </div>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400 pl-1">
-                ओटीपी आपके नंबर पर तुरंत भेजा जाएगा।
-              </p>
             </div>
 
             <button
               type="submit"
               disabled={isLoading || phone.length < 10}
-              className={`w-full py-4 rounded-full font-extrabold text-base shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              className={`w-full h-14 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
                 phone.length === 10
-                  ? 'bg-primary text-on-primary'
-                  : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
+                  ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xl active:scale-[0.98] cursor-pointer'
+                  : 'bg-stone-300 dark:bg-stone-800 text-stone-500 dark:text-stone-400 cursor-not-allowed shadow-none'
               }`}
             >
               {isLoading ? (
@@ -170,16 +182,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </button>
           </form>
         ) : (
-          <form onSubmit={handleVerifyOtp} className="space-y-4">
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
+          <form onSubmit={handleVerifyOtp} className="space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between pl-1">
                 <label className="block text-xs font-bold text-stone-700 dark:text-stone-300">
                   {t('enterOtp')} (+91 {phone})
                 </label>
                 <button
                   type="button"
                   onClick={() => setIsOtpSent(false)}
-                  className="text-xs text-primary font-bold underline"
+                  className="text-xs text-emerald-700 font-bold underline cursor-pointer"
                 >
                   नंबर बदलें
                 </button>
@@ -191,7 +203,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                 placeholder="1234"
-                className="w-full px-4 py-4 text-center rounded-2xl bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 text-[#1A1C18] dark:text-[#E2E3DC] font-extrabold text-3xl tracking-[0.35em] focus:border-primary focus:outline-none shadow-sm"
+                className="w-full h-14 text-center rounded-2xl bg-stone-50 dark:bg-stone-900/60 border-2 border-stone-200 dark:border-stone-800 text-[#1A1C18] dark:text-[#E2E3DC] font-extrabold text-3xl tracking-[0.35em] focus:border-emerald-600 focus:outline-none shadow-sm"
                 autoFocus
               />
             </div>
@@ -205,10 +217,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <button
               type="submit"
               disabled={isLoading || otp.length < 4}
-              className={`w-full py-4 rounded-full font-extrabold text-base shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              className={`w-full h-14 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
                 otp.length >= 4
-                  ? 'bg-primary text-on-primary'
-                  : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
+                  ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xl active:scale-[0.98] cursor-pointer'
+                  : 'bg-stone-300 dark:bg-stone-800 text-stone-500 dark:text-stone-400 cursor-not-allowed shadow-none'
               }`}
             >
               {isLoading ? (
@@ -222,25 +234,33 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </button>
           </form>
         )}
-      </div>
 
-      {/* Bottom Guest Bypass Button */}
-      <div className="pt-3 pb-4 text-center space-y-2.5">
-        <div className="relative flex py-1 items-center">
+        {/* Clean Balanced Divider */}
+        <div className="relative flex py-0.5 items-center">
           <div className="flex-grow border-t border-stone-200 dark:border-stone-800" />
-          <span className="flex-shrink mx-3 text-xs text-stone-400 font-medium">अथवा</span>
+          <span className="flex-shrink mx-3 text-xs text-stone-400 font-bold">या</span>
           <div className="flex-grow border-t border-stone-200 dark:border-stone-800" />
         </div>
 
+        {/* Elevated Guest Bypass Button */}
         <button
           type="button"
           onClick={handleGuest}
-          className="w-full py-3.5 px-4 rounded-2xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800/80 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-200 font-bold text-sm transition-all flex items-center justify-center gap-2 border border-stone-200 dark:border-stone-700 cursor-pointer shadow-sm active:scale-[0.98]"
+          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 hover:border-emerald-600/40 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-sm hover:shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-lg text-primary">person_outline</span>
+          <span className="material-symbols-outlined text-base text-emerald-700 dark:text-emerald-400">person_outline</span>
           <span>{t('guestBypass')}</span>
+          <span className="material-symbols-outlined text-sm">arrow_forward</span>
         </button>
       </div>
+
+      {/* Properly Placed Reassurance Footer */}
+      <footer className="pt-3 pb-4 text-center">
+        <div className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs text-stone-500 dark:text-stone-400 font-medium">
+          <span className="material-symbols-outlined text-base text-emerald-700 dark:text-emerald-400">verified_user</span>
+          <span>सुरक्षित एवं गोपनीयता संरक्षित</span>
+        </div>
+      </footer>
     </div>
   );
 };
