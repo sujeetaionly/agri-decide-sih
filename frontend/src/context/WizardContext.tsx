@@ -7,7 +7,8 @@ export interface FarmQuestionnaireState {
   soilType: string | null; // 'BLACK', 'LOAM', 'RED', 'SANDY', 'CLAY'
   waterCapacity: string | null; // 'HIGH', 'MEDIUM', 'LOW'
   waterSource: string | null; // 'CANAL', 'WELL', 'BOREWELL', 'RAINFED'
-  previousCrop: string | null; // 'WHEAT', 'GRAM', 'PADDY', 'SOYBEAN', 'COTTON', 'OTHER'
+  previousCrop: string | null; // e.g. 'WHEAT, GRAM'
+  previousCrops: string[]; // multi-crop list e.g. ['WHEAT', 'GRAM']
   season: string | null; // 'KHARIF', 'RABI', 'ZAID'
   plannedSowingDate: string | null;
 }
@@ -74,7 +75,7 @@ interface WizardContextType {
   resetWizard: () => void;
 }
 
-// Strictly null defaults so NO options on any step are preselected
+// Strictly null/empty defaults so NO options on any step are preselected
 const DEFAULT_FARM_DATA: FarmQuestionnaireState = {
   landAcres: null,
   landUnit: 'ACRE',
@@ -82,6 +83,7 @@ const DEFAULT_FARM_DATA: FarmQuestionnaireState = {
   waterCapacity: null,
   waterSource: null,
   previousCrop: null,
+  previousCrops: [],
   season: null,
   plannedSowingDate: null,
 };
@@ -115,7 +117,7 @@ const DEFAULT_TOP_RECOMMENDATION: RecommendedCrop = {
     'काली मिट्टी और मानसूनी मौसम के साथ 94% सबसे उत्तम कृषि अनुकूलता।',
     '95 दिनों की कम अवधि में कुएं से मध्यम पानी में सुरक्षित पैदावार।',
     'अनुमानित लागत (₹19,412/एकड़) के साथ सर्वाधिक शुद्ध मुनाफा।',
-    'पिछली गेहूं की फसल के बाद दलहन/तिलहन फसल चक्र से खेत की उर्वरता में वृद्धि।',
+    'पिछली फसल के बाद फसल चक्र से खेत की उर्वरता में वृद्धि।',
   ],
 };
 
@@ -216,7 +218,13 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const updateFarmData = (data: Partial<FarmQuestionnaireState>) => {
-    setFarmData((prev) => ({ ...prev, ...data }));
+    setFarmData((prev) => {
+      const updated = { ...prev, ...data };
+      if (data.previousCrops) {
+        updated.previousCrop = data.previousCrops.join(', ');
+      }
+      return updated;
+    });
   };
 
   const fetchRecommendations = async () => {
@@ -231,7 +239,9 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           water_source: farmData.waterSource || 'WELL',
           water_capacity_level: farmData.waterCapacity || 'MEDIUM',
           working_capital_inr: 80000.0,
-          previous_season_crop: farmData.previousCrop || 'WHEAT',
+          previous_season_crop: farmData.previousCrops && farmData.previousCrops.length > 0
+            ? farmData.previousCrops[0]
+            : (farmData.previousCrop || 'WHEAT'),
           planned_sowing_date: farmData.plannedSowingDate || '2026-06-25',
         }),
       });
