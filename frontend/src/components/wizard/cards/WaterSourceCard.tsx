@@ -16,24 +16,24 @@ export const WaterSourceCard: React.FC = () => {
       source: 'CANAL',
       title: t('waterHigh'),
       subtitle: 'नहर या बारहमासी ट्यूबवेल • सभी फसलों के लिए भरपूर पानी',
-      icon: 'water',
-      iconBg: 'bg-blue-500/15 text-blue-600',
+      icon: 'waves',
+      iconBg: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-500/30',
     },
     {
       id: 'MEDIUM',
       source: 'WELL',
       title: t('waterMedium'),
-      subtitle: 'कुआं या सीमित ट्यूबवेल • 2-3 सिंचाई की सुविधा',
+      subtitle: 'कुआं या सीमित ट्यूबवेल • २-३ सिंचाई की सुविधा',
       icon: 'water_drop',
-      iconBg: 'bg-teal-500/15 text-teal-600',
+      iconBg: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20',
     },
     {
       id: 'LOW',
       source: 'RAINFED',
       title: t('waterRainfed'),
       subtitle: 'सिंचाई का कोई साधन नहीं • केवल मानसूनी बारिश पर निर्भर',
-      icon: 'cloud_queue',
-      iconBg: 'bg-amber-500/15 text-amber-600',
+      icon: 'rainy',
+      iconBg: 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700',
     },
   ];
 
@@ -98,8 +98,8 @@ export const WaterSourceCard: React.FC = () => {
                   : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
               }`}
             >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${w.iconBg}`}>
-                <span className="material-symbols-outlined text-3xl">{w.icon}</span>
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm ${w.iconBg}`}>
+                <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">{w.icon}</span>
               </div>
 
               <div className="flex-1 min-w-0">

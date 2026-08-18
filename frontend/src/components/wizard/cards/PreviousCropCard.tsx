@@ -205,50 +205,44 @@ export const PreviousCropCard: React.FC = () => {
           {t('card4Title')}
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
-          एक या एक से अधिक फसलें चुन सकते हैं। आप बोलकर भी बता सकते हैं।
+          एक या एक से अधिक फसलें चुन सकते हैं।
         </p>
       </div>
 
-      {/* PROMINENT VOICE RECOGNITION MIC TRIGGER */}
+      {/* Clean Voice Recognition Bar */}
       <div className="space-y-2">
         <button
           type="button"
           onClick={handleToggleVoice}
-          className={`w-full p-4 rounded-3xl border-2 transition-all flex items-center justify-between text-left active:scale-[0.98] shadow-sm cursor-pointer ${
+          className={`w-full p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between text-left active:scale-[0.98] shadow-sm cursor-pointer ${
             isListening
-              ? 'bg-red-50 dark:bg-red-950/40 border-red-500 ring-2 ring-red-500/30'
-              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/50'
+              ? 'bg-red-50 dark:bg-red-950/40 border-red-500 ring-2 ring-red-500/30 text-red-700 dark:text-red-300 animate-pulse'
+              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 hover:border-primary/40'
           }`}
         >
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3">
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
                 isListening
-                  ? 'bg-red-500 text-white shadow-lg animate-pulse'
+                  ? 'bg-red-500 text-white shadow-md'
                   : 'bg-primary/10 text-primary'
               }`}
             >
-              <span className="material-symbols-outlined text-2xl">
+              <span className="material-symbols-outlined text-xl">
                 {isListening ? 'graphic_eq' : 'mic'}
               </span>
             </div>
 
             <div>
-              <h3 className="text-sm font-bold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
+              <h3 className="text-sm font-bold font-headline">
                 {isListening ? 'सुन रहे हैं... फसल बोलें' : 'बोलकर फसल चुनें'}
               </h3>
-              <p className="text-xs text-stone-500 dark:text-stone-400">
-                {isListening
-                  ? 'उदा. गेहूं, चना, सोयाबीन...'
-                  : 'माइक दबाकर अपनी फसल का नाम बोलें'}
-              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 text-[11px] font-bold text-stone-600 dark:text-stone-300">
-            <span className="material-symbols-outlined text-sm text-primary">hearing</span>
-            <span>{isListening ? 'सक्रिय' : 'आवाज सहायक'}</span>
-          </div>
+          <span className="text-xs font-semibold text-stone-400 dark:text-stone-500">
+            {isListening ? '● सक्रिय' : 'माइक दबाएं'}
+          </span>
         </button>
 
         {transcriptFeedback && (
@@ -288,16 +282,13 @@ export const PreviousCropCard: React.FC = () => {
                 </div>
               </div>
 
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-2.5 mt-1 ${c.iconBg}`}>
-                <span className="material-symbols-outlined text-2xl">{c.icon}</span>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-2 mt-1 shadow-sm ${c.iconBg}`}>
+                <span className="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_1]">{c.icon}</span>
               </div>
 
               <h3 className="text-base font-bold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
                 {cropTitle}
               </h3>
-              <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 mt-0.5">
-                {c.category}
-              </span>
             </div>
           );
         })}

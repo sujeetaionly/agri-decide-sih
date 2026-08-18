@@ -72,22 +72,22 @@ export const SowingSeasonCard: React.FC = () => {
       id: 'THIS_WEEK',
       title: t('sowingTimingWeek'),
       sub: 'तुरंत बुवाई की तैयारी के लिए मौसम अनुसार सलाह',
-      icon: 'bolt',
-      iconBg: 'bg-emerald-500/15 text-emerald-600',
+      icon: 'spa',
+      iconBg: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-500/30',
     },
     {
       id: 'NEXT_MONTH',
       title: t('sowingTimingMonth'),
       sub: 'मानसूनी बारिश के आगमन अनुसार योजना',
-      icon: 'calendar_month',
-      iconBg: 'bg-blue-500/15 text-blue-600',
+      icon: 'event',
+      iconBg: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20',
     },
     {
       id: 'CUSTOM_DATE',
       title: t('sowingTimingCustomDate'),
       sub: 'कैलेंडर से अपनी सुविधानुसार तारीख चुनें',
-      icon: 'edit_calendar',
-      iconBg: 'bg-amber-500/15 text-amber-600',
+      icon: 'calendar_month',
+      iconBg: 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700',
     },
   ];
 
@@ -132,8 +132,8 @@ export const SowingSeasonCard: React.FC = () => {
               }`}
             >
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${opt.iconBg}`}>
-                  <span className="material-symbols-outlined text-3xl">{opt.icon}</span>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm ${opt.iconBg}`}>
+                  <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">{opt.icon}</span>
                 </div>
 
                 <div className="flex-1 min-w-0">
