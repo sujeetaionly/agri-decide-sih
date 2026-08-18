@@ -89,7 +89,7 @@ export const WizardPage: React.FC<WizardPageProps> = ({
       </main>
 
       {/* Persistent Bottom Navigation Bar on Every Page */}
-      <HomeBottomNav activeTab="wizard" onTabChange={handleNavChange} />
+      <HomeBottomNav onTabChange={handleNavChange} />
     </div>
   );
 };

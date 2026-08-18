@@ -195,12 +195,11 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
       </main>
 
-      {/* 3. Persistent 4-Button Bottom Navigation */}
+      {/* 3. Persistent 3-Button Bottom Navigation */}
       <HomeBottomNav
         activeTab="settings"
         onTabChange={(tab) => {
           if (tab === 'home') onGoToHome();
-          if (tab === 'wizard') onStartNewRecommendation();
           if (tab === 'my-crops') onOpenMyCrops();
         }}
       />

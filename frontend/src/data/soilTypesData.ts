@@ -17,41 +17,6 @@ export interface LocalizedSoilInfo {
   imageUrl: string;
 }
 
-// Ultra-reliable, rich photographic SVG textures that render instant realistic soil patterns
-const createSoilSvgUrl = (bgColor: string, accentColor: string, label: string, crackColor?: string) => {
-  const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="340" viewBox="0 0 600 340">
-  <defs>
-    <radialGradient id="soilGrad" cx="50%" cy="50%" r="70%">
-      <stop offset="0%" stop-color="${bgColor}" />
-      <stop offset="100%" stop-color="${accentColor}" />
-    </radialGradient>
-    <filter id="noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
-      <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.45 0"/>
-      <feBlend mode="multiply" in="SourceGraphic" />
-    </filter>
-  </defs>
-  <rect width="600" height="340" fill="url(#soilGrad)" />
-  <rect width="600" height="340" filter="url(#noise)" opacity="0.65" />
-  ${crackColor ? `
-  <path d="M 50 120 Q 150 180 280 140 T 450 220 T 580 170" stroke="${crackColor}" stroke-width="3" fill="none" opacity="0.5"/>
-  <path d="M 120 40 Q 200 130 180 260 T 320 310" stroke="${crackColor}" stroke-width="2.5" fill="none" opacity="0.4"/>
-  <path d="M 380 30 Q 360 160 480 280" stroke="${crackColor}" stroke-width="2.5" fill="none" opacity="0.4"/>
-  ` : ''}
-  <!-- Overlay Vignette & Badge -->
-  <rect width="600" height="340" fill="black" opacity="0.15" />
-  <g transform="translate(24, 280)">
-    <rect width="180" height="36" rx="18" fill="rgba(0,0,0,0.55)" backdrop-filter="blur(8px)"/>
-    <text x="90" y="23" fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle">
-      ${label}
-    </text>
-  </g>
-</svg>
-`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-};
-
 export const soilTypesList: LocalizedSoilInfo[] = [
   {
     id: 'BLACK',
@@ -69,7 +34,7 @@ export const soilTypesList: LocalizedSoilInfo[] = [
       gu: 'ભેજ જાળવી રાખવાની ઉત્તમ ક્ષમતા ધરાવતી ફળદ્રુપ કાળી જમીન. કપાસ, સોયાબીન અને ચણા માટે શ્રેષ્ઠ.',
     },
     suitableCrops: ['सोयाबीन', 'कपास', 'चना', 'गेहूं'],
-    imageUrl: createSoilSvgUrl('#1c1c1c', '#0d0d0d', 'काली मिट्टी (Black Soil)', '#383838'),
+    imageUrl: '/assets/soils/black_soil.jpg',
   },
   {
     id: 'LOAM',
@@ -87,7 +52,7 @@ export const soilTypesList: LocalizedSoilInfo[] = [
       gu: 'ઉત્તમ ડ્રેનેજ અને પોષક તત્વો ધરાવતી સૌથી ફળદ્રુપ જમીન. મકાઈ, ઘઉં અને કઠોળ માટે આદર્શ.',
     },
     suitableCrops: ['मक्का', 'गेहूं', 'मूंग', 'सब्जियां'],
-    imageUrl: createSoilSvgUrl('#5c3e21', '#382210', 'दोमट मिट्टी (Loam Soil)', '#78502c'),
+    imageUrl: '/assets/soils/loam_soil.jpg',
   },
   {
     id: 'RED',
@@ -105,7 +70,7 @@ export const soilTypesList: LocalizedSoilInfo[] = [
       gu: 'આયર્નથી ભરપૂર છિદ્રાળુ જમીન. મગફળી, બાજરી અને મગના પાક માટે અનુકૂળ.',
     },
     suitableCrops: ['मूंगफली', 'बाजरा', 'मूंग', 'तिल'],
-    imageUrl: createSoilSvgUrl('#9e2a2b', '#540b0e', 'लाल मिट्टी (Red Soil)', '#bf4342'),
+    imageUrl: '/assets/soils/red_soil.jpg',
   },
   {
     id: 'SANDY',
@@ -123,7 +88,7 @@ export const soilTypesList: LocalizedSoilInfo[] = [
       gu: 'ઝડપી પાણી નિતાર ધરાવતી હલકી જમીન. બાજરી, ગુવાર અને ઓછા પાણીના પાક માટે શ્રેષ્ઠ.',
     },
     suitableCrops: ['बाजरा', 'ग्वार', 'मूंग', 'मोठ'],
-    imageUrl: createSoilSvgUrl('#c29b62', '#8c683b', 'बलुई मिट्टी (Sandy Soil)', '#dfb87c'),
+    imageUrl: '/assets/soils/sandy_soil.jpg',
   },
   {
     id: 'CLAY',
@@ -141,6 +106,6 @@ export const soilTypesList: LocalizedSoilInfo[] = [
       gu: 'ભારે ભેજ સંગ્રહ ક્ષમતા ધરાવતી માટી. ડાંગર, સરસવ અને ઘઉં માટે ઉત્તમ.',
     },
     suitableCrops: ['धान', 'सरसों', 'गेहूं', 'चना'],
-    imageUrl: createSoilSvgUrl('#4a3728', '#2b1e15', 'चिकनी मिट्टी (Clay Soil)', '#694f3a'),
+    imageUrl: '/assets/soils/clay_soil.jpg',
   },
 ];

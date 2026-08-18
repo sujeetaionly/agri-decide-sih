@@ -67,9 +67,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   const handleNavChange = (tab: NavTab) => {
-    if (tab === 'wizard') {
-      onStartWizard();
-    } else if (tab === 'my-crops') {
+    if (tab === 'my-crops') {
       onOpenMyCrops();
     } else if (tab === 'settings') {
       onOpenSettings();

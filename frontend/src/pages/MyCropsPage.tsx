@@ -94,7 +94,6 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
 
   const handleNavChange = (tab: NavTab) => {
     if (tab === 'home') onGoToHome();
-    else if (tab === 'wizard') onStartNewRecommendation();
     else if (tab === 'settings') onOpenSettings();
   };
 
