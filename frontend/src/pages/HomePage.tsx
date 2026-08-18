@@ -110,29 +110,29 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         {/* CARD 1: PRIMARY ACTION - AI Crop Recommendation Hero */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F381E] via-[#164E28] to-[#1E6B37] text-white p-6 shadow-xl space-y-5">
-          <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-white/5 rounded-full blur-xl pointer-events-none" />
-          <div className="absolute right-4 top-4 text-white/15 text-7xl select-none font-bold">
+        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-[#1E231B] border-2 border-emerald-600/40 dark:border-emerald-500/40 p-6 shadow-md hover:shadow-lg transition-all space-y-5">
+          <div className="absolute right-2 top-2 text-emerald-900/5 dark:text-emerald-100/5 text-8xl select-none font-bold pointer-events-none">
             🌾
           </div>
 
-          <div className="space-y-2.5 relative z-10">
-            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold text-emerald-200">
-              एआई फसल सलाहकार
+          <div className="space-y-2 relative z-10">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 rounded-full text-xs font-bold border border-emerald-500/30">
+              <span className="material-symbols-outlined text-sm [font-variation-settings:'FILL'_1]">psychology_alt</span>
+              <span>एआई फसल सलाहकार</span>
             </span>
-            <h2 className="text-2xl font-black font-headline leading-snug">
+            <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug tracking-tight">
               {t('homeHeroTitle')}
             </h2>
-            <p className="text-xs text-emerald-100/90 leading-relaxed max-w-[280px]">
+            <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed max-w-[290px]">
               {t('homeHeroSub')}
             </p>
           </div>
 
           <button
             onClick={handleStartRecommendation}
-            className="w-full py-4 px-6 rounded-2xl bg-amber-400 hover:bg-amber-300 active:scale-[0.98] text-stone-950 font-extrabold text-base shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10"
+            className="w-full py-4 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-extrabold text-base shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer relative z-10"
           >
-            <span className="material-symbols-outlined text-xl">eco</span>
+            <span className="material-symbols-outlined text-xl [font-variation-settings:'FILL'_1]">eco</span>
             <span>{t('getCropRecButton')}</span>
             <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </button>
