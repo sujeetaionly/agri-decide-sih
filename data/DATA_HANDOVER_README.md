@@ -23,6 +23,7 @@ data/
 └── official_real_data/
     ├── agmarknet_mandi_prices_pune_2021_2025.csv   <-- ⭐ MASTER Pillar 3: 14,786 daily mandi rows (2021-2025)
     ├── cacp_costs_official_maharashtra.csv         <-- ⭐ MASTER Pillar 2: Official CACP CoC A2 & A2+FL (₹/ha & ₹/acre)
+    ├── cacp_itemized_costs_pune.csv                <-- ⭐ MASTER Pillar 2 (Task 4): Seeds, Fertilizer, Labor, Machinery breakdown
     ├── district_sowing_windows.csv                 <-- ⭐ MASTER Pillar 3: Agronomic sowing windows & MPKV varieties
     ├── raw_upag_pune_foodgrains_2024_25.csv        <-- ⭐ MASTER Pillar 1: Official UPAg 2024-25 Pune advance yields
     ├── historical_icrisat_pune_2008_2017.csv       <-- ⭐ MASTER Pillar 1: 10-year ICRISAT Pune yield time series
@@ -43,8 +44,9 @@ import pandas as pd
 # 1. Master Agmarknet Mandi Prices (14,786 daily transactions)
 df_prices = pd.read_csv("data/official_real_data/agmarknet_mandi_prices_pune_2021_2025.csv")
 
-# 2. Master CACP Cost of Cultivation (Official A2 & A2+FL for 15 crops)
+# 2. Master CACP Cost of Cultivation & Itemized Costs (Task 4)
 df_costs = pd.read_csv("data/official_real_data/cacp_costs_official_maharashtra.csv")
+df_itemized_costs = pd.read_csv("data/official_real_data/cacp_itemized_costs_pune.csv")
 
 # 3. Master Sowing Windows & Agronomy (Duration, water need, MPKV varieties)
 df_calendar = pd.read_csv("data/official_real_data/district_sowing_windows.csv")
