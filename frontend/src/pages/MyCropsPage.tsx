@@ -146,40 +146,40 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
               return (
                 <div
                   key={item.rec_id}
-                  className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3"
+                  className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-md hover:shadow-lg transition-all space-y-3.5"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-2xl flex-shrink-0">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
                         🌾
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
                           {cropName}
                         </h3>
-                        <span className="text-xs text-stone-500">
+                        <span className="text-xs text-stone-500 font-medium">
                           {item.total_land_acres} एकड़ • {item.created_at}
                         </span>
                       </div>
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[10px] text-stone-400 block font-medium">शुद्ध लाभ</span>
+                      <span className="text-[10px] text-stone-500 block font-medium">शुद्ध लाभ</span>
                       <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">
                         {formatCurrencyINR(item.expected_profit_per_acre)} / एकड़
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-xs bg-stone-50 dark:bg-stone-900/60 p-3 rounded-2xl border border-stone-100 dark:border-stone-800">
+                  <div className="grid grid-cols-2 gap-2 text-xs bg-stone-100/80 dark:bg-stone-900/80 p-3.5 rounded-2xl border border-stone-200 dark:border-stone-700/80">
                     <div>
-                      <span className="text-stone-400 block text-[10px]">अनुमानित लागत:</span>
+                      <span className="text-stone-500 block text-[10px] font-medium">अनुमानित लागत:</span>
                       <span className="font-bold text-stone-800 dark:text-stone-200">
                         {formatCurrencyINR(item.total_cost_per_acre)}/एकड़
                       </span>
                     </div>
                     <div>
-                      <span className="text-stone-400 block text-[10px]">पैदावार:</span>
+                      <span className="text-stone-500 block text-[10px] font-medium">पैदावार:</span>
                       <span className="font-bold text-stone-800 dark:text-stone-200">
                         {item.expected_yield_qtl_per_acre} क्विंटल/एकड़
                       </span>

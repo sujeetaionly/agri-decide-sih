@@ -729,18 +729,18 @@ export const translations: Record<string, TranslationStrings> = {
   },
   // Dedicated Pages
   myCropPlanTitle: {
-    en: 'My Active Crop Plan',
-    hi: 'मेरी फसल (कार्य-योजना)',
-    mr: 'माझे पीक (कार्य-योजना)',
-    gu: 'મારો પાક (કાર્ય-યોજના)',
-    raj: 'म्हारी फसल (कार्य-योजना)',
+    en: 'My Crop Plan',
+    hi: 'मेरी फसल',
+    mr: 'माझे पीक',
+    gu: 'મારો પાક',
+    raj: 'म्हारी फसल',
   },
   historyTitle: {
-    en: 'Crop History (Past Analysis)',
-    hi: 'फसल इतिहास (पुराने विश्लेषण)',
-    mr: 'पीक इतिहास (मागील विश्लेषण)',
-    gu: 'પાક ઇતિહાસ (પાછલું વિશ્લેષણ)',
-    raj: 'फसल इतिहास (पुराना विश्लेषण)',
+    en: 'Crop History',
+    hi: 'फसल इतिहास',
+    mr: 'पीक इतिहास',
+    gu: 'પાક ઇતિહાસ',
+    raj: 'फसल इतिहास',
   },
 };
 

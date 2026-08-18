@@ -105,7 +105,7 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 px-3 py-1 rounded-full">
-            १२०-दिवसीय फसल कार्य-योजना
+            कृषि कार्य-योजना
           </span>
 
           <button
@@ -129,24 +129,24 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
       </div>
 
       {/* Selected Crop Summary Hero */}
-      <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/20 rounded-3xl p-5 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-md space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-700 flex items-center justify-center font-bold text-xl">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-700 flex items-center justify-center font-bold text-2xl shadow-sm">
               🌱
             </div>
             <div>
-              <h3 className="text-lg font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
+              <h3 className="text-xl font-bold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
                 {cropName}
               </h3>
-              <span className="text-xs text-stone-500">
-                {farmData.landAcres} एकड़ • खरीफ मौसम 2026
+              <span className="text-xs text-stone-500 font-medium">
+                {farmData.landAcres || 2.5} एकड़ • खरीफ मौसम 2026
               </span>
             </div>
           </div>
 
           <div className="text-right">
-            <span className="text-[10px] text-stone-500 block">शुद्ध लाभ</span>
+            <span className="text-[10px] text-stone-500 block font-medium">शुद्ध लाभ</span>
             <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">
               {formatCurrencyINR(crop.expected_net_profit_per_acre_inr)} / एकड़
             </span>
@@ -168,15 +168,15 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
                 onClick={() => handleToggleComplete(m.day)}
                 className={`absolute -left-[25px] top-1 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
                   isDone
-                    ? 'bg-primary text-white ring-4 ring-primary/20'
-                    : 'bg-white dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-700 text-transparent'
+                    ? 'bg-primary text-white ring-4 ring-primary/20 shadow-sm'
+                    : 'bg-white dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-700 text-transparent shadow-sm'
                 }`}
               >
                 <span className="material-symbols-outlined text-xs">check</span>
               </button>
 
               {/* Milestone Card */}
-              <div className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-2xl p-4 shadow-sm space-y-2">
+              <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-4.5 shadow-md hover:shadow-lg transition-all space-y-2.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-xs font-extrabold px-2.5 py-0.5 rounded-md">

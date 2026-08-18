@@ -83,7 +83,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
 
         {/* Clean Farmer Mobile Number Card */}
-        <div className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-2">
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-md space-y-2">
           <span className="text-xs font-bold text-stone-500 uppercase tracking-wider block">
             {t('phoneNumber')}
           </span>
@@ -93,14 +93,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
 
         {/* App Language Switcher */}
-        <div className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3">
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-md space-y-3">
           <h3 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
             ऐप प्राथमिकताएं
           </h3>
 
           <div className="flex items-center justify-between py-1">
             <div>
-              <span className="text-xs text-stone-400 block">{t('currentLanguageLabel')}</span>
+              <span className="text-xs text-stone-500 block font-medium">{t('currentLanguageLabel')}</span>
               <span className="text-base font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
                 {LANGUAGE_NAMES[language] || 'हिन्दी'}
               </span>
@@ -119,7 +119,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
 
         {/* Kisan Toll-Free Helpline Support Card */}
-        <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-500/20 rounded-3xl p-5 shadow-sm space-y-2">
+        <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-600/30 dark:border-emerald-700/50 rounded-3xl p-5 shadow-md space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
               किसान कॉल सेंटर (टोल-फ्री हेल्पलाइन)
@@ -134,7 +134,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           >
             1800-180-1551
           </a>
-          <p className="text-[11px] text-emerald-800/80 dark:text-emerald-300/80 leading-relaxed">
+          <p className="text-[11px] text-emerald-800/80 dark:text-emerald-300/80 leading-relaxed font-medium">
             कृषि विशेषज्ञों से सीधे फोन पर बात करने के लिए ऊपर दिए गए नंबर पर कॉल करें।
           </p>
         </div>
