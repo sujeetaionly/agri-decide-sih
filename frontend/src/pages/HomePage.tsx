@@ -16,11 +16,13 @@ interface RecentAnalysis {
 interface HomePageProps {
   onStartWizard: () => void;
   onOpenMyCrops: () => void;
+  onOpenSettings: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onStartWizard,
   onOpenMyCrops,
+  onOpenSettings,
 }) => {
   const { language, t } = useLanguage();
   const [recentAnalysis, setRecentAnalysis] = useState<RecentAnalysis | null>(null);
@@ -69,6 +71,8 @@ export const HomePage: React.FC<HomePageProps> = ({
       onStartWizard();
     } else if (tab === 'my-crops') {
       onOpenMyCrops();
+    } else if (tab === 'settings') {
+      onOpenSettings();
     }
   };
 

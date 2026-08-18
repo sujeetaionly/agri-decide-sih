@@ -508,6 +508,31 @@ export const translations: TranslationDictionary = {
     gu: 'શ્રેષ્ઠ પાક વિકલ્પો જુઓ',
   },
 
+  // Recommendations Screen Titles
+  resultsTitle: {
+    en: 'Best Crops for Your Farm',
+    hi: 'आपके खेत के लिए सर्वोत्तम फसल',
+    mr: 'तुमच्या शेतासाठी सर्वोत्तम पीक',
+    gu: 'તમારા ખેતર માટે શ્રેષ્ઠ પાક',
+  },
+  resultsSub: {
+    en: 'AI generated recommendations based on your soil, water and market rates.',
+    hi: 'आपकी मिट्टी, सिंचाई और मंडी भाव के आधार पर एआई द्वारा चयनित परिणाम।',
+    mr: 'माती, पाणी आणि बाजारभावानुसार एआय द्वारे निवडलेले निकाल.',
+    gu: 'જમીન, પાણી અને બજાર ભાવના આધારે એઆઈ પરિણામો.',
+  },
+  expectedYield: {
+    en: 'Expected Yield',
+    hi: 'अनुमानित पैदावार',
+    mr: 'अपेक्षित उत्पन्न',
+    gu: 'અંદાજિત ઉપજ',
+  },
+  quintalPerAcre: {
+    en: 'quintal / acre',
+    hi: 'क्विंटल / एकड़',
+    mr: 'क्विंटल / एकर',
+    gu: 'ક્વિન્ટલ / એકર',
+  },
   // Recommendations Screen
   topChoiceBadge: {
     en: 'TOP RECOMMENDATION',
@@ -662,6 +687,55 @@ export const translations: TranslationDictionary = {
     hi: 'अपनी सभी सुरक्षित फसल योजनाओं का विवरण देखें।',
     mr: 'आपल्या सर्व जतन केलेल्या पीक योजनांची माहिती पहा.',
     gu: 'તમારી તમામ સાચવેલ પાક યોજનાઓની વિગત જુઓ.',
+  },
+  // Settings & Account
+  navSettings: {
+    en: 'Settings',
+    hi: 'सेटिंग्स',
+    mr: 'सेटिंग्ज',
+    gu: 'સેટિંગ્સ',
+  },
+  settingsTitle: {
+    en: 'Farmer Account & Settings',
+    hi: 'किसान खाता व सेटिंग्स',
+    mr: 'शेतकरी खाते आणि सेटिंग्ज',
+    gu: 'ખેડૂત ખાતું અને સેટિંગ્સ',
+  },
+  phoneNumber: {
+    en: 'Registered Mobile Number',
+    hi: 'पंजीकृत मोबाइल नंबर',
+    mr: 'नोंदणीकृत मोबाईल नंबर',
+    gu: 'નોંધાયેલ મોબાઇલ નંબર',
+  },
+  verifiedFarmer: {
+    en: 'Verified Farmer Profile',
+    hi: 'प्रमाणित किसान प्रोफाइल',
+    mr: 'प्रमाणित शेतकरी प्रोफाइल',
+    gu: 'પ્રમાણિત ખેડૂત પ્રોફાઇલ',
+  },
+  currentLanguageLabel: {
+    en: 'App Language',
+    hi: 'ऐप की भाषा',
+    mr: 'ॲपची भाषा',
+    gu: 'ઍપની ભાષા',
+  },
+  changeLanguageBtn: {
+    en: 'Change Language',
+    hi: 'भाषा बदलें',
+    mr: 'भाषा बदला',
+    gu: 'ભાષા બદલો',
+  },
+  signOut: {
+    en: 'Sign Out',
+    hi: 'साइन आउट करें',
+    mr: 'साइन आउट करा',
+    gu: 'સાઇન આઉટ કરો',
+  },
+  whatIfCardBtn: {
+    en: 'Check Weather & Risks (What-If)',
+    hi: 'मौसम व जोखिम जांचें (What-If)',
+    mr: 'हवामान आणि जोखीम तपासा',
+    gu: 'હવામાન અને જોખમ તપાસો',
   },
 };
 

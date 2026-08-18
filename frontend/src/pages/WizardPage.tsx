@@ -15,11 +15,13 @@ import { triggerHaptic } from '../lib/utils';
 interface WizardPageProps {
   onReturnHome: () => void;
   onOpenMyCrops: () => void;
+  onOpenSettings: () => void;
 }
 
 export const WizardPage: React.FC<WizardPageProps> = ({
   onReturnHome,
   onOpenMyCrops,
+  onOpenSettings,
 }) => {
   const { currentCard, prevCard } = useWizard();
   const { t } = useLanguage();
@@ -27,6 +29,7 @@ export const WizardPage: React.FC<WizardPageProps> = ({
   const handleNavChange = (tab: NavTab) => {
     if (tab === 'home') onReturnHome();
     else if (tab === 'my-crops') onOpenMyCrops();
+    else if (tab === 'settings') onOpenSettings();
   };
 
   const handleHeaderBack = () => {

@@ -109,7 +109,7 @@ export const FarmSizeCard: React.FC = () => {
               : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
           }`}
         >
-          <span>{t('continue')} (मिट्टी का प्रकार)</span>
+          <span>{t('continue')}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>
         </button>
       </div>

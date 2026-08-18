@@ -12,6 +12,7 @@ import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/HomePage';
 import { WizardPage } from './pages/WizardPage';
 import { MyCropsPage } from './pages/MyCropsPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { SupportedLanguage } from './data/translations';
 
 export type AppViewMode =
@@ -21,7 +22,8 @@ export type AppViewMode =
   | 'login'
   | 'home'
   | 'wizard'
-  | 'my-crops';
+  | 'my-crops'
+  | 'settings';
 
 const AppContent: React.FC = () => {
   const [showSplash, setShowSplash] = useState<boolean>(true);
@@ -40,6 +42,7 @@ const AppContent: React.FC = () => {
     }
     if (hash === 'wizard') return 'wizard';
     if (hash === 'my-crops') return 'my-crops';
+    if (hash === 'settings') return 'settings';
     if (hash === 'home') return 'home';
 
     const hasOnboarded = localStorage.getItem('krishi_has_onboarded');
@@ -49,7 +52,7 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') as AppViewMode;
-      if (['language-select', 'language-confirm', 'audio-guide', 'login', 'home', 'wizard', 'my-crops'].includes(hash)) {
+      if (['language-select', 'language-confirm', 'audio-guide', 'login', 'home', 'wizard', 'my-crops', 'settings'].includes(hash)) {
         setViewMode(hash);
         setShowSplash(false);
       }
@@ -122,8 +125,16 @@ const AppContent: React.FC = () => {
     navigateTo('my-crops');
   };
 
+  const handleOpenSettings = () => {
+    navigateTo('settings');
+  };
+
   const handleReturnHome = () => {
     navigateTo('home');
+  };
+
+  const handleSignOut = () => {
+    navigateTo('login');
   };
 
   return (
@@ -184,6 +195,7 @@ const AppContent: React.FC = () => {
         <HomePage
           onStartWizard={handleStartWizard}
           onOpenMyCrops={handleOpenMyCrops}
+          onOpenSettings={handleOpenSettings}
         />
       )}
 
@@ -192,6 +204,7 @@ const AppContent: React.FC = () => {
         <WizardPage
           onReturnHome={handleReturnHome}
           onOpenMyCrops={handleOpenMyCrops}
+          onOpenSettings={handleOpenSettings}
         />
       )}
 
@@ -200,6 +213,18 @@ const AppContent: React.FC = () => {
         <MyCropsPage
           onStartNewRecommendation={handleStartWizard}
           onGoToHome={handleReturnHome}
+          onOpenSettings={handleOpenSettings}
+        />
+      )}
+
+      {/* Screen 8: Farmer Account & Settings */}
+      {viewMode === 'settings' && (
+        <SettingsPage
+          onGoToHome={handleReturnHome}
+          onStartNewRecommendation={handleStartWizard}
+          onOpenMyCrops={handleOpenMyCrops}
+          onChangeLanguage={handleChangeLanguage}
+          onSignOut={handleSignOut}
         />
       )}
     </>

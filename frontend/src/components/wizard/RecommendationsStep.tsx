@@ -9,7 +9,6 @@ export const RecommendationsStep: React.FC = () => {
     topRecommendation,
     comparisonMatrix,
     goToCard,
-    prevCard,
     selectedCropId,
     setSelectedCropId,
   } = useWizard();
@@ -58,31 +57,20 @@ export const RecommendationsStep: React.FC = () => {
     speakText(msg, language);
   };
 
-  const handleSelectAltCrop = (item: ComparisonCropItem) => {
-    triggerHaptic('medium');
-    setSelectedCropId(item.crop_id);
-  };
-
-  const handleProceedToPlan = () => {
+  const handleProceedToWhatIf = () => {
     triggerHaptic('success');
-    goToCard(8); // Move to 120-Day Action Plan
-  };
-
-  const handleTestWhatIf = () => {
-    triggerHaptic('light');
-    goToCard(7); // Move to What-If simulator
+    goToCard(7); // Proceed to What-If Risk Simulation
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-40">
-      
-      {/* Header & Listen Button */}
+    <div className="space-y-6 animate-fadeIn pb-44">
+      {/* Header & Confidence Badge */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full text-xs font-bold">
-            <span className="material-symbols-outlined text-base">verified</span>
-            <span>उच्च विश्वसनीयता (High Match)</span>
-          </div>
+          <span className="text-xs font-bold text-emerald-700 bg-emerald-100 dark:bg-emerald-950 px-3 py-1 rounded-full flex items-center gap-1 border border-emerald-500/20">
+            <span className="material-symbols-outlined text-sm">verified</span>
+            <span>उच्च विश्वसनीयता</span>
+          </span>
 
           <button
             onClick={handleAudio}
@@ -94,78 +82,73 @@ export const RecommendationsStep: React.FC = () => {
         </div>
 
         <h2 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug">
-          आपके खेत के लिए सर्वोत्तम फसल
+          {t('resultsTitle')}
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
-          आपकी मिट्टी, सिंचाई और मंडी भाव के आधार पर एआई द्वारा चयनित परिणाम
+          {t('resultsSub')}
         </p>
       </div>
 
-      {/* HERO TOP RECOMMENDATION CARD */}
-      <div className="bg-white dark:bg-[#1E231B] border-2 border-primary rounded-3xl overflow-hidden shadow-lg space-y-0">
-        
-        {/* Banner */}
-        <div className="bg-primary text-on-primary px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-amber-300 text-xl fill">star</span>
-            <span className="font-extrabold text-xs uppercase tracking-wider">
-              {t('topChoiceBadge')}
-            </span>
+      {/* TOP RECOMMENDATION CARD */}
+      <div className="rounded-3xl border-2 border-emerald-500 bg-white dark:bg-[#1E231B] overflow-hidden shadow-lg">
+        {/* Top Header Banner */}
+        <div className="bg-emerald-700 text-white px-5 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 font-bold text-xs">
+            <span className="material-symbols-outlined text-base text-amber-300">star</span>
+            <span>{t('topChoiceBadge')}</span>
           </div>
-          <div className="bg-white/20 text-white px-2.5 py-0.5 rounded-full text-xs font-extrabold">
-            {Math.round(top.suitability_pct)}% मैच स्कोर
-          </div>
+          <span className="text-xs font-black bg-white/20 px-2.5 py-0.5 rounded-full">
+            {top.suitability_pct}% मैच स्कोर
+          </span>
         </div>
 
         <div className="p-5 space-y-4">
-          {/* Crop Title & Duration */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold text-2xl shadow-inner">
-                🌾
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
-                  {topCropName}
-                </h3>
-                <span className="text-xs text-stone-500 font-medium">
-                  खरीफ मौसम • {top.duration_days} {t('days')} फसल अवधि
-                </span>
-              </div>
+          {/* Crop Name & Icon */}
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner">
+              🌾
+            </div>
+            <div>
+              <h3 className="text-2xl font-extrabold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
+                {topCropName}
+              </h3>
+              <p className="text-xs text-stone-500 font-medium">
+                {top.duration_days} दिन फसल अवधि
+              </p>
             </div>
           </div>
 
-          {/* 3-Pillar Financial Metrics Grid (Yield + Cost + Profit) */}
+          {/* 3-Pillar Balanced Metric Scorecard */}
           <div className="grid grid-cols-3 gap-2.5 pt-1">
             {/* 1. Net Profit */}
-            <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 p-3 rounded-2xl text-center space-y-1">
-              <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 block uppercase">
+            <div className="bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-2.5 text-center">
+              <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 block leading-tight">
                 {t('estimatedProfit')}
               </span>
-              <span className="text-base font-extrabold text-emerald-700 dark:text-emerald-300 block leading-tight">
+              <span className="text-base font-black text-emerald-700 dark:text-emerald-400 block leading-tight">
                 {formatCurrencyINR(top.expected_net_profit_per_acre_inr)}
               </span>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">
                 {t('perAcre')}
               </span>
             </div>
 
             {/* 2. Expected Yield */}
-            <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-500/30 p-3 rounded-2xl text-center space-y-1">
-              <span className="text-[10px] font-bold text-blue-800 dark:text-blue-300 block uppercase">
-                {t('estimatedYield')}
+            <div className="bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 rounded-2xl p-2.5 text-center">
+              <span className="text-[11px] font-bold text-blue-800 dark:text-blue-300 block leading-tight">
+                {t('expectedYield')}
               </span>
-              <span className="text-base font-extrabold text-blue-700 dark:text-blue-300 block leading-tight">
+              <span className="text-base font-black text-blue-700 dark:text-blue-400 block leading-tight">
                 {top.expected_yield_qtl_per_acre}
               </span>
-              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">
-                क्विंटल / एकड़
+              <span className="text-[10px] text-blue-600 dark:text-blue-500 font-medium">
+                {t('quintalPerAcre')}
               </span>
             </div>
 
-            {/* 3. Estimated Cultivation Cost */}
-            <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-500/30 p-3 rounded-2xl text-center space-y-1">
-              <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 block uppercase">
+            {/* 3. Estimated Working Cost */}
+            <div className="bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-2xl p-2.5 text-center">
+              <span className="text-[11px] font-bold text-amber-800 dark:text-amber-300 block leading-tight">
                 {t('estimatedCost')}
               </span>
               <span className="text-base font-extrabold text-amber-700 dark:text-amber-300 block leading-tight">
@@ -249,32 +232,38 @@ export const RecommendationsStep: React.FC = () => {
 
       {/* ALTERNATIVE CROP COMPARISON CARDS */}
       <div className="space-y-3">
-        <h3 className="text-sm font-bold text-stone-700 dark:text-stone-300">
-          अन्य मजबूत फसल विकल्प (Comparison Options)
-        </h3>
+        <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
+          {t('alternativeOptionsTitle')}
+        </h4>
 
         <div className="space-y-2.5">
-          {comparisonMatrix.slice(1, 4).map((alt) => {
+          {comparisonMatrix.map((alt) => {
+            const isTop = alt.crop_id === top.crop_id;
+            if (isTop) return null;
+
             const altName = (language === 'mr' ? alt.crop_name_mr : alt.crop_name_hi) || alt.crop_name_hi;
-            const isSelectedAlt = selectedCropId === alt.crop_id;
+
             return (
               <button
                 key={alt.crop_id}
                 type="button"
-                onClick={() => handleSelectAltCrop(alt)}
-                className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center justify-between active:scale-[0.98] ${
-                  isSelectedAlt
-                    ? 'border-primary bg-primary/10 shadow-sm'
-                    : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800'
+                onClick={() => {
+                  triggerHaptic('medium');
+                  setSelectedCropId(alt.crop_id);
+                }}
+                className={`w-full p-4 rounded-2xl border text-left transition-all flex items-center justify-between ${
+                  selectedCropId === alt.crop_id
+                    ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
+                    : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B]'
                 }`}
               >
-                <div className="space-y-1">
+                <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-base text-[#1A1C18] dark:text-[#E2E3DC]">
+                    <span className="font-bold text-sm text-[#1A1C18] dark:text-[#E2E3DC]">
                       {altName}
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600">
-                      {Math.round(alt.suitability_pct)}% मैच
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300">
+                      {alt.suitability_pct}%
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-stone-500 font-medium">
@@ -296,35 +285,15 @@ export const RecommendationsStep: React.FC = () => {
         </div>
       </div>
 
-      {/* STICKY BOTTOM ACTION BAR (1 Main Button + 1 Link to What-If) */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto space-y-2 bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
+      {/* SINGLE CLEAN CTA BUTTON: Proceed to What-If Weather & Risk Analysis */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto bg-gradient-to-t from-surface-light via-surface-light to-transparent dark:from-surface-dark dark:via-surface-dark pt-4 pb-2">
         <button
-          onClick={handleProceedToPlan}
-          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          onClick={handleProceedToWhatIf}
+          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
-          <span>{t('chooseAndPlanBtn')}</span>
+          <span>मौसम व जोखिम जांचें (What-If)</span>
           <span className="material-symbols-outlined text-xl">arrow_forward</span>
         </button>
-
-        <div className="flex justify-between items-center px-2">
-          <button
-            onClick={() => {
-              triggerHaptic('light');
-              prevCard();
-            }}
-            className="text-xs font-semibold text-stone-500 hover:text-stone-800"
-          >
-            ← {t('back')}
-          </button>
-
-          <button
-            onClick={handleTestWhatIf}
-            className="text-xs font-bold text-primary underline flex items-center gap-1"
-          >
-            <span className="material-symbols-outlined text-sm">tune</span>
-            <span>{t('testWhatIfBtn')}</span>
-          </button>
-        </div>
       </div>
     </div>
   );
