@@ -11,6 +11,7 @@ import { AudioGuidePage } from './pages/AudioGuidePage';
 import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/HomePage';
 import { WizardPage } from './pages/WizardPage';
+import { ActiveCropPlanPage } from './pages/ActiveCropPlanPage';
 import { MyCropsPage } from './pages/MyCropsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SupportedLanguage } from './data/translations';
@@ -22,7 +23,8 @@ export type AppViewMode =
   | 'login'
   | 'home'
   | 'wizard'
-  | 'my-crops'
+  | 'my-crop'
+  | 'history'
   | 'settings';
 
 const AppContent: React.FC = () => {
@@ -41,7 +43,8 @@ const AppContent: React.FC = () => {
       return 'language-select';
     }
     if (hash === 'wizard') return 'wizard';
-    if (hash === 'my-crops') return 'my-crops';
+    if (hash === 'my-crop') return 'my-crop';
+    if (hash === 'history') return 'history';
     if (hash === 'settings') return 'settings';
     if (hash === 'home') return 'home';
 
@@ -52,7 +55,7 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') as AppViewMode;
-      if (['language-select', 'language-confirm', 'audio-guide', 'login', 'home', 'wizard', 'my-crops', 'settings'].includes(hash)) {
+      if (['language-select', 'language-confirm', 'audio-guide', 'login', 'home', 'wizard', 'my-crop', 'history', 'settings'].includes(hash)) {
         setViewMode(hash);
         setShowSplash(false);
       }
@@ -121,8 +124,12 @@ const AppContent: React.FC = () => {
     navigateTo('wizard');
   };
 
-  const handleOpenMyCrops = () => {
-    navigateTo('my-crops');
+  const handleOpenMyCropPlan = () => {
+    navigateTo('my-crop');
+  };
+
+  const handleOpenHistory = () => {
+    navigateTo('history');
   };
 
   const handleOpenSettings = () => {
@@ -194,7 +201,8 @@ const AppContent: React.FC = () => {
       {viewMode === 'home' && (
         <HomePage
           onStartWizard={handleStartWizard}
-          onOpenMyCrops={handleOpenMyCrops}
+          onOpenMyCropPlan={handleOpenMyCropPlan}
+          onOpenHistory={handleOpenHistory}
           onOpenSettings={handleOpenSettings}
         />
       )}
@@ -203,25 +211,38 @@ const AppContent: React.FC = () => {
       {viewMode === 'wizard' && (
         <WizardPage
           onReturnHome={handleReturnHome}
-          onOpenMyCrops={handleOpenMyCrops}
+          onOpenMyCropPlan={handleOpenMyCropPlan}
+          onOpenHistory={handleOpenHistory}
           onOpenSettings={handleOpenSettings}
         />
       )}
 
-      {/* Screen 7: "मेरी फसलें" (My Crops) Previous Analysis Archive */}
-      {viewMode === 'my-crops' && (
+      {/* Screen 7: "मेरी फसल" (My Crop) Active 120-Day Action Plan */}
+      {viewMode === 'my-crop' && (
+        <ActiveCropPlanPage
+          onGoToHome={handleReturnHome}
+          onOpenHistory={handleOpenHistory}
+          onOpenSettings={handleOpenSettings}
+          onStartNewRecommendation={handleStartWizard}
+        />
+      )}
+
+      {/* Screen 8: "इतिहास" (History) Crop Archive */}
+      {viewMode === 'history' && (
         <MyCropsPage
           onStartNewRecommendation={handleStartWizard}
           onGoToHome={handleReturnHome}
+          onOpenMyCropPlan={handleOpenMyCropPlan}
           onOpenSettings={handleOpenSettings}
         />
       )}
 
-      {/* Screen 8: Farmer Account & Settings */}
+      {/* Screen 9: Farmer Account & Settings */}
       {viewMode === 'settings' && (
         <SettingsPage
           onGoToHome={handleReturnHome}
-          onOpenMyCrops={handleOpenMyCrops}
+          onOpenMyCropPlan={handleOpenMyCropPlan}
+          onOpenHistory={handleOpenHistory}
           onChangeLanguage={handleChangeLanguage}
           onSignOut={handleSignOut}
         />

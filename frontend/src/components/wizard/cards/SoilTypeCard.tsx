@@ -115,18 +115,6 @@ export const SoilTypeCard: React.FC = () => {
                 <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
                   {soilDesc}
                 </p>
-
-                <div className="pt-1.5 border-t border-stone-100 dark:border-stone-800 flex items-center gap-1.5 flex-wrap">
-                  <span className="text-[11px] font-bold text-stone-500 mr-1">उपयुक्त फसलें:</span>
-                  {soil.suitableCrops.map((crop) => (
-                    <span
-                      key={crop}
-                      className="text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-500/20"
-                    >
-                      {crop}
-                    </span>
-                  ))}
-                </div>
               </div>
             </div>
           );

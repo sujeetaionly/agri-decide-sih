@@ -33,6 +33,12 @@ const LANGUAGES: LanguageOption[] = [
     sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, કૃષિ-વાઇઝમાં આપનું સ્વાગત છે.',
   },
   {
+    code: 'raj',
+    nativeName: 'राजस्थानी',
+    glyph: 'रा',
+    sampleAudio: 'खम्मा घणी किसान भाई, आपरो कृषि-वाइज़ में स्वागत है।',
+  },
+  {
     code: 'en',
     nativeName: 'English',
     glyph: 'A',

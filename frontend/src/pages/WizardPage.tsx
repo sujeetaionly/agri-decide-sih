@@ -14,13 +14,15 @@ import { triggerHaptic } from '../lib/utils';
 
 interface WizardPageProps {
   onReturnHome: () => void;
-  onOpenMyCrops: () => void;
+  onOpenMyCropPlan: () => void;
+  onOpenHistory: () => void;
   onOpenSettings: () => void;
 }
 
 export const WizardPage: React.FC<WizardPageProps> = ({
   onReturnHome,
-  onOpenMyCrops,
+  onOpenMyCropPlan,
+  onOpenHistory,
   onOpenSettings,
 }) => {
   const { currentCard, prevCard } = useWizard();
@@ -28,7 +30,8 @@ export const WizardPage: React.FC<WizardPageProps> = ({
 
   const handleNavChange = (tab: NavTab) => {
     if (tab === 'home') onReturnHome();
-    else if (tab === 'my-crops') onOpenMyCrops();
+    else if (tab === 'my-crop') onOpenMyCropPlan();
+    else if (tab === 'history') onOpenHistory();
     else if (tab === 'settings') onOpenSettings();
   };
 
@@ -42,14 +45,14 @@ export const WizardPage: React.FC<WizardPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between pt-14 pb-20">
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between pt-14 pb-20 font-body">
       
       {/* Top Header */}
       <header className="fixed top-0 inset-x-0 z-40 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 pt-[env(safe-area-inset-top)]">
         <div className="flex items-center justify-between h-14 px-4 max-w-md mx-auto">
           <button
             onClick={handleHeaderBack}
-            className="flex items-center gap-1 text-xs font-bold text-stone-700 dark:text-stone-300 active:scale-95 py-1 px-2 rounded-lg"
+            className="flex items-center gap-1 text-xs font-bold text-stone-700 dark:text-stone-300 active:scale-95 py-1 px-2 rounded-lg cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">arrow_back</span>
             <span>{t('back')}</span>
@@ -61,22 +64,22 @@ export const WizardPage: React.FC<WizardPageProps> = ({
 
           <div className="flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>{t('networkConnected')}</span>
+            <span>ऑनलाइन जुड़े हैं</span>
           </div>
         </div>
 
-        {/* Progress Bar (Only during 5-question questionnaire) */}
+        {/* 5-Step Progress Bar Indicator */}
         {currentCard <= 5 && (
-          <div className="w-full bg-stone-100 dark:bg-stone-800 h-1">
+          <div className="w-full bg-stone-200 dark:bg-stone-800 h-1">
             <div
-              className="bg-primary h-1 transition-all duration-300"
+              className="bg-primary h-1 transition-all duration-300 ease-out"
               style={{ width: `${(currentCard / 5) * 100}%` }}
             />
           </div>
         )}
       </header>
 
-      {/* Main Single-Question Card Canvas */}
+      {/* Main Questionnaire / Recommendations / Action Plan Step */}
       <main className="flex-1 max-w-md mx-auto w-full px-4 pt-4">
         {currentCard === 1 && <FarmSizeCard />}
         {currentCard === 2 && <SoilTypeCard />}

@@ -7,14 +7,16 @@ import { speakText } from '../lib/speech';
 
 interface SettingsPageProps {
   onGoToHome: () => void;
-  onOpenMyCrops: () => void;
+  onOpenMyCropPlan: () => void;
+  onOpenHistory: () => void;
   onChangeLanguage: () => void;
   onSignOut: () => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({
   onGoToHome,
-  onOpenMyCrops,
+  onOpenMyCropPlan,
+  onOpenHistory,
   onChangeLanguage,
   onSignOut,
 }) => {
@@ -44,6 +46,12 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
     onSignOut();
   };
 
+  const handleNavChange = (tab: NavTab) => {
+    if (tab === 'home') onGoToHome();
+    else if (tab === 'my-crop') onOpenMyCropPlan();
+    else if (tab === 'history') onOpenHistory();
+  };
+
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col font-body pt-16 pb-24">
       {/* 1. Top Status Bar */}
@@ -67,14 +75,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
           <button
             onClick={handleAudio}
-            className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 active:scale-95"
+            className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 active:scale-95 cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">volume_up</span>
             <span>{t('listen')}</span>
           </button>
         </div>
 
-        {/* Clean Farmer Mobile Number Card (No icons/avatars or fake verified badges) */}
+        {/* Clean Farmer Mobile Number Card */}
         <div className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-2">
           <span className="text-xs font-bold text-stone-500 uppercase tracking-wider block">
             {t('phoneNumber')}
@@ -103,7 +111,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 triggerHaptic('light');
                 onChangeLanguage();
               }}
-              className="text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-4 py-2 rounded-full border border-primary/30 active:scale-95"
+              className="text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-4 py-2 rounded-full border border-primary/30 active:scale-95 cursor-pointer"
             >
               {t('changeLanguageBtn')}
             </button>
@@ -154,7 +162,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowSignOutConfirm(false)}
-                  className="flex-1 py-2.5 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-xs font-bold"
+                  className="flex-1 py-2.5 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-xs font-bold cursor-pointer"
                 >
                   रद्द करें
                 </button>
@@ -174,10 +182,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       {/* 3. Persistent Bottom Navigation */}
       <HomeBottomNav
         activeTab="settings"
-        onTabChange={(tab: NavTab) => {
-          if (tab === 'home') onGoToHome();
-          if (tab === 'my-crops') onOpenMyCrops();
-        }}
+        onTabChange={handleNavChange}
       />
     </div>
   );

@@ -15,13 +15,15 @@ interface RecentAnalysis {
 
 interface HomePageProps {
   onStartWizard: () => void;
-  onOpenMyCrops: () => void;
+  onOpenMyCropPlan: () => void;
+  onOpenHistory: () => void;
   onOpenSettings: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onStartWizard,
-  onOpenMyCrops,
+  onOpenMyCropPlan,
+  onOpenHistory,
   onOpenSettings,
 }) => {
   const { language, t } = useLanguage();
@@ -29,15 +31,13 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
-    // Check localStorage or backend for recent analysis
     const saved = localStorage.getItem('krishi_recent_analysis');
     if (saved) {
       try {
         setRecentAnalysis(JSON.parse(saved));
       } catch {
-        // Fallback default sample for demonstration
         setRecentAnalysis({
-          cropName: language === 'mr' ? 'सोयाबीन' : 'सोयाबीन',
+          cropName: 'सोयाबीन',
           profitPerAcre: 24500,
           yieldQtl: 9.5,
           date: '18 अगस्त 2026',
@@ -45,9 +45,8 @@ export const HomePage: React.FC<HomePageProps> = ({
         });
       }
     } else {
-      // Default sample for first-time visual delight
       setRecentAnalysis({
-        cropName: language === 'mr' ? 'सोयाबीन' : 'सोयाबीन',
+        cropName: 'सोयाबीन',
         profitPerAcre: 24500,
         yieldQtl: 9.5,
         date: '18 अगस्त 2026',
@@ -63,12 +62,14 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   const handleOpenPrevious = () => {
     triggerHaptic('light');
-    onOpenMyCrops();
+    onOpenMyCropPlan();
   };
 
   const handleNavChange = (tab: NavTab) => {
-    if (tab === 'my-crops') {
-      onOpenMyCrops();
+    if (tab === 'my-crop') {
+      onOpenMyCropPlan();
+    } else if (tab === 'history') {
+      onOpenHistory();
     } else if (tab === 'settings') {
       onOpenSettings();
     }
@@ -90,106 +91,102 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   return (
-    <div className="bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark min-h-screen flex flex-col justify-between pt-16 pb-24">
-      
-      {/* Top Single Header */}
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col font-body pb-24">
+      {/* 1. Single Top App Bar with Audio Button */}
       <HomeTopAppBar />
 
-      {/* Main Minimalist Canvas (Only 2 Cards as requested) */}
-      <main className="flex-grow px-4 py-4 max-w-md mx-auto w-full space-y-4">
+      {/* 2. Main Dashboard (2 Key Cards Only) */}
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-16 pb-4 space-y-4 animate-fadeIn">
         
         {/* Welcome Greeting */}
-        <div className="pt-2 pb-1">
-          <h2 className="text-xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
+        <div className="pt-2">
+          <h1 className="text-2xl font-black font-headline tracking-tight text-[#1A1C18] dark:text-[#E2E3DC]">
             {t('greeting')}
-          </h2>
-          <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+          </h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
             पुणे, महाराष्ट्र • खरीफ मौसम 2026
           </p>
         </div>
 
-        {/* CARD 1: Primary Big Crop Recommendation Action Card */}
-        <div className="bg-gradient-to-br from-emerald-800 to-green-950 text-white rounded-3xl p-6 shadow-xl border border-emerald-600/30 space-y-5 relative overflow-hidden">
-          {/* Subtle Background Art */}
-          <div className="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-emerald-500/10 blur-xl pointer-events-none" />
-          <div className="absolute right-4 top-4 text-emerald-400/20">
-            <span className="material-symbols-outlined text-6xl">psychology_alt</span>
+        {/* CARD 1: PRIMARY ACTION - Large CTA to Start Recommendation */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F381E] via-[#164E28] to-[#1E6B37] text-white p-6 shadow-xl space-y-4">
+          <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none" />
+          <div className="absolute right-4 top-4 text-white/20 text-6xl select-none font-bold">
+            🌾
           </div>
 
-          <div className="space-y-2 relative z-10 pr-12">
-            <span className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-xs font-bold tracking-wide">
+          <div className="space-y-2 relative z-10">
+            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold text-emerald-200">
               एआई फसल सलाहकार
             </span>
-            <h3 className="text-2xl font-bold font-headline leading-snug">
+            <h2 className="text-2xl font-black font-headline leading-snug">
               {t('homeHeroTitle')}
-            </h3>
-            <p className="text-xs text-emerald-100/85 leading-relaxed">
+            </h2>
+            <p className="text-xs text-emerald-100/90 leading-relaxed max-w-[260px]">
               {t('homeHeroSub')}
             </p>
           </div>
 
           <button
             onClick={handleStartRecommendation}
-            className="w-full py-4 px-6 rounded-2xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-base shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-3 relative z-10"
+            className="w-full py-4 px-6 rounded-2xl bg-amber-400 hover:bg-amber-300 active:scale-[0.98] text-stone-950 font-extrabold text-base shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10"
           >
-            <span className="material-symbols-outlined text-2xl">eco</span>
+            <span className="material-symbols-outlined text-xl">eco</span>
             <span>{t('getCropRecButton')}</span>
-            <span className="material-symbols-outlined text-xl">arrow_forward</span>
+            <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </button>
         </div>
 
-        {/* CARD 2: Previous Analysis Summary Card */}
-        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-4">
-          
+        {/* CARD 2: RECENT ANALYSIS SUMMARY */}
+        <div className="bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-700 dark:text-emerald-300">
                 <span className="material-symbols-outlined text-lg">history</span>
               </div>
-              <h4 className="font-bold text-sm text-[#1A1C18] dark:text-[#E2E3DC]">
+              <h3 className="text-sm font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
                 {t('recentAnalysisTitle')}
-              </h4>
+              </h3>
             </div>
 
             <button
               onClick={handleAudioCard}
-              className="text-stone-400 hover:text-primary active:scale-95"
-              title={t('listen')}
+              className="text-stone-400 hover:text-primary transition-colors p-1"
+              title="आवाज सुनें"
             >
-              <span className="material-symbols-outlined text-xl">volume_up</span>
+              <span className="material-symbols-outlined text-lg">volume_up</span>
             </button>
           </div>
 
           {recentAnalysis ? (
-            <div className="space-y-3.5">
-              <div className="flex items-center justify-between bg-stone-50 dark:bg-stone-900/60 p-3.5 rounded-2xl border border-stone-200/70 dark:border-stone-800">
+            <div className="space-y-3">
+              <div className="bg-stone-50 dark:bg-stone-900/60 rounded-2xl p-3.5 flex items-center justify-between">
                 <div>
-                  <span className="text-xs text-stone-500 dark:text-stone-400 block font-medium">
+                  <span className="text-[11px] text-stone-400 block font-medium">
                     सुझाई गई फसल ({recentAnalysis.landArea} एकड़)
                   </span>
-                  <span className="text-lg font-bold text-primary">
+                  <span className="text-lg font-black text-primary font-headline">
                     {recentAnalysis.cropName}
                   </span>
                 </div>
-
                 <div className="text-right">
-                  <span className="text-xs text-stone-500 dark:text-stone-400 block font-medium">
-                    अनुमानित शुद्ध लाभ
+                  <span className="text-[11px] text-stone-400 block font-medium">
+                    {t('estimatedProfit')}
                   </span>
-                  <span className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">
                     {formatCurrencyINR(recentAnalysis.profitPerAcre)} / एकड़
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-stone-500 px-1 font-medium">
+              <div className="flex items-center justify-between text-xs text-stone-500 font-medium px-1">
                 <span>पैदावार: {recentAnalysis.yieldQtl} क्विंटल/एकड़</span>
                 <span>दिनांक: {recentAnalysis.date}</span>
               </div>
 
               <button
                 onClick={handleOpenPrevious}
-                className="w-full py-3 px-4 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
+                className="w-full py-3 px-4 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <span>{t('viewFullReport')}</span>
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -206,7 +203,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       </main>
 
-      {/* Persistent Bottom Navigation Bar */}
+      {/* Persistent 4-Tab Bottom Navigation Bar */}
       <HomeBottomNav activeTab="home" onTabChange={handleNavChange} />
     </div>
   );
