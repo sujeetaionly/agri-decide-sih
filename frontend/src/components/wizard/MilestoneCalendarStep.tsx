@@ -230,32 +230,19 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
             triggerHaptic('medium');
             setIsPrintModalOpen(true);
           }}
-          className="w-full py-3.5 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
+          className="w-full py-3.5 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
           <span className="material-symbols-outlined text-lg">download</span>
           <span>{t('printPdfBtn')}</span>
         </button>
 
-        <div className="flex gap-2">
-          <button
-            onClick={handleWhatsAppShare}
-            className="flex-1 py-3 px-4 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-200 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
-          >
-            <span className="material-symbols-outlined text-base text-emerald-600">share</span>
-            <span>{t('shareWhatsappBtn')}</span>
-          </button>
-
-          <button
-            onClick={() => {
-              triggerHaptic('light');
-              onReturnHome();
-            }}
-            className="flex-1 py-3 px-4 rounded-full bg-primary text-on-primary font-bold text-xs shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
-          >
-            <span className="material-symbols-outlined text-base">home</span>
-            <span>{t('backToHomeBtn')}</span>
-          </button>
-        </div>
+        <button
+          onClick={handleWhatsAppShare}
+          className="w-full py-3 px-4 rounded-full bg-white dark:bg-[#1E231B] border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-base text-emerald-600">share</span>
+          <span>{t('shareWhatsappBtn')}</span>
+        </button>
       </div>
 
       {/* Printable Slip Modal */}
