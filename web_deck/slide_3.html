@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+    <title>AGRI-DECIDE — Slide 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            background: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1e293b;
+            position: relative;
+        }
+        @page {
+            size: 1920px 1080px;
+            margin: 0;
+        }
+        .corner-logo {
+            position: absolute;
+            top: 22px;
+            right: 45px;
+            width: 320px;
+            height: 90px;
+            z-index: 10;
+        }
+        .footer-banner {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 64px;
+            background: #0070c0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+            color: #ffffff;
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+        .team-oval {
+            position: absolute;
+            top: 26px;
+            left: 45px;
+            width: 200px;
+            height: 82px;
+            border: 2.5px solid #2d3748;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 21px;
+            font-weight: 800;
+            color: #0f2744;
+            line-height: 1.15;
+            background: #ffffff;
+            z-index: 10;
+        }
+        .slide-title-center {
+            position: absolute;
+            top: 36px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: 'Cinzel', serif, 'Times New Roman';
+            font-size: 46px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #111827;
+            z-index: 5;
+        }
+        .content-area {
+            position: absolute;
+            top: 130px;
+            left: 45px;
+            right: 45px;
+            bottom: 74px;
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+        }
+
+        /* Slide 1 Styles */
+        .slide-1-header {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .slide-1-header h1 {
+            font-family: 'Cinzel', serif, 'Times New Roman';
+            font-size: 52px;
+            font-weight: 900;
+            color: #1a428a;
+            letter-spacing: 2.5px;
+            margin-bottom: 8px;
+        }
+        .slide-1-header h2 {
+            font-family: 'Cinzel', serif, 'Times New Roman';
+            font-size: 42px;
+            font-weight: 900;
+            color: #111827;
+            letter-spacing: 2px;
+        }
+        .slide-1-left {
+            position: absolute;
+            top: 245px;
+            left: 70px;
+            width: 1100px;
+        }
+        .slide-1-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 38px;
+            font-size: 28px;
+            line-height: 1.4;
+        }
+        .bullet-dot {
+            width: 13px;
+            height: 13px;
+            background: #111827;
+            border-radius: 50%;
+            margin-top: 13px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .slide-1-label {
+            font-weight: 800;
+            color: #111827;
+            white-space: nowrap;
+            margin-right: 12px;
+        }
+        .slide-1-val {
+            font-weight: 700;
+            color: #0070c0;
+        }
+        .slide-1-val.dark {
+            color: #1e293b;
+        }
+        .slide-1-right-graphic {
+            position: absolute;
+            top: 160px;
+            right: 60px;
+            width: 720px;
+            height: 720px;
+        }
+
+        /* Subheader & 3-Column Cards */
+        .sub-header-strip {
+            display: flex;
+            align-items: center;
+            font-size: 30px;
+            font-weight: 800;
+            color: #0070c0;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 3.5px solid #0070c0;
+        }
+        .sub-header-strip .star-icon {
+            margin-right: 12px;
+            font-size: 32px;
+        }
+        .cards-3-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+        }
+        .card-panel {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 24px 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .card-header-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 23px;
+            font-weight: 800;
+            color: #0f2744;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .card-header-badge .badge-icon {
+            font-size: 26px;
+        }
+        .card-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            font-size: 19px;
+            line-height: 1.48;
+            color: #334155;
+            flex: 1;
+        }
+        .card-bullets li {
+            position: relative;
+            padding-left: 24px;
+        }
+        .card-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            top: -2px;
+            color: #0070c0;
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .highlight-bold {
+            font-weight: 700;
+            color: #0f2744;
+        }
+        .bottom-pill-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0369a1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Slide 3 Layout */
+        .slide3-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1.85fr;
+            gap: 26px;
+            flex: 1;
+        }
+        .tech-stack-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+        .tech-box {
+            background: #ffffff;
+            border-left: 6px solid #0070c0;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .tech-box-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f2744;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .tech-box-sub {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0284c7;
+            margin-bottom: 5px;
+        }
+        .tech-box-desc {
+            font-size: 16px;
+            line-height: 1.42;
+            color: #475569;
+        }
+        .pipeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+        .pipeline-stage {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .stage-num-badge {
+            background: #0f2744;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 800;
+            padding: 8px 14px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        .stage-content {
+            flex: 1;
+        }
+        .stage-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f2744;
+            margin-bottom: 4px;
+        }
+        .stage-desc {
+            font-size: 16.5px;
+            color: #334155;
+            line-height: 1.42;
+        }
+
+        /* Slide 4 Layout */
+        .feasibility-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.92fr 0.93fr;
+            gap: 22px;
+            flex: 1;
+        }
+        .metric-banner {
+            background: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .metric-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1d4ed8;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .metric-lbl {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+        .risk-item {
+            background: #fff1f2;
+            border-left: 5px solid #e11d48;
+            border-radius: 8px;
+            padding: 13px 15px;
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 1.42;
+            flex: 1;
+        }
+        .risk-title {
+            font-weight: 800;
+            color: #9f1239;
+            margin-bottom: 3px;
+            font-size: 18px;
+        }
+        .strategy-item {
+            background: #f0fdf4;
+            border-left: 5px solid #16a34a;
+            border-radius: 8px;
+            padding: 13px 15px;
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 1.42;
+            flex: 1;
+        }
+        .strategy-title {
+            font-weight: 800;
+            color: #166534;
+            margin-bottom: 3px;
+            font-size: 18px;
+        }
+
+        /* Slide 5 Layout */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            flex: 1;
+        }
+        .impact-feature-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            gap: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            flex: 1;
+            align-items: center;
+        }
+        .impact-icon {
+            font-size: 36px;
+            line-height: 1;
+        }
+        .impact-text h4 {
+            font-size: 21px;
+            font-weight: 800;
+            color: #0f2744;
+            margin-bottom: 4px;
+        }
+        .impact-text p {
+            font-size: 17px;
+            color: #334155;
+            line-height: 1.45;
+        }
+
+        /* Slide 6 Layout */
+        .ref-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+        }
+        .ref-card {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 22px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .ref-item {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .ref-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f2744;
+            margin-bottom: 3px;
+        }
+        .ref-desc {
+            font-size: 15.5px;
+            color: #475569;
+            line-height: 1.38;
+            margin-bottom: 5px;
+        }
+        .ref-link {
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: #0284c7;
+            text-decoration: none;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="team-oval">AGRI-DECIDE</div>
+    <div class="slide-title-center">TECHNICAL APPROACH</div>
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+
+    <div class="content-area">
+        <div class="slide3-grid">
+            <!-- Left: Technologies -->
+            <div class="tech-stack-container">
+                <div style="font-size: 24px; font-weight: 800; color: #0f2744; margin-bottom: 4px;">
+                    🛠️ Technologies to be Used
+                </div>
+                
+                <div class="tech-box">
+                    <div class="tech-box-title">Frontend PWA Layer <span>📱</span></div>
+                    <div class="tech-box-sub">React / Next.js + Tailwind CSS + Lucide Icons</div>
+                    <div class="tech-box-desc">Mobile-first, touch-friendly wizard (>48px targets), Web Speech API for Hindi voice input and SpeechSynthesis audio playback. GIGW accessibility compliant.</div>
+                </div>
+
+                <div class="tech-box">
+                    <div class="tech-box-title">Backend API Core <span>⚡</span></div>
+                    <div class="tech-box-sub">Python 3.11 + FastAPI + PostgreSQL / SQLite</div>
+                    <div class="tech-box-desc">Asynchronous, high-throughput REST API with strict Pydantic validation schemas, storing official CACP cultivation cost norms and Agmarknet historical mandis.</div>
+                </div>
+
+                <div class="tech-box">
+                    <div class="tech-box-title">Predictive AI/ML Engine <span>🤖</span></div>
+                    <div class="tech-box-sub">scikit-learn + XGBoost Regressor + LightGBM</div>
+                    <div class="tech-box-desc">District-trained XGBoost Yield Regressor with delay penalty curves + seasonal harvest-month wholesale mandi price forecasting models.</div>
+                </div>
+
+                <div class="tech-box" style="border-left-color: #16a34a;">
+                    <div class="tech-box-title">Deployment & Infrastructure <span>☁️</span></div>
+                    <div class="tech-box-sub">Docker + NIC Cloud / MeghRaj / Render</div>
+                    <div class="tech-box-desc">100% Free and Open-Source (FOSS) architecture with zero per-transaction API fees; lightweight PWA (&lt; 2MB bundle) with offline-first caching.</div>
+                </div>
+            </div>
+
+            <!-- Right: Methodology & Pipeline -->
+            <div class="pipeline-container">
+                <div style="font-size: 24px; font-weight: 800; color: #0f2744; margin-bottom: 4px;">
+                    🔄 Methodology & Implementation Pipeline
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 1</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Zero-Friction Ingestion & Profile Detection</div>
+                        <div class="stage-desc">Farmer selects District/Taluka or taps GPS. Engine auto-fetches SoilGrids GIS soil texture and ICAR agro-climatic baseline. Farmer inputs water source, budget, and owned machinery.</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 2</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Sowing Window & Agro-Climatic Validation</div>
+                        <div class="stage-desc">Planned sowing date is cross-referenced with crop-specific ICAR calendar windows, computing delay penalties: 🟢 Optimal Window, 🟡 Late (Yield Penalty), 🔴 Closed.</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 3</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Predictive Yield & Dynamic Economic Modeling</div>
+                        <div class="stage-desc">XGBoost calculates expected yield (qtl/acre). CACP engine deducts machinery rental savings if tractor/sprayer is owned. Computes Net Profit = (Yield × Mandi Price) - Adjusted Cost.</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 4</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Explainable 4-Crop Scorecard & 120-Day Action Timeline</div>
+                        <div class="stage-desc">Renders side-by-side comparison ranked by ₹/Day with 'Why' reasoning bullets, live "What-If" climate shock sensitivity sandbox, and a 120-day milestone calendar.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span>@SIH Idea submission- Template 3</span>
+        <span>3</span>
+    </div>
+
+</body>
+</html>

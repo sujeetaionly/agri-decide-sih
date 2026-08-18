@@ -1,291 +1,823 @@
-export const translations = {
-  // App General
+export type SupportedLanguage = 'hi' | 'mr' | 'gu' | 'raj' | 'en';
+
+export interface TranslationStrings {
+  en: string;
+  hi: string;
+  mr: string;
+  gu: string;
+  raj: string;
+}
+
+export const translations: Record<string, TranslationStrings> = {
+  // Global & App Branding
   appName: {
-    en: 'KrishiWise AI',
-    hi: 'कृषि-वाइज़ एआई (Agri-Decide)',
+    en: 'Krishi-Wise AI',
+    hi: 'कृषि-वाइज़ एआई',
+    mr: 'कृषी-वाइज एआय',
+    gu: 'કૃષિ-વાઇઝ એઆઇ',
+    raj: 'कृषि-वाइज़ एआई',
   },
-  appTagline: {
-    en: 'Smart Precision Crop Advisory for Maximum Yield & Profit',
-    hi: 'स्मार्ट फसल सलाहकार • अधिकतम पैदावार एवं लाभ',
-  },
-  listen: {
-    en: 'Listen',
-    hi: 'सुनें',
+  continue: {
+    en: 'Next',
+    hi: 'आगे बढ़ें',
+    mr: 'पुढे जा',
+    gu: 'આગળ વધો',
+    raj: 'आगे बढ़ो',
   },
   back: {
     en: 'Back',
     hi: 'पीछे जाएं',
-  },
-  continue: {
-    en: 'Continue',
-    hi: 'आगे बढ़ें',
-  },
-  save: {
-    en: 'Save',
-    hi: 'सुरक्षित करें',
-  },
-  cancel: {
-    en: 'Cancel',
-    hi: 'रद्द करें',
+    mr: 'मागे जा',
+    gu: 'પાછા જાઓ',
+    raj: 'पाछा जाओ',
   },
   stepOf: {
-    en: 'Step',
-    hi: 'चरण',
+    en: 'Question',
+    hi: 'प्रश्न',
+    mr: 'प्रश्न',
+    gu: 'પ્રશ્ન',
+    raj: 'सवाल',
   },
-  of: {
-    en: 'of',
-    hi: 'का',
+  listen: {
+    en: 'Listen',
+    hi: 'सुनें',
+    mr: 'ऐका',
+    gu: 'સાંભળો',
+    raj: 'सुणो',
+  },
+  onlineStatus: {
+    en: 'Connected Online',
+    hi: 'ऑनलाइन जुड़े हैं',
+    mr: 'ऑनलाइन जोडलेले आहात',
+    gu: 'ઓનલાઇન જોડાયેલા છો',
+    raj: 'ऑनलाइन जुड़्या हो',
   },
 
-  // Language Screen
+  // 4 Bottom Navigation Tabs
+  navHome: {
+    en: 'Home',
+    hi: 'होम',
+    mr: 'होम',
+    gu: 'હોમ',
+    raj: 'होम',
+  },
+  navMyCrop: {
+    en: 'My Crop',
+    hi: 'मेरी फसल',
+    mr: 'माझे पीक',
+    gu: 'મારો પાક',
+    raj: 'म्हारी फसल',
+  },
+  navHistory: {
+    en: 'History',
+    hi: 'इतिहास',
+    mr: 'इतिहास',
+    gu: 'ઇતિહાસ',
+    raj: 'इतिहास',
+  },
+  navSettings: {
+    en: 'Settings',
+    hi: 'सेटिंग्स',
+    mr: 'सेटिंग्ज',
+    gu: 'સેટિંગ્સ',
+    raj: 'सेटिंग्स',
+  },
+
+  // GPS Permission Modal Keys
+  gpsPermissionTitle: {
+    en: 'Allow Krishi-Wise to access your farm location?',
+    hi: 'क्या आप कृषि-वाइज़ को अपने खेत की लोकेशन जानने की अनुमति देते हैं?',
+    mr: 'कृषी-वाइजला तुमच्या शेताचे स्थान (Location) जाणून घेण्याची परवानगी द्यायची का?',
+    gu: 'શું તમે કૃષિ-વાઇઝને તમારા ખેતરનું સ્થાન (Location) જાણવાની મંજૂરી આપો છો?',
+    raj: 'कांई थे कृषि-वाइज़ ने आपरे खेत री लोकेशन जाणबा री अनुमति दो हो?',
+  },
+  gpsPermissionDesc: {
+    en: 'Precise location is used to detect local soil types, rainfall forecasts and mandi rates.',
+    hi: 'सटीक लोकेशन से आपकी स्थानीय मिट्टी, मानसूनी बारिश और पास की मंडी के भाव अपने-आप मिल जाते हैं।',
+    mr: 'अचूक स्थानामुळे स्थानिक माती, पावसाचा अंदाज आणि जवळच्या बाजारभावाची अचूक माहिती मिळते.',
+    gu: 'ચોક્કસ સ્થાન દ્વારા તમારી સ્થાનિક જમીન, વરસાદ અને નજીકના બજાર ભાવ આપમેળે મળી જાય છે.',
+    raj: 'सटीक लोकेशन सूं आपरे खेत री माटी, बारिश अर पास री मंडी रा भाव आपोआप मिल जावेला।',
+  },
+  gpsAllowWhileUsing: {
+    en: 'While using the app',
+    hi: 'ऐप का उपयोग करते समय अनुमति दें',
+    mr: 'ॲप वापरताना परवानगी द्या',
+    gu: 'ઍપનો ઉપયોગ કરતી વખતે મંજૂરી આપો',
+    raj: 'ऐप रो उपयोग करते समै अनुमति द्यो',
+  },
+  gpsAllowOnlyThisTime: {
+    en: 'Only this time',
+    hi: 'केवल इस बार अनुमति दें',
+    mr: 'फक्त यावेळीच परवानगी द्या',
+    gu: 'માત્ર આ વખતે જ મંજૂરી આપો',
+    raj: 'सिर्फ इणी बार अनुमति द्यो',
+  },
+  gpsDontAllow: {
+    en: "Don't allow",
+    hi: 'अनुमति न दें',
+    mr: 'परवानगी देऊ नका',
+    gu: 'મંજૂરી ન આપો',
+    raj: 'अनुमति मत द्यो',
+  },
+
+  // Language Page Title Aliases
   chooseLanguageTitle: {
     en: 'Which language do you prefer?',
     hi: 'आप कौन सी भाषा पसंद करते हैं?',
+    mr: 'तुम्हाला कोणती भाषा आवडते?',
+    gu: 'તમે કઈ ભાષા પસંદ કરો છો?',
+    raj: 'आप कौन सी भाषा पसंद करो हो?',
   },
   chooseLanguageSub: {
-    en: 'You can change this anytime from the top bar.',
-    hi: 'आप इसे ऊपर दिए गए बटन से कभी भी बदल सकते हैं।',
+    en: 'Choose your preferred language to continue.',
+    hi: 'कृषि-वाइज़ का उपयोग करने के लिए अपनी पसंदीदा भाषा चुनें।',
+    mr: 'कृषी-वाइज वापरण्यासाठी आपली पसंतीची भाषा निवडा.',
+    gu: 'કૃષિ-વાઇઝ વાપરવા માટે તમારી પસંદગીની ભાષા પસંદ કરો.',
+    raj: 'कृषि-वाइज़ चलाबा सारू आपरी मनपसंद भाषा चुणो।',
+  },
+  // Onboarding Screen 1: Language Select
+  langTitle: {
+    en: 'Choose Your Language',
+    hi: 'अपनी भाषा चुनें',
+    mr: 'आपली भाषा निवडा',
+    gu: 'તમારી ભાષા પસંદ કરો',
+    raj: 'आपणी भाषा चुणो',
+  },
+  langSubtitle: {
+    en: 'Select the language you are most comfortable with for all voice and text instructions.',
+    hi: 'सभी जानकारी और आवाज अपनी पसंदीदा भाषा में प्राप्त करने के लिए नीचे दिए गए विकल्पों में से एक चुनें।',
+    mr: 'सर्व माहिती आणि आवाज आपल्या पसंतीच्या भाषेत मिळवण्यासाठी खालील पर्यायांमधून एक निवडा.',
+    gu: 'તમામ માહિતી અને અવાજ તમારી પસંદગીની ભાષામાં મેળવવા માટે નીચેના વિકલ્પોમાંથી એક પસંદ કરો.',
+    raj: 'सगळी जानकारी अर आवाज आपणी राजस्थानी भाषा में सुणबा खातर नीचे दियोड़ा विकल्पां सूं चुणो।',
   },
   getStarted: {
     en: 'Get Started',
     hi: 'शुरू करें',
+    mr: 'सुरू करा',
+    gu: 'શરૂ કરો',
+    raj: 'सरू करो',
+  },
+
+  // Onboarding Screen 2: Language Confirm
+  langConfirmPrompt: {
+    en: 'Have you selected your preferred language for the app?',
+    hi: 'क्या आप ऐप की जानकारी हिन्दी में देखना और सुनना चाहते हैं?',
+    mr: 'तुम्हाला ॲपमधील माहिती मराठीत पाहायची आणि ऐकायची आहे का?',
+    gu: 'શું તમે ઍપની માહિતી ગુજરાતીમાં જોવા અને સાંભળવા માંગો છો?',
+    raj: 'कांई थे ऐप री सगळी जानकारी राजस्थानी में देखणी अर सुणणी चाहो?',
+  },
+  yesContinue: {
+    en: 'Yes, Continue',
+    hi: 'हाँ, आगे बढ़ें',
+    mr: 'होय, पुढे जा',
+    gu: 'હા, આગળ વધો',
+    raj: 'हाँ, आगे बढ़ो',
+  },
+  changeLanguage: {
+    en: 'Change Language',
+    hi: 'दूसरी भाषा चुनें',
+    mr: 'दुसरी भाषा निवडा',
+    gu: 'બીજી ભાષા પસંદ કરો',
+    raj: 'दूजी भाषा चुणो',
+  },
+
+  // Onboarding Screen 3: Audio Guide Tutorial
+  audioGuideTitle: {
+    en: 'Audio Information Feature',
+    hi: 'आवाज में जानकारी सुनने की सुविधा',
+    mr: 'आवाजात माहिती ऐकण्याची सुविधा',
+    gu: 'અવાજમાં માહિતી સાંભળવાની સુવિધા',
+    raj: 'आवाज में जानकारी सुणबा री सुविधा',
+  },
+  audioGuideLine1: {
+    en: 'Tap the speaker button at any time to hear information in your language.',
+    hi: 'ऐप में किसी भी जानकारी को आवाज में सुनने के लिए ऊपर दिखाए गए स्पीकर बटन को दबाएं।',
+    mr: 'ॲपमध्ये कोणतीही माहिती आवाजात ऐकण्यासाठी वर दाखवलेले स्पीकर बटण दाबा.',
+    gu: 'ઍપમાં કોઈપણ માહિતી અવાજમાં સાંભળવા માટે ઉપર દર્શાવેલ સ્પીકર બટન દબાવો.',
+    raj: 'ऐप में कोई भी जानकारी आवाज में सुणबा सारू ऊपर दियोड़ो स्पीकर बटन दबाओ।',
+  },
+  audioGuideLine2: {
+    en: 'Test the voice narration now by tapping the button below.',
+    hi: 'नीचे दिया गया बटन दबाकर आवाज का परीक्षण करें।',
+    mr: 'खालील बटण दाबून आवाजाची चाचणी घ्या.',
+    gu: 'નીચે આપેલ બટન દબાવીને અવાજની ચકાસણી કરો.',
+    raj: 'नीचे दियोड़ो बटन दबाकर आवाज रो परीक्षण करो।',
+  },
+  audioGuideSampleBtn: {
+    en: 'Test Voice Audio',
+    hi: 'स्पीकर की आवाज सुनें',
+    mr: 'स्पीकरचा आवाज ऐका',
+    gu: 'સ્પીકરનો અવાજ સાંભળો',
+    raj: 'स्पीकर री आवाज सुणो',
+  },
+  goToApp: {
+    en: 'Enter App',
+    hi: 'ऐप में प्रवेश करें',
+    mr: 'ॲपमध्ये प्रवेश करा',
+    gu: 'ઍપમાં પ્રવેશ કરો',
+    raj: 'ऐप में चालो',
+  },
+
+  // Onboarding Screen 4: Login & Guest
+  loginTitle: {
+    en: 'Login',
+    hi: 'लॉगिन',
+    mr: 'लॉगिन',
+    gu: 'લૉગિન',
+    raj: 'लॉगिन',
+  },
+  loginSubtitle: {
+    en: 'Enter your mobile number to get started',
+    hi: 'शुरू करने के लिए अपना मोबाइल नंबर दर्ज करें',
+    mr: 'सुरू करण्यासाठी आपला मोबाईल नंबर टाका',
+    gu: 'શરૂ કરવા માટે તમારો મોબાઇલ નંબર દાખલ કરો',
+    raj: 'शुरू करबा सारू आपरो मोबाइल नंबर लगाओ',
+  },
+  sendOtp: {
+    en: 'Send OTP',
+    hi: 'ओटीपी भेजें',
+    mr: 'ओटीपी पाठवा',
+    gu: 'ઓટીપી મોકલો',
+    raj: 'ओटीपी भेजो',
+  },
+  verifyOtp: {
+    en: 'Verify & Login',
+    hi: 'सत्यापित करें और आगे बढ़ें',
+    mr: 'सत्यापित करा आणि पुढे जा',
+    gu: 'ચકાસો અને આગળ વધો',
+    raj: 'सत्यापित करो अर आगे बढ़ो',
+  },
+  continueWithoutLogin: {
+    en: 'Continue without Login',
+    hi: 'लॉगिन के बिना जारी रखें',
+    mr: 'लॉगिनशिवाय पुढे चालू ठेवा',
+    gu: 'લૉગિન વિના ચાલુ રાખો',
+    raj: 'लॉगिन बिना चालो',
   },
 
   // Home Screen
   greeting: {
-    en: 'Namaste, Ramesh ji!',
-    hi: 'नमस्ते, रमेश जी!',
+    en: 'Welcome, Farmer Friend!',
+    hi: 'नमस्ते, किसान भाई!',
+    mr: 'नमस्कार, शेतकरी बांधवांनो!',
+    gu: 'નમસ્તે, ખેડૂત મિત્ર!',
+    raj: 'खम्मा घणी, किसान भाई!',
   },
   homeHeroTitle: {
-    en: 'Find the right crop for your farm.',
-    hi: 'अपने खेत के लिए सबसे सही फसल चुनें।',
+    en: 'Which crop will give you maximum profit in your farm?',
+    hi: 'आपके खेत में कौन सी फसल देगी सबसे अधिक मुनाफा?',
+    mr: 'तुमच्या शेतात कोणते पीक देईल सर्वाधिक नफा?',
+    gu: 'તમારા ખેતરમાં કયો પાક આપશે સૌથી વધુ નફો?',
+    raj: 'आपरे खेत में कौनसी फसल देगी सबसूं ज्यादा नफो?',
   },
   homeHeroSub: {
-    en: 'AI analyzes your soil, local monsoon forecast, and market prices to guarantee maximum returns.',
-    hi: 'एआई आपकी मिट्टी, मानसूनी वर्षा और बाजार भाव का विश्लेषण कर अधिकतम लाभ वाली फसल सुझाता है।',
+    en: 'Know the best crop choice based on your soil, water and live mandi rates.',
+    hi: 'अपनी मिट्टी, पानी और मंडी भाव के आधार पर सर्वोत्तम फसल जानें।',
+    mr: 'आपली माती, पाणी आणि बाजारभावानुसार सर्वोत्तम पीक निवडा.',
+    gu: 'તમારી જમીન, પાણી અને બજાર ભાવના આધારે શ્રેષ્ઠ પાક જાણો.',
+    raj: 'आपणी माटी, पाणी अर मंडी भाव रे आधार पर सबसूं उत्तम फसल जानो।',
   },
   getCropRecButton: {
     en: 'Get Crop Recommendation',
     hi: 'नई फसल की सलाह लें',
+    mr: 'नवीन पिकाचा सल्ला घ्या',
+    gu: 'નવા પાકની સલાહ મેળવો',
+    raj: 'नवी फसल री सलाह ल्यो',
   },
-  mySavedPlans: {
-    en: 'My Saved Plans',
-    hi: 'मेरी सुरक्षित योजनाएं',
+  recentAnalysisTitle: {
+    en: 'Your Previous Crop Analysis',
+    hi: 'आपका पिछला फसल विश्लेषण',
+    mr: 'आपले मागील पीक विश्लेषण',
+    gu: 'તમારું પાછલું પાક વિશ્લેષણ',
+    raj: 'आपरो पिछलो फसल विश्लेषण',
   },
-  viewAll: {
-    en: 'View All',
-    hi: 'सभी देखें',
+  viewFullReport: {
+    en: 'View Full Action Plan',
+    hi: 'पूरी योजना देखें',
+    mr: 'संपूर्ण योजना पहा',
+    gu: 'સંપૂર્ણ યોજના જુઓ',
+    raj: 'पूरी योजना देखो',
   },
-  weatherCardTitle: {
-    en: 'Nagaur, Rajasthan Weather',
-    hi: 'नागौर, राजस्थान मौसम',
+  offlineReadyBadge: {
+    en: '100% Offline Ready',
+    hi: '100% ऑफ़लाइन उपलब्ध',
+    mr: '100% ऑफलाइन उपलब्ध',
+    gu: '100% ઑફલાઇન ઉપલબ્ધ',
+    raj: '100% ऑफ़लाइन उपलब्ध',
   },
-  temp: {
-    en: '34°C Scattered Clouds',
-    hi: '34°C आंशिक बादल',
-  },
-  rainfallForecast: {
-    en: 'Monsoon Normal (+5% Expected)',
-    hi: 'मानसून सामान्य (+5% अनुमानित)',
-  },
-  howItWorks: {
-    en: 'How It Works',
+  howItWorksTitle: {
+    en: 'How Krishi-Wise Works',
     hi: 'यह कैसे काम करता है',
+    mr: 'हे कसे कार्य करते',
+    gu: 'આ કેવી રીતે કાર્ય કરે છે',
+    raj: 'यो कियां काम करे है',
   },
-  step1Title: {
-    en: '1. Enter Farm & Soil',
-    hi: '1. खेत और मिट्टी चुनें',
+  howItWorksStep1: {
+    en: 'Enter farm details: Soil, water & previous crop',
+    hi: 'खेत की स्थिति दर्ज करें: मिट्टी, पानी और पिछली फसल',
+    mr: 'शेताची माहिती भरा: माती, पाणी आणि मागील पीक',
+    gu: 'ખેતરની માહિતી દાખલ કરો: જમીન, પાણી અને અગાઉનો પાક',
+    raj: 'खेत री स्थिति लगाओ: माटी, पाणी अर पहली री फसल',
   },
-  step1Desc: {
-    en: 'Specify your land size, soil type, and irrigation source.',
-    hi: 'अपनी जमीन का आकार, मिट्टी का प्रकार और पानी का साधन बताएं।',
+  howItWorksStep2: {
+    en: 'Get AI recommendations with profit & cost breakdown',
+    hi: 'AI से सही फसल जानें: सटीक पैदावार, लागत व शुद्ध मुनाफा',
+    mr: 'AI कडून योग्य पीक जाणून घ्या: अचूक उत्पादन, खर्च व नफा',
+    gu: 'AI પાસેથી યોગ્ય પાક જાણો: સચોટ ઉપજ, ખર્ચ અને નફો',
+    raj: 'AI सूं सही फसल जानो: पैदावार, लागत अर शुद्ध नफो',
   },
-  step2Title: {
-    en: '2. AI Climate Forecast',
-    hi: '2. एआई जलवायु विश्लेषण',
+  howItWorksStep3: {
+    en: 'Download 1-page printable advisory slip for field use',
+    hi: '1-पेज सलाह पर्ची लें: प्रिंट करें या व्हाट्सएप पर साझा करें',
+    mr: '1-पानाचा सल्ला पत्रक घ्या: प्रिंट करा किंवा व्हॉट्सॲपवर शेअर करा',
+    gu: '1-પેજ સલાહ સ્લિપ મેળવો: પ્રિન્ટ કરો અથવા વ્હોટ્સએપ પર શેર કરો',
+    raj: '1-पेज सलाह पर्ची ल्यो: प्रिंट करो या व्हाट्सएप पर भेजो',
   },
-  step2Desc: {
-    en: 'We cross-reference IMD monsoon data with soil health cards.',
-    hi: 'हम मौसम विभाग के डेटा और मिट्टी की सेहत का मिलान करते हैं।',
-  },
-  step3Title: {
-    en: '3. Customized Action Calendar',
-    hi: '3. 120 दिन का फसल कैलेंडर',
-  },
-  step3Desc: {
-    en: 'Get Day 0 to Day 120 guidance with voice instructions.',
-    hi: 'बुवाई से लेकर कटाई तक के हर चरण की आवाज में जानकारी पाएं।',
-  },
-
-  // Step 1 Location
-  whereIsFarm: {
-    en: 'Where is your farm?',
-    hi: 'आपका खेत कहाँ स्थित है?',
-  },
-  whereIsFarmSub: {
-    en: 'Accurate location ensures localized rainfall prediction and soil matching.',
-    hi: 'सटीक स्थान से स्थानीय मानसूनी बारिश और मिट्टी का सही मिलान होता है।',
-  },
-  useMyLocation: {
-    en: 'Use My Location',
-    hi: 'मेरा स्थान स्वतः पता करें (GPS)',
-  },
-  useMyLocationDesc: {
-    en: 'Use GPS to automatically detect village, tehsil, and district.',
-    hi: 'जीपीएस द्वारा अपने गांव, तहसील और जिले की स्वतः पहचान करें।',
-  },
-  orManual: {
-    en: 'OR SELECT MANUALLY',
-    hi: 'या नीचे दिए विकल्पों से चुनें',
-  },
-  selectState: {
-    en: 'State',
-    hi: 'राज्य',
-  },
-  selectDistrict: {
-    en: 'District',
-    hi: 'जिला',
-  },
-  selectTehsil: {
-    en: 'Sub-district / Tehsil',
-    hi: 'तहसील / ब्लॉक',
+  noPreviousAnalysis: {
+    en: 'No previous analysis saved yet.',
+    hi: 'अभी तक कोई पिछला विश्लेषण सुरक्षित नहीं है।',
+    mr: 'अजून कोणतेही मागील विश्लेषण जतन केलेले नाही.',
+    gu: 'હજુ સુધી કોઈ પાછલું વિશ્લેષણ સાચવેલ નથી.',
+    raj: 'हजी तक कोई पिछलो विश्लेषण सुरक्षित कोनी।',
   },
 
-  // Step 2 Farm & Soil
-  tellUsFarm: {
-    en: 'Tell us about your farm',
-    hi: 'अपने खेत और मिट्टी की जानकारी दें',
+  // Wizard Steps Names
+  wizardStep1Name: {
+    en: 'Farm Size',
+    hi: 'खेत का आकार',
+    mr: 'शेताचा आकार',
+    gu: 'ખેતરનું કદ',
+    raj: 'खेत रो आकार',
   },
-  landArea: {
-    en: 'Land Area',
-    hi: 'जमीन का कुल क्षेत्रफल',
-  },
-  acres: {
-    en: 'Acres',
-    hi: 'एकड़',
-  },
-  hectares: {
-    en: 'Hectares',
-    hi: 'हेक्टेयर',
-  },
-  soilType: {
+  wizardStep2Name: {
     en: 'Soil Type',
     hi: 'मिट्टी का प्रकार',
+    mr: 'मातीचा प्रकार',
+    gu: 'જમીનનો પ્રકાર',
+    raj: 'माटी रो प्रकार',
   },
-  waterAvailability: {
-    en: 'Water Availability',
-    hi: 'पानी की उपलब्धता',
+  wizardStep3Name: {
+    en: 'Water Source',
+    hi: 'सिंचाई का साधन',
+    mr: 'पाण्याचा स्रोत',
+    gu: 'પાણીનો સ્ત્રોત',
+    raj: 'पाणी रो साधन',
   },
-  waterSource: {
-    en: 'Primary Water Source',
-    hi: 'सिंचाई का मुख्य स्रोत',
+  wizardStep4Name: {
+    en: 'Previous Crop',
+    hi: 'पिछली फसल',
+    mr: 'मागील पीक',
+    gu: 'અગાઉનો પાક',
+    raj: 'पहली री फसल',
   },
-
-  // Step 3 Sowing & Crops
-  whatPlanning: {
-    en: 'What are you planning to grow?',
-    hi: 'आप कौन सी फसल उगाने की सोच रहे हैं?',
-  },
-  sowingDate: {
-    en: 'Expected Sowing Date',
-    hi: 'बुवाई की अनुमानित तारीख',
-  },
-  cropPreferences: {
-    en: 'Crop Preferences (Optional)',
-    hi: 'पसंदीदा फसलें (वैकल्पिक)',
-  },
-  speakCropNames: {
-    en: 'Speak Crop Names in Hindi/English',
-    hi: 'बोलकर फसल चुनें (आवाज से)',
-  },
-  voiceListening: {
-    en: 'Listening... Speak now',
-    hi: 'सुन रहे हैं... अब बोलिए (उदा. बाजरा, मूंग)',
-  },
-  stopListening: {
-    en: 'Done / Stop Listening',
-    hi: 'हो गया / सुनना बंद करें',
+  wizardStep5Name: {
+    en: 'Sowing Timing',
+    hi: 'बुवाई का समय',
+    mr: 'पेरणीची वेळ',
+    gu: 'વાવણીનો સમય',
+    raj: 'बुवाई रो टेम',
   },
 
-  // Step 4 Recommendations
-  bestCropChoices: {
-    en: 'Your Best Crop Choices',
-    hi: 'आपकी सबसे उपयुक्त फसलें',
+  // Wizard Card 1: Land Area
+  card1Title: {
+    en: 'How much land do you have for farming?',
+    hi: 'आपके पास खेती के लिए कितनी जमीन है?',
+    mr: 'आपल्याकडे शेतीसाठी किती जमीन आहे?',
+    gu: 'તમારી પાસે ખેતી માટે કેટલી જમીન છે?',
+    raj: 'आपरे कने खेती सारू कितरी जमीन है?',
   },
-  confidenceHigh: {
-    en: 'AI Confidence: High • Verified with Kharif 2026 Monsoon Model',
-    hi: 'एआई विश्वसनीयता: उच्च • खरीफ 2026 मानसून मॉडल अनुसार',
+
+  // Wizard Card 2: Soil Types
+  card2Title: {
+    en: 'What type of soil is in your farm?',
+    hi: 'आपके खेत की मिट्टी कैसी है?',
+    mr: 'तुमच्या शेतातील माती कोणत्या प्रकारची आहे?',
+    gu: 'તમારા ખેતરની જમીન કેવી છે?',
+    raj: 'आपरे खेत री माटी कैसी है?',
   },
-  selectThisCrop: {
-    en: 'Select This Crop & View Plan',
-    hi: 'इस फसल को चुनें और योजना देखें',
+  card2Sub: {
+    en: 'Look at the large photos below and select your soil type.',
+    hi: 'नीचे दिए गए बड़े फोटो कार्ड देखकर अपने खेत की मिट्टी से मिलती-जुलती मिट्टी चुनें।',
+    mr: 'खालील मोठे फोटो कार्ड पाहून आपल्या मातीशी मिळतीजुळती माती निवडा.',
+    gu: 'નીચે આપેલા મોટા ફોટો કાર્ડ જોઈને તમારી જમીનને મળતી આવતી જમીન પસંદ કરો.',
+    raj: 'नीचे दियोड़ा बड़ा फोटो कार्ड देखकर आपरे खेत री माटी सूं मिलती माटी चुणो।',
   },
-  otherOptions: {
-    en: 'Other Strong Options',
-    hi: 'अन्य उपयुक्त विकल्प',
+
+  // Wizard Card 3: Water
+  card3Title: {
+    en: 'How much water is available for irrigation?',
+    hi: 'सिंचाई के लिए पानी की क्या व्यवस्था है?',
+    mr: 'सिंचनासाठी पाण्याची काय सोय आहे?',
+    gu: 'સિંચાઈ માટે પાણીની શું વ્યવસ્થા છે?',
+    raj: 'सिंचाई सारू पाणी री कांई व्यवस्था है?',
   },
-  match: {
-    en: 'Match',
-    hi: 'उपयुक्तता',
+  card3Sub: {
+    en: 'Select your water source and capacity.',
+    hi: 'अपने खेत के जल स्रोत और पानी की उपलब्धता का चयन करें।',
+    mr: 'आपल्या शेतातील पाण्याचा स्रोत आणि उपलब्धता निवडा.',
+    gu: 'તમારા ખેતરના પાણીનો સ્ત્રોત અને ઉપલબ્ધતા પસંદ કરો.',
+    raj: 'आपरे खेत में पाणी रो साधन अर उपलब्धता चुणो।',
   },
-  expectedYield: {
-    en: 'Expected Yield',
-    hi: 'अनुमानित पैदावार',
+  waterHigh: {
+    en: 'Abundant Water (Canal / Perennial Tubewell)',
+    hi: 'भरपूर पानी (नहर या बारहमासी ट्यूबवेल)',
+    mr: 'भरपूर पाणी (कालवा किंवा बारमाही विहीर)',
+    gu: 'ભરપૂર પાણી (નહેર અથવા બારમાસી બોરવેલ)',
+    raj: 'घणो पाणी (नहर या बारहमासी ट्यूबवेल)',
+  },
+  waterMedium: {
+    en: 'Medium Water (Well / Limited Tubewell)',
+    hi: 'मध्यम पानी (कुआं या सीमित ट्यूबवेल)',
+    mr: 'मध्यम पाणी (विहीर किंवा मर्यादित पाणी)',
+    gu: 'મધ્યમ પાણી (કૂવો અથવા મર્યાદિત બોર)',
+    raj: 'मध्यम पाणी (कुओ या सीमित ट्यूबवेल)',
+  },
+  waterRainfed: {
+    en: 'Rainfed (Dependent on Monsoons)',
+    hi: 'कम पानी / वर्षा आधारित (केवल बारिश पर निर्भर)',
+    mr: 'कमी पाणी / कोरडवाहू (केवळ पावसावर अवलंबून)',
+    gu: 'ઓછું પાણી / વરસાદ આધારિત (માત્ર વરસાદ પર આધાર)',
+    raj: 'कम पाणी / बारानी (केवल बारिश पर निर्भर)',
+  },
+
+  // Wizard Card 4: Previous Crop
+  card4Title: {
+    en: 'Which crop was planted previously in your field?',
+    hi: 'पिछली बार खेत में कौन सी फसल लगाई थी?',
+    mr: 'मागील हंगामात शेतात कोणते पीक घेतले होते?',
+    gu: 'પાછલી વખતે ખેતરમાં કયો પાક લીધો હતો?',
+    raj: 'पिछली बार खेत में कौनसी फसल लगाई ही?',
+  },
+  card4Sub: {
+    en: 'Crop rotation maintains soil fertility.',
+    hi: 'फसल चक्र अपनाने से जमीन की उपजाऊ शक्ति बढ़ती है।',
+    mr: 'पीक फेरपालट केल्याने जमिनीची सुपीकता टिकून राहते.',
+    gu: 'પાકની ફેરબદલી કરવાથી જમીનની ફળદ્રુપતા વધે છે.',
+    raj: 'फसल चक्र अपनाबा सूं जमीन री उपजाऊ ताकत बढ़े है।',
+  },
+
+  // Wizard Card 5: Sowing Timing
+  card5Title: {
+    en: 'When will you sow in your field?',
+    hi: 'आप खेत में बुवाई कब करेंगे?',
+    mr: 'तुम्ही शेतात पेरणी कधी करणार आहात?',
+    gu: 'તમે ખેતરમાં વાવણી ક્યારે કરશો?',
+    raj: 'थे खेत में बुवाई कदे करोला?',
+  },
+  card5Sub: {
+    en: 'Select your sowing timeframe or pick a date to match weather forecasts.',
+    hi: 'बुवाई का समय चुनें ताकि मानसूनी बारिश और तापमान के अनुसार सटीक सलाह मिल सके।',
+    mr: 'पेरणीची वेळ निवडा जेणेकरून पावसाच्या अंदाजानुसार योग्य सल्ला मिळेल.',
+    gu: 'વાવણીનો સમય પસંદ કરો જેથી વરસાદના આધારે યોગ્ય સલાહ મળી શકે.',
+    raj: 'बुवाई रो टेम चुणो ताकि मानसूनी बारिश अर मौसम अनुसार सटीक सलाह मिल सके।',
+  },
+  sowingTimingWeek: {
+    en: 'This Week (Next 7 Days)',
+    hi: 'इसी हफ्ते (अगले ७ दिनों में)',
+    mr: 'याच आठवड्यात (पुढील ७ दिवसांत)',
+    gu: 'આ જ અઠવાડિયે (આગામી ૭ દિવસમાં)',
+    raj: 'इणी हफ्ते (अगला ७ दिनां में)',
+  },
+  sowingTimingMonth: {
+    en: 'Within the Next Month',
+    hi: 'अगले एक महीने में',
+    mr: 'पुढील एका महिन्यात',
+    gu: 'આગામી એક મહિનામાં',
+    raj: 'अगला एक महीना में',
+  },
+  sowingTimingCustomDate: {
+    en: 'Pick a Specific Date',
+    hi: 'निश्चित तारीख चुनें',
+    mr: 'विशिष्ट तारीख निवडा',
+    gu: 'ચોક્કસ તારીખ પસંદ કરો',
+    raj: 'निश्चित तारीख चुणो',
+  },
+  seeRecommendations: {
+    en: 'Show AI Recommendations',
+    hi: 'सर्वोत्तम फसल विकल्प देखें',
+    mr: 'सर्वोत्तम पीक पर्याय पहा',
+    gu: 'શ્રેષ્ઠ પાક વિકલ્પો જુઓ',
+    raj: 'सबसूं चोखी फसल विकल्प देखो',
+  },
+
+  // Recommendations Screen Titles & Metrics
+  resultsTitle: {
+    en: 'Best Crops for Your Farm',
+    hi: 'आपके खेत के लिए सर्वोत्तम फसल',
+    mr: 'तुमच्या शेतासाठी सर्वोत्तम पीक',
+    gu: 'તમારા ખેતર માટે શ્રેષ્ઠ પાક',
+    raj: 'आपरे खेत सारू सबसूं उत्तम फसल',
+  },
+  resultsSub: {
+    en: 'AI generated recommendations based on your soil, water and market rates.',
+    hi: 'आपकी मिट्टी, सिंचाई और मंडी भाव के आधार पर एआई द्वारा चयनित परिणाम।',
+    mr: 'माती, पाणी आणि बाजारभावानुसार एआय द्वारे निवडलेले निकाल.',
+    gu: 'જમીન, પાણી અને બજાર ભાવના આધારે એઆઈ પરિણામો.',
+    raj: 'माटी, सिंचाई अर मंडी भाव रे आधार पर चुण्योड़ा परिणाम।',
+  },
+  topChoiceBadge: {
+    en: 'TOP RECOMMENDATION',
+    hi: 'सर्वोत्तम फसल विकल्प',
+    mr: 'सर्वोत्कृष्ट पीक पर्याय',
+    gu: 'શ્રેષ્ઠ પાક વિકલ્પ',
+    raj: 'सबसूं उत्तम फसल विकल्प',
   },
   estimatedProfit: {
     en: 'Estimated Profit',
     hi: 'अनुमानित शुद्ध लाभ',
+    mr: 'अंदाजे निव्वळ नफा',
+    gu: 'અંદાજિત ચોખ્ખો નફો',
+    raj: 'अनुमानित शुद्ध नफो',
   },
-  duration: {
-    en: 'Crop Duration',
-    hi: 'फसल अवधि',
+  expectedYield: {
+    en: 'Expected Yield',
+    hi: 'अनुमानित पैदावार',
+    mr: 'अपेक्षित उत्पन्न',
+    gu: 'અંદાજિત ઉપજ',
+    raj: 'अनुमानित पैदावार',
   },
-  waterNeed: {
-    en: 'Water Need',
-    hi: 'पानी की जरूरत',
+  estimatedCost: {
+    en: 'Estimated Cost',
+    hi: 'अनुमानित लागत',
+    mr: 'अंदाजे उत्पादन खर्च',
+    gu: 'અંદાજિત ખર્ચ',
+    raj: 'अनुमानित लागत',
+  },
+  perAcre: {
+    en: '/ acre',
+    hi: '/ एकड़',
+    mr: '/ एकर',
+    gu: '/ એકર',
+    raj: '/ एकड़',
+  },
+  quintalPerAcre: {
+    en: 'quintal / acre',
+    hi: 'क्विंटल / एकड़',
+    mr: 'क्विंटल / एकर',
+    gu: 'ક્વિન્ટલ / એકર',
+    raj: 'क्विंटल / एकड़',
+  },
+  alternativeOptionsTitle: {
+    en: 'Alternative Crop Options',
+    hi: 'अन्य मजबूत फसल विकल्प',
+    mr: 'इतर पर्यायी पीक पर्याय',
+    gu: 'અન્ય વૈકલ્પિક પાક વિકલ્પો',
+    raj: 'दूजा मजबूत फसल विकल्प',
+  },
+  whyRecommendedTitle: {
+    en: 'Why This Crop is Recommended',
+    hi: 'एआई द्वारा चयन का कारण',
+    mr: 'हे पीक निवडण्याचे कारण',
+    gu: 'આ પાક પસંદ કરવાનું કારણ',
+    raj: 'एआई द्वारा चुणबा रो कारण',
+  },
+  costBreakdownTitle: {
+    en: 'Detailed Cost Breakdown (Seed, Fertilizer, Labor)',
+    hi: 'विस्तृत लागत विवरण (बीज, खाद, मजदूरी)',
+    mr: 'तपशीलवार खर्च (बियाणे, खत, मजुरी)',
+    gu: 'વિગતવાર ખર્ચ (બિયારણ, ખાતર, મજૂરી)',
+    raj: 'विस्तृत लागत विवरण (बीज, खाद, मजूरी)',
+  },
+  seedCost: {
+    en: 'Seed Cost',
+    hi: 'बीज व बीज उपचार लागत',
+    mr: 'बियाणे व बीज प्रक्रिया खर्च',
+    gu: 'બિયારણ ખર્ચ',
+    raj: 'बीज व बीज उपचार लागत',
+  },
+  fertilizerCost: {
+    en: 'Fertilizers & Nutrients',
+    hi: 'उर्वरक व खाद',
+    mr: 'खते व पोषण',
+    gu: 'ખાતર ખર્ચ',
+    raj: 'खाद अर उर्वरक',
+  },
+  pesticideCost: {
+    en: 'Pesticides & Plant Protection',
+    hi: 'कीटनाशक व फसल सुरक्षा',
+    mr: 'कीटकनाशके व पीक संरक्षण',
+    gu: 'જંતુનાશક દવાઓ',
+    raj: 'कीटनाशक व फसल सुरक्षा',
+  },
+  machineryCost: {
+    en: 'Machinery & Tractor Rental',
+    hi: 'मशीनरी व ट्रैक्टर जुताई',
+    mr: 'यंत्रसामग्री व ट्रॅक्टर मशागत',
+    gu: 'ટ્રેક્ટર અને યંત્ર ખર્ચ',
+    raj: 'ट्रैक्टर जुताई व मशीन',
+  },
+  labourCost: {
+    en: 'Hired Farm Labor',
+    hi: 'मजदूरी (निराई, बुवाई, कटाई)',
+    mr: 'मजुरी खर्च',
+    gu: 'મજૂરી ખર્ચ',
+    raj: 'मजूरी खर्च',
+  },
+  irrigationCost: {
+    en: 'Irrigation & Electricity',
+    hi: 'सिंचाई व बिजली/डीजल',
+    mr: 'सिंचन व वीज/डिझेल',
+    gu: 'સિંચાઈ અને વીજળી ખર્ચ',
+    raj: 'सिंचाई व बिजली/डीजल',
+  },
+  chooseAndPlanBtn: {
+    en: 'Select Crop & View 120-Day Plan',
+    hi: 'यह फसल चुनें और कार्य-योजना देखें',
+    mr: 'हे पीक निवडा आणि कार्य-योजना पहा',
+    gu: 'આ પાક પસંદ કરો અને કાર્ય-યોજના જુઓ',
+    raj: 'या फसल चुणो अर कार्य-योजना देखो',
+  },
+  whatIfCardBtn: {
+    en: 'Check Weather & Risks (What-If)',
+    hi: 'मौसम व जोखिम जांचें (What-If)',
+    mr: 'हवामान आणि जोखीम तपासा',
+    gu: 'હવામાન અને જોખમ તપાસો',
+    raj: 'मौसम व जोखिम जांचो (What-If)',
   },
 
-  // Step 5 What-If
-  whatIfTitle: {
-    en: 'What If? Scenario Simulation',
-    hi: 'अगर मौसम या बाजार बदले तो क्या होगा?',
+  // Settings & Account Page
+  settingsTitle: {
+    en: 'Farmer Account & Settings',
+    hi: 'किसान खाता व सेटिंग्स',
+    mr: 'शेतकरी खाते आणि सेटिंग्ज',
+    gu: 'ખેડૂત ખાતું અને સેટિંગ્સ',
+    raj: 'किसान खातो व सेटिंग्स',
   },
-  whatIfSub: {
-    en: 'Adjust rainfall & prices to see if your crop choice stays optimal.',
-    hi: 'बारिश और बाजार भाव बदलकर देखें कि क्या आपकी चुनी हुई फसल सुरक्षित रहेगी।',
+  phoneNumber: {
+    en: 'Registered Mobile Number',
+    hi: 'पंजीकृत मोबाइल नंबर',
+    mr: 'नोंदणीकृत मोबाईल नंबर',
+    gu: 'નોંધાયેલ મોબાઇલ નંબર',
+    raj: 'पंजीकृत मोबाइल नंबर',
   },
-  rainfallVariation: {
-    en: 'Rainfall Variation from Normal',
-    hi: 'सामान्य से वर्षा में बदलाव',
+  currentLanguageLabel: {
+    en: 'App Language',
+    hi: 'ऐप की भाषा',
+    mr: 'ॲपची भाषा',
+    gu: 'ઍપની ભાષા',
+    raj: 'ऐप री भाषा',
   },
-  priceVariation: {
-    en: 'Market Price Variation',
-    hi: 'मंडी भाव में बदलाव',
+  changeLanguageBtn: {
+    en: 'Change Language',
+    hi: 'भाषा बदलें',
+    mr: 'भाषा बदला',
+    gu: 'ભાષા બદલો',
+    raj: 'भाषा बदलो',
   },
-  simulationResult: {
-    en: 'AI Simulation Verdict',
-    hi: 'एआई सिमुलेशन परिणाम',
+  signOut: {
+    en: 'Sign Out',
+    hi: 'साइन आउट करें',
+    mr: 'साइन आउट करा',
+    gu: 'સાઇન આઉટ કરો',
+    raj: 'साइन आउट करो',
   },
 
-  // Step 6 Milestone Plan
-  cropPlanTitle: {
-    en: 'Your Crop Milestone Plan',
-    hi: 'आपकी 120 दिवसीय फसल कार्य-योजना',
+  // Action Plan Milestone Screen Keys
+  planTitle: {
+    en: '120-Day Crop Action Plan',
+    hi: '१२०-दिवसीय फसल कार्य-योजना',
+    mr: '१२०-दिवसीय पीक कार्य-योजना',
+    gu: '૧૨૦-દિવસીય પાક કાર્ય-યોજના',
+    raj: '१२०-दिनां री फसल कार्य-योजना',
   },
-  offlineAvailable: {
-    en: 'Available Offline',
-    hi: 'ऑफलाइन उपलब्ध (बिना इंटरनेट)',
+  planSubtitle: {
+    en: 'Step-by-step guidance from sowing to harvest.',
+    hi: 'बुवाई से लेकर कटाई तक का चरणबद्ध कृषि मार्गदर्शन।',
+    mr: 'पेरणीपासून काढणीपर्यंतचे टप्प्याटप्प्याने मार्गदर्शन.',
+    gu: 'વાવણીથી લઈને લણણી સુધીનું તબક્કાવાર માર્ગદર્શન.',
+    raj: 'बुवाई सूं ले’र कटाई तक रो चरणबद्ध मार्गदर्शन।',
   },
-  saveOffline: {
-    en: 'Save Offline',
-    hi: 'ऑफलाइन सुरक्षित करें',
+  printPdfBtn: {
+    en: 'Download Advisory Slip (PDF)',
+    hi: 'कृषि सलाह पर्ची डाउनलोड करें (PDF)',
+    mr: 'कृषी सल्ला पावती डाउनलोड करा (PDF)',
+    gu: 'કૃષિ સલાહ પાવતી ડાઉનલોડ કરો (PDF)',
+    raj: 'कृषि सलाह पर्ची डाउनलोड करो (PDF)',
   },
-  downloadPdf: {
-    en: 'Download Plan (PDF)',
-    hi: 'योजना डाउनलोड करें (PDF)',
+  shareWhatsappBtn: {
+    en: 'Share on WhatsApp',
+    hi: 'व्हाट्सएप पर भेजें',
+    mr: 'व्हॉट्सॲपवर पाठवा',
+    gu: 'વોટ્સએપ પર મોકલો',
+    raj: 'व्हाट्सएप पर भेजो',
   },
-  returnHome: {
-    en: 'Return to Dashboard',
-    hi: 'मुख्य पृष्ठ पर लौटें',
+  backToHomeBtn: {
+    en: 'Back to Home',
+    hi: 'मुख्य पृष्ठ पर जाएं',
+    mr: 'मुख्य पृष्ठावर जा',
+    gu: 'મુખ્ય પૃષ્ઠ પર જાઓ',
+    raj: 'मुख्य पृष्ठ पर चालो',
+  },
+  networkConnected: {
+    en: 'Connected Online',
+    hi: 'ऑनलाइन जुड़े हैं',
+    mr: 'ऑनलाइन जोडलेले आहात',
+    gu: 'ઓનલાઇન જોડાયેલા છો',
+    raj: 'ऑनलाइन जुड़्या हो',
+  },
+  speaking: {
+    en: 'Speaking...',
+    hi: 'बोल रहा है...',
+    mr: 'बोलत आहे...',
+    gu: 'બોલી રહ્યું છે...',
+    raj: 'बोल रियो है...',
+  },
+  enterOtp: {
+    en: 'Enter 6-digit OTP',
+    hi: 'प्राप्त ६-अंकों का ओटीपी दर्ज करें',
+    mr: 'मिळालेला ६-अंकी ओटीपी टाका',
+    gu: 'મળેલ ૬-અંકનો ઓટીપી દાખલ કરો',
+    raj: 'आयोड़ो ६-अंका रो ओटीपी लगाओ',
+  },
+  guestBypass: {
+    en: 'Continue without Login',
+    hi: 'लॉगिन के बिना जारी रखें',
+    mr: 'लॉगिनशिवाय पुढे चालू ठेवा',
+    gu: 'લૉગિન વિના ચાલુ રાખો',
+    raj: 'लॉगिन बिना चालो',
+  },
+  mobileNumberLabel: {
+    en: 'Mobile Number',
+    hi: 'मोबाइल नंबर',
+    mr: 'मोबाईल नंबर',
+    gu: 'મોબાઇલ નંબર',
+    raj: 'मोबाइल नंबर',
+  },
+  confirmLangTitle: {
+    en: 'Confirm Language',
+    hi: 'भाषा की पुष्टि करें',
+    mr: 'भाषेची खात्री करा',
+    gu: 'ભાષાની ખાતરી કરો',
+    raj: 'भाषा री पुष्टि करो',
+  },
+  confirmLangMessage: {
+    en: 'Do you want to continue with this language?',
+    hi: 'क्या आप इसी भाषा में आगे बढ़ना चाहते हैं?',
+    mr: 'तुम्हाला याच भाषेत पुढे जायचे आहे का?',
+    gu: 'શું તમે આ જ ભાષામાં આગળ વધવા માંગો છો?',
+    raj: 'कांई थे इणी भाषा में आगे बढ़ना चाहो?',
+  },
+  confirmLangYes: {
+    en: 'Yes, Continue',
+    hi: 'हाँ, आगे बढ़ें',
+    mr: 'होय, पुढे जा',
+    gu: 'હા, આગળ વધો',
+    raj: 'हाँ, आगे बढ़ो',
+  },
+  confirmLangChange: {
+    en: 'Change Language',
+    hi: 'दूसरी भाषा चुनें',
+    mr: 'दुसरी भाषा निवडा',
+    gu: 'બીજી ભાષા પસંદ કરો',
+    raj: 'दूजी भाषा चुणो',
+  },
+  audioGuideTestBtn: {
+    en: 'Test Voice Audio',
+    hi: 'स्पीकर की आवाज सुनें',
+    mr: 'स्पीकरचा आवाज ऐका',
+    gu: 'સ્પીકરનો અવાજ સાંભળો',
+    raj: 'स्पीकर री आवाज सुणो',
+  },
+  audioGuideProceed: {
+    en: 'Enter App',
+    hi: 'ऐप में प्रवेश करें',
+    mr: 'ॲपमध्ये प्रवेश करा',
+    gu: 'ઍપમાં પ્રવેશ કરો',
+    raj: 'ऐप में चालो',
+  },
+  audioGuideSuccess: {
+    en: 'Great! Voice is playing properly.',
+    hi: 'बहुत बढ़िया! आवाज सफलतापूर्वक बज रही है।',
+    mr: 'उत्तम! आवाज व्यवस्थित येत आहे.',
+    gu: 'ખૂબ સરસ! અવાજ યોગ્ય રીતે આવી રહ્યો છે.',
+    raj: 'घणी चोखी! आवाज सही आ री है।',
+  },
+  cancel: {
+    en: 'Cancel',
+    hi: 'रद्द करें',
+    mr: 'रद्द करा',
+    gu: 'રદ કરો',
+    raj: 'रद्द करो',
+  },
+  // Dedicated Pages
+  myCropPlanTitle: {
+    en: 'My Crop Plan',
+    hi: 'मेरी फसल',
+    mr: 'माझे पीक',
+    gu: 'મારો પાક',
+    raj: 'म्हारी फसल',
+  },
+  historyTitle: {
+    en: 'Crop History',
+    hi: 'फसल इतिहास',
+    mr: 'पीक इतिहास',
+    gu: 'પાક ઇતિહાસ',
+    raj: 'फसल इतिहास',
   },
 };
+
+export function getTranslation(key: string, lang: SupportedLanguage): string {
+  const item = translations[key];
+  if (!item) return key;
+  return item[lang] || item['hi'] || item['en'] || key;
+}

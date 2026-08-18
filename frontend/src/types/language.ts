@@ -1,18 +1,12 @@
-export type Language = 'hi' | 'en' | 'mr' | 'gu' | 'pa' | 'bn';
+import { SupportedLanguage } from '../data/translations';
+
+export type Language = SupportedLanguage;
 
 export interface LanguageOption {
-  code: Language;
+  code: SupportedLanguage;
   name: string;
   nativeName: string;
-  subtext: string;
+  glyph: string;
+  subtext?: string;
   flagIcon?: string;
-}
-
-export interface TranslationDictionary {
-  [key: string]: {
-    hi: string;
-    en: string;
-    mr?: string;
-    gu?: string;
-  };
 }

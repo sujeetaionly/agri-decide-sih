@@ -134,6 +134,7 @@ def detect_language(
                 detected_state=state,
                 detected_district=district,
                 suggested_languages=[
+                    LanguageOptionItem(code="raj", name="Rajasthani", nativeName="राजस्थानी"),
                     LanguageOptionItem(code="hi", name="Hindi", nativeName="हिंदी"),
                     LanguageOptionItem(code="en", name="English", nativeName="English")
                 ]

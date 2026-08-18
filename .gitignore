@@ -58,3 +58,6 @@ Thumbs.db
 *.pt
 *.pth
 !models_ml/*.joblib
+
+# Local Backup & Archives
+archive_24h_ago/

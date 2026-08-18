@@ -1,155 +1,300 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { WizardState, LocationData, FarmSoilData, CropPreferencesData, WhatIfSimulationData } from '@/types/wizard';
-import { mockCrops } from '@/data/mockCrops';
-import { CropOption } from '@/types/crop';
+import { triggerHaptic } from '../lib/utils';
+
+export interface FarmQuestionnaireState {
+  landAcres: number | null;
+  landUnit: 'ACRE' | 'BIGHA' | 'GUNTHA';
+  soilType: string | null; // 'BLACK', 'LOAM', 'RED', 'SANDY', 'CLAY'
+  waterCapacity: string | null; // 'HIGH', 'MEDIUM', 'LOW'
+  waterSource: string | null; // 'CANAL', 'WELL', 'BOREWELL', 'RAINFED'
+  previousCrop: string | null; // e.g. 'WHEAT, GRAM'
+  previousCrops: string[]; // multi-crop list e.g. ['WHEAT', 'GRAM']
+  season: string | null; // 'KHARIF', 'RABI', 'ZAID'
+  plannedSowingDate: string | null;
+}
+
+export interface CACPItemizedCost {
+  seed_cost: number;
+  fertilizer_cost: number;
+  pesticide_cost: number;
+  machinery_rental_cost: number;
+  labour_cost: number;
+  irrigation_electricity_cost: number;
+  operational_cost_a2_inr_per_acre: number;
+  family_labor_cost_per_acre: number;
+  total_cost_a2_fl_inr_per_acre: number;
+}
+
+export interface RecommendedCrop {
+  crop_id: string;
+  crop_name_en: string;
+  crop_name_hi: string;
+  crop_name_mr?: string;
+  suitability_pct: number;
+  duration_days: number;
+  expected_yield_qtl_per_acre: number;
+  yield_range_qtl: string;
+  total_cost_inr_per_acre: number;
+  cost_breakdown?: CACPItemizedCost;
+  forecasted_mandi_price_inr_per_qtl: number;
+  expected_net_profit_per_acre_inr: number;
+  net_profit_per_day_inr: number;
+  price_volatility: string;
+  why_recommended: string[];
+}
+
+export interface ComparisonCropItem {
+  crop_id: string;
+  crop_name_en: string;
+  crop_name_hi: string;
+  crop_name_mr?: string;
+  suitability_pct: number;
+  sowing_window_status: string;
+  total_cost_inr_per_acre: number;
+  cost_breakdown?: CACPItemizedCost;
+  expected_yield_qtl_per_acre: number;
+  forecasted_mandi_price_inr_per_qtl: number;
+  expected_net_profit_per_acre_inr: number;
+  duration_days: number;
+  net_profit_per_day_inr: number;
+}
 
 interface WizardContextType {
-  state: WizardState;
-  currentStep: number;
-  goToStep: (step: number) => void;
-  nextStep: () => void;
-  prevStep: () => void;
-  updateLocation: (loc: Partial<LocationData>) => void;
-  updateFarmSoil: (data: Partial<FarmSoilData>) => void;
-  updateCropPreferences: (data: Partial<CropPreferencesData>) => void;
-  setSelectedCropId: (cropId: string) => void;
-  selectedCrop: CropOption;
-  updateWhatIf: (data: Partial<WhatIfSimulationData>) => void;
-  toggleOfflineSave: () => void;
+  currentCard: number; // 1 to 5 (Question Cards), 6 (Recommendations), 7 (What-If), 8 (120-Day Plan)
+  farmData: FarmQuestionnaireState;
+  updateFarmData: (data: Partial<FarmQuestionnaireState>) => void;
+  topRecommendation: RecommendedCrop | null;
+  comparisonMatrix: ComparisonCropItem[];
+  isLoadingRecommendation: boolean;
+  fetchRecommendations: () => Promise<void>;
+  goToCard: (card: number) => void;
+  nextCard: () => void;
+  prevCard: () => void;
+  selectedCropId: string;
+  setSelectedCropId: (id: string) => void;
   resetWizard: () => void;
 }
 
-const DEFAULT_STATE: WizardState = {
-  currentStep: 1,
-  location: {
-    state: 'Rajasthan',
-    district: 'Nagaur',
-    tehsil: 'Merta',
-    isAutoDetected: false,
-    detectedName: 'Merta City, Nagaur, Rajasthan',
-  },
-  farmSoil: {
-    area: 2.5,
-    unit: 'Acres',
-    soilType: 'sandy-loam',
-    soilNameHi: 'बलुई दोमट मिट्टी',
-    waterAvailability: 'Moderate',
-    waterSource: ['Borewell', 'Rainfed'],
-  },
-  cropPreferences: {
-    sowingDate: '2026-07-05',
-    preferredCrops: ['Bajra', 'Moong'],
-    voiceTranscript: '',
-  },
-  selectedCropId: 'bajra',
-  whatIf: {
-    rainfallOffset: 0,
-    priceFluctuation: 0,
-  },
-  isOfflineSaved: true,
+// Strictly null/empty defaults so NO options on any step are preselected
+const DEFAULT_FARM_DATA: FarmQuestionnaireState = {
+  landAcres: null,
+  landUnit: 'ACRE',
+  soilType: null,
+  waterCapacity: null,
+  waterSource: null,
+  previousCrop: null,
+  previousCrops: [],
+  season: null,
+  plannedSowingDate: null,
 };
+
+const DEFAULT_TOP_RECOMMENDATION: RecommendedCrop = {
+  crop_id: 'SOYBEAN',
+  crop_name_en: 'Soybean',
+  crop_name_hi: 'सोयाबीन',
+  crop_name_mr: 'सोयाबीन',
+  suitability_pct: 94.0,
+  duration_days: 95,
+  expected_yield_qtl_per_acre: 9.5,
+  yield_range_qtl: '8.5 - 10.5 क्विंटल',
+  total_cost_inr_per_acre: 19412.0,
+  cost_breakdown: {
+    seed_cost: 2250.0,
+    fertilizer_cost: 2450.0,
+    pesticide_cost: 1350.0,
+    machinery_rental_cost: 1950.0,
+    labour_cost: 2850.0,
+    irrigation_electricity_cost: 394.0,
+    operational_cost_a2_inr_per_acre: 19412.0,
+    family_labor_cost_per_acre: 1863.0,
+    total_cost_a2_fl_inr_per_acre: 21275.0,
+  },
+  forecasted_mandi_price_inr_per_qtl: 4625.0,
+  expected_net_profit_per_acre_inr: 24525.0,
+  net_profit_per_day_inr: 258.0,
+  price_volatility: 'LOW',
+  why_recommended: [
+    'काली मिट्टी और मानसूनी मौसम के साथ 94% सबसे उत्तम कृषि अनुकूलता।',
+    '95 दिनों की कम अवधि में कुएं से मध्यम पानी में सुरक्षित पैदावार।',
+    'अनुमानित लागत (₹19,412/एकड़) के साथ सर्वाधिक शुद्ध मुनाफा।',
+    'पिछली फसल के बाद फसल चक्र से खेत की उर्वरता में वृद्धि।',
+  ],
+};
+
+const DEFAULT_COMPARISON_MATRIX: ComparisonCropItem[] = [
+  {
+    crop_id: 'SOYBEAN',
+    crop_name_en: 'Soybean',
+    crop_name_hi: 'सोयाबीन',
+    crop_name_mr: 'सोयाबीन',
+    suitability_pct: 94.0,
+    sowing_window_status: 'Optimal',
+    total_cost_inr_per_acre: 19412.0,
+    expected_yield_qtl_per_acre: 9.5,
+    forecasted_mandi_price_inr_per_qtl: 4625.0,
+    expected_net_profit_per_acre_inr: 24525.0,
+    duration_days: 95,
+    net_profit_per_day_inr: 258.0,
+  },
+  {
+    crop_id: 'MAIZE',
+    crop_name_en: 'Maize',
+    crop_name_hi: 'मक्का',
+    crop_name_mr: 'मका',
+    suitability_pct: 88.0,
+    sowing_window_status: 'Optimal',
+    total_cost_inr_per_acre: 18211.0,
+    expected_yield_qtl_per_acre: 24.0,
+    forecasted_mandi_price_inr_per_qtl: 2150.0,
+    expected_net_profit_per_acre_inr: 21389.0,
+    duration_days: 105,
+    net_profit_per_day_inr: 203.0,
+  },
+  {
+    crop_id: 'BAJRA',
+    crop_name_en: 'Bajra',
+    crop_name_hi: 'बाजरा',
+    crop_name_mr: 'बाजरी',
+    suitability_pct: 85.0,
+    sowing_window_status: 'Optimal',
+    total_cost_inr_per_acre: 17264.0,
+    expected_yield_qtl_per_acre: 12.0,
+    forecasted_mandi_price_inr_per_qtl: 2450.0,
+    expected_net_profit_per_acre_inr: 18136.0,
+    duration_days: 85,
+    net_profit_per_day_inr: 213.0,
+  },
+  {
+    crop_id: 'GROUNDNUT',
+    crop_name_en: 'Groundnut',
+    crop_name_hi: 'मूंगफली',
+    crop_name_mr: 'भुईमूग',
+    suitability_pct: 82.0,
+    sowing_window_status: 'Optimal',
+    total_cost_inr_per_acre: 30351.0,
+    expected_yield_qtl_per_acre: 8.5,
+    forecasted_mandi_price_inr_per_qtl: 6200.0,
+    expected_net_profit_per_acre_inr: 22349.0,
+    duration_days: 120,
+    net_profit_per_day_inr: 186.0,
+  },
+];
 
 const WizardContext = createContext<WizardContextType | undefined>(undefined);
 
 export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<WizardState>(() => {
+  const [currentCard, setCurrentCard] = useState<number>(1);
+  const [farmData, setFarmData] = useState<FarmQuestionnaireState>(DEFAULT_FARM_DATA);
+
+  const [topRecommendation, setTopRecommendation] = useState<RecommendedCrop | null>(DEFAULT_TOP_RECOMMENDATION);
+  const [comparisonMatrix, setComparisonMatrix] = useState<ComparisonCropItem[]>(DEFAULT_COMPARISON_MATRIX);
+  const [selectedCropId, setSelectedCropId] = useState<string>('SOYBEAN');
+  const [isLoadingRecommendation, setIsLoadingRecommendation] = useState<boolean>(false);
+
+  // Android Hardware Back Gesture integration
+  useEffect(() => {
+    const handlePopState = () => {
+      if (currentCard > 1) {
+        setCurrentCard((prev) => prev - 1);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentCard]);
+
+  const goToCard = (card: number) => {
+    triggerHaptic('light');
+    setCurrentCard(card);
+    window.history.pushState({ card }, `Card ${card}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const nextCard = () => {
+    goToCard(currentCard + 1);
+  };
+
+  const prevCard = () => {
+    goToCard(Math.max(1, currentCard - 1));
+  };
+
+  const updateFarmData = (data: Partial<FarmQuestionnaireState>) => {
+    setFarmData((prev) => {
+      const updated = { ...prev, ...data };
+      if (data.previousCrops) {
+        updated.previousCrop = data.previousCrops.join(', ');
+      }
+      return updated;
+    });
+  };
+
+  const fetchRecommendations = async () => {
+    setIsLoadingRecommendation(true);
     try {
-      const saved = localStorage.getItem('krishi_wizard_state');
-      if (saved) {
-        return JSON.parse(saved);
+      const response = await fetch('http://127.0.0.1:8000/api/v1/crop/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          total_land_acres: farmData.landAcres || 2.5,
+          soil_type: farmData.soilType || 'BLACK',
+          water_source: farmData.waterSource || 'WELL',
+          water_capacity_level: farmData.waterCapacity || 'MEDIUM',
+          working_capital_inr: 80000.0,
+          previous_season_crop: farmData.previousCrops && farmData.previousCrops.length > 0
+            ? farmData.previousCrops[0]
+            : (farmData.previousCrop || 'WHEAT'),
+          planned_sowing_date: farmData.plannedSowingDate || '2026-06-25',
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.top_recommendation) {
+          setTopRecommendation(data.top_recommendation);
+          setSelectedCropId(data.top_recommendation.crop_id);
+          // Persist recent analysis for home screen
+          localStorage.setItem(
+            'krishi_recent_analysis',
+            JSON.stringify({
+              cropName: data.top_recommendation.crop_name_hi,
+              profitPerAcre: data.top_recommendation.expected_net_profit_per_acre_inr,
+              yieldQtl: data.top_recommendation.expected_yield_qtl_per_acre,
+              date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+              landArea: farmData.landAcres || 2.5,
+            })
+          );
+        }
+        if (data.comparison_matrix) {
+          setComparisonMatrix(data.comparison_matrix);
+        }
       }
     } catch (e) {
-      console.error('Error loading saved wizard state:', e);
+      console.warn('API error, using cached benchmark recommendations:', e);
+    } finally {
+      setIsLoadingRecommendation(false);
+      goToCard(6); // Move to recommendations view
     }
-    return DEFAULT_STATE;
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('krishi_wizard_state', JSON.stringify(state));
-    } catch (e) {
-      console.error('Error saving wizard state:', e);
-    }
-  }, [state]);
-
-  const goToStep = (step: number) => {
-    if (step >= 1 && step <= 6) {
-      setState((prev) => ({ ...prev, currentStep: step }));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const nextStep = () => {
-    goToStep(state.currentStep + 1);
-  };
-
-  const prevStep = () => {
-    goToStep(state.currentStep - 1);
-  };
-
-  const updateLocation = (loc: Partial<LocationData>) => {
-    setState((prev) => ({
-      ...prev,
-      location: { ...prev.location, ...loc },
-    }));
-  };
-
-  const updateFarmSoil = (data: Partial<FarmSoilData>) => {
-    setState((prev) => ({
-      ...prev,
-      farmSoil: { ...prev.farmSoil, ...data },
-    }));
-  };
-
-  const updateCropPreferences = (data: Partial<CropPreferencesData>) => {
-    setState((prev) => ({
-      ...prev,
-      cropPreferences: { ...prev.cropPreferences, ...data },
-    }));
-  };
-
-  const setSelectedCropId = (cropId: string) => {
-    setState((prev) => ({
-      ...prev,
-      selectedCropId: cropId,
-    }));
-  };
-
-  const updateWhatIf = (data: Partial<WhatIfSimulationData>) => {
-    setState((prev) => ({
-      ...prev,
-      whatIf: { ...prev.whatIf, ...data },
-    }));
-  };
-
-  const toggleOfflineSave = () => {
-    setState((prev) => ({
-      ...prev,
-      isOfflineSaved: !prev.isOfflineSaved,
-    }));
   };
 
   const resetWizard = () => {
-    setState(DEFAULT_STATE);
+    setCurrentCard(1);
+    setFarmData(DEFAULT_FARM_DATA);
   };
-
-  const selectedCrop = mockCrops.find((c) => c.id === state.selectedCropId) || mockCrops[0];
 
   return (
     <WizardContext.Provider
       value={{
-        state,
-        currentStep: state.currentStep,
-        goToStep,
-        nextStep,
-        prevStep,
-        updateLocation,
-        updateFarmSoil,
-        updateCropPreferences,
+        currentCard,
+        farmData,
+        updateFarmData,
+        topRecommendation,
+        comparisonMatrix,
+        isLoadingRecommendation,
+        fetchRecommendations,
+        goToCard,
+        nextCard,
+        prevCard,
+        selectedCropId,
         setSelectedCropId,
-        selectedCrop,
-        updateWhatIf,
-        toggleOfflineSave,
         resetWizard,
       }}
     >
@@ -158,7 +303,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   );
 };
 
-export const useWizard = (): WizardContextType => {
+export const useWizard = () => {
   const context = useContext(WizardContext);
   if (!context) {
     throw new Error('useWizard must be used within a WizardProvider');

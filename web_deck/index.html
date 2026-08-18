@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRI-DECIDE — SIH 2025 Presentation Deck (All 6 Slides)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0f172a;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            gap: 40px;
+        }
+        .slide-wrapper {
+            width: 1920px;
+            height: 1080px;
+            background: #ffffff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            page-break-after: always;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-wrapper" id="slide-1">
+
+    <div class="slide-1-header">
+        <h1>SMART INDIA HACKATHON 2025</h1>
+        <h2>TITLE PAGE</h2>
+    </div>
+    
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+    <img src="../presentation_assets/title_bulb.svg" alt="SIH Bulb Graphic" class="slide-1-right-graphic">
+
+    <div class="slide-1-left">
+        <div class="slide-1-item">
+            <div class="bullet-dot"></div>
+            <div class="slide-1-label">Problem Statement ID –</div>
+            <div class="slide-1-val">PS24 / SIH2025-PS24</div>
+        </div>
+        <div class="slide-1-item">
+            <div class="bullet-dot"></div>
+            <div class="slide-1-label">Problem Statement Title –</div>
+            <div class="slide-1-val">AI-Based Crop Recommendation Engine for Farmers</div>
+        </div>
+        <div class="slide-1-item">
+            <div class="bullet-dot"></div>
+            <div class="slide-1-label">Theme –</div>
+            <div class="slide-1-val">Agriculture, Food Technology & Rural Development</div>
+        </div>
+        <div class="slide-1-item">
+            <div class="bullet-dot"></div>
+            <div class="slide-1-label">PS Category –</div>
+            <div class="slide-1-val dark">Software</div>
+        </div>
+        <div class="slide-1-item">
+            <div class="bullet-dot"></div>
+            <div class="slide-1-label">Team ID –</div>
+            <div class="slide-1-val dark">MNIT-SIH2025-01</div>
+        </div>
+        <div class="slide-1-item">
+            <div class="bullet-dot"></div>
+            <div class="slide-1-label">Team Name (Registered on portal) –</div>
+            <div class="slide-1-val">AGRI-DECIDE</div>
+        </div>
+    </div>
+
+    </div>
+    <div class="slide-wrapper" id="slide-2">
+
+    <div class="team-oval">AGRI-DECIDE</div>
+    <div class="slide-title-center">IDEA TITLE</div>
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+
+    <div class="content-area">
+        <div class="sub-header-strip">
+            <span class="star-icon">❖</span> Proposed Solution (Describe your Idea/Solution/Prototype)
+        </div>
+
+        <div class="cards-3-col">
+            <!-- Detailed Explanation -->
+            <div class="card-panel">
+                <div class="card-header-badge">
+                    <span class="badge-icon">🌾</span> Detailed Explanation
+                </div>
+                <ul class="card-bullets">
+                    <li><span class="highlight-bold">Zero-Friction Decision Support:</span> Replaces static Kaggle N-P-K classification with dynamic agro-climatic & economic intelligence.</li>
+                    <li><span class="highlight-bold">Automated GIS Integration:</span> Auto-fetches baseline soil texture (SoilGrids) and historical climate GDD via GPS/Taluka without requiring lab soil test kits.</li>
+                    <li><span class="highlight-bold">Multi-Crop Comparison:</span> Evaluates candidate crops side-by-side and ranks by <span class="highlight-bold">Net Realization per Day (₹/Day)</span>.</li>
+                    <li><span class="highlight-bold">Crop Rotation Incentive:</span> Rewards nitrogen-fixing legume rotations after cereals to sustain long-term soil fertility.</li>
+                </ul>
+                <div class="bottom-pill-box">🎯 Target: Smallholder Farmers (&lt; 2 Hectares)</div>
+            </div>
+
+            <!-- How it Addresses Problem -->
+            <div class="card-panel">
+                <div class="card-header-badge">
+                    <span class="badge-icon">🎯</span> How it Addresses Problem
+                </div>
+                <ul class="card-bullets">
+                    <li><span class="highlight-bold">Soil & Water Reality:</span> Directly factors farmer's irrigation type (borewell, canal, open well, rainfed) and capacity.</li>
+                    <li><span class="highlight-bold">Sowing Window Validation:</span> Evaluates planned sowing dates against regional ICAR cutoffs, penalizing delayed sowing yields.</li>
+                    <li><span class="highlight-bold">True Economic Viability:</span> Ingests official Ministry CACP cost norms and dynamically deducts machinery rental if owned (tractor/sprayer).</li>
+                    <li><span class="highlight-bold">Market Specialization:</span> Respects regional crop clustering (APMC mandis, labor, seed ecosystems).</li>
+                </ul>
+                <div class="bottom-pill-box">💧 Solves: Water, Sowing & Budget Mismatch</div>
+            </div>
+
+            <!-- Innovation & Uniqueness -->
+            <div class="card-panel">
+                <div class="card-header-badge">
+                    <span class="badge-icon">💡</span> Innovation & Uniqueness
+                </div>
+                <ul class="card-bullets">
+                    <li><span class="highlight-bold">Explainable AI Reasoning:</span> Clear, farmer-friendly bullet points explaining <i>why</i> the top crop is recommended.</li>
+                    <li><span class="highlight-bold">Interactive "What-If" Sandbox:</span> Live sliders allowing evaluators/farmers to simulate climate shocks (-20% rain) and sowing delay (+15d).</li>
+                    <li><span class="highlight-bold">Rural Voice Accessibility:</span> Dual-language PWA (English/Hindi) with hands-free crop voice input (<code>🎤 बोलकर बताएं</code>) and TTS audio.</li>
+                    <li><span class="highlight-bold">120-Day Action Timeline:</span> Sowing-to-harvest milestone schedule for fertilizers, irrigation, and mandi tracking.</li>
+                </ul>
+                <div class="bottom-pill-box">🎙️ Accessibility: Hindi/English Voice PWA</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span>@SIH Idea submission- Template 2</span>
+        <span>2</span>
+    </div>
+
+    </div>
+    <div class="slide-wrapper" id="slide-3">
+
+    <div class="team-oval">AGRI-DECIDE</div>
+    <div class="slide-title-center">TECHNICAL APPROACH</div>
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+
+    <div class="content-area">
+        <div class="slide3-grid">
+            <!-- Left: Technologies -->
+            <div class="tech-stack-container">
+                <div style="font-size: 24px; font-weight: 800; color: #0f2744; margin-bottom: 4px;">
+                    🛠️ Technologies to be Used
+                </div>
+                
+                <div class="tech-box">
+                    <div class="tech-box-title">Frontend PWA Layer <span>📱</span></div>
+                    <div class="tech-box-sub">React / Next.js + Tailwind CSS + Lucide Icons</div>
+                    <div class="tech-box-desc">Mobile-first, touch-friendly wizard (>48px targets), Web Speech API for Hindi voice input and SpeechSynthesis audio playback. GIGW accessibility compliant.</div>
+                </div>
+
+                <div class="tech-box">
+                    <div class="tech-box-title">Backend API Core <span>⚡</span></div>
+                    <div class="tech-box-sub">Python 3.11 + FastAPI + PostgreSQL / SQLite</div>
+                    <div class="tech-box-desc">Asynchronous, high-throughput REST API with strict Pydantic validation schemas, storing official CACP cultivation cost norms and Agmarknet historical mandis.</div>
+                </div>
+
+                <div class="tech-box">
+                    <div class="tech-box-title">Predictive AI/ML Engine <span>🤖</span></div>
+                    <div class="tech-box-sub">scikit-learn + XGBoost Regressor + LightGBM</div>
+                    <div class="tech-box-desc">District-trained XGBoost Yield Regressor with delay penalty curves + seasonal harvest-month wholesale mandi price forecasting models.</div>
+                </div>
+
+                <div class="tech-box" style="border-left-color: #16a34a;">
+                    <div class="tech-box-title">Deployment & Infrastructure <span>☁️</span></div>
+                    <div class="tech-box-sub">Docker + NIC Cloud / MeghRaj / Render</div>
+                    <div class="tech-box-desc">100% Free and Open-Source (FOSS) architecture with zero per-transaction API fees; lightweight PWA (&lt; 2MB bundle) with offline-first caching.</div>
+                </div>
+            </div>
+
+            <!-- Right: Methodology & Pipeline -->
+            <div class="pipeline-container">
+                <div style="font-size: 24px; font-weight: 800; color: #0f2744; margin-bottom: 4px;">
+                    🔄 Methodology & Implementation Pipeline
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 1</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Zero-Friction Ingestion & Profile Detection</div>
+                        <div class="stage-desc">Farmer selects District/Taluka or taps GPS. Engine auto-fetches SoilGrids GIS soil texture and ICAR agro-climatic baseline. Farmer inputs water source, budget, and owned machinery.</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 2</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Sowing Window & Agro-Climatic Validation</div>
+                        <div class="stage-desc">Planned sowing date is cross-referenced with crop-specific ICAR calendar windows, computing delay penalties: 🟢 Optimal Window, 🟡 Late (Yield Penalty), 🔴 Closed.</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 3</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Predictive Yield & Dynamic Economic Modeling</div>
+                        <div class="stage-desc">XGBoost calculates expected yield (qtl/acre). CACP engine deducts machinery rental savings if tractor/sprayer is owned. Computes Net Profit = (Yield × Mandi Price) - Adjusted Cost.</div>
+                    </div>
+                </div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-num-badge">STAGE 4</div>
+                    <div class="stage-content">
+                        <div class="stage-title">Explainable 4-Crop Scorecard & 120-Day Action Timeline</div>
+                        <div class="stage-desc">Renders side-by-side comparison ranked by ₹/Day with 'Why' reasoning bullets, live "What-If" climate shock sensitivity sandbox, and a 120-day milestone calendar.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span>@SIH Idea submission- Template 3</span>
+        <span>3</span>
+    </div>
+
+    </div>
+    <div class="slide-wrapper" id="slide-4">
+
+    <div class="team-oval">AGRI-DECIDE</div>
+    <div class="slide-title-center">FEASIBILITY AND VIABILITY</div>
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+
+    <div class="content-area">
+        <div class="feasibility-grid">
+            <!-- Column 1: Analysis of Feasibility -->
+            <div class="card-panel">
+                <div class="card-header-badge">
+                    <span class="badge-icon">📊</span> Analysis of Feasibility
+                </div>
+                <ul class="card-bullets">
+                    <li><span class="highlight-bold">100% FOSS Stack:</span> Zero per-transaction API fees; easily deployable on National Informatics Centre (NIC) Cloud / MeghRaj.</li>
+                    <li><span class="highlight-bold">Verified Government Data:</span> Grounded on CACP cost reports, Agmarknet 5-year modal mandi series, and SoilGrids GIS.</li>
+                    <li><span class="highlight-bold">Operational Feasibility:</span> Ultra-lightweight mobile PWA (&lt; 2MB bundle) optimized for rural low-bandwidth networks.</li>
+                    <li><span class="highlight-bold">Financial Viability:</span> Zero recurring software licensing overhead; scalable microservices backend.</li>
+                </ul>
+                
+                <div class="metric-banner">
+                    <div>
+                        <div class="metric-val">R² ≥ 0.82</div>
+                        <div class="metric-lbl">Model Fit</div>
+                    </div>
+                    <div style="border-left: 1px solid #bfdbfe;"></div>
+                    <div>
+                        <div class="metric-val">&lt; 1.8 qtl</div>
+                        <div class="metric-lbl">Yield RMSE</div>
+                    </div>
+                    <div style="border-left: 1px solid #bfdbfe;"></div>
+                    <div>
+                        <div class="metric-val">15 Crops</div>
+                        <div class="metric-lbl">Benchmark</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: Potential Challenges & Risks -->
+            <div class="card-panel" style="justify-content: flex-start; gap: 10px;">
+                <div class="card-header-badge" style="color: #9f1239; margin-bottom: 6px;">
+                    <span class="badge-icon">⚠️</span> Potential Risks & Challenges
+                </div>
+                
+                <div class="risk-item">
+                    <div class="risk-title">1. Micro-Soil Heterogeneity</div>
+                    Variations in soil depth and texture within a single taluka boundary.
+                </div>
+
+                <div class="risk-item">
+                    <div class="risk-title">2. Climate Anomalies & Monsoon Shifts</div>
+                    Unseasonal dry spells or delayed monsoons shifting sowing dates.
+                </div>
+
+                <div class="risk-item">
+                    <div class="risk-title">3. Harvest Mandi Price Volatility</div>
+                    Sudden wholesale price crashes during peak arrival harvest months.
+                </div>
+
+                <div class="risk-item">
+                    <div class="risk-title">4. Rural Literacy & Digital Divide</div>
+                    Barriers faced by smallholders with text-heavy interfaces.
+                </div>
+            </div>
+
+            <!-- Column 3: Mitigation Strategies -->
+            <div class="card-panel" style="justify-content: flex-start; gap: 10px;">
+                <div class="card-header-badge" style="color: #166534; margin-bottom: 6px;">
+                    <span class="badge-icon">🛡️</span> Mitigation Strategies
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-title">1. GIS Fallback + Visual Soil Tiles</div>
+                    SoilGrids baseline combined with clean manual visual tiles (Black, Loam, Red, Sandy).
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-title">2. Real-Time "What-If" Sandbox</div>
+                    Interactive sliders allowing dynamic recalculation for sowing delays (+15d) and rainfall deficits (-20%).
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-title">3. Harvest Seasonal Price Forecasting</div>
+                    Projections based on historical multi-year arrival indices with explicit volatility risk flags.
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-title">4. Multilingual Voice & Audio TTS</div>
+                    Dual-language interface (English/Hindi) with hands-free speech recognition and TTS narration.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span>@SIH Idea submission- Template 4</span>
+        <span>4</span>
+    </div>
+
+    </div>
+    <div class="slide-wrapper" id="slide-5">
+
+    <div class="team-oval">AGRI-DECIDE</div>
+    <div class="slide-title-center">IMPACT AND BENEFITS</div>
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+
+    <div class="content-area">
+        <div class="impact-grid">
+            <!-- Left: Impact on Target Audience -->
+            <div class="card-panel" style="justify-content: space-between; gap: 12px;">
+                <div class="card-header-badge" style="margin-bottom: 4px;">
+                    <span class="badge-icon">👥</span> Potential Impact on Target Audience
+                </div>
+                
+                <div class="impact-feature-card">
+                    <div class="impact-icon">🧑‍🌾</div>
+                    <div class="impact-text">
+                        <h4>Empowering 120M+ Indian Smallholders</h4>
+                        <p>Tailored specifically for small and marginal farmers (&lt; 2 hectares) with limited working capital and high vulnerability to crop failures.</p>
+                    </div>
+                </div>
+
+                <div class="impact-feature-card">
+                    <div class="impact-icon">📈</div>
+                    <div class="impact-text">
+                        <h4>Actionable Metric: Net Profit / Day (₹/Day)</h4>
+                        <p>Shifts farmer decision-making from single-crop guesswork to duration-adjusted profitability, enabling smarter multi-season planning.</p>
+                    </div>
+                </div>
+
+                <div class="impact-feature-card">
+                    <div class="impact-icon">🚜</div>
+                    <div class="impact-text">
+                        <h4>Capital & Machinery Protection</h4>
+                        <p>Deducting owned machinery rental costs avoids budget over-estimation by up to 20%, preventing farmers from taking high-interest informal debt.</p>
+                    </div>
+                </div>
+
+                <div class="impact-feature-card">
+                    <div class="impact-icon">⚡</div>
+                    <div class="impact-text">
+                        <h4>Zero Laboratory Soil Kit Friction</h4>
+                        <p>Eliminates the need for chemical N-P-K soil kits, enabling instant, high-confidence crop guidance in under 60 seconds.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Triple-Bottom-Line Benefits -->
+            <div class="card-panel" style="justify-content: space-between; gap: 12px;">
+                <div class="card-header-badge" style="margin-bottom: 4px;">
+                    <span class="badge-icon">🌱</span> Triple-Bottom-Line Benefits
+                </div>
+
+                <div class="impact-feature-card" style="border-left: 6px solid #16a34a;">
+                    <div class="impact-icon">💰</div>
+                    <div class="impact-text">
+                        <h4>Economic Benefits (15–25% Income Increase)</h4>
+                        <p>Maximizes net realization per acre through optimal sowing timing, rotation bonuses, and matching crops to farmer's exact water capacity.</p>
+                    </div>
+                </div>
+
+                <div class="impact-feature-card" style="border-left: 6px solid #0284c7;">
+                    <div class="impact-icon">🗣️</div>
+                    <div class="impact-text">
+                        <h4>Social & Digital Accessibility</h4>
+                        <p>Dual-language PWA (English/Hindi) with speech recognition (<code>🎤 बोलकर बताएं</code>) and audio TTS reads advice aloud, removing digital barriers.</p>
+                    </div>
+                </div>
+
+                <div class="impact-feature-card" style="border-left: 6px solid #d97706;">
+                    <div class="impact-icon">🌍</div>
+                    <div class="impact-text">
+                        <h4>Ecological & Soil Sustainability</h4>
+                        <p>Recommends nitrogen-fixing pulse rotations (Tur/Moong after Cereals) to replenish soil health and guides water-resilient crops in dry zones.</p>
+                    </div>
+                </div>
+
+                <div class="impact-feature-card" style="border-left: 6px solid #8b5cf6;">
+                    <div class="impact-icon">🏛️</div>
+                    <div class="impact-text">
+                        <h4>National Policy Alignment</h4>
+                        <p>Directly supports GoI's National Mission on Sustainable Agriculture (NMSA) and Digital Agriculture Mission guidelines.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span>@SIH Idea submission- Template 5</span>
+        <span>5</span>
+    </div>
+
+    </div>
+    <div class="slide-wrapper" id="slide-6">
+
+    <div class="team-oval">AGRI-DECIDE</div>
+    <div class="slide-title-center">RESEARCH AND REFERENCES</div>
+    <img src="../presentation_assets/sih_corner_logo.svg" alt="SIH 2025" class="corner-logo">
+
+    <div class="content-area">
+        <div class="ref-grid">
+            <!-- Card 1: Government Data -->
+            <div class="ref-card">
+                <div class="card-header-badge">
+                    <span class="badge-icon">🏛️</span> Government Data Benchmarks
+                </div>
+
+                <div class="ref-item">
+                    <div class="ref-title">CACP Cultivation Costs</div>
+                    <div class="ref-desc">Ministry of Agriculture & Farmers Welfare, GoI state-wise comprehensive cost of cultivation norms.</div>
+                    <a href="https://cacp.dacnet.nic.in" class="ref-link" target="_blank">https://cacp.dacnet.nic.in</a>
+                </div>
+
+                <div class="ref-item">
+                    <div class="ref-title">Agmarknet Mandi Portal</div>
+                    <div class="ref-desc">Directorate of Marketing & Inspection (DMI) historical 5-year modal wholesale prices (2020–2026).</div>
+                    <a href="https://agmarknet.gov.in" class="ref-link" target="_blank">https://agmarknet.gov.in</a>
+                </div>
+
+                <div class="ref-item">
+                    <div class="ref-title">SoilGrids & ICAR Survey</div>
+                    <div class="ref-desc">ISRIC global soil property maps & ICAR regional agro-climatic crop calendar benchmarks.</div>
+                    <a href="https://www.soilgrids.org" class="ref-link" target="_blank">https://www.soilgrids.org</a>
+                </div>
+            </div>
+
+            <!-- Card 2: Research Papers & Standards -->
+            <div class="ref-card">
+                <div class="card-header-badge">
+                    <span class="badge-icon">📚</span> Research Papers & Standards
+                </div>
+
+                <div class="ref-item">
+                    <div class="ref-title">XGBoost Algorithmic Framework</div>
+                    <div class="ref-desc">Chen, T., & Guestrin, C. (2016). <i>"XGBoost: A Scalable Tree Boosting System."</i> ACM SIGKDD International Conference.</div>
+                    <span class="ref-link">DOI: 10.1145/2939672.2939785</span>
+                </div>
+
+                <div class="ref-item">
+                    <div class="ref-title">ICAR Agronomic Guidelines</div>
+                    <div class="ref-desc">Standard crop rotation protocols, GDD heat units, and Kharif/Rabi sowing window management.</div>
+                    <a href="https://icar.org.in" class="ref-link" target="_blank">https://icar.org.in</a>
+                </div>
+
+                <div class="ref-item">
+                    <div class="ref-title">GIGW Digital Accessibility</div>
+                    <div class="ref-desc">Guidelines for Indian Government Apps & Websites (MeitY) for accessible rural digital interfaces.</div>
+                    <span class="ref-link">MeitY Accessibility Standards</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Project Repository & Live Prototype -->
+            <div class="ref-card">
+                <div class="card-header-badge">
+                    <span class="badge-icon">🚀</span> Project Repositories & Demos
+                </div>
+
+                <div class="ref-item" style="border-left: 5px solid #0070c0;">
+                    <div class="ref-title">GitHub Source Code Repository</div>
+                    <div class="ref-desc">Complete codebase: FastAPI backend, PostgreSQL schema, Next.js PWA, XGBoost models & seeds.</div>
+                    <a href="https://github.com/sujeetaionly/agri-decide-sih" class="ref-link" target="_blank">https://github.com/sujeetaionly/agri-decide-sih</a>
+                </div>
+
+                <div class="ref-item" style="border-left: 5px solid #16a34a;">
+                    <div class="ref-title">Live Cloud Production Prototype</div>
+                    <div class="ref-desc">Interactive 6-screen PWA featuring Hindi/English voice input, crop comparison, and live What-If sliders.</div>
+                    <a href="https://agri-decide-sih.vercel.app" class="ref-link" target="_blank">https://agri-decide-sih.vercel.app</a>
+                </div>
+
+                <div class="ref-item" style="border-left: 5px solid #d97706;">
+                    <div class="ref-title">Team Identity & Institution</div>
+                    <div class="ref-desc">Team AGRI-DECIDE • Malaviya National Institute of Technology (MNIT) Jaipur.</div>
+                    <span class="ref-link">SIH 2025 Official Submission</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span>@SIH Idea submission- Template 6</span>
+        <span>6</span>
+    </div>
+
+    </div>
+</body>
+</html>

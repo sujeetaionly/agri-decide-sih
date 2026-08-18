@@ -1,223 +1,219 @@
-import React from 'react';
-import { useLanguage } from '@/context/LanguageContext';
-import { useWizard } from '@/context/WizardContext';
-import { Card } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Button } from '@/components/ui/button';
-import { AudioButton } from '@/components/common/AudioButton';
-import { calculateWhatIf } from '@/lib/simulation';
+import React, { useState } from 'react';
+import { useWizard } from '../../context/WizardContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { triggerHaptic, formatCurrencyINR } from '../../lib/utils';
+import { speakText } from '../../lib/speech';
 
 export const WhatIfStep: React.FC = () => {
-  const { isHindi } = useLanguage();
-  const { state, updateWhatIf, setSelectedCropId } = useWizard();
+  const { topRecommendation, goToCard, prevCard } = useWizard();
+  const { language, t } = useLanguage();
 
-  const { rainfallOffset, priceFluctuation } = state.whatIf;
+  const [rainfallOffset, setRainfallOffset] = useState<number>(0);
+  const [priceOffset, setPriceOffset] = useState<number>(0);
 
-  const outcome = calculateWhatIf(state.selectedCropId, rainfallOffset, priceFluctuation);
+  const baseProfit = topRecommendation?.expected_net_profit_per_acre_inr || 24525.0;
+  const baseYield = topRecommendation?.expected_yield_qtl_per_acre || 9.5;
+  const cropName = topRecommendation?.crop_name_hi || 'सोयाबीन';
 
-  const handleRainfallChange = (val: number[]) => {
-    updateWhatIf({ rainfallOffset: val[0] });
+  // Dynamic simulated metrics
+  const rainPenalty = rainfallOffset < 0 ? Math.abs(rainfallOffset) * 0.007 : rainfallOffset * 0.003;
+  const simYield = Math.max(1.0, Number((baseYield * (1 + (rainfallOffset > 0 ? rainfallOffset * 0.004 : -rainPenalty))).toFixed(1)));
+  const simProfit = Math.round(baseProfit * (1 + priceOffset * 0.01) * (simYield / baseYield));
+
+  const isDroughtResilient = rainfallOffset < -15;
+
+  const handleAudio = () => {
+    triggerHaptic('light');
+    const msg = `मौसम और बाजार जोखिम सिमुलेशन। यदि ${Math.abs(rainfallOffset)}% कम बारिश और ${priceOffset}% भाव का उतार-चढ़ाव हो, तो आपकी अनुमानित पैदावार ${simYield} क्विंटल और शुद्ध लाभ ${formatCurrencyINR(simProfit)} रहेगा।`;
+    speakText(msg, language);
   };
 
-  const handlePriceChange = (val: number[]) => {
-    updateWhatIf({ priceFluctuation: val[0] });
-  };
-
-  const handleReset = () => {
-    updateWhatIf({ rainfallOffset: 0, priceFluctuation: 0 });
-  };
-
-  const handleApplySwitch = () => {
-    if (outcome.recommendedCropId !== state.selectedCropId) {
-      setSelectedCropId(outcome.recommendedCropId);
-    }
+  const handleProceed = () => {
+    triggerHaptic('success');
+    goToCard(8); // Move to 120-day plan
   };
 
   return (
-    <div className="space-y-6 pb-28">
-      {/* Header */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface">
-            {isHindi ? 'अगर मौसम या बाजार बदले तो क्या होगा?' : 'What If? Simulation'}
+    <div className="space-y-5 animate-fadeIn pb-36">
+      
+      {/* Clean Title & Description Header with Proper Hierarchy */}
+      <div className="space-y-2 pb-2">
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
+            मौसम व बाजार जोखिम सिमुलेशन
           </h2>
-          <AudioButton
-            id="step5-whatif-audio"
-            textHi="चरण 5: मौसम और बाजार सिमुलेशन। नीचे दिए गए स्लाइडर को खिसकाकर देखें कि यदि 30% कम बारिश या बाजार भाव में उतार-चढ़ाव हो, तो क्या आपकी चुनी हुई फसल सुरक्षित रहेगी।"
-            textEn="Step 5: What-If simulation. Slide the controls to see how unexpected drought or price drops impact your crop yield and profits."
-          />
+
+          <button
+            type="button"
+            onClick={handleAudio}
+            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
+          >
+            <span className="material-symbols-outlined text-base">volume_up</span>
+            <span>{t('listen')}</span>
+          </button>
         </div>
-        <p className="text-sm md:text-base text-on-surface-variant leading-relaxed">
-          {isHindi
-            ? 'मौसम और बाजार के जोखिमों से पहले ही निपटने के लिए परिस्थितियों को बदलकर देखें।'
-            : 'Simulate climate and market fluctuations to make a risk-resilient crop decision.'}
+        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
+          स्लाइडर बदलकर देखें कि कम बारिश या भाव में बदलाव होने पर {cropName} कितनी सुरक्षित रहेगी।
         </p>
       </div>
 
-      {/* 1. Simulation Sliders Card */}
-      <Card className="p-5 md:p-6 space-y-6 border-outline-variant/60 shadow-level-1">
-        {/* Rainfall Slider */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <label className="text-sm md:text-base font-bold text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-sky-600 text-[22px]">rainy</span>
-              <span>{isHindi ? 'मानसूनी वर्षा में बदलाव (Rainfall Deviation)' : 'Monsoon Rainfall Deviation'}</span>
-            </label>
-            <span
-              className={`px-3 py-1 rounded-full text-xs md:text-sm font-bold ${
-                rainfallOffset < 0
-                  ? 'bg-amber-100 text-amber-950 border border-amber-300'
-                  : rainfallOffset > 0
-                  ? 'bg-sky-100 text-sky-950 border border-sky-300'
-                  : 'bg-surface-container-high text-on-surface'
-              }`}
-            >
+      {/* Interactive Sliders Card */}
+      <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-3xl p-5 shadow-2xs space-y-5">
+        
+        {/* Rainfall Deficit Slider */}
+        <div className="space-y-2.5">
+          <div className="flex justify-between items-center text-xs font-bold">
+            <span className="flex items-center gap-1.5 text-[#1A1C18] dark:text-[#E2E3DC]">
+              <span className="material-symbols-outlined text-lg text-emerald-700 dark:text-emerald-400">rainy</span>
+              <span>मानसूनी बारिश का बदलाव:</span>
+            </span>
+            <span className={`px-3 py-1 rounded-xl text-xs font-black font-mono border ${
+              rainfallOffset < 0
+                ? 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700'
+                : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-500/30'
+            }`}>
               {rainfallOffset > 0 ? `+${rainfallOffset}%` : `${rainfallOffset}%`}
-              {rainfallOffset === 0
-                ? isHindi
-                  ? ' (सामान्य)'
-                  : ' (Normal)'
-                : rainfallOffset < -25
-                ? isHindi
-                  ? ' (सूखा)'
-                  : ' (Drought)'
-                : rainfallOffset > 25
-                ? isHindi
-                  ? ' (अतिवृष्टि)'
-                  : ' (Excess)'
-                : ''}
             </span>
           </div>
 
-          <Slider
-            min={-50}
-            max={50}
-            step={5}
-            value={[rainfallOffset]}
-            onValueChange={handleRainfallChange}
+          <input
+            type="range"
+            min="-35"
+            max="25"
+            step="5"
+            value={rainfallOffset}
+            onChange={(e) => {
+              triggerHaptic('light');
+              setRainfallOffset(parseInt(e.target.value));
+            }}
+            className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-emerald-700"
           />
 
-          <div className="flex justify-between text-[11px] font-semibold text-on-surface-variant/80">
-            <span>-50% (गंभीर सूखा)</span>
+          <div className="flex justify-between text-[11px] text-stone-500 font-semibold">
+            <span>-35% (कम बारिश)</span>
             <span>0% (सामान्य)</span>
-            <span>+50% (अत्यधिक बारिश)</span>
+            <span>+25% (अधिक बारिश)</span>
           </div>
         </div>
 
-        {/* Market Price Slider */}
-        <div className="space-y-3 pt-2 border-t border-outline-variant/40">
-          <div className="flex items-center justify-between">
-            <label className="text-sm md:text-base font-bold text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-emerald-700 text-[22px]">trending_up</span>
-              <span>{isHindi ? 'मंडी भाव में उतार-चढ़ाव (Mandi Price)' : 'Market Price Fluctuation'}</span>
-            </label>
-            <span
-              className={`px-3 py-1 rounded-full text-xs md:text-sm font-bold ${
-                priceFluctuation < 0
-                  ? 'bg-rose-100 text-rose-950 border border-rose-300'
-                  : priceFluctuation > 0
-                  ? 'bg-emerald-100 text-emerald-950 border border-emerald-300'
-                  : 'bg-surface-container-high text-on-surface'
-              }`}
-            >
-              {priceFluctuation > 0 ? `+${priceFluctuation}%` : `${priceFluctuation}%`}
+        <div className="h-px bg-stone-200 dark:bg-stone-800" />
+
+        {/* Mandi Price Shock Slider */}
+        <div className="space-y-2.5">
+          <div className="flex justify-between items-center text-xs font-bold">
+            <span className="flex items-center gap-1.5 text-[#1A1C18] dark:text-[#E2E3DC]">
+              <span className="material-symbols-outlined text-lg text-emerald-700 dark:text-emerald-400">trending_down</span>
+              <span>मंडी भाव में उतार-चढ़ाव:</span>
+            </span>
+            <span className={`px-3 py-1 rounded-xl text-xs font-black font-mono border ${
+              priceOffset < 0
+                ? 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border-stone-300 dark:border-stone-700'
+                : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-500/30'
+            }`}>
+              {priceOffset > 0 ? `+${priceOffset}%` : `${priceOffset}%`}
             </span>
           </div>
 
-          <Slider
-            min={-30}
-            max={30}
-            step={5}
-            value={[priceFluctuation]}
-            onValueChange={handlePriceChange}
+          <input
+            type="range"
+            min="-25"
+            max="25"
+            step="5"
+            value={priceOffset}
+            onChange={(e) => {
+              triggerHaptic('light');
+              setPriceOffset(parseInt(e.target.value));
+            }}
+            className="w-full h-3 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer accent-emerald-700"
           />
 
-          <div className="flex justify-between text-[11px] font-semibold text-on-surface-variant/80">
-            <span>-30% (मंडी मंदी)</span>
+          <div className="flex justify-between text-[11px] text-stone-500 font-semibold">
+            <span>-25% (भाव में गिरावट)</span>
             <span>0% (वर्तमान भाव)</span>
-            <span>+30% (मंडी तेजी)</span>
+            <span>+25% (भाव में तेजी)</span>
           </div>
         </div>
+      </div>
 
-        {/* Reset Slider Button */}
-        {(rainfallOffset !== 0 || priceFluctuation !== 0) && (
-          <div className="pt-1 flex justify-end">
-            <button
-              onClick={handleReset}
-              className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
-            >
-              <span className="material-symbols-outlined text-[16px]">restart_alt</span>
-              <span>{isHindi ? 'सामान्य स्थिति पर रीसेट करें' : 'Reset to Normal'}</span>
-            </button>
+      {/* Harmonized Simulation Outcome Hero Card */}
+      <div className="rounded-3xl border-2 border-stone-300 dark:border-stone-700 bg-white dark:bg-[#1E231B] shadow-lg overflow-hidden animate-fadeIn">
+        {/* Top Card Banner */}
+        <div className="bg-emerald-700 text-white px-5 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 font-bold text-xs">
+            <span className="material-symbols-outlined text-base text-amber-300">analytics</span>
+            <span>सिमुलेशन परिणाम ({cropName})</span>
           </div>
-        )}
-      </Card>
-
-      {/* 2. Dynamic AI Simulation Outcome Card */}
-      <Card className="p-5 md:p-6 border-2 border-primary bg-primary-container/5 space-y-4 shadow-level-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[26px]">psychology</span>
-            <h3 className="text-lg md:text-xl font-bold text-on-surface">
-              {isHindi ? 'एआई सिमुलेशन परिणाम' : 'AI Simulation Verdict'}
-            </h3>
-          </div>
-
-          <span
-            className={`px-3 py-1 rounded-full text-xs md:text-sm font-bold ${
-              outcome.resilienceRating === 'Optimal' || outcome.resilienceRating === 'Exceptional'
-                ? 'bg-emerald-100 text-emerald-900 border border-emerald-300'
-                : 'bg-amber-100 text-amber-950 border border-amber-300'
-            }`}
-          >
-            {isHindi ? outcome.resilienceRatingHi : outcome.resilienceRating}
+          <span className="text-xs font-black bg-white/20 px-3 py-0.5 rounded-full">
+            {isDroughtResilient ? 'सूखा सुरक्षित' : 'सामान्य स्थिति'}
           </span>
         </div>
 
-        {/* Live recalculation metrics */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-3.5 rounded-xl bg-surface-container-lowest border border-outline-variant/60 space-y-1">
-            <div className="text-xs font-semibold text-on-surface-variant">
-              {isHindi ? 'संशोधित पैदावार' : 'Adjusted Yield'}
+        {/* Card Body */}
+        <div className="p-5 space-y-4">
+          {/* 2-Column Balanced Neutral Scorecard */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Yield Metric */}
+            <div className="bg-stone-100/70 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700 rounded-2xl p-3 text-center shadow-2xs">
+              <span className="text-[11px] font-bold text-stone-600 dark:text-stone-400 block leading-tight">
+                संशोधित पैदावार
+              </span>
+              <span className="text-2xl font-black text-stone-900 dark:text-stone-100 block my-0.5">
+                {simYield}
+              </span>
+              <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">
+                {t('quintalPerAcre')}
+              </span>
             </div>
-            <div className="text-base md:text-lg font-bold text-on-surface">
-              {isHindi ? outcome.adjustedYieldHi : outcome.adjustedYield}
-            </div>
-          </div>
 
-          <div className="p-3.5 rounded-xl bg-surface-container-lowest border border-outline-variant/60 space-y-1">
-            <div className="text-xs font-semibold text-on-surface-variant">
-              {isHindi ? 'संशोधित शुद्ध लाभ' : 'Adjusted Profit'}
-            </div>
-            <div className="text-base md:text-lg font-bold text-emerald-800">
-              {isHindi ? outcome.adjustedProfitHi : outcome.adjustedProfit}
-              <span className={`text-xs ml-1 ${outcome.profitChangePercent >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
-                ({outcome.profitChangePercent >= 0 ? `+${outcome.profitChangePercent}%` : `${outcome.profitChangePercent}%`})
+            {/* Profit Metric */}
+            <div className="bg-stone-100/70 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700 rounded-2xl p-3 text-center shadow-2xs">
+              <span className="text-[11px] font-bold text-stone-600 dark:text-stone-400 block leading-tight">
+                संशोधित शुद्ध लाभ
+              </span>
+              <span className="text-2xl font-black text-emerald-700 dark:text-emerald-400 block my-0.5">
+                {formatCurrencyINR(simProfit)}
+              </span>
+              <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium">
+                {t('perAcre')}
               </span>
             </div>
           </div>
-        </div>
 
-        {/* Verdict Explanation */}
-        <div className="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/60 space-y-2">
-          <p className="text-xs md:text-sm font-medium text-on-surface leading-relaxed">
-            {isHindi ? outcome.verdictHi : outcome.verdictEn}
-          </p>
-
-          {outcome.recommendedCropId !== state.selectedCropId && (
-            <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-3">
-              <span className="text-xs font-bold text-amber-800">
-                {isHindi
-                  ? `सुझाव: ${outcome.recommendedCropNameHi} पर स्विच करें`
-                  : `Recommendation: Switch to ${outcome.recommendedCropName}`}
-              </span>
-              <Button variant="secondary" size="sm" onClick={handleApplySwitch}>
-                {isHindi ? 'लागू करें' : 'Switch Crop'}
-              </Button>
-            </div>
-          )}
+          {/* AI Guidance Callout */}
+          <div className="bg-stone-50 dark:bg-stone-900/60 p-3.5 rounded-2xl border border-stone-200 dark:border-stone-800 flex items-start gap-2.5 text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+            <span className="material-symbols-outlined text-base text-emerald-700 dark:text-emerald-400 flex-shrink-0 mt-0.5">psychology_alt</span>
+            <span>
+              {rainfallOffset < 0
+                ? `${Math.abs(rainfallOffset)}% कम बारिश होने पर भी ${cropName} अन्य फसलों की तुलना में न्यूनतम जोखिम के साथ सबसे सुरक्षित लाभ सुनिश्चित करती है।`
+                : `सामान्य बारिश में यह फसल भरपूर पैदावार और अधिकतम लाभ देगी।`}
+            </span>
+          </div>
         </div>
-      </Card>
+      </div>
+
+      {/* True Progressive Blur Layer with Gradient Mask */}
+      <div
+        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-28"
+        style={{
+          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
+          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
+        }}
+      />
+
+      {/* Floating Action Bar with Proceed CTA */}
+      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2">
+        <button
+          type="button"
+          onClick={handleProceed}
+          className="w-full py-4 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-black text-base shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>{t('chooseAndPlanBtn')}</span>
+          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
     </div>
   );
 };

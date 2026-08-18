@@ -1,177 +1,307 @@
-import React from 'react';
-import { useLanguage, LANGUAGE_OPTIONS } from '@/context/LanguageContext';
-import { useAudio } from '@/context/AudioContext';
-import { Language } from '@/types/language';
+import React, { useState } from 'react';
+import { SupportedLanguage, getTranslation } from '../data/translations';
+import { triggerHaptic } from '../lib/utils';
+import { speakText, stopSpeaking } from '../lib/speech';
+
+interface LanguageOption {
+  code: SupportedLanguage;
+  nativeName: string;
+  englishName: string;
+  glyph: string;
+  audioLabel: string;
+  sampleAudio: string;
+}
+
+const LANGUAGES: LanguageOption[] = [
+  {
+    code: 'hi',
+    nativeName: 'हिन्दी',
+    englishName: 'Hindi',
+    glyph: 'अ',
+    audioLabel: 'सुनें',
+    sampleAudio: 'नमस्ते किसान भाई, आपका कृषि-वाइज़ में स्वागत है।',
+  },
+  {
+    code: 'en',
+    nativeName: 'English',
+    englishName: 'English',
+    glyph: 'A',
+    audioLabel: 'Listen',
+    sampleAudio: 'Hello farmer friend, welcome to Krishi-Wise crop decision support.',
+  },
+  {
+    code: 'mr',
+    nativeName: 'मराठी',
+    englishName: 'Marathi',
+    glyph: 'म',
+    audioLabel: 'ऐका',
+    sampleAudio: 'नमस्कार शेतकरी मित्रांनो, कृषी-वाइज ॲपमध्ये आपले स्वागत आहे.',
+  },
+  {
+    code: 'gu',
+    nativeName: 'ગુજરાતી',
+    englishName: 'Gujarati',
+    glyph: 'ગ',
+    audioLabel: 'સાંભળો',
+    sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, કૃષિ-વાઇઝમાં આપનું સ્વાગત છે.',
+  },
+  {
+    code: 'raj',
+    nativeName: 'राजस्थानी',
+    englishName: 'Rajasthani',
+    glyph: 'रा',
+    audioLabel: 'सुणो',
+    sampleAudio: 'खम्मा घणी किसान भाई, आपरो कृषि-वाइज़ में स्वागत है।',
+  },
+];
 
 interface LanguageSelectionPageProps {
-  onContinue: () => void;
+  currentLanguage: SupportedLanguage;
+  onSelectLanguage: (lang: SupportedLanguage) => void;
+  onConfirm: () => void;
 }
 
 export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
-  onContinue,
+  currentLanguage: _currentLanguage,
+  onSelectLanguage,
+  onConfirm,
 }) => {
-  const { language, setLanguage, isHindi } = useLanguage();
-  const { isPlaying, activeAudioId, playAudio, stopAudio } = useAudio();
+  const [selected, setSelected] = useState<SupportedLanguage | null>(null);
+  const [playingCode, setPlayingCode] = useState<string | null>(null);
 
-  const handleSelect = (code: Language) => {
-    setLanguage(code);
+  const handleSelect = (lang: LanguageOption) => {
+    triggerHaptic('medium');
+    setSelected(lang.code);
+    onSelectLanguage(lang.code);
   };
 
-  const handleAudio = (id: string, textHi: string, textEn: string, e?: React.MouseEvent) => {
+  const handlePlaySample = (lang: LanguageOption, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    if (isPlaying && activeAudioId === id) {
-      stopAudio();
-    } else {
-      playAudio(id, textHi, textEn);
+    triggerHaptic('light');
+
+    if (playingCode === lang.code) {
+      stopSpeaking();
+      setPlayingCode(null);
+      return;
     }
+
+    setPlayingCode(lang.code);
+    speakText(
+      lang.sampleAudio,
+      lang.code,
+      () => setPlayingCode(lang.code),
+      () => setPlayingCode(null),
+      () => setPlayingCode(null)
+    );
   };
 
-  // Avatar glyph map for language badges matching Stitch
-  const glyphMap: Record<Language, string> = {
-    en: 'A',
-    hi: 'अ',
-    mr: 'म',
-    gu: 'ગુ',
-    pa: 'ਪੰ',
-    bn: 'বা',
+  const handleHeaderAudio = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    triggerHaptic('light');
+
+    const effectiveLang = selected || 'en';
+    const headerText = effectiveLang === 'en'
+      ? 'Which language do you prefer? Choose your preferred language to continue using Krishi-Wise.'
+      : 'आप कौन सी भाषा पसंद करते हैं? कृषि-वाइज़ का उपयोग करने के लिए अपनी पसंदीदा भाषा चुनें।';
+
+    if (playingCode === 'header') {
+      stopSpeaking();
+      setPlayingCode(null);
+      return;
+    }
+
+    setPlayingCode('header');
+    speakText(
+      headerText,
+      effectiveLang,
+      () => setPlayingCode('header'),
+      () => setPlayingCode(null),
+      () => setPlayingCode(null)
+    );
   };
+
+  const handleProceed = () => {
+    if (!selected) return;
+    stopSpeaking();
+    triggerHaptic('success');
+    onConfirm();
+  };
+
+  const titleText = selected
+    ? getTranslation('chooseLanguageTitle', selected)
+    : 'Which language do you prefer?';
+
+  const subText = selected
+    ? getTranslation('chooseLanguageSub', selected)
+    : 'Choose your preferred language to continue using Krishi-Wise.';
+
+  const buttonText = selected
+    ? getTranslation('getStarted', selected)
+    : 'Get Started';
 
   return (
-    <div className="pattern-bg text-on-background min-h-screen flex items-center justify-center p-gutter md:p-card-padding antialiased font-body-md">
-      {/* Modal Container */}
-      <main className="bg-surface-container-lowest rounded-xl shadow-[0px_-4px_12px_rgba(0,0,0,0.08)] w-full max-w-[480px] p-card-padding md:p-8 relative overflow-hidden flex flex-col gap-6 md:gap-8 border border-surface-variant animate-in fade-in zoom-in-95 duration-200">
-        {/* Header */}
-        <header className="text-center flex flex-col items-center gap-4">
-          <div className="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container mb-1 shadow-sm">
-            <span className="material-symbols-outlined text-[32px]">language</span>
-          </div>
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-5 max-w-md mx-auto">
+      
+      {/* Header - Spacious, Centered & Clean */}
+      <header className="pt-6 pb-2 text-center space-y-2.5">
+        <div className="w-14 h-14 bg-emerald-700 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
+          <span className="material-symbols-outlined text-[28px]">language</span>
+        </div>
 
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            <h1 className="font-headline-lg text-headline-lg text-primary font-bold text-center">
-              {isHindi ? 'आप कौन सी भाषा पसंद करते हैं?' : 'Which language do you prefer?'}
-            </h1>
-            <button
-              onClick={(e) =>
-                handleAudio(
-                  'lang-header-audio',
-                  'नमस्ते! कृपया अपनी पसंदीदा भाषा चुनें और शुरू करें बटन दबाएं।',
-                  'Which language do you prefer? Choose your preferred language to continue using Agri-Decide.',
-                  e
-                )
-              }
-              aria-label="Listen to heading"
-              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all min-h-[48px] ${
-                isPlaying && activeAudioId === 'lang-header-audio'
-                  ? 'text-primary bg-primary-container/20 animate-pulse'
-                  : 'text-primary hover:bg-primary-container/10'
+        <div className="space-y-1">
+          <h1 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] tracking-tight flex items-center justify-center gap-2">
+            <span>{titleText}</span>
+          </h1>
+
+          <button
+            type="button"
+            onClick={handleHeaderAudio}
+            aria-label="Listen to heading"
+            className={`inline-flex items-center justify-center w-9 h-9 rounded-full transition-all cursor-pointer ${
+              playingCode === 'header'
+                ? 'text-emerald-700 bg-emerald-100 dark:bg-emerald-950 animate-pulse'
+                : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[22px]">volume_up</span>
+          </button>
+
+          <p className="text-xs text-stone-500 dark:text-stone-400 font-medium max-w-xs mx-auto leading-relaxed">
+            {subText}
+          </p>
+        </div>
+      </header>
+
+      {/* Language Options - 2x2 Square Cards Grid + English Full Width */}
+      <div className="grid grid-cols-2 gap-3 my-auto py-2">
+        {/* 4 Square Indic Cards */}
+        {[
+          { code: 'hi', nativeName: 'हिन्दी', glyph: 'अ', audioLabel: 'सुनें', sampleAudio: 'नमस्ते किसान भाई, आपका कृषि-वाइज़ में स्वागत है।' },
+          { code: 'mr', nativeName: 'मराठी', glyph: 'म', audioLabel: 'ऐका', sampleAudio: 'नमस्कार शेतकरी मित्रांनो, कृषी-वाइज ॲपमध्ये आपले स्वागत आहे।' },
+          { code: 'gu', nativeName: 'ગુજરાતી', glyph: 'ગ', audioLabel: 'સાંભળો', sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, કૃષિ-વાઇઝમાં આપનું સ્વાગત છે।' },
+          { code: 'raj', nativeName: 'राजस्थानी', glyph: 'रा', audioLabel: 'सुणो', sampleAudio: 'खम्मा घणी किसान भाई, आपरो कृषि-वाइज़ में स्वागत है।' },
+        ].map((lang) => {
+          const isSelected = selected === lang.code;
+          const isItemPlaying = playingCode === lang.code;
+
+          return (
+            <div
+              key={lang.code}
+              onClick={() => handleSelect(lang as any)}
+              className={`relative flex flex-col items-center justify-center p-4 rounded-3xl border-2 transition-all active:scale-[0.97] cursor-pointer shadow-sm ${
+                isSelected
+                  ? 'border-emerald-700 bg-emerald-50/70 dark:bg-emerald-950/40 ring-1 ring-emerald-600/30'
+                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B] hover:border-emerald-500/40'
               }`}
             >
-              <span className="material-symbols-outlined text-[24px]">volume_up</span>
-            </button>
-          </div>
+              {isSelected && (
+                <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shadow">
+                  <span className="material-symbols-outlined text-xs">check</span>
+                </div>
+              )}
 
-          <p className="font-body-md text-body-md text-on-surface-variant text-center">
-            {isHindi
-              ? 'एग्री-डिसाइड का उपयोग जारी रखने के लिए अपनी पसंदीदा भाषा चुनें।'
-              : 'Choose your preferred language to continue using Agri-Decide.'}
-          </p>
-        </header>
-
-        {/* Language Options */}
-        <div className="flex flex-col gap-3">
-          {LANGUAGE_OPTIONS.map((opt) => {
-            const isSelected = language === opt.code;
-            const audioId = `lang-opt-${opt.code}`;
-            const isItemAudioPlaying = isPlaying && activeAudioId === audioId;
-
-            return (
               <div
-                key={opt.code}
-                onClick={() => handleSelect(opt.code)}
-                className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-150 btn-tactile ${
+                className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black mb-2 shadow-sm ${
                   isSelected
-                    ? 'border-2 border-primary bg-primary-container/10 shadow-sm'
-                    : 'border border-surface-variant hover:bg-surface-container-low'
+                    ? 'bg-emerald-700 text-white'
+                    : 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200'
                 }`}
               >
-                {/* Avatar Circle & Language Title */}
-                <div className="flex-1 flex items-center gap-4">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-colors ${
-                      isSelected
-                        ? 'bg-primary text-on-primary'
-                        : 'bg-surface-variant text-on-surface-variant'
-                    }`}
-                  >
-                    <span>{glyphMap[opt.code] || opt.name.charAt(0)}</span>
-                  </div>
+                {lang.glyph}
+              </div>
 
-                  <div className="flex flex-col">
-                    <span
-                      className={`font-button-text text-button-text font-bold ${
-                        isSelected ? 'text-primary' : 'text-on-background'
-                      }`}
-                    >
-                      {opt.nativeName}
-                    </span>
-                    <span className="text-xs text-on-surface-variant">
-                      {opt.name}
-                    </span>
-                  </div>
-                </div>
+              <span className="text-base font-bold tracking-wide font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
+                {lang.nativeName}
+              </span>
 
-                {/* Individual Language Audio Button */}
-                <button
-                  onClick={(e) =>
-                    handleAudio(
-                      audioId,
-                      opt.code === 'hi'
-                        ? 'हिंदी भाषा चुनी गई है।'
-                        : `${opt.name} language selected.`,
-                      `${opt.name} language selected.`,
-                      e
-                    )
-                  }
-                  aria-label={`Listen to ${opt.name}`}
-                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all min-h-[48px] ${
-                    isItemAudioPlaying
-                      ? 'text-primary bg-primary-container/20 animate-pulse'
-                      : isSelected
-                      ? 'text-primary hover:bg-primary-container/20'
-                      : 'text-on-surface-variant hover:bg-surface-container'
+              <button
+                type="button"
+                onClick={(e) => handlePlaySample(lang as any, e)}
+                className={`flex items-center gap-1 text-xs mt-1.5 font-bold px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                  isItemPlaying
+                    ? 'text-emerald-700 bg-emerald-100 dark:bg-emerald-950 animate-pulse'
+                    : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100/50'
+                }`}
+              >
+                <span className="material-symbols-outlined text-xs">volume_up</span>
+                <span>{lang.audioLabel}</span>
+              </button>
+            </div>
+          );
+        })}
+
+        {/* 5th Option: English as a comfortable wide tile */}
+        {(() => {
+          const eng = { code: 'en', nativeName: 'English', glyph: 'A', audioLabel: 'Listen', sampleAudio: 'Hello farmer friend, welcome to Krishi-Wise crop decision support.' };
+          const isSelected = selected === eng.code;
+          const isItemPlaying = playingCode === eng.code;
+
+          return (
+            <div
+              key={eng.code}
+              onClick={() => handleSelect(eng as any)}
+              className={`col-span-2 relative flex items-center justify-between px-5 py-3.5 rounded-3xl border-2 transition-all active:scale-[0.98] cursor-pointer shadow-sm ${
+                isSelected
+                  ? 'border-emerald-700 bg-emerald-50/70 dark:bg-emerald-950/40 ring-1 ring-emerald-600/30'
+                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B] hover:border-emerald-500/40'
+              }`}
+            >
+              <div className="flex items-center gap-3.5">
+                <div
+                  className={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg font-black shadow-sm ${
+                    isSelected
+                      ? 'bg-emerald-700 text-white'
+                      : 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[22px]">volume_up</span>
-                </button>
+                  {eng.glyph}
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-bold tracking-wide text-[#1A1C18] dark:text-[#E2E3DC]">{eng.nativeName}</div>
+                  <div className="text-[11px] text-stone-500">Universal fallback</div>
+                </div>
+              </div>
 
-                {/* Selection Check Circle */}
-                {isSelected ? (
-                  <span className="material-symbols-outlined text-primary text-[24px]">
-                    check_circle
-                  </span>
-                ) : (
-                  <span className="material-symbols-outlined text-outline-variant text-[24px]">
-                    radio_button_unchecked
-                  </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={(e) => handlePlaySample(eng as any, e)}
+                  className={`flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                    isItemPlaying
+                      ? 'text-emerald-700 bg-emerald-100 dark:bg-emerald-950 animate-pulse'
+                      : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100/50'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-xs">volume_up</span>
+                  <span>{eng.audioLabel}</span>
+                </button>
+                {isSelected && (
+                  <div className="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shadow">
+                    <span className="material-symbols-outlined text-xs">check</span>
+                  </div>
                 )}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })()}
+      </div>
 
-        {/* Action Area */}
-        <div className="mt-2">
-          <button
-            onClick={onContinue}
-            className="w-full bg-primary text-on-primary font-button-text text-button-text py-4 px-6 rounded-lg shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-none hover:translate-y-[2px] transition-all duration-150 flex items-center justify-center gap-2 min-h-[56px] btn-tactile cursor-pointer"
-          >
-            <span className="font-bold text-[18px]">
-              {isHindi ? 'शुरू करें' : 'Get Started'}
-            </span>
-            <span className="material-symbols-outlined text-[24px]">arrow_forward</span>
-          </button>
-        </div>
-      </main>
+      {/* Bottom Action Button - Disabled & Greyed Out when unselected */}
+      <div className="pt-2 pb-4">
+        <button
+          type="button"
+          onClick={handleProceed}
+          disabled={!selected}
+          className={`w-full py-4 px-6 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
+            selected
+              ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xl active:scale-[0.98] cursor-pointer'
+              : 'bg-stone-300 dark:bg-stone-800 text-stone-500 dark:text-stone-400 cursor-not-allowed shadow-none'
+          }`}
+        >
+          <span>{buttonText}</span>
+          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+        </button>
+      </div>
     </div>
   );
 };

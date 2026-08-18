@@ -1,260 +1,260 @@
-import React, { useState } from 'react';
-import { useLanguage } from '@/context/LanguageContext';
-import { useAudio } from '@/context/AudioContext';
-import { NetworkStatusBar } from '@/components/home/NetworkStatusBar';
-import { HomeTopAppBar } from '@/components/home/HomeTopAppBar';
-import { HomeBottomNav, HomeTab } from '@/components/home/HomeBottomNav';
-import { HowItWorksModal } from '@/components/home/HowItWorksModal';
-import { SettingsModal } from '@/components/home/SettingsModal';
+import React, { useEffect, useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { HomeTopAppBar } from '../components/home/HomeTopAppBar';
+import { HomeBottomNav, NavTab } from '../components/home/HomeBottomNav';
+import { triggerHaptic, formatCurrencyINR } from '../lib/utils';
+import { speakText, stopSpeaking } from '../lib/speech';
+
+interface RecentAnalysis {
+  cropName: string;
+  profitPerAcre: number;
+  yieldQtl: number;
+  date: string;
+  landArea: number;
+}
 
 interface HomePageProps {
   onStartWizard: () => void;
-  onOpenSavedPlan: () => void;
-  onOpenLanguagePage?: () => void;
-  onResetLanguage?: () => void;
+  onOpenMyCropPlan: () => void;
+  onOpenHistory: () => void;
+  onOpenSettings: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   onStartWizard,
-  onOpenSavedPlan,
-  onOpenLanguagePage,
-  onResetLanguage,
+  onOpenMyCropPlan,
+  onOpenHistory,
+  onOpenSettings,
 }) => {
-  const { isHindi } = useLanguage();
-  const { isPlaying, activeAudioId, playAudio, stopAudio } = useAudio();
-  const [activeTab, setActiveTab] = useState<HomeTab>('home');
-  const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { language, t } = useLanguage();
+  const [recentAnalysis, setRecentAnalysis] = useState<RecentAnalysis | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const handleTabChange = (tab: HomeTab) => {
-    setActiveTab(tab);
-    if (tab === 'crops') {
-      onStartWizard();
-    } else if (tab === 'plans') {
-      onOpenSavedPlan();
+  useEffect(() => {
+    const saved = localStorage.getItem('krishi_recent_analysis');
+    if (saved) {
+      try {
+        setRecentAnalysis(JSON.parse(saved));
+      } catch {
+        setRecentAnalysis({
+          cropName: 'सोयाबीन',
+          profitPerAcre: 24500,
+          yieldQtl: 9.5,
+          date: '18 अगस्त 2026',
+          landArea: 2.5,
+        });
+      }
+    } else {
+      setRecentAnalysis({
+        cropName: 'सोयाबीन',
+        profitPerAcre: 24500,
+        yieldQtl: 9.5,
+        date: '18 अगस्त 2026',
+        landArea: 2.5,
+      });
+    }
+  }, [language]);
+
+  const handleStartRecommendation = () => {
+    triggerHaptic('medium');
+    onStartWizard();
+  };
+
+  const handleOpenPrevious = () => {
+    triggerHaptic('light');
+    onOpenMyCropPlan();
+  };
+
+  const handleNavChange = (tab: NavTab) => {
+    if (tab === 'my-crop') {
+      onOpenMyCropPlan();
+    } else if (tab === 'history') {
+      onOpenHistory();
     } else if (tab === 'settings') {
-      setIsSettingsOpen(true);
+      onOpenSettings();
     }
   };
 
-  const handleAudio = (id: string, textHi: string, textEn: string) => {
-    if (isPlaying && activeAudioId === id) {
-      stopAudio();
-    } else {
-      playAudio(id, textHi, textEn);
-    }
+  const handleAudioCard = () => {
+    triggerHaptic('light');
+    const msg = recentAnalysis
+      ? `${t('recentAnalysisTitle')}। ${recentAnalysis.cropName} फसल, अनुमानित शुद्ध लाभ ${formatCurrencyINR(recentAnalysis.profitPerAcre)} प्रति एकड़।`
+      : `${t('homeHeroTitle')}। ${t('homeHeroSub')}`;
+
+    speakText(
+      msg,
+      language,
+      () => setIsSpeaking(true),
+      () => setIsSpeaking(false),
+      () => setIsSpeaking(false)
+    );
   };
 
   return (
-    <div className="bg-background text-on-background min-h-screen flex flex-col pt-[72px] pb-[72px]">
-      {/* Network Status Bar */}
-      <NetworkStatusBar />
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col font-body pb-24">
+      {/* 1. Single Top App Bar with Audio Button */}
+      <HomeTopAppBar />
 
-      {/* Top App Bar */}
-      <HomeTopAppBar onOpenLanguagePage={onOpenLanguagePage} />
+      {/* 2. Main Dashboard (2 Key Cards Perfectly Balanced) */}
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-20 pb-28 flex flex-col justify-center space-y-5 animate-fadeIn">
+        
+        {/* Welcome Greeting */}
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 dark:bg-stone-800/80 text-stone-700 dark:text-stone-300 rounded-full text-xs font-bold border border-stone-200 dark:border-stone-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-600" />
+            <span>खरीफ मौसम २०२६ • पुणे, महाराष्ट्र</span>
+          </div>
+          <h1 className="text-2xl font-black font-headline tracking-tight text-[#1A1C18] dark:text-[#E2E3DC] pt-1">
+            {t('greeting')}
+          </h1>
+        </div>
 
-      {/* Main Canvas */}
-      <main className="flex-grow px-margin-mobile py-6 max-w-3xl mx-auto w-full">
-        {/* Hero Section */}
-        <section className="mb-8">
-          <h2 className="font-headline-lg text-headline-lg text-on-background mb-4 flex items-center flex-wrap gap-2">
-            <span>{isHindi ? 'अपने खेत के लिए सबसे सही फसल चुनें।' : 'Find the right crop for your farm.'}</span>
-            <button
-              onClick={() =>
-                handleAudio(
-                  'hero-heading-audio',
-                  'अपने खेत के लिए सबसे सही फसल चुनें। अपनी मिट्टी, पानी और खेत की स्थिति बताएं। हम आपको उपयुक्त फसलों की तुलना करने में मदद करेंगे।',
-                  'Find the right crop for your farm. Tell us about your soil, water and farm conditions. We will help you compare suitable crops.'
-                )
-              }
-              className={`inline-flex items-center justify-center rounded-full transition-colors duration-150 p-1 ${
-                isPlaying && activeAudioId === 'hero-heading-audio'
-                  ? 'text-primary bg-primary/20 animate-pulse'
-                  : 'text-primary hover:bg-surface-container-high'
-              }`}
-              aria-label="Listen to heading"
-            >
-              <span className="material-symbols-outlined text-[24px]">volume_up</span>
-            </button>
-          </h2>
+        {/* CARD 1: PRIMARY ACTION - AI Crop Recommendation Hero (Rich Forest Green) */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F381E] via-[#164E28] to-[#1E6B37] text-white p-6 shadow-xl space-y-5 border border-emerald-600/30">
+          <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-white/5 rounded-full blur-xl pointer-events-none" />
+          <div className="absolute right-4 top-4 text-white/15 text-7xl select-none font-bold pointer-events-none">
+            🌾
+          </div>
 
-          <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-xl">
-            {isHindi
-              ? 'अपनी मिट्टी, पानी और खेत की स्थिति बताएं। हम आपको उपयुक्त फसलों की तुलना करने में मदद करेंगे।'
-              : 'Tell us about your soil, water and farm conditions. We’ll help you compare suitable crops.'}
-          </p>
+          <div className="space-y-2.5 relative z-10">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/15 backdrop-blur-md rounded-full text-xs font-bold text-emerald-100">
+              <span className="material-symbols-outlined text-sm [font-variation-settings:'FILL'_1]">psychology_alt</span>
+              <span>एआई फसल सलाहकार</span>
+            </span>
+            <h2 className="text-2xl font-black font-headline leading-snug tracking-tight">
+              {t('homeHeroTitle')}
+            </h2>
+            <p className="text-xs text-emerald-100/90 leading-relaxed max-w-[280px]">
+              {t('homeHeroSub')}
+            </p>
+          </div>
 
-          {/* Primary CTA */}
           <button
-            onClick={onStartWizard}
-            className="w-full sm:w-auto min-h-[56px] flex items-center justify-center gap-3 bg-primary text-on-primary rounded-xl px-6 py-4 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-none hover:translate-y-[2px] transition-all duration-200 group btn-tactile cursor-pointer"
+            onClick={handleStartRecommendation}
+            className="w-full py-4 px-6 rounded-2xl bg-amber-400 hover:bg-amber-300 active:scale-[0.98] text-stone-950 font-extrabold text-base shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10"
           >
-            <span
-              className="material-symbols-outlined text-[24px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              agriculture
-            </span>
-            <span className="font-button-text text-button-text font-bold text-[18px]">
-              {isHindi ? 'नई फसल की सलाह लें' : 'Get Crop Recommendation'}
-            </span>
+            <span className="material-symbols-outlined text-xl [font-variation-settings:'FILL'_1]">eco</span>
+            <span>{t('getCropRecButton')}</span>
+            <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </button>
-        </section>
+        </div>
 
-        {/* Secondary Actions (Bento Grid Style) */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-          {/* Saved Plans Card */}
-          <div
-            onClick={onOpenSavedPlan}
-            className="block bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-card-padding hover:border-primary hover:bg-surface-container-low transition-colors duration-200 h-full flex flex-col justify-between shadow-[0px_4px_12px_rgba(0,0,0,0.04)] cursor-pointer group btn-tactile"
-          >
-            <div className="mb-4">
-              <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center mb-4">
-                <span
-                  className="material-symbols-outlined text-primary text-[24px]"
-                  style={{ fontVariationSettings: "'FILL' 0" }}
-                >
-                  calendar_today
-                </span>
+        {/* CARD 2: RECENT ANALYSIS SUMMARY */}
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300/90 dark:border-stone-700 rounded-3xl p-5 shadow-sm space-y-3.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center text-emerald-800 dark:text-emerald-300">
+                <span className="material-symbols-outlined text-lg">history</span>
               </div>
-
-              <div className="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full mb-2">
-                <span className="material-symbols-outlined text-[16px]">offline_pin</span>
-                <span className="text-[12px] font-label-md font-semibold">
-                  {isHindi ? 'ऑफलाइन उपलब्ध' : 'Available Offline'}
-                </span>
-              </div>
-
-              <h3 className="font-headline-md text-headline-md text-on-background flex items-center gap-2">
-                <span>{isHindi ? 'मेरी सुरक्षित योजनाएं' : 'My Saved Plans'}</span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAudio(
-                      'saved-plans-audio',
-                      'मेरी सुरक्षित योजनाएं: जहाँ आपने छोड़ा था वहीं से शुरू करें और अपनी चुनी हुई फसलों का प्रबंधन करें।',
-                      'My Saved Plans: Resume where you left off and manage your selected crops.'
-                    );
-                  }}
-                  className="inline-flex items-center justify-center text-primary hover:bg-surface-container-high rounded-full transition-colors duration-150 p-1"
-                  aria-label="Listen to title"
-                >
-                  <span className="material-symbols-outlined text-[20px]">volume_up</span>
-                </button>
+              <h3 className="text-sm font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
+                {t('recentAnalysisTitle')}
               </h3>
+            </div>
 
-              <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-                {isHindi
-                  ? 'जहाँ आपने छोड़ा था वहीं से शुरू करें और अपनी चुनी हुई फसलों का प्रबंधन करें।'
-                  : 'Resume where you left off and manage your selected crops.'}
+            <button
+              onClick={handleAudioCard}
+              className="text-stone-400 hover:text-emerald-800 transition-colors p-1 cursor-pointer"
+              title="आवाज सुनें"
+            >
+              <span className="material-symbols-outlined text-lg">volume_up</span>
+            </button>
+          </div>
+
+          {recentAnalysis ? (
+            <div className="space-y-3">
+              <div className="bg-stone-50/90 dark:bg-stone-900/60 rounded-2xl p-4 flex items-center justify-between border-2 border-stone-200/90 dark:border-stone-700/90 shadow-2xs">
+                <div>
+                  <span className="text-[11px] text-stone-500 dark:text-stone-400 block font-medium">
+                    सुझाई गई फसल ({recentAnalysis.landArea} एकड़)
+                  </span>
+                  <span className="text-xl font-black text-stone-900 dark:text-stone-100 font-headline">
+                    {recentAnalysis.cropName}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[11px] text-stone-500 dark:text-stone-400 block font-medium">
+                    {t('estimatedProfit')}
+                  </span>
+                  <span className="text-base font-extrabold text-emerald-800 dark:text-emerald-300">
+                    {formatCurrencyINR(recentAnalysis.profitPerAcre)} / एकड़
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-stone-500 font-medium px-1">
+                <span>पैदावार: {recentAnalysis.yieldQtl} क्विंटल/एकड़</span>
+                <span>दिनांक: {recentAnalysis.date}</span>
+              </div>
+
+              <button
+                onClick={handleOpenPrevious}
+                className="w-full py-3.5 px-4 rounded-xl bg-white dark:bg-stone-800/90 border-2 border-stone-300 dark:border-stone-700 hover:border-emerald-600/40 text-stone-900 dark:text-stone-100 font-bold text-xs shadow-xs hover:shadow-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <span>{t('viewFullReport')}</span>
+                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+          ) : (
+            <div className="text-center py-4 space-y-2">
+              <p className="text-xs text-stone-500">
+                {t('noPreviousAnalysis')}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* CARD 3: HOW IT WORKS / 3-STEP ADVISORY GUIDE */}
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-stone-300/90 dark:border-stone-700 rounded-3xl p-5 shadow-sm space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center text-emerald-800 dark:text-emerald-300">
+                <span className="material-symbols-outlined text-lg">info</span>
+              </div>
+              <h3 className="text-sm font-bold text-[#1A1C18] dark:text-[#E2E3DC]">
+                {t('howItWorksTitle')}
+              </h3>
+            </div>
+
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-full text-[11px] font-bold border border-stone-300 dark:border-stone-700 shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+              <span>{t('offlineReadyBadge')}</span>
+            </span>
+          </div>
+
+          <div className="space-y-2.5">
+            <div className="flex items-start gap-3 p-3 rounded-2xl bg-stone-50/80 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 shadow-2xs">
+              <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                १
+              </span>
+              <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                {t('howItWorksStep1')}
               </p>
             </div>
 
-            <div className="flex items-center text-primary font-label-lg text-label-lg font-bold">
-              <span>{isHindi ? 'योजनाएं देखें' : 'View Plans'}</span>
-              <span className="material-symbols-outlined ml-1 text-[20px] group-hover:translate-x-1 transition-transform">
-                arrow_forward
+            <div className="flex items-start gap-3 p-3 rounded-2xl bg-stone-50/80 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 shadow-2xs">
+              <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                २
               </span>
-            </div>
-          </div>
-
-          {/* How It Works Card */}
-          <div
-            onClick={() => setIsHowItWorksOpen(true)}
-            className="block bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-card-padding hover:border-primary hover:bg-surface-container-low transition-colors duration-200 h-full flex flex-col justify-between shadow-[0px_4px_12px_rgba(0,0,0,0.04)] cursor-pointer group btn-tactile"
-          >
-            <div className="mb-4">
-              <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center mb-4">
-                <span
-                  className="material-symbols-outlined text-primary text-[24px]"
-                  style={{ fontVariationSettings: "'FILL' 0" }}
-                >
-                  info
-                </span>
-              </div>
-
-              <h3 className="font-headline-md text-headline-md text-on-background flex items-center gap-2">
-                <span>{isHindi ? 'यह कैसे काम करता है' : 'How It Works'}</span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAudio(
-                      'how-it-works-audio-card',
-                      'यह कैसे काम करता है: जानें कि हमारा एआई फसल इंजन आपको अधिकतम पैदावार और लाभ प्राप्त करने में कैसे मदद करता है।',
-                      'How It Works: Learn how our recommendation engine helps you maximize yield and profits.'
-                    );
-                  }}
-                  className="inline-flex items-center justify-center text-primary hover:bg-surface-container-high rounded-full transition-colors duration-150 p-1"
-                  aria-label="Listen to title"
-                >
-                  <span className="material-symbols-outlined text-[20px]">volume_up</span>
-                </button>
-              </h3>
-
-              <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-                {isHindi
-                  ? 'जानें कि हमारा एआई मॉडल आपको अधिकतम पैदावार प्राप्त करने में कैसे मदद करता है।'
-                  : 'Learn how our recommendation engine helps you maximize yield.'}
+              <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                {t('howItWorksStep2')}
               </p>
             </div>
 
-            <div className="flex items-center text-primary font-label-lg text-label-lg font-bold">
-              <span>{isHindi ? 'गाइड पढ़ें' : 'Read Guide'}</span>
-              <span className="material-symbols-outlined ml-1 text-[20px] group-hover:translate-x-1 transition-transform">
-                arrow_forward
+            <div className="flex items-start gap-3 p-3 rounded-2xl bg-stone-50/80 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 shadow-2xs">
+              <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+                ३
               </span>
+              <p className="text-xs text-stone-700 dark:text-stone-300 leading-relaxed font-medium">
+                {t('howItWorksStep3')}
+              </p>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* Hero Image Section */}
-        <section className="rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.08)] mb-8 border border-outline-variant/40">
-          <div className="w-full h-64 bg-surface-variant relative">
-            <img
-              className="object-cover w-full h-full absolute inset-0"
-              alt="A bright, sunlit wide-angle shot of a meticulously organized modern farm field with rows of vibrant green crops stretching towards the horizon."
-              src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end p-5">
-              <div className="text-white space-y-0.5">
-                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white backdrop-blur-md">
-                  {isHindi ? 'स्मार्ट सटीक कृषि' : 'Precision Farming'}
-                </span>
-                <p className="text-sm font-semibold text-white/95">
-                  {isHindi ? 'वैज्ञानिक कृषि प्रबंधन से बढ़ाएं अपनी उपज' : 'Maximizing agricultural prosperity through AI'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* Bottom Navigation Bar */}
-      <HomeBottomNav activeTab={activeTab} onTabChange={handleTabChange} />
-
-      {/* How It Works Modal Dialog */}
-      <HowItWorksModal
-        isOpen={isHowItWorksOpen}
-        onClose={() => setIsHowItWorksOpen(false)}
-        onStart={() => {
-          setIsHowItWorksOpen(false);
-          onStartWizard();
-        }}
-      />
-
-      {/* Settings & Testing Reset Modal Dialog */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        onOpenLanguagePage={() => {
-          setIsSettingsOpen(false);
-          onOpenLanguagePage?.();
-        }}
-        onResetLanguage={() => {
-          setIsSettingsOpen(false);
-          onResetLanguage?.();
-        }}
-      />
+      {/* Persistent 4-Tab Bottom Navigation Bar */}
+      <HomeBottomNav activeTab="home" onTabChange={handleNavChange} />
     </div>
   );
 };

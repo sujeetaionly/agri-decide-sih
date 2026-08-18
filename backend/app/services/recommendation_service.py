@@ -110,8 +110,16 @@ def generate_why_recommended(
     soil_desc = soil_names.get(soil_type.upper(), "दोमट मिट्टी")
     bullets.append(f"{soil_desc} और स्थानीय मौसम के साथ {round(suitability_pct)}% सबसे उत्तम कृषि अनुकूलता।")
 
-    water_desc = "पर्याप्त" if water_capacity.upper() in ["MEDIUM", "HIGH"] else "सीमित"
-    bullets.append(f"{crop_info['duration']} दिनों की फसल अवधि में {water_source} से {water_desc} पानी में सुरक्षित पैदावार।")
+    water_source_names = {
+        "WELL": "कुआं",
+        "BOREWELL": "ट्यूबवेल",
+        "CANAL": "नहर",
+        "RAINFED": "बारिश"
+    }
+    ws_key = str(water_source).upper().strip() if water_source else "WELL"
+    ws_hindi = water_source_names.get(ws_key, "कुआं")
+    water_desc = "पर्याप्त" if str(water_capacity).upper().strip() in ["MEDIUM", "HIGH"] else "सीमित"
+    bullets.append(f"{crop_info['duration']} दिनों की फसल अवधि में {ws_hindi} से {water_desc} पानी में सुरक्षित पैदावार।")
 
     if working_capital >= adjusted_cost:
         bullets.append(f"अनुमानित लागत (₹{int(adjusted_cost):,}/एकड़) आपके ₹{int(working_capital):,} के बजट में पूर्णतः सुरक्षित।")
