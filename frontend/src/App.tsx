@@ -1,155 +1,206 @@
 import React, { useState, useEffect } from 'react';
-import { LanguageProvider } from '@/context/LanguageContext';
-import { AudioProvider } from '@/context/AudioContext';
-import { AuthProvider } from '@/context/AuthContext';
-import { WizardProvider, useWizard } from '@/context/WizardContext';
-import { SplashScreen } from '@/components/common/SplashScreen';
-import { LanguageSelectionPage } from '@/pages/LanguageSelectionPage';
-import { LoginPage } from '@/pages/LoginPage';
-import { HomePage } from '@/pages/HomePage';
-import { WizardPage } from '@/pages/WizardPage';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { AudioProvider } from './context/AudioContext';
+import { AuthProvider } from './context/AuthContext';
+import { WizardProvider, useWizard } from './context/WizardContext';
+import { SplashScreen } from './components/common/SplashScreen';
+import { AndroidGpsPermissionModal } from './components/common/AndroidGpsPermissionModal';
+import { LanguageSelectionPage } from './pages/LanguageSelectionPage';
+import { LanguageConfirmPage } from './pages/LanguageConfirmPage';
+import { AudioGuidePage } from './pages/AudioGuidePage';
+import { LoginPage } from './pages/LoginPage';
+import { HomePage } from './pages/HomePage';
+import { WizardPage } from './pages/WizardPage';
+import { MyCropsPage } from './pages/MyCropsPage';
+import { SupportedLanguage } from './data/translations';
 
-export type ViewMode = 'language' | 'login' | 'home' | 'wizard';
+export type AppViewMode =
+  | 'language-select'
+  | 'language-confirm'
+  | 'audio-guide'
+  | 'login'
+  | 'home'
+  | 'wizard'
+  | 'my-crops';
 
 const AppContent: React.FC = () => {
-  // Splash screen shown on initial launch
   const [showSplash, setShowSplash] = useState<boolean>(true);
-
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    const hash = window.location.hash.replace('#', '');
-    
-    if (hash === 'language' || hash === 'reset') {
-      if (hash === 'reset') {
-        localStorage.removeItem('krishi_has_selected_language');
-      }
-      return 'language';
-    }
-    if (hash === 'login') return 'login';
-    if (hash === 'wizard') return 'wizard';
-    if (hash === 'home') return 'home';
-
-    // First-time user behavior:
-    const hasSelected = localStorage.getItem('krishi_has_selected_language');
-    return hasSelected === 'true' ? 'home' : 'language';
+  const [showGpsModal, setShowGpsModal] = useState<boolean>(() => {
+    return !localStorage.getItem('krishi_gps_prompted');
   });
 
-  const { goToStep, resetWizard } = useWizard();
+  const { language, setLanguage } = useLanguage();
+  const { resetWizard, goToCard } = useWizard();
+
+  const [viewMode, setViewMode] = useState<AppViewMode>(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'reset') {
+      localStorage.clear();
+      return 'language-select';
+    }
+    if (hash === 'wizard') return 'wizard';
+    if (hash === 'my-crops') return 'my-crops';
+    if (hash === 'home') return 'home';
+
+    const hasOnboarded = localStorage.getItem('krishi_has_onboarded');
+    return hasOnboarded === 'true' ? 'home' : 'language-select';
+  });
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash === 'splash') {
-        setShowSplash(true);
-      } else if (hash === 'home') {
+      const hash = window.location.hash.replace('#', '') as AppViewMode;
+      if (['language-select', 'language-confirm', 'audio-guide', 'login', 'home', 'wizard', 'my-crops'].includes(hash)) {
+        setViewMode(hash);
         setShowSplash(false);
-        setViewMode('home');
-      } else if (hash === 'login') {
-        setShowSplash(false);
-        setViewMode('login');
-      } else if (hash === 'wizard') {
-        setShowSplash(false);
-        setViewMode('wizard');
-      } else if (hash === 'language' || hash === 'reset') {
-        setShowSplash(false);
-        if (hash === 'reset') {
-          localStorage.removeItem('krishi_has_selected_language');
-        }
-        setViewMode('language');
       }
     };
-
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const navigateTo = (mode: ViewMode) => {
+  const navigateTo = (mode: AppViewMode) => {
     setViewMode(mode);
     window.location.hash = mode;
   };
 
-  const handleLanguageContinue = () => {
-    // Save language onboarding status and transition to Login screen
-    localStorage.setItem('krishi_has_selected_language', 'true');
+  // 1. GPS Modal Handlers
+  const handleGpsAllow = (precise: boolean) => {
+    localStorage.setItem('krishi_gps_prompted', 'true');
+    localStorage.setItem('krishi_gps_granted', precise ? 'precise' : 'approx');
+    setShowGpsModal(false);
+  };
+
+  const handleGpsDeny = () => {
+    localStorage.setItem('krishi_gps_prompted', 'true');
+    localStorage.setItem('krishi_gps_granted', 'denied');
+    setShowGpsModal(false);
+  };
+
+  // 2. Language Selection -> Confirmation
+  const handleSelectLanguage = (lang: SupportedLanguage) => {
+    setLanguage(lang);
+  };
+
+  const handleProceedToConfirm = () => {
+    navigateTo('language-confirm');
+  };
+
+  // 3. Language Confirmation -> Audio Guide
+  const handleConfirmLanguage = () => {
+    navigateTo('audio-guide');
+  };
+
+  const handleChangeLanguage = () => {
+    navigateTo('language-select');
+  };
+
+  // 4. Audio Guide -> Login
+  const handleAudioGuideProceed = () => {
     navigateTo('login');
   };
 
+  // 5. Login -> Home
   const handleLoginSuccess = (phone?: string) => {
-    if (phone) {
-      localStorage.setItem('krishi_user_phone', phone);
-    }
+    if (phone) localStorage.setItem('krishi_user_phone', phone);
+    localStorage.setItem('krishi_has_onboarded', 'true');
     navigateTo('home');
   };
 
   const handleLoginSkip = () => {
+    localStorage.setItem('krishi_has_onboarded', 'true');
     navigateTo('home');
   };
 
+  // Navigation handlers
   const handleStartWizard = () => {
     resetWizard();
-    goToStep(1);
+    goToCard(1);
     navigateTo('wizard');
   };
 
-  const handleOpenSavedPlan = () => {
-    goToStep(6);
-    navigateTo('wizard');
+  const handleOpenMyCrops = () => {
+    navigateTo('my-crops');
   };
 
   const handleReturnHome = () => {
     navigateTo('home');
   };
 
-  const handleOpenLanguagePage = () => {
-    navigateTo('language');
-  };
-
-  const handleResetLanguage = () => {
-    // Reset language selection flag for development/testing
-    localStorage.removeItem('krishi_has_selected_language');
-    localStorage.removeItem('krishi_user_phone');
-    navigateTo('language');
-  };
-
   return (
     <>
-      {showSplash ? (
+      {/* Splash Screen on Initial App Load */}
+      {showSplash && (
         <SplashScreen
-          durationMs={1800}
           onFinish={() => {
             setShowSplash(false);
-            const hash = window.location.hash.replace('#', '');
-            if (hash === 'splash') {
-              const hasSelected = localStorage.getItem('krishi_has_selected_language');
-              navigateTo(hasSelected === 'true' ? 'home' : 'language');
-            }
           }}
         />
-      ) : (
-        <>
-          {viewMode === 'language' && (
-            <LanguageSelectionPage onContinue={handleLanguageContinue} />
-          )}
+      )}
 
-          {viewMode === 'login' && (
-            <LoginPage
-              onLoginSuccess={handleLoginSuccess}
-              onSkip={handleLoginSkip}
-            />
-          )}
+      {/* 1. First-Open Android Native GPS Permission Popup */}
+      <AndroidGpsPermissionModal
+        isOpen={showGpsModal && !showSplash}
+        language={language}
+        onAllow={handleGpsAllow}
+        onDeny={handleGpsDeny}
+      />
 
-          {viewMode === 'home' && (
-            <HomePage
-              onStartWizard={handleStartWizard}
-              onOpenSavedPlan={handleOpenSavedPlan}
-              onOpenLanguagePage={handleOpenLanguagePage}
-              onResetLanguage={handleResetLanguage}
-            />
-          )}
+      {/* Screen 1: Regional Language Selection */}
+      {viewMode === 'language-select' && (
+        <LanguageSelectionPage
+          currentLanguage={language}
+          onSelectLanguage={handleSelectLanguage}
+          onConfirm={handleProceedToConfirm}
+        />
+      )}
 
-          {viewMode === 'wizard' && (
-            <WizardPage onReturnHome={handleReturnHome} />
-          )}
-        </>
+      {/* Screen 2: Language Confirmation */}
+      {viewMode === 'language-confirm' && (
+        <LanguageConfirmPage
+          language={language}
+          onConfirm={handleConfirmLanguage}
+          onChangeLanguage={handleChangeLanguage}
+        />
+      )}
+
+      {/* Screen 3: Audio Guide Tutorial */}
+      {viewMode === 'audio-guide' && (
+        <AudioGuidePage
+          language={language}
+          onProceed={handleAudioGuideProceed}
+        />
+      )}
+
+      {/* Screen 4: Farmer Login with Guest Bypass */}
+      {viewMode === 'login' && (
+        <LoginPage
+          onLoginSuccess={handleLoginSuccess}
+          onSkip={handleLoginSkip}
+        />
+      )}
+
+      {/* Screen 5: Minimalist Home Screen */}
+      {viewMode === 'home' && (
+        <HomePage
+          onStartWizard={handleStartWizard}
+          onOpenMyCrops={handleOpenMyCrops}
+        />
+      )}
+
+      {/* Screen 6: 1-Question Card Wizard */}
+      {viewMode === 'wizard' && (
+        <WizardPage
+          onReturnHome={handleReturnHome}
+          onOpenMyCrops={handleOpenMyCrops}
+        />
+      )}
+
+      {/* Screen 7: "मेरी फसलें" (My Crops) Previous Analysis Archive */}
+      {viewMode === 'my-crops' && (
+        <MyCropsPage
+          onStartNewRecommendation={handleStartWizard}
+          onGoToHome={handleReturnHome}
+        />
       )}
     </>
   );

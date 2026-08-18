@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useLanguage } from '@/context/LanguageContext';
-import { useAuth } from '@/context/AuthContext';
-import { AudioButton } from '@/components/common/AudioButton';
+import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { triggerHaptic } from '../lib/utils';
+import { speakText, stopSpeaking } from '../lib/speech';
 
 interface LoginPageProps {
   onLoginSuccess: (phone?: string) => void;
@@ -12,7 +13,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   onLoginSuccess,
   onSkip,
 }) => {
-  const { isHindi } = useLanguage();
+  const { language, t } = useLanguage();
   const { sendOtp, verifyOtp, loginAsGuest, isLoading } = useAuth();
 
   const [phone, setPhone] = useState('');
@@ -20,18 +21,36 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [demoCodeHint, setDemoCodeHint] = useState('');
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const handlePlayVoice = () => {
+    triggerHaptic('light');
+    const msg = isOtpSent
+      ? `${t('enterOtp')}। परीक्षण हेतु कोड 1234 है।`
+      : `${t('loginTitle')}। ${t('loginSubtitle')}`;
+
+    speakText(
+      msg,
+      language,
+      () => setIsSpeaking(true),
+      () => setIsSpeaking(false),
+      () => setIsSpeaking(false)
+    );
+  };
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
+    triggerHaptic('medium');
     setErrorMessage('');
+
+    if (!phone || phone.length < 10) {
+      setErrorMessage('कृपया १० अंकों का मान्य मोबाइल नंबर दर्ज करें।');
+      return;
+    }
 
     const res = await sendOtp(phone);
     if (!res.success) {
-      setErrorMessage(
-        isHindi
-          ? 'कृपया वैध 10 अंकों का मोबाइल नंबर दर्ज करें।'
-          : res.error || 'Please enter a valid 10-digit mobile number.'
-      );
+      setErrorMessage(res.error || 'ओटीपी भेजने में असमर्थ, कृपया पुनः प्रयास करें।');
       return;
     }
 
@@ -43,215 +62,169 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
+    triggerHaptic('medium');
     setErrorMessage('');
 
     const res = await verifyOtp(phone, otp);
     if (!res.success) {
-      setErrorMessage(
-        isHindi
-          ? 'अमान्य ओटीपी कोड। परीक्षण हेतु कोड 1234 दर्ज करें।'
-          : res.error || 'Invalid OTP code. For demo, use 1234.'
-      );
+      setErrorMessage('गलत ओटीपी कोड। परीक्षण हेतु 1234 दर्ज करें।');
       return;
     }
 
+    triggerHaptic('success');
     onLoginSuccess(phone);
   };
 
-  const handleGuestLogin = async () => {
-    await loginAsGuest();
+  const handleGuest = () => {
+    stopSpeaking();
+    triggerHaptic('light');
+    loginAsGuest();
     onSkip();
   };
 
   return (
-    <div className="pattern-bg text-on-background min-h-screen flex flex-col justify-between font-body-lg">
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
+      
       {/* Top Header */}
-      <header className="bg-surface shadow-sm flex justify-between items-center px-margin-mobile w-full h-[56px] sticky top-0 z-40 border-b border-outline-variant/50">
-        <div className="flex items-center gap-2 max-w-md mx-auto w-full">
-          <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-[20px]">agriculture</span>
+      <div className="pt-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <span className="material-symbols-outlined text-2xl">agriculture</span>
           </div>
-          <h1 className="font-bold text-lg text-primary tracking-tight">
-            Agri-Decide • {isHindi ? 'कृषि-वाइज़' : 'KrishiWise'}
-          </h1>
+          <span className="font-bold text-lg text-primary">{t('appName')}</span>
         </div>
-      </header>
 
-      {/* Main Content Canvas */}
-      <main className="flex-grow flex items-center justify-center p-4 md:p-6 my-auto">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-6 md:p-8 flex flex-col gap-6 border border-outline-variant/60 animate-in fade-in zoom-in-95 duration-200">
-          {/* Header & Title */}
-          <div className="text-center space-y-1.5 relative">
-            <div className="flex items-center justify-center gap-2">
-              <h2 className="font-headline-lg text-headline-lg text-2xl md:text-3xl font-bold text-on-surface">
-                {isHindi ? 'लॉगिन / Login' : 'Login / Sign In'}
-              </h2>
-              <AudioButton
-                id="login-page-audio"
-                textHi="लॉगिन करें: अपना 10 अंकों का मोबाइल नंबर दर्ज करें और ओटीपी भेजें बटन दबाएं, या बिना लॉगिन के अतिथि के रूप में जारी रखें।"
-                textEn="Login to your account. Enter your 10-digit mobile number and tap Send OTP, or continue as guest without login."
-                size="sm"
+        <button
+          onClick={handlePlayVoice}
+          className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border border-primary/30 transition-all ${
+            isSpeaking ? 'bg-primary text-white animate-pulse' : 'bg-primary/10 text-primary'
+          }`}
+        >
+          <span className="material-symbols-outlined text-base">volume_up</span>
+          <span>{t('listen')}</span>
+        </button>
+      </div>
+
+      {/* Main Login Card */}
+      <div className="my-auto space-y-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
+            {t('loginTitle')}
+          </h1>
+          <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">
+            {t('loginSubtitle')}
+          </p>
+        </div>
+
+        {errorMessage && (
+          <div className="bg-red-50 dark:bg-red-950/40 border border-red-500/30 text-red-700 dark:text-red-300 p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-2 animate-shake">
+            <span className="material-symbols-outlined text-lg flex-shrink-0">error</span>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {!isOtpSent ? (
+          <form onSubmit={handleSendOtp} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300">
+                {t('mobileNumberLabel')}
+              </label>
+              <div className="relative flex items-center">
+                <span className="absolute left-4 font-bold text-stone-500 text-sm">
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  maxLength={10}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                  placeholder="9876543210"
+                  className="w-full pl-14 pr-4 py-4 rounded-2xl bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 text-[#1A1C18] dark:text-[#E2E3DC] font-bold text-lg tracking-wider focus:border-primary focus:outline-none shadow-sm"
+                  autoFocus
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading || phone.length < 10}
+              className="w-full py-4 rounded-full bg-primary text-on-primary font-bold text-base shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {isLoading ? (
+                <span className="material-symbols-outlined text-xl animate-spin">progress_activity</span>
+              ) : (
+                <>
+                  <span>{t('sendOtp')}</span>
+                  <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                </>
+              )}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerifyOtp} className="space-y-4">
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300">
+                  {t('enterOtp')} (+91 {phone})
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setIsOtpSent(false)}
+                  className="text-xs text-primary font-semibold underline"
+                >
+                  नंबर बदलें
+                </button>
+              </div>
+              <input
+                type="text"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                placeholder="1234"
+                className="w-full px-4 py-4 text-center rounded-2xl bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 text-[#1A1C18] dark:text-[#E2E3DC] font-bold text-2xl tracking-[0.4em] focus:border-primary focus:outline-none shadow-sm"
+                autoFocus
               />
             </div>
-            <p className="font-body-md text-sm text-on-surface-variant">
-              {isHindi
-                ? 'अपनी पहचान प्रमाणित करें / Verify your identity'
-                : 'Verify your farmer identity for personalized advice'}
-            </p>
-          </div>
 
-          {/* Validation Alert */}
-          {errorMessage && (
-            <div className="p-3 rounded-xl bg-error-container/60 border border-error/30 text-error text-xs font-semibold flex items-center gap-2 animate-in fade-in">
-              <span className="material-symbols-outlined text-[18px]">error</span>
-              <span>{errorMessage}</span>
-            </div>
-          )}
-
-          {!isOtpSent ? (
-            /* Phase 1: Phone Number Input Form */
-            <form onSubmit={handleSendOtp} className="flex flex-col gap-5">
-              <div className="flex flex-col gap-1.5">
-                <label
-                  className="font-semibold text-xs text-on-surface uppercase tracking-wider"
-                  htmlFor="phone"
-                >
-                  {isHindi ? 'मोबाइल नंबर / Phone Number' : 'Mobile Number'}
-                </label>
-                <div className="relative flex items-center h-[56px]">
-                  <div className="absolute left-3 flex items-center gap-1 text-on-surface-variant font-bold text-sm border-r border-outline-variant pr-2">
-                    <span>🇮🇳</span>
-                    <span>+91</span>
-                  </div>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    pattern="[0-9]{10}"
-                    maxLength={10}
-                    placeholder="98765 43210"
-                    required
-                    className="w-full h-full pl-20 pr-4 border-2 border-outline-variant rounded-xl bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold text-base text-on-surface outline-none transition-all placeholder:font-normal placeholder:text-outline"
-                  />
-                </div>
-                <span className="text-[11px] text-on-surface-variant">
-                  {isHindi
-                    ? 'हम आपको 4 अंकों का सत्यापन कोड (OTP) भेजेंगे।'
-                    : 'We will send you a 4-digit verification OTP.'}
-                </span>
+            {demoCodeHint && (
+              <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 p-2.5 rounded-xl text-xs text-center font-medium">
+                डेमो परीक्षण कोड: <strong>{demoCodeHint}</strong>
               </div>
+            )}
 
-              {/* Primary Action Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-[56px] bg-primary text-on-primary rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:bg-primary-container transition-all active:translate-y-[2px] active:shadow-none duration-150 btn-tactile cursor-pointer disabled:opacity-60"
-              >
-                {isLoading ? (
-                  <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                ) : (
-                  <>
-                    <span>{isHindi ? 'OTP भेजें / Send OTP' : 'Send OTP'}</span>
-                    <span className="material-symbols-outlined text-[20px]">send</span>
-                  </>
-                )}
-              </button>
-            </form>
-          ) : (
-            /* Phase 2: OTP Verification Form */
-            <form onSubmit={handleVerifyOtp} className="flex flex-col gap-5 animate-in fade-in">
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <label
-                    className="font-semibold text-xs text-on-surface uppercase tracking-wider"
-                    htmlFor="otp"
-                  >
-                    {isHindi ? 'ओटीपी दर्ज करें / Enter OTP' : 'Enter OTP Code'}
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setIsOtpSent(false)}
-                    className="text-xs text-primary font-bold hover:underline"
-                  >
-                    {isHindi ? 'नंबर बदलें' : 'Change Number'}
-                  </button>
-                </div>
+            <button
+              type="submit"
+              disabled={isLoading || otp.length < 4}
+              className="w-full py-4 rounded-full bg-primary text-on-primary font-bold text-base shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {isLoading ? (
+                <span className="material-symbols-outlined text-xl animate-spin">progress_activity</span>
+              ) : (
+                <>
+                  <span>{t('verifyOtp')}</span>
+                  <span className="material-symbols-outlined text-lg">check</span>
+                </>
+              )}
+            </button>
+          </form>
+        )}
+      </div>
 
-                <div className="relative flex items-center h-[56px]">
-                  <span className="absolute left-4 material-symbols-outlined text-on-surface-variant text-[20px]">
-                    pin
-                  </span>
-                  <input
-                    id="otp"
-                    name="otp"
-                    type="number"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    maxLength={6}
-                    placeholder="1234"
-                    autoFocus
-                    required
-                    className="w-full h-full pl-12 pr-4 border-2 border-outline-variant rounded-xl bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20 font-bold text-lg tracking-widest text-on-surface outline-none transition-all"
-                  />
-                </div>
-                <div className="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
-                  <span>+91 {phone}</span>
-                  <span className="font-semibold text-primary">
-                    {isHindi ? 'परीक्षण कोड:' : 'Demo Code:'} {demoCodeHint || '1234'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Verify Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-[56px] bg-primary text-on-primary rounded-xl font-bold text-base flex items-center justify-center gap-2 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:bg-primary-container transition-all active:translate-y-[2px] active:shadow-none duration-150 btn-tactile cursor-pointer disabled:opacity-60"
-              >
-                {isLoading ? (
-                  <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                ) : (
-                  <>
-                    <span>{isHindi ? 'सत्यापित करें / Verify & Login' : 'Verify & Login'}</span>
-                    <span className="material-symbols-outlined text-[20px]">check</span>
-                  </>
-                )}
-              </button>
-            </form>
-          )}
-
-          {/* Divider */}
-          <div className="relative flex items-center py-1">
-            <div className="flex-grow border-t border-outline-variant"></div>
-            <span className="flex-shrink-0 mx-4 font-semibold text-xs text-on-surface-variant uppercase">
-              {isHindi ? 'या / OR' : 'OR'}
-            </span>
-            <div className="flex-grow border-t border-outline-variant"></div>
-          </div>
-
-          {/* Secondary Action: Skip / Continue as Guest */}
-          <button
-            type="button"
-            onClick={handleGuestLogin}
-            disabled={isLoading}
-            className="w-full h-[56px] bg-surface-container-high text-on-surface rounded-xl font-bold text-sm md:text-base flex items-center justify-center gap-2 shadow-sm hover:bg-surface-container-highest transition-colors active:translate-y-[2px] duration-150 border-2 border-outline-variant btn-tactile cursor-pointer disabled:opacity-60"
-          >
-            <span>
-              {isHindi
-                ? 'लॉगिन के बिना जारी रखें / Continue as Guest'
-                : 'Continue as Guest (No Login)'}
-            </span>
-            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
-          </button>
+      {/* Bottom Guest Bypass Button */}
+      <div className="pt-4 pb-4 text-center space-y-3">
+        <div className="relative flex py-1 items-center">
+          <div className="flex-grow border-t border-stone-200 dark:border-stone-800" />
+          <span className="flex-shrink mx-3 text-xs text-stone-400 font-medium">अथवा</span>
+          <div className="flex-grow border-t border-stone-200 dark:border-stone-800" />
         </div>
-      </main>
 
-      {/* Footer Note */}
-      <footer className="p-4 text-center text-xs text-on-surface-variant">
-        <span>{isHindi ? 'सुरक्षित एवं गोपनीयता संरक्षित' : 'Secure & Privacy-Preserved'}</span>
-      </footer>
+        <button
+          onClick={handleGuest}
+          className="w-full py-3.5 px-4 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200 font-semibold text-sm hover:bg-stone-200 active:scale-[0.98] transition-all"
+        >
+          {t('guestBypass')}
+        </button>
+      </div>
     </div>
   );
 };

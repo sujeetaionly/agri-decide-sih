@@ -1,7 +1,6 @@
 import React from 'react';
-import { useLanguage, LANGUAGE_OPTIONS } from '@/context/LanguageContext';
-import { Button } from '@/components/ui/button';
-import { Language } from '@/types/language';
+import { useLanguage, LANGUAGE_OPTIONS } from '../../context/LanguageContext';
+import { SupportedLanguage } from '../../data/translations';
 
 interface LanguageModalProps {
   isOpen: boolean;
@@ -9,69 +8,61 @@ interface LanguageModalProps {
 }
 
 export const LanguageModal: React.FC<LanguageModalProps> = ({ isOpen, onClose }) => {
-  const { language, setLanguage, isHindi } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   if (!isOpen) return null;
 
-  const handleSelect = (langCode: Language) => {
+  const handleSelect = (langCode: SupportedLanguage) => {
     setLanguage(langCode);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-level-3 border border-outline-variant p-6 space-y-5 animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-outline-variant/60 pb-3">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
+      <div className="w-full max-w-md bg-white dark:bg-[#1E231B] rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
           <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-primary text-[28px]">language</span>
-            <h3 className="text-xl font-bold text-on-surface">
-              {isHindi ? 'भाषा चुनें' : 'Select Language'}
+            <span className="material-symbols-outlined text-primary text-2xl">language</span>
+            <h3 className="text-xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
+              {t('chooseLanguageTitle')}
             </h3>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-2.5 max-h-[60vh] overflow-y-auto pr-1">
+        <div className="grid grid-cols-2 gap-2.5 max-h-[60vh] overflow-y-auto">
           {LANGUAGE_OPTIONS.map((opt) => {
             const isSelected = language === opt.code;
             return (
               <button
                 key={opt.code}
                 onClick={() => handleSelect(opt.code)}
-                className={`flex items-center justify-between p-3.5 rounded-xl border-2 transition-all text-left btn-tactile ${
+                className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border-2 transition-all text-center ${
                   isSelected
-                    ? 'border-primary bg-primary-container/10 text-primary font-bold shadow-sm ring-1 ring-primary/20'
-                    : 'border-outline-variant/50 bg-surface-container-lowest hover:border-primary/50 text-on-surface'
+                    ? 'border-primary bg-primary/10 text-primary font-bold shadow-sm ring-2 ring-primary/30'
+                    : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B] text-stone-800 dark:text-stone-200'
                 }`}
               >
-                <div>
-                  <div className="text-base font-bold">{opt.nativeName}</div>
-                  <div className="text-xs text-on-surface-variant/80">{opt.name} • {opt.subtext}</div>
-                </div>
-                {isSelected ? (
-                  <span className="material-symbols-outlined text-primary fill text-[24px]">
-                    check_circle
-                  </span>
-                ) : (
-                  <span className="material-symbols-outlined text-outline text-[24px]">
-                    radio_button_unchecked
-                  </span>
-                )}
+                <span className="text-2xl font-bold mb-1">{opt.glyph}</span>
+                <span className="text-base font-bold">{opt.nativeName}</span>
               </button>
             );
           })}
         </div>
 
         <div className="pt-2">
-          <Button variant="outline" size="md" fullWidth onClick={onClose}>
-            {isHindi ? 'बंद करें' : 'Close'}
-          </Button>
+          <button
+            onClick={onClose}
+            className="w-full py-3 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-semibold text-sm"
+          >
+            {t('cancel')}
+          </button>
         </div>
       </div>
     </div>
