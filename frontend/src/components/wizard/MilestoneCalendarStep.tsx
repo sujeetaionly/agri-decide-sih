@@ -243,25 +243,24 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
         })}
       </div>
 
-      {/* COMPACT STICKY BOTTOM ACTIONS (Single Row Bar) */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto flex items-center gap-2.5 bg-gradient-to-t from-surface-light via-surface-light/95 to-transparent dark:from-surface-dark dark:via-surface-dark/95 pt-4 pb-2">
+      {/* INLINE ACTION BUTTONS (Full-Width Glorious Pills) */}
+      <div className="space-y-3 pt-4 pb-6">
         <button
           onClick={() => {
             triggerHaptic('medium');
             setIsPrintModalOpen(true);
           }}
-          className="flex-1 py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-extrabold text-xs shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          className="w-full py-4 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-extrabold text-base shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-base">download</span>
+          <span className="material-symbols-outlined text-xl">download</span>
           <span>{t('printPdfBtn')}</span>
         </button>
 
         <button
           onClick={handleWhatsAppShare}
-          className="py-3.5 px-4 rounded-2xl bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-md cursor-pointer"
-          title={t('shareWhatsappBtn')}
+          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-sm hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
         >
-          <span className="material-symbols-outlined text-base text-emerald-600">share</span>
+          <span className="material-symbols-outlined text-lg text-emerald-600">share</span>
           <span>{t('shareWhatsappBtn')}</span>
         </button>
       </div>
