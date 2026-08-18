@@ -45,31 +45,47 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
         <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto text-primary">
           <span className="material-symbols-outlined text-3xl">record_voice_over</span>
         </div>
-        <h1 className="text-2xl font-bold font-headline">
+        <h1 className="text-2xl font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
           {getTranslation('audioGuideTitle', language)}
         </h1>
       </div>
 
-      {/* Center Tutorial Box (1-2 lines tutorial as requested) */}
+      {/* Center Tutorial Box (Showing EXACT matching speaker button) */}
       <div className="my-auto space-y-6">
-        <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/20 rounded-3xl p-6 shadow-sm space-y-4">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-600 flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-3xl animate-pulse">volume_up</span>
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/20 rounded-3xl p-6 shadow-sm space-y-5">
+          
+          {/* Visual Replica of the EXACT Top App Bar Speaker Button */}
+          <div className="flex items-center justify-center gap-3 bg-stone-50 dark:bg-stone-900/60 p-4 rounded-2xl border border-stone-200 dark:border-stone-800">
+            <span className="text-xs font-bold text-stone-600 dark:text-stone-300">
+              ऐप में दिखने वाला स्पीकर बटन:
+            </span>
+            <div className="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800 text-primary border-2 border-primary/30 flex items-center justify-center shadow-sm animate-bounce">
+              <span className="material-symbols-outlined text-2xl">volume_up</span>
             </div>
-            <p className="text-base font-semibold leading-relaxed text-[#1A1C18] dark:text-[#E2E3DC]">
-              {getTranslation('audioGuideLine1', language)}
-            </p>
           </div>
 
-          <div className="h-px bg-stone-200 dark:bg-stone-800" />
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                १
+              </span>
+              <p className="text-base font-bold leading-relaxed text-[#1A1C18] dark:text-[#E2E3DC]">
+                {getTranslation('audioGuideLine1', language)}
+              </p>
+            </div>
 
-          <p className="text-sm text-stone-600 dark:text-stone-300">
-            {getTranslation('audioGuideLine2', language)}
-          </p>
+            <div className="flex items-start gap-3">
+              <span className="w-6 h-6 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                २
+              </span>
+              <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed font-medium">
+                {getTranslation('audioGuideLine2', language)}
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Interactive Speaker Test Button */}
+        {/* Interactive Speaker Test Button with EXACT volume_up icon */}
         <button
           onClick={handleTestAudio}
           className={`w-full py-5 px-6 rounded-2xl border-2 font-bold text-base transition-all flex items-center justify-center gap-3 active:scale-[0.98] ${
@@ -89,8 +105,8 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
         </button>
 
         {hasTestedAudio && (
-          <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 px-4 py-2.5 rounded-xl text-xs font-semibold animate-fadeIn">
-            <span className="material-symbols-outlined text-base">verified</span>
+          <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 px-4 py-3 rounded-2xl text-xs font-semibold animate-fadeIn">
+            <span className="material-symbols-outlined text-lg flex-shrink-0">verified</span>
             <span>{getTranslation('audioGuideSuccess', language)}</span>
           </div>
         )}

@@ -174,9 +174,9 @@ export const translations: TranslationDictionary = {
   },
   audioGuideLine1: {
     en: 'Whenever you see the speaker button anywhere in the app, press it to hear the instructions in your language.',
-    hi: 'ऐप में कहीं भी स्पीकर (📢) का बटन दिखे, तो उसे दबाकर आप पूरी जानकारी अपनी भाषा में सुन सकते हैं।',
-    mr: 'ॲपमध्ये कुठेही स्पीकर (📢) बटण दिसल्यास, ते दाबून तुम्ही संपूर्ण माहिती आपल्या भाषेत ऐकू शकता.',
-    gu: 'ઍપમાં ક્યાંય પણ સ્પીકર (📢) બટન દેખાય, તો તેને દબાવીને તમે તમામ માહિતી તમારી ભાષામાં સાંભળી શકો છો.',
+    hi: 'ऐप में किसी भी जानकारी को आवाज में सुनने के लिए ऊपर दिखाए गए स्पीकर बटन को दबाएं।',
+    mr: 'ॲपमध्ये कोणतीही माहिती आवाजात ऐकण्यासाठी वर दाखवलेले स्पीकर बटण दाबा.',
+    gu: 'ઍપમાં કોઈપણ માહિતી અવાજમાં સાંભળવા માટે ઉપર દર્શાવેલ સ્પીકર બટન દબાવો.',
   },
   audioGuideLine2: {
     en: 'Press the test button below to hear how it works.',
@@ -309,12 +309,6 @@ export const translations: TranslationDictionary = {
     hi: 'मेरी फसलें',
     mr: 'माझी पिके',
     gu: 'મારા પાક',
-  },
-  navMandi: {
-    en: 'Mandi Rates',
-    hi: 'मंडी भाव',
-    mr: 'बाजार भाव',
-    gu: 'બજાર ભાવો',
   },
 
   // 1-Question Card Wizard

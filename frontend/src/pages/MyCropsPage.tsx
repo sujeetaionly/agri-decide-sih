@@ -20,13 +20,11 @@ interface SavedCropAnalysis {
 interface MyCropsPageProps {
   onStartNewRecommendation: () => void;
   onGoToHome: () => void;
-  onOpenMandiRates?: () => void;
 }
 
 export const MyCropsPage: React.FC<MyCropsPageProps> = ({
   onStartNewRecommendation,
   onGoToHome,
-  onOpenMandiRates,
 }) => {
   const { language, t } = useLanguage();
   const [historyList, setHistoryList] = useState<SavedCropAnalysis[]>([]);
@@ -95,7 +93,6 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
   const handleNavChange = (tab: NavTab) => {
     if (tab === 'home') onGoToHome();
     else if (tab === 'wizard') onStartNewRecommendation();
-    else if (tab === 'mandi' && onOpenMandiRates) onOpenMandiRates();
   };
 
   const handleAudio = () => {
