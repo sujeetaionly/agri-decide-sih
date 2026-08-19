@@ -93,10 +93,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           </div>
           <div>
             <span className="font-black text-base text-emerald-900 dark:text-emerald-100 tracking-tight block">
-              Agri-Decide
+              फसल-दिशा (Fasal Disha)
             </span>
-            <span className="text-[11px] text-stone-500 dark:text-stone-400 font-bold block -mt-0.5">
-              कृषि-वाइज़
+            <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold block -mt-0.5">
+              हर खेत को मिले सही दिशा
             </span>
           </div>
         </div>

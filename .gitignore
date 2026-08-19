@@ -61,3 +61,10 @@ Thumbs.db
 
 # Local Backup & Archives
 archive_24h_ago/
+
+# Presentations & PPTs
+presentation/
+presentation_assets/
+ppt/
+*.pptx
+

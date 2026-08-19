@@ -15,7 +15,17 @@ def test_health():
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json()["project"] == "AGRI-DECIDE"
+    assert "Fasal Disha" in response.json()["project"]
+    assert "हर खेत को मिले सही दिशा" in response.json()["tagline"]
+
+def test_local_crops_discovery():
+    response = client.get("/api/v1/crop/local-crops?district=Jaipur&season=KHARIF&lang=hi")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "success"
+    assert data["district"] == "JAIPUR"
+    assert len(data["local_crops"]) >= 3
+    assert any(c["crop_id"] == "BAJRA" for c in data["local_crops"])
 
 def test_endpoint_1_assess_soil_weather():
     payload = {

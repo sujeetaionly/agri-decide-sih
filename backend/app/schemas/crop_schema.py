@@ -17,6 +17,9 @@ class CostBreakdownItem(BaseModel):
 class RecommendCropRequest(BaseModel):
     farmer_id: Optional[str] = None
     total_land_acres: Optional[float] = 1.0
+    district: Optional[str] = "Pune"
+    state: Optional[str] = "Maharashtra"
+    lang: Optional[str] = "hi"
     soil_type: Optional[str] = "BLACK"
     water_source: Optional[str] = "WELL"
     water_capacity_level: Optional[str] = "MEDIUM"
@@ -34,11 +37,13 @@ class SowingWindowBadge(BaseModel):
 
 class TopRecommendation(BaseModel):
     crop_id: str
+    crop_name: Optional[str] = None
     crop_name_en: str
     crop_name_hi: str
     crop_name_mr: Optional[str] = None
     crop_name_gu: Optional[str] = None
     crop_name_raj: Optional[str] = None
+    localized_names: Optional[Dict[str, str]] = None
     suitability_pct: float
     duration_days: int
     expected_yield_qtl_per_acre: float
@@ -54,11 +59,13 @@ class TopRecommendation(BaseModel):
 
 class ComparisonMatrixItem(BaseModel):
     crop_id: str
+    crop_name: Optional[str] = None
     crop_name_en: str
     crop_name_hi: str
     crop_name_mr: Optional[str] = None
     crop_name_gu: Optional[str] = None
     crop_name_raj: Optional[str] = None
+    localized_names: Optional[Dict[str, str]] = None
     suitability_pct: float
     sowing_window_status: str
     total_cost_inr_per_acre: float
@@ -69,6 +76,21 @@ class ComparisonMatrixItem(BaseModel):
     duration_days: int
     net_profit_per_day_inr: float
     rotation_benefit: Optional[str] = None
+
+class LocalCropItem(BaseModel):
+    crop_id: str
+    crop_name: str
+    localized_names: Dict[str, str]
+
+class LocalCropsResponse(BaseModel):
+    status: str = "success"
+    district: str
+    state: str
+    season: str
+    mandi_source: str
+    agro_climatic_zone: str
+    is_benchmark_route: bool
+    local_crops: List[LocalCropItem]
 
 class RecommendCropResponse(BaseModel):
     status: str = "success"
@@ -82,6 +104,9 @@ class RecommendCropResponse(BaseModel):
 # --- What-If Simulation Schemas ---
 class WhatIfSimulateRequest(BaseModel):
     farmer_id: Optional[str] = None
+    district: Optional[str] = "Pune"
+    state: Optional[str] = "Maharashtra"
+    lang: Optional[str] = "hi"
     sowing_delay_days: int = 0
     rainfall_deficit_pct: float = 0.0
     mandi_price_shock_pct: float = 0.0

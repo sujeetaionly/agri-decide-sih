@@ -14,8 +14,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title="AGRI-DECIDE API",
-    description="AI-Based Crop Recommendation Engine & Decision Support System (SIH PS #24)",
+    title="फसल-दिशा (Fasal Disha) API",
+    description="AI-Based Crop Recommendation Engine & Multi-Region Decision Support System — हर खेत को मिले सही दिशा",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -36,8 +36,9 @@ app.include_router(crop_router, prefix=settings.API_V1_STR)
 @app.get("/")
 def root():
     return {
-        "project": "AGRI-DECIDE",
-        "description": "AI-Based Crop Recommendation Engine for Farmers",
+        "project": "Fasal Disha (फसल-दिशा)",
+        "tagline": "हर खेत को मिले सही दिशा",
+        "description": "AI-Based Intelligent Multilingual Crop Recommendation Engine for Farmers",
         "status": "online",
         "docs_url": "/docs",
         "version": settings.VERSION

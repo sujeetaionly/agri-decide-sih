@@ -19,7 +19,7 @@ const LANGUAGES: LanguageOption[] = [
     englishName: 'Hindi',
     glyph: 'अ',
     audioLabel: 'सुनें',
-    sampleAudio: 'नमस्ते किसान भाई, आपका कृषि-वाइज़ में स्वागत है।',
+    sampleAudio: 'नमस्ते किसान भाई, आपका फसल-दिशा में स्वागत है।',
   },
   {
     code: 'en',
@@ -27,7 +27,7 @@ const LANGUAGES: LanguageOption[] = [
     englishName: 'English',
     glyph: 'A',
     audioLabel: 'Listen',
-    sampleAudio: 'Hello farmer friend, welcome to Krishi-Wise crop decision support.',
+    sampleAudio: 'Hello farmer friend, welcome to Fasal Disha crop decision support.',
   },
   {
     code: 'mr',
@@ -35,7 +35,7 @@ const LANGUAGES: LanguageOption[] = [
     englishName: 'Marathi',
     glyph: 'म',
     audioLabel: 'ऐका',
-    sampleAudio: 'नमस्कार शेतकरी मित्रांनो, कृषी-वाइज ॲपमध्ये आपले स्वागत आहे.',
+    sampleAudio: 'नमस्कार शेतकरी मित्रांनो, फसल-दिशा ॲपमध्ये आपले स्वागत आहे.',
   },
   {
     code: 'gu',
@@ -43,7 +43,7 @@ const LANGUAGES: LanguageOption[] = [
     englishName: 'Gujarati',
     glyph: 'ગ',
     audioLabel: 'સાંભળો',
-    sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, કૃષિ-વાઇઝમાં આપનું સ્વાગત છે.',
+    sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, ફસલ-દિશામાં આપનું સ્વાગત છે.',
   },
   {
     code: 'raj',
@@ -51,7 +51,7 @@ const LANGUAGES: LanguageOption[] = [
     englishName: 'Rajasthani',
     glyph: 'रा',
     audioLabel: 'सुणो',
-    sampleAudio: 'खम्मा घणी किसान भाई, आपरो कृषि-वाइज़ में स्वागत है।',
+    sampleAudio: 'खम्मा घणी किसान भाई, आपरो फसल-दिशा में स्वागत है।',
   },
 ];
 
@@ -101,8 +101,8 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
 
     const effectiveLang = selected || 'en';
     const headerText = effectiveLang === 'en'
-      ? 'Which language do you prefer? Choose your preferred language to continue using Krishi-Wise.'
-      : 'आप कौन सी भाषा पसंद करते हैं? कृषि-वाइज़ का उपयोग करने के लिए अपनी पसंदीदा भाषा चुनें।';
+      ? 'Which language do you prefer? Choose your preferred language to continue using Fasal Disha.'
+      : 'आप कौन सी भाषा पसंद करते हैं? फसल-दिशा का उपयोग करने के लिए अपनी पसंदीदा भाषा चुनें।';
 
     if (playingCode === 'header') {
       stopSpeaking();
@@ -232,7 +232,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
 
         {/* 5th Option: English as a comfortable wide tile */}
         {(() => {
-          const eng = { code: 'en', nativeName: 'English', glyph: 'A', audioLabel: 'Listen', sampleAudio: 'Hello farmer friend, welcome to Krishi-Wise crop decision support.' };
+          const eng = { code: 'en', nativeName: 'English', glyph: 'A', audioLabel: 'Listen', sampleAudio: 'Hello farmer friend, welcome to Fasal Disha crop decision support.' };
           const isSelected = selected === eng.code;
           const isItemPlaying = playingCode === eng.code;
 

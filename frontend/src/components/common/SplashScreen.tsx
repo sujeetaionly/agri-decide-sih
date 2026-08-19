@@ -41,7 +41,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       <div className="w-full flex justify-center items-center gap-2 pt-4">
         <span className="w-2 h-2 rounded-full bg-[#3e6a00] animate-pulse"></span>
         <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant/80">
-          KrishiWise AI • Agri-Decide
+          फसल-दिशा • Fasal Disha
         </span>
       </div>
 
@@ -65,15 +65,15 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
         {/* Brand Typography */}
         <div className="space-y-1.5">
           <h1 className="font-headline-lg text-headline-lg text-3xl md:text-4xl font-bold tracking-tight text-primary">
-            Agri-Decide
+            फसल-दिशा (Fasal Disha)
           </h1>
-          <div className="text-sm md:text-base font-semibold text-secondary">
-            {isHindi ? 'कृषि-वाइज़ एआई (KrishiWise AI)' : 'KrishiWise AI Platform'}
+          <div className="text-sm md:text-base font-semibold text-emerald-800">
+            हर खेत को मिले सही दिशा
           </div>
           <p className="text-xs md:text-sm text-on-surface-variant font-medium pt-1 max-w-[280px] mx-auto leading-relaxed">
             {isHindi
-              ? 'स्मार्ट सटीक कृषि एवं मौसम आधारित फसल निर्णय इंजन'
-              : 'Precision Crop Advisory & Climate Resilience Engine'}
+              ? 'एआई आधारित सटीक फसल चयन व कृषि निर्णय प्रणाली'
+              : 'AI-Powered Intelligent Crop Advisory & Multi-Region Decision Engine'}
           </p>
         </div>
 

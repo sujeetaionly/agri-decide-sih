@@ -18,6 +18,8 @@ from backend.app.services.economics_service import (
 from backend.app.services.sowing_window_service import evaluate_sowing_window
 from backend.app.models_ml.yield_predictor import predict_crop_yield
 from backend.app.models_ml.price_forecaster import get_harvest_mandi_price
+from backend.app.core.i18n import resolve_localized_crop_name, get_all_crop_translations
+from backend.app.services.local_crop_service import get_local_crops_for_district
 
 # Load CACP Itemized Cost Breakdown from CSV
 CACP_CSV_PATH = os.path.join(
@@ -218,21 +220,27 @@ def recommend_crops_engine(
     price_shock_pct: float = 0.0,
     district: Optional[str] = "Pune",
     state: Optional[str] = "Maharashtra",
+    lang: str = "hi",
     db: Optional[Session] = None
 ) -> Dict[str, Any]:
     """
-    Core Recommendation Engine with itemized CACP cost breakdowns and pure Indic output.
+    Core Recommendation Engine with itemized CACP cost breakdowns,
+    dynamic local crop discovery (Agmarknet Mandi & ICRISAT), and 100+ language i18n support.
     """
     # 1. Season Detection
     season_info = get_current_season(planned_sowing_date)
     current_season_code = season_info["code"]
 
-    # 2. Resolve candidate crop list
+    # 2. Local Crop Discovery for the specific District & Season
+    local_crop_discovery = get_local_crops_for_district(
+        district=district,
+        state=state,
+        season=current_season_code,
+        lang=lang
+    )
+
     if not candidate_crops or len(candidate_crops) == 0:
-        if soil_type.upper() in ["SANDY", "RED"]:
-            active_candidates = ["BAJRA", "MOONG", "GROUNDNUT", "SOYBEAN"]
-        else:
-            active_candidates = ["SOYBEAN", "MAIZE", "TUR", "COTTON", "MOONG", "GROUNDNUT", "BAJRA"]
+        active_candidates = local_crop_discovery["raw_crop_ids"]
     else:
         active_candidates = [c.upper().strip() for c in candidate_crops]
 
@@ -321,11 +329,13 @@ def recommend_crops_engine(
 
         evaluated_crops.append({
             "crop_id": crop_id,
+            "crop_name": resolve_localized_crop_name(crop_id, lang),
             "crop_name_en": crop_info["en"],
             "crop_name_hi": crop_info["hi"],
             "crop_name_mr": crop_info.get("mr", crop_info["hi"]),
             "crop_name_gu": crop_info.get("gu", crop_info["hi"]),
             "crop_name_raj": crop_info.get("raj", crop_info["hi"]),
+            "localized_names": get_all_crop_translations(crop_id),
             "suitability_pct": suitability_pct,
             "duration_days": crop_info["duration"],
             "expected_yield_qtl_per_acre": exp_yield,
@@ -361,11 +371,13 @@ def recommend_crops_engine(
 
     top_recommendation = {
         "crop_id": top_crop["crop_id"],
+        "crop_name": top_crop["crop_name"],
         "crop_name_en": top_crop["crop_name_en"],
         "crop_name_hi": top_crop["crop_name_hi"],
         "crop_name_mr": top_crop["crop_name_mr"],
         "crop_name_gu": top_crop["crop_name_gu"],
         "crop_name_raj": top_crop["crop_name_raj"],
+        "localized_names": top_crop["localized_names"],
         "suitability_pct": top_crop["suitability_pct"],
         "duration_days": top_crop["duration_days"],
         "expected_yield_qtl_per_acre": top_crop["expected_yield_qtl_per_acre"],
@@ -384,11 +396,13 @@ def recommend_crops_engine(
     for item in evaluated_crops[:4]:
         comparison_matrix.append({
             "crop_id": item["crop_id"],
+            "crop_name": item["crop_name"],
             "crop_name_en": item["crop_name_en"],
             "crop_name_hi": item["crop_name_hi"],
             "crop_name_mr": item["crop_name_mr"],
             "crop_name_gu": item["crop_name_gu"],
             "crop_name_raj": item["crop_name_raj"],
+            "localized_names": item["localized_names"],
             "suitability_pct": item["suitability_pct"],
             "sowing_window_status": item["sowing_window_status"],
             "total_cost_inr_per_acre": item["total_cost_inr_per_acre"],
@@ -402,13 +416,13 @@ def recommend_crops_engine(
         })
 
     data_sources_info = {
-        "district_profile": f"{district or 'Pune'} District (Benchmark Route)",
-        "mandi_source": "Baramati APMC, Pune District (Agmarknet Live Pipeline)",
+        "district_profile": f"{district or 'Pune'} District ({local_crop_discovery['agro_climatic_zone']})",
+        "mandi_source": f"{local_crop_discovery['mandi_source']} (Agmarknet Live Pipeline)",
         "soil_source": "SoilGrids ISRIC Global 250m Spatial Model [18.15°N, 74.58°E]",
         "sowing_calendar": "ICAR-CRIDA District Crop Calendar Benchmark",
         "yield_model": "ICRISAT 10-Year District Panel Random Forest Engine",
         "cost_benchmarks": "CACP (Commission for Agricultural Costs & Prices) Official A2/A2+FL",
-        "routing_note": "For production demo, queries across all states route to verified Pune/Maharashtra ICRISAT & Agmarknet baseline."
+        "routing_note": "For production demo, unmapped districts gracefully route to verified Pune/Maharashtra ICRISAT & Agmarknet baseline."
     }
 
     return {

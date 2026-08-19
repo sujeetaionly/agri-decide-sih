@@ -11,11 +11,18 @@ export interface TranslationStrings {
 export const translations: Record<string, TranslationStrings> = {
   // Global & App Branding
   appName: {
-    en: 'Krishi-Wise AI',
-    hi: 'कृषि-वाइज़ एआई',
-    mr: 'कृषी-वाइज एआय',
-    gu: 'કૃષિ-વાઇઝ એઆઇ',
-    raj: 'कृषि-वाइज़ एआई',
+    en: 'Fasal Disha',
+    hi: 'फसल-दिशा',
+    mr: 'पीक-दिशा (Fasal Disha)',
+    gu: 'પાક-દિશા (Fasal Disha)',
+    raj: 'फसल-दिशा',
+  },
+  appTagline: {
+    en: 'Guiding Every Farm in the Right Direction',
+    hi: 'हर खेत को मिले सही दिशा',
+    mr: 'प्रत्येक शेताला मिळावी योग्य दिशा',
+    gu: 'દરેક ખેતરને મળે સાચી દિશા',
+    raj: 'हर खेत ने मिले सही दिशा',
   },
   continue: {
     en: 'Next',
@@ -85,11 +92,11 @@ export const translations: Record<string, TranslationStrings> = {
 
   // GPS Permission Modal Keys
   gpsPermissionTitle: {
-    en: 'Allow Krishi-Wise to access your farm location?',
-    hi: 'क्या आप कृषि-वाइज़ को अपने खेत की लोकेशन जानने की अनुमति देते हैं?',
-    mr: 'कृषी-वाइजला तुमच्या शेताचे स्थान (Location) जाणून घेण्याची परवानगी द्यायची का?',
-    gu: 'શું તમે કૃષિ-વાઇઝને તમારા ખેતરનું સ્થાન (Location) જાણવાની મંજૂરી આપો છો?',
-    raj: 'कांई थे कृषि-वाइज़ ने आपरे खेत री लोकेशन जाणबा री अनुमति दो हो?',
+    en: 'Allow Fasal Disha to access your farm location?',
+    hi: 'क्या आप फसल-दिशा को अपने खेत की लोकेशन जानने की अनुमति देते हैं?',
+    mr: 'फसल-दिशाला (Fasal Disha) तुमच्या शेताचे स्थान जाणून घेण्याची परवानगी द्यायची का?',
+    gu: 'શું તમે પાક-દિશાને (Fasal Disha) તમારા ખેતરનું સ્થાન જાણવાની મંજૂરી આપો છો?',
+    raj: 'कांई थे फसल-दिशा ने आपरे खेत री लोकेशन जाणबा री अनुमति दो हो?',
   },
   gpsPermissionDesc: {
     en: 'Precise location is used to detect local soil types, rainfall forecasts and mandi rates.',
@@ -306,11 +313,11 @@ export const translations: Record<string, TranslationStrings> = {
     raj: '100% ऑफ़लाइन उपलब्ध',
   },
   howItWorksTitle: {
-    en: 'How Krishi-Wise Works',
-    hi: 'यह कैसे काम करता है',
-    mr: 'हे कसे कार्य करते',
-    gu: 'આ કેવી રીતે કાર્ય કરે છે',
-    raj: 'यो कियां काम करे है',
+    en: 'How Fasal Disha Works',
+    hi: 'फसल-दिशा कैसे काम करता है',
+    mr: 'फसल-दिशा कसे कार्य करते',
+    gu: 'ફસલ-દિશા કેવી રીતે કાર્ય કરે છે',
+    raj: 'फसल-दिशा कियां काम करे है',
   },
   howItWorksStep1: {
     en: 'Enter farm details: Soil, water & previous crop',

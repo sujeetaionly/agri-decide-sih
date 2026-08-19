@@ -17,12 +17,14 @@ from backend.app.schemas.crop_schema import (
     CropSearchItem,
     SaveAnalysisRequest,
     AnalysisHistoryItem,
-    AnalysisHistoryResponse
+    AnalysisHistoryResponse,
+    LocalCropsResponse
 )
 from backend.app.services.recommendation_service import (
     recommend_crops_engine,
     CROP_NAMES
 )
+from backend.app.services.local_crop_service import get_local_crops_for_district
 
 router = APIRouter(tags=["Crops & Recommendations"])
 
@@ -77,10 +79,27 @@ CROP_MILESTONES_DB = {
     ]
 }
 
+@router.get("/crop/local-crops", response_model=LocalCropsResponse)
+def get_local_crops_endpoint(
+    district: str = Query("Pune", description="District name"),
+    state: str = Query("Maharashtra", description="State name"),
+    season: str = Query("KHARIF", description="Agricultural season (KHARIF, RABI, ZAID)"),
+    lang: str = Query("hi", description="ISO language code (hi, mr, gu, raj, en, pa, kn, te, ta, bn)")
+):
+    """
+    Endpoint: Discovers authentic local crops grown & traded in the specified District & Mandi.
+    """
+    return get_local_crops_for_district(
+        district=district,
+        state=state,
+        season=season,
+        lang=lang
+    )
+
 @router.post("/crop/recommend", response_model=RecommendCropResponse)
 def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)):
     """
-    Endpoint: Run AI Crop Recommendation & Comparison Matrix with Itemized CACP Costs.
+    Endpoint: Run AI Crop Recommendation & Comparison Matrix with Itemized CACP Costs and Local Mandi crops.
     """
     soil = payload.soil_type or "BLACK"
     water_source = payload.water_source or "WELL"
@@ -89,6 +108,9 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
     previous_crop = payload.previous_season_crop or "WHEAT"
     owns_tractor = payload.owns_tractor or False
     owns_sprayer = payload.owns_sprayer or False
+    district = payload.district or "Pune"
+    state = payload.state or "Maharashtra"
+    lang = payload.lang or "hi"
 
     if payload.farmer_id:
         farmer = db.query(Farmer).filter(Farmer.farmer_id == payload.farmer_id).first()
@@ -101,6 +123,10 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
             previous_crop = farm.previous_season_crop
             owns_tractor = farm.owns_tractor
             owns_sprayer = farm.owns_sprayer
+            if farmer.district:
+                district = farmer.district
+            if farmer.state:
+                state = farmer.state
 
     result = recommend_crops_engine(
         soil_type=soil,
@@ -112,6 +138,9 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
         owns_sprayer=owns_sprayer,
         planned_sowing_date=payload.planned_sowing_date,
         candidate_crops=payload.candidate_crops,
+        district=district,
+        state=state,
+        lang=lang,
         db=db
     )
 
@@ -138,6 +167,9 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
 
     return RecommendCropResponse(
         status="success",
+        current_season=result.get("current_season", "KHARIF"),
+        season_display_name=result.get("season_display_name", "खरीफ मौसम 2026-27"),
+        data_sources=result.get("data_sources"),
         sowing_window=result["sowing_window"],
         top_recommendation=top_crop,
         comparison_matrix=result["comparison_matrix"]
@@ -151,6 +183,9 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
     soil = payload.soil_type or "BLACK"
     water_capacity = payload.water_capacity_level or "MEDIUM"
     capital = payload.working_capital_inr or 80000.0
+    district = payload.district or "Pune"
+    state = payload.state or "Maharashtra"
+    lang = payload.lang or "hi"
 
     if payload.farmer_id:
         farmer = db.query(Farmer).filter(Farmer.farmer_id == payload.farmer_id).first()
@@ -159,6 +194,10 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
             soil = farm.soil_type
             water_capacity = farm.water_capacity_level
             capital = farm.working_capital_inr
+            if farmer.district:
+                district = farmer.district
+            if farmer.state:
+                state = farmer.state
 
     sim_result = recommend_crops_engine(
         soil_type=soil,
@@ -168,6 +207,9 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
         rainfall_deficit_pct=payload.rainfall_deficit_pct,
         price_shock_pct=payload.mandi_price_shock_pct,
         candidate_crops=payload.candidate_crops,
+        district=district,
+        state=state,
+        lang=lang,
         db=db
     )
 
@@ -177,7 +219,7 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
     delay_msg = f"{payload.sowing_delay_days} दिन की देरी" if payload.sowing_delay_days > 0 else "सामान्य बुवाई"
     rain_msg = f"{abs(int(payload.rainfall_deficit_pct))}% कम बारिश" if payload.rainfall_deficit_pct < 0 else "सामान्य वर्षा"
     
-    alert_msg = f"{delay_msg} और {rain_msg} में {top_crop['crop_name_hi']} सबसे सुरक्षित और लाभदायी फसल है।"
+    alert_msg = f"{delay_msg} और {rain_msg} में {top_crop['crop_name']} सबसे सुरक्षित और लाभदायी फसल है।"
     resilience = "उच्च प्रतिरोधक क्षमता" if top_id in ["MOONG", "BAJRA", "TUR", "JOWAR"] else "मध्यम संवेदनशीलता"
 
     return WhatIfSimulateResponse(
