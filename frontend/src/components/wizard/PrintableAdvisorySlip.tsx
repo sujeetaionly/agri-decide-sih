@@ -2,7 +2,10 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { useWizard } from '../../context/WizardContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { formatCurrencyINR, triggerHaptic } from '../../lib/utils';
+import { formatCurrencyINR } from '../../lib/utils';
+import { getCropSchedule } from '../../data/cropMilestones';
+
+import { getDynamicCropDetail } from '../../data/cropAgronomics';
 
 interface PrintableAdvisorySlipProps {
   isOpen: boolean;
@@ -11,111 +14,100 @@ interface PrintableAdvisorySlipProps {
 
 export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
   isOpen,
-  onClose,
 }) => {
-  const { topRecommendation, farmData } = useWizard();
-  const { language, t } = useLanguage();
+  const { activeCropPlan, topRecommendation, farmData } = useWizard();
+  const { language } = useLanguage();
 
   if (!isOpen) return null;
 
-  const crop = topRecommendation || {
-    crop_id: 'SOYBEAN',
-    crop_name_en: 'Soybean',
-    crop_name_hi: 'सोयाबीन',
-    crop_name_mr: 'सोयाबीन',
-    suitability_pct: 94.0,
-    duration_days: 95,
-    expected_yield_qtl_per_acre: 9.5,
-    yield_range_qtl: '8.5 - 10.5 क्विंटल',
-    total_cost_inr_per_acre: 19412.0,
-    forecasted_mandi_price_inr_per_qtl: 4625.0,
-    expected_net_profit_per_acre_inr: 24525.0,
-    net_profit_per_day_inr: 258.0,
-    price_volatility: 'LOW',
-    why_recommended: [],
-    cost_breakdown: {
-      seed_cost: 2250.0,
-      fertilizer_cost: 2450.0,
-      pesticide_cost: 1350.0,
-      machinery_rental_cost: 1950.0,
-      labour_cost: 2850.0,
-      irrigation_electricity_cost: 394.0,
-      operational_cost_a2_inr_per_acre: 19412.0,
-      family_labor_cost_per_acre: 1863.0,
-      total_cost_a2_fl_inr_per_acre: 21275.0,
-    },
+  const crop = activeCropPlan || topRecommendation || getDynamicCropDetail('SOYBEAN', farmData);
+
+  const langKey = language || 'hi';
+
+  const L = {
+    appName: { hi: 'फसल-दिशा', mr: 'पीक-दिशा', gu: 'પાક-દિશા', raj: 'फसल-दिशा', en: 'Fasal Disha' }[langKey] || 'फसल-दिशा',
+    slipTitle: { hi: 'डिजिटल फसल योजना रिपोर्ट', mr: 'डिजिटल पीक नियोजन अहवाल', gu: 'ડિજિટલ પાક આયોજન રિપોર્ટ', raj: 'डिजिटल फसल योजना रिपोर्ट', en: 'Digital Crop Action Plan Report' }[langKey] || 'डिजिटल फसल योजना रिपोर्ट',
+    dateLabel: { hi: 'दिनांक', mr: 'दिनांक', gu: 'તારીખ', raj: 'दिनांक', en: 'Date' }[langKey] || 'दिनांक',
+    selectedCrop: { hi: 'चयनित फसल', mr: 'निवडलेले पीक', gu: 'પસંદ કરેલ પાક', raj: 'चुणीज्यौड़ी फसल', en: 'Selected Crop' }[langKey] || 'चयनित फसल',
+    fieldSize: { hi: 'खेत का आकार', mr: 'शेताचा आकार', gu: 'ખેતરનું કદ', raj: 'खेत रो नाप', en: 'Field Size' }[langKey] || 'खेत का आकार',
+    soilType: { hi: 'मिट्टी का प्रकार', mr: 'मातीचा प्रकार', gu: 'જમીનનો પ્રકાર', raj: 'माटी रो प्रकार', en: 'Soil Type' }[langKey] || 'मिट्टी का प्रकार',
+    waterSource: { hi: 'सिंचाई साधन', mr: 'पाण्याचे साधन', gu: 'સિંચાઈ સાધન', raj: 'सिंचाई रो साधन', en: 'Irrigation Source' }[langKey] || 'सिंचाई साधन',
+    acre: { hi: 'एकड़', mr: 'एकर', gu: 'એકર', raj: 'एकड़', en: 'acre' }[langKey] || 'एकड़',
+    duration: { hi: 'कालावधि', mr: 'कालावधी', gu: 'કાલાવધિ', raj: 'कालावधि', en: 'Duration' }[langKey] || 'कालावधि',
+    days: { hi: 'दिन', mr: 'दिवस', gu: 'દિવસ', raj: 'दिन', en: 'Days' }[langKey] || 'दिन',
+    expectedYield: { hi: 'अनुमानित पैदावार', mr: 'अपेक्षित उत्पादन', gu: 'અંદાજિત ઉત્પાદન', raj: 'अनुमानित पैदावार', en: 'Expected Yield' }[langKey] || 'अनुमानित पैदावार',
+    mandiPrice: { hi: 'मंडी भाव अनुमान', mr: 'मंडी भाव अंदाज', gu: 'બજાર ભાવ અંદાજ', raj: 'मंडी भाव अनुमान', en: 'Estimated Mandi Price' }[langKey] || 'मंडी भाव अनुमान',
+    totalCost: { hi: 'कुल लागत', mr: 'एकूण खर्च', gu: 'કુલ ખર્ચ', raj: 'कुल लागत', en: 'Total Cost' }[langKey] || 'कुल लागत',
+    netProfit: { hi: 'अनुमानित शुद्ध लाभ', mr: 'अपेक्षित निव्वळ नफा', gu: 'અંદાજિત ચોખ્ખો નફો', raj: 'अनुमानित शुद्ध लाभ', en: 'Estimated Net Profit' }[langKey] || 'अनुमानित शुद्ध लाभ',
+    quintal: { hi: 'क्विंटल', mr: 'क्विंटल', gu: 'ક્વિન્ટલ', raj: 'क्विंटल', en: 'qtl' }[langKey] || 'क्विंटल',
+    costBreakdownTitle: { hi: 'मदवार लागत विवरण', mr: 'बाबनिहाय खर्च तपशील', gu: 'વિગતવાર ખર્ચ વિવરણ', raj: 'मदवार लागत विवरण', en: 'Itemized Cost Breakdown' }[langKey] || 'मदवार लागत विवरण',
+    seedCost: { hi: 'बीज', mr: 'बियाणे', gu: 'બીજ', raj: 'बीज', en: 'Seed' }[langKey] || 'बीज',
+    fertilizerCost: { hi: 'उर्वरक/खाद', mr: 'खते/पोषण', gu: 'ખાતર', raj: 'खाद', en: 'Fertilizer' }[langKey] || 'उर्वरक/खाद',
+    pesticideCost: { hi: 'कीटनाशक', mr: 'कीटकनाशक', gu: 'જંતુનાશક', raj: 'दवा', en: 'Pesticide' }[langKey] || 'कीटनाशक',
+    machineryCost: { hi: 'जुताई/मशीन', mr: 'मशागत/यंत्रे', gu: 'ખેડ/મશીનરી', raj: 'जुताई/मशीन', en: 'Machinery' }[langKey] || 'जुताई/मशीन',
+    labourCost: { hi: 'मजदूरी', mr: 'मजुरी', gu: 'મજૂરી', raj: 'मजदूरी', en: 'Labour' }[langKey] || 'मजदूरी',
+    irrigationCost: { hi: 'सिंचाई/बिजली', mr: 'पाणी/वीज', gu: 'સિંચાઈ', raj: 'सिंचाई', en: 'Irrigation' }[langKey] || 'सिंचाई/बिजली',
+    planTitle: { hi: 'फसल कार्य-योजना कैलेंडर', mr: 'पीक कार्य-योजना वेळापत्रક', gu: 'પાક કાર્ય-યોજના કેલેન્ડર', raj: 'फसल कार्य-योजना पंचांग', en: 'Crop Action Plan Calendar' }[langKey] || 'फसल कार्य-योजना कैलेंडर',
+    dayAndStage: { hi: 'दिन व चरण', mr: 'दिवस व टप्पा', gu: 'દિવસ અને તબક્કો', raj: 'दिन व चरण', en: 'Day & Stage' }[langKey] || 'दिन व चरण',
+    actionAndInstructions: { hi: 'कृषि कार्य एवं निर्देश', mr: 'कृषी कार्य व मार्गदर्शन', gu: 'કૃષિ કાર્ય અને સૂચનાઓ', raj: 'कृषि कार्य व निर्देश', en: 'Agricultural Actions & Management' }[langKey] || 'कृषि कार्य एवं निर्देश',
+    helplineText: { hi: 'किसान हेल्पलाइन: 1800-180-1551 (टोल-फ्री २४x७)', mr: 'शेतकरी हेल्पलाइन: 1800-180-1551 (टोल-फ्री २४x७)', gu: 'કિસાન હેલ્પલાઇન: 1800-180-1551 (ટોલ-ફ્રી २४x७)', raj: 'किसान हेल्पलाइन: 1800-180-1551 (टोल-फ्री २४x७)', en: 'Farmer Helpline: 1800-180-1551 (Toll-Free 24x7)' }[langKey] || 'किसान हेल्पलाइन: 1800-180-1551 (टोल-फ्री २४x७)',
   };
+
+  const soilNames: Record<string, Record<string, string>> = {
+    BLACK: { hi: 'काली मिट्टी', mr: 'काळी माती', gu: 'કાળી જમીન', raj: 'काली माटी', en: 'Black Soil' },
+    RED: { hi: 'लाल मिट्टी', mr: 'तांबडी माती', gu: 'લાલ જમીન', raj: 'राता माटी', en: 'Red Soil' },
+    SANDY: { hi: 'बलुई मिट्टी', mr: 'रेतीयुक्त माती', gu: 'રેતાળ જમીન', raj: 'बलुई माटी', en: 'Sandy Soil' },
+    CLAY: { hi: 'चिकनी मिट्टी', mr: 'चिकण माती', gu: 'ચીકણી જમીન', raj: 'चिकनी माटी', en: 'Clay Soil' },
+    LOAM: { hi: 'दोमट मिट्टी', mr: 'गाळाची माती', gu: 'ગોરાડુ જમીન', raj: 'दोमट माटी', en: 'Loam Soil' },
+  };
+
+  const waterNames: Record<string, Record<string, string>> = {
+    CANAL: { hi: 'नहर', mr: 'कालवा', gu: 'નહેર', raj: 'नहर', en: 'Canal' },
+    BOREWELL: { hi: 'ट्यूबवेल', mr: 'बोअरवेल', gu: 'બોરવેલ', raj: 'बोरवेल', en: 'Borewell' },
+    WELL: { hi: 'कुआं', mr: 'विहीर', gu: 'કૂવો', raj: 'कूवो', en: 'Open Well' },
+    RAINFED: { hi: 'वर्षा आधारित', mr: 'पावसावर आधारित', gu: 'વરસાદ આધારિત', raj: 'बरसात पै', en: 'Rainfed' },
+  };
+
+  const soilKey = farmData.soilType || 'LOAM';
+  const waterKey = farmData.waterSource || 'WELL';
+  const soilName = soilNames[soilKey]?.[langKey] || soilNames['LOAM'][langKey];
+  const waterName = waterNames[waterKey]?.[langKey] || waterNames['WELL'][langKey];
 
   const cropName = (language === 'mr' ? crop.crop_name_mr : crop.crop_name_hi) || crop.crop_name_hi;
-  const soilName = farmData.soilType === 'BLACK' ? 'काली मिट्टी' : farmData.soilType === 'RED' ? 'लाल मिट्टी' : farmData.soilType === 'SANDY' ? 'बलुई मिट्टी' : farmData.soilType === 'CLAY' ? 'चिकनी मिट्टी' : 'दोमट मिट्टी';
-  const waterName = farmData.waterSource === 'CANAL' ? 'नहर' : farmData.waterSource === 'BOREWELL' ? 'ट्यूबवेल' : farmData.waterSource === 'RAINFED' ? 'बारिश (वर्षा आधारित)' : 'कुआं';
-  const todayFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  const todayFormatted = new Date().toLocaleDateString(language === 'en' ? 'en-IN' : 'hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  const MILESTONES = [
-    {
-      day: 0,
-      stage: 'बुवाई व बीज उपचार',
-      date: '25 जून 2026',
-      action: 'बीज को ट्राइकोडर्मा (4 ग्राम/किग्रा) से उपचारित कर 3-4 सेमी गहराई और 45 सेमी कतार दूरी पर बुवाई करें।',
-    },
-    {
-      day: 21,
-      stage: 'निराई-गुड़ाई',
-      date: '16 जुलाई 2026',
-      action: 'खुरपी से पहली निराई करें या उपयुक्त खरपतवार नाशक का छिड़काव करें। पौधों की उचित छंटाई करें।',
-    },
-    {
-      day: 45,
-      stage: 'फूल व कीट निगरानी',
-      date: '09 अगस्त 2026',
-      action: 'खेत में नमी बनाए रखें। तना छेदक/सुंडी की निगरानी हेतु फेरोमोन ट्रैप लगाएं व नीम तेल छिड़कें।',
-    },
-    {
-      day: 75,
-      stage: 'दाना भराव व पोषण',
-      date: '08 सितंबर 2026',
-      action: 'दानों के अच्छे भराव हेतु 00:52:34 घुलनशील उर्वरक (10 ग्राम/लीटर) का छिड़काव करें।',
-    },
-    {
-      day: 95,
-      stage: 'कटाई व भंडारण',
-      date: '28 सितंबर 2026',
-      action: 'फलियां सुनहरी भूरी होने पर कटाई करें। दानों को धूप में सुखाकर 12% से कम नमी पर सुरक्षित बोरियों में रखें।',
-    },
-  ];
+  const scheduleData = getCropSchedule(crop.crop_id || 'SOYBEAN');
 
-  const handlePrint = () => {
-    triggerHaptic('success');
-    window.print();
-  };
-
-  const handleWhatsAppShare = () => {
-    triggerHaptic('light');
-    const text = `🌾 *फसल-दिशा (Fasal Disha) — डिजिटल कृषि सलाह पर्ची* 🌾\n_हर खेत को मिले सही दिशा_\n\n📌 *सुझाई गई फसल*: ${cropName}\n🌱 *खेत का आकार*: ${farmData.landAcres || 2.5} एकड़\n🏞️ *मिट्टी*: ${soilName} | *सिंचाई*: ${waterName}\n💰 *अनुमानित शुद्ध लाभ*: ${formatCurrencyINR(crop.expected_net_profit_per_acre_inr)} / एकड़\n💵 *अनुमानित लागत*: ${formatCurrencyINR(crop.total_cost_inr_per_acre)} / एकड़\n⚖️ *अनुमानित पैदावार*: ${crop.expected_yield_qtl_per_acre} क्विंटल / एकड़\n📅 *मौसम*: खरीफ 2026-27\n\n_कृषि एवं किसान कल्याण मंत्रालय (CACP/ICAR) मानकों पर आधारित_`;
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  };
+  const milestones = scheduleData.milestones.map((m) => ({
+    day: m.day,
+    badge: m.badge[langKey] || m.badge.hi,
+    title: m.title[langKey] || m.title.hi,
+    desc: m.desc[langKey] || m.desc.hi,
+  }));
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn overflow-y-auto print:p-0 print:bg-white print:static print:overflow-visible print:block">
-      
-      {/* Strict Print CSS: Collapses root DOM so EXACTLY 1 A4 Page is generated with ZERO blank pages */}
+    <div
+      id="printable-slip-modal-backdrop"
+      className="hidden print:block print:p-0 print:bg-white print:static print:overflow-visible"
+    >
       <style>{`
         @media print {
           @page {
             size: A4 portrait;
-            margin: 8mm 10mm;
+            margin: 10mm 12mm;
           }
           html, body {
             margin: 0 !important;
             padding: 0 !important;
-            height: auto !important;
-            min-height: 0 !important;
             background: #ffffff !important;
-            color: #111111 !important;
-            overflow: visible !important;
+            color: #111827 !important;
+            box-sizing: border-box !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+          }
+          *, *::before, *::after {
+            box-sizing: border-box !important;
           }
           #root {
             display: none !important;
@@ -131,151 +123,184 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
             height: auto !important;
           }
           #printable-slip-container {
-            position: relative !important;
             width: 100% !important;
             max-width: 100% !important;
-            margin: 0 !important;
-            padding: 16px !important;
+            margin: 0 auto !important;
+            padding: 16px 20px !important;
             box-shadow: none !important;
             border: 2px solid #0F381E !important;
+            border-radius: 12px !important;
             background: #ffffff !important;
-            border-radius: 8px !important;
-            page-break-after: avoid !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-          }
-          .no-print {
-            display: none !important;
           }
         }
       `}</style>
 
+      {/* Official Advisory Document Sheet */}
       <div
         id="printable-slip-container"
-        className="w-full max-w-lg bg-white text-stone-900 rounded-3xl p-6 shadow-2xl space-y-4 border-2 border-stone-300 print:max-w-none print:border-2 print:border-[#0F381E] print:p-4 print:rounded-xl"
+        className="w-full bg-white text-[#111827] border-2 border-[#0F381E] rounded-xl p-5 space-y-3"
       >
         
-        {/* Clean Header */}
-        <div className="border-b-2 border-primary/30 pb-3 text-center space-y-1">
-          <div className="inline-block bg-primary/10 text-primary font-bold text-xs px-3 py-0.5 rounded-full mb-1">
-            फसल-दिशा (Fasal Disha)
-          </div>
-          <h2 className="text-2xl font-black font-headline text-[#1A1C18]">
-            डिजिटल कृषि सलाह पर्ची
-          </h2>
-          <p className="text-xs text-stone-500">
-            हर खेत को मिले सही दिशा • दिनांक: {todayFormatted} • खरीफ मौसम 2026-27
-          </p>
-        </div>
-
-        {/* Farmer & Plot Summary */}
-        <div className="bg-stone-50 p-3 rounded-2xl border border-stone-200 grid grid-cols-3 gap-2 text-xs text-center">
-          <div>
-            <span className="text-stone-400 block text-[10px] font-medium">खेत का आकार</span>
-            <span className="font-bold text-stone-800 text-sm">{farmData.landAcres || 2.5} एकड़</span>
-          </div>
-          <div>
-            <span className="text-stone-400 block text-[10px] font-medium">मिट्टी का प्रकार</span>
-            <span className="font-bold text-stone-800 text-sm">{soilName}</span>
-          </div>
-          <div>
-            <span className="text-stone-400 block text-[10px] font-medium">सिंचाई सुविधा</span>
-            <span className="font-bold text-stone-800 text-sm">{waterName}</span>
-          </div>
-        </div>
-
-        {/* Recommended Crop Decision Card */}
-        <div className="bg-emerald-50/80 border-2 border-emerald-600/40 p-4 rounded-2xl space-y-2.5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-black text-emerald-950 font-headline">
-              🌾 {cropName}
-            </h3>
-            <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
-              फसल अवधि: {crop.duration_days} दिन
-            </span>
-          </div>
-          
-          {/* Key Financial & Yield Scorecards */}
-          <div className="grid grid-cols-3 gap-2 pt-2 border-t border-emerald-200 text-center">
-            <div className="bg-white p-2.5 rounded-xl border border-emerald-200">
-              <span className="text-stone-500 block text-[10px] font-bold">अनुमानित शुद्ध लाभ</span>
-              <span className="font-black text-emerald-700 text-sm block my-0.5">
-                {formatCurrencyINR(crop.expected_net_profit_per_acre_inr)}
-              </span>
-              <span className="text-[10px] text-stone-400">/ एकड़</span>
+        {/* 1. Header (Icon + App Title + Date Box) */}
+        <div className="border-b-2 border-[#0F381E] pb-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Authentic Brand App Icon */}
+            <div className="w-10 h-10 rounded-xl bg-[#0F381E] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                <path d="M5 17h-2v-4m2 -3h9l4 7" />
+                <path d="M9 17l1 -6h4l2 6" />
+                <path d="M14 8h-6v3h6z" />
+              </svg>
             </div>
-
-            <div className="bg-white p-2.5 rounded-xl border border-emerald-200">
-              <span className="text-stone-500 block text-[10px] font-bold">अनुमानित कुल लागत</span>
-              <span className="font-black text-amber-800 text-sm block my-0.5">
-                {formatCurrencyINR(crop.total_cost_inr_per_acre)}
-              </span>
-              <span className="text-[10px] text-stone-400">/ एकड़</span>
+            <div>
+              <h1 className="text-xl font-black tracking-tight text-[#0F381E] leading-none">
+                {L.appName}
+              </h1>
+              <p className="text-xs font-bold text-stone-500 mt-0.5">
+                {L.slipTitle}
+              </p>
             </div>
+          </div>
 
-            <div className="bg-white p-2.5 rounded-xl border border-emerald-200">
-              <span className="text-stone-500 block text-[10px] font-bold">अनुमानित पैदावार</span>
-              <span className="font-black text-blue-800 text-sm block my-0.5">
-                {crop.expected_yield_qtl_per_acre}
-              </span>
-              <span className="text-[10px] text-stone-400">क्विंटल / एकड़</span>
-            </div>
+          <div className="text-right text-xs bg-stone-50 border border-stone-200 rounded-lg px-3 py-1 space-y-0.5">
+            <span className="font-extrabold text-stone-800 block">{L.dateLabel}: {todayFormatted}</span>
+            <span className="text-[11px] text-stone-500 font-semibold block">{L.duration}: {scheduleData.durationDays} {L.days}</span>
           </div>
         </div>
 
-        {/* 120-Day Action Schedule & Milestones (What to do on the field) */}
-        <div className="space-y-2">
-          <h4 className="font-black text-stone-800 text-xs flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-sm text-primary">calendar_month</span>
-            <span>फसल कार्य-योजना (बुवाई से कटाई तक के मुख्य चरण):</span>
-          </h4>
+        {/* 2. Farmer & Land Profile (Group 1: Clean 4-Column Balanced Grid) */}
+        <div className="bg-[#F9FAFB] rounded-xl border border-stone-300 p-2.5 grid grid-cols-4 gap-2 text-center">
+          <div className="border-r border-stone-200 pr-1">
+            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.selectedCrop}</span>
+            <span className="text-base font-black text-[#0F381E] block mt-0.5">{cropName}</span>
+          </div>
+          <div className="border-r border-stone-200 pr-1">
+            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.fieldSize}</span>
+            <span className="text-sm font-extrabold text-stone-900 block mt-0.5">{farmData.landAcres || 2.5} {L.acre}</span>
+          </div>
+          <div className="border-r border-stone-200 pr-1">
+            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.soilType}</span>
+            <span className="text-sm font-extrabold text-stone-900 block mt-0.5">{soilName}</span>
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.waterSource}</span>
+            <span className="text-sm font-extrabold text-stone-900 block mt-0.5">{waterName}</span>
+          </div>
+        </div>
 
-          <div className="space-y-2">
-            {MILESTONES.map((m) => (
-              <div key={m.day} className="bg-stone-50 p-2.5 rounded-xl border border-stone-200 text-xs space-y-1">
-                <div className="flex items-center justify-between font-bold">
-                  <span className="text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded-md">
-                    दिन {m.day} • {m.stage}
-                  </span>
-                  <span className="text-stone-600 font-semibold text-[11px]">{m.date}</span>
-                </div>
-                <p className="text-stone-700 text-[11px] leading-relaxed pl-0.5">
-                  {m.action}
-                </p>
+        {/* 3. Crop Economics & Forecast (Group 2: Direct, Concise Scorecards) */}
+        <div className="border border-stone-300 rounded-xl overflow-hidden shadow-xs">
+          <div className="bg-[#0F381E] text-white px-3.5 py-1.5 flex items-center justify-between font-bold text-xs">
+            <span className="text-sm font-black">{cropName}</span>
+            <span className="text-xs bg-white/15 px-2.5 py-0.5 rounded-full">{scheduleData.durationDays} {L.days}</span>
+          </div>
+
+          <div className="grid grid-cols-4 divide-x divide-stone-200 text-center py-2.5 bg-white">
+            <div className="px-2">
+              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.expectedYield}</span>
+              <span className="text-base font-black text-stone-900 block mt-1">
+                {crop.expected_yield_qtl_per_acre} {L.quintal}/{L.acre}
+              </span>
+            </div>
+
+            <div className="px-2">
+              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.mandiPrice}</span>
+              <span className="text-base font-black text-stone-900 block mt-1">
+                {formatCurrencyINR(crop.forecasted_mandi_price_inr_per_qtl)}/{L.quintal}
+              </span>
+            </div>
+
+            <div className="px-2">
+              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider block">{L.totalCost}</span>
+              <span className="text-base font-black text-stone-900 block mt-1">
+                {formatCurrencyINR(crop.total_cost_inr_per_acre)}/{L.acre}
+              </span>
+            </div>
+
+            <div className="px-2 bg-[#0F381E]/5">
+              <span className="text-[10px] font-black text-[#0F381E] uppercase tracking-wider block">{L.netProfit}</span>
+              <span className="text-lg font-black text-[#0F381E] block mt-0.5">
+                {formatCurrencyINR(crop.expected_net_profit_per_acre_inr)}/{L.acre}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Itemized Cost Breakdown (Group 3: Symmetrical 6-Column Card) */}
+        {crop.cost_breakdown && (
+          <div className="border border-stone-300 rounded-xl overflow-hidden text-xs">
+            <div className="bg-stone-100 px-3 py-1 font-bold text-stone-800 border-b border-stone-300 text-[11px]">
+              {L.costBreakdownTitle} ({L.acre})
+            </div>
+            <div className="grid grid-cols-6 divide-x divide-stone-200 text-center py-2 bg-white text-[11px]">
+              <div className="px-1">
+                <span className="text-[10px] font-bold text-stone-500 block">{L.seedCost}</span>
+                <span className="font-extrabold text-stone-900 block mt-0.5">{formatCurrencyINR(crop.cost_breakdown.seed_cost)}</span>
               </div>
-            ))}
+              <div className="px-1">
+                <span className="text-[10px] font-bold text-stone-500 block">{L.fertilizerCost}</span>
+                <span className="font-extrabold text-stone-900 block mt-0.5">{formatCurrencyINR(crop.cost_breakdown.fertilizer_cost)}</span>
+              </div>
+              <div className="px-1">
+                <span className="text-[10px] font-bold text-stone-500 block">{L.pesticideCost}</span>
+                <span className="font-extrabold text-stone-900 block mt-0.5">{formatCurrencyINR(crop.cost_breakdown.pesticide_cost)}</span>
+              </div>
+              <div className="px-1">
+                <span className="text-[10px] font-bold text-stone-500 block">{L.machineryCost}</span>
+                <span className="font-extrabold text-stone-900 block mt-0.5">{formatCurrencyINR(crop.cost_breakdown.machinery_rental_cost)}</span>
+              </div>
+              <div className="px-1">
+                <span className="text-[10px] font-bold text-stone-500 block">{L.labourCost}</span>
+                <span className="font-extrabold text-stone-900 block mt-0.5">{formatCurrencyINR(crop.cost_breakdown.labour_cost)}</span>
+              </div>
+              <div className="px-1">
+                <span className="text-[10px] font-bold text-stone-500 block">{L.irrigationCost}</span>
+                <span className="font-extrabold text-stone-900 block mt-0.5">{formatCurrencyINR(crop.cost_breakdown.irrigation_electricity_cost)}</span>
+              </div>
+            </div>
           </div>
+        )}
+
+        {/* 5. Step-by-Step Crop Action Plan (Group 4: Structured Milestone Calendar) */}
+        <div className="border border-stone-300 rounded-xl overflow-hidden text-xs">
+          <div className="bg-[#0F381E] text-white px-3 py-1.5 font-bold flex items-center justify-between text-[11px]">
+            <span className="text-xs font-black">{L.planTitle}</span>
+            <span className="text-stone-200 font-semibold">{scheduleData.durationDays} {L.days}</span>
+          </div>
+
+          <table className="w-full text-left border-collapse table-fixed">
+            <thead>
+              <tr className="bg-stone-100 border-b border-stone-300 text-[10px] font-bold text-stone-600 uppercase">
+                <th className="py-1 px-3 w-[26%] text-left">{L.dayAndStage}</th>
+                <th className="py-1 px-3 w-[74%] text-left">{L.actionAndInstructions}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-200 bg-white text-[11px]">
+              {milestones.map((m) => (
+                <tr key={m.day} className="hover:bg-stone-50/60">
+                  <td className="py-1.5 px-3 align-top font-bold text-stone-900">
+                    <span className="inline-block bg-[#0F381E]/10 text-[#0F381E] px-2 py-0.5 rounded text-[10px] font-black border border-[#0F381E]/20 mb-0.5">
+                      {L.days} {m.day}
+                    </span>
+                    <span className="block text-xs font-bold text-stone-800 leading-tight">{m.badge}</span>
+                  </td>
+                  <td className="py-1.5 px-3 align-top">
+                    <span className="font-extrabold text-stone-900 text-xs block leading-snug">{m.title}</span>
+                    <p className="text-[10.5px] text-stone-600 mt-0.5 leading-relaxed">{m.desc}</p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* Clean Footer: Helpline */}
-        <div className="pt-2 border-t border-stone-200 text-center text-xs text-stone-500 font-medium">
-          किसान कॉल सेंटर हेल्पलाइन: <strong className="text-stone-800">1800-180-1551</strong> (टोल-फ्री २४x७)
-        </div>
-
-        {/* Modal Action Buttons (Screen Only - Hidden During Print) */}
-        <div className="space-y-2.5 pt-2 no-print">
-          <button
-            onClick={handlePrint}
-            className="w-full py-4 px-6 rounded-full bg-primary hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-lg">print</span>
-            <span>पर्ची प्रिंट / डाउनलोड करें (PDF)</span>
-          </button>
-
-          <button
-            onClick={handleWhatsAppShare}
-            className="w-full py-3 px-6 rounded-full bg-white border-2 border-stone-300 text-stone-800 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-base text-emerald-600">share</span>
-            <span>व्हाट्सएप पर भेजें</span>
-          </button>
-
-          <button
-            onClick={onClose}
-            className="w-full py-1.5 text-stone-400 hover:text-stone-700 text-xs font-bold text-center cursor-pointer"
-          >
-            बंद करें
-          </button>
+        {/* 6. Footer (Group 5: Helpline) */}
+        <div className="pt-2 border-t border-stone-300 text-center text-[10.5px] font-bold text-[#0F381E]">
+          {L.helplineText}
         </div>
 
       </div>

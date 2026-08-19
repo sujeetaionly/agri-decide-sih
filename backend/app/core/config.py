@@ -6,8 +6,22 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
-    # Default to SQLite for zero-friction local development; easily overridden by environment variable for PostgreSQL
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./agri_decide.db")
+    # Production-Grade PostgreSQL Database Configuration
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL",
+        "postgresql+psycopg2://postgres:postgres@localhost:5432/fasal_disha_db"
+    )
+    
+    # PostgreSQL Connection Pool Parameters
+    DB_POOL_SIZE: int = 20
+    DB_MAX_OVERFLOW: int = 10
+    DB_POOL_TIMEOUT: int = 30
+    DB_POOL_RECYCLE: int = 3600
+
+    # JWT Authentication Configuration
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "fasal_disha_production_secret_key_2026_secure")
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30  # 30 days
     
     # CORS Origins
     CORS_ORIGINS: list[str] = [

@@ -1,43 +1,24 @@
-export interface LocationData {
-  state: string;
-  district: string;
-  tehsil: string;
-  isAutoDetected?: boolean;
-  latitude?: number;
-  longitude?: number;
-  detectedName?: string;
+export type LandUnit = 'ACRE' | 'BIGHA' | 'GUNTHA';
+export type SoilType = 'BLACK' | 'LOAM' | 'RED' | 'SANDY' | 'CLAY';
+export type WaterCapacity = 'HIGH' | 'MEDIUM' | 'LOW';
+export type WaterSource = 'CANAL' | 'WELL' | 'BOREWELL' | 'RAINFED';
+export type CropSeason = 'KHARIF' | 'RABI' | 'ZAID';
+
+export interface FarmQuestionnaireState {
+  landAcres: number | null;
+  landUnit: LandUnit;
+  soilType: SoilType | string | null;
+  waterCapacity: WaterCapacity | string | null;
+  waterSource: WaterSource | string | null;
+  previousCrop: string | null;
+  previousCrops: string[];
+  intendedCrops: string[];
+  season: CropSeason | string | null;
+  plannedSowingDate: string | null;
 }
 
-export type AreaUnit = 'Acres' | 'Hectares';
-
-export type WaterAvailabilityLevel = 'Low' | 'Moderate' | 'High';
-
-export interface FarmSoilData {
-  area: number;
-  unit: AreaUnit;
-  soilType: string;
-  soilNameHi: string;
-  waterAvailability: WaterAvailabilityLevel;
-  waterSource: string[];
-}
-
-export interface CropPreferencesData {
-  sowingDate: string;
-  preferredCrops: string[];
-  voiceTranscript?: string;
-}
-
-export interface WhatIfSimulationData {
+export interface WhatIfSimulationState {
   rainfallOffset: number; // -50% to +50%
-  priceFluctuation: number; // -30% to +30%
+  priceOffset: number; // -30% to +30%
 }
 
-export interface WizardState {
-  currentStep: number;
-  location: LocationData;
-  farmSoil: FarmSoilData;
-  cropPreferences: CropPreferencesData;
-  selectedCropId: string;
-  whatIf: WhatIfSimulationData;
-  isOfflineSaved: boolean;
-}

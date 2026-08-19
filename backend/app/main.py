@@ -6,6 +6,7 @@ from backend.app.core.config import settings
 from backend.app.core.database import Base, engine
 from backend.app.api.v1.farm_routes import router as farm_router
 from backend.app.api.v1.crop_routes import router as crop_router
+from backend.app.api.v1.auth_routes import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,6 +31,7 @@ app.add_middleware(
 )
 
 # Register API routers
+app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(farm_router, prefix=settings.API_V1_STR)
 app.include_router(crop_router, prefix=settings.API_V1_STR)
 

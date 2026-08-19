@@ -10,7 +10,7 @@ export const Badge: React.FC<BadgeProps> = ({ className, variant = 'primary', ch
     primary: 'bg-primary-container text-on-primary-container font-bold',
     secondary: 'bg-secondary-container text-on-secondary-container font-bold',
     outline: 'border border-outline text-on-surface bg-surface-container-low font-medium',
-    success: 'bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold',
+    success: 'bg-primary/10 text-primary border border-primary/20 font-bold',
     warning: 'bg-amber-100 text-amber-950 border border-amber-300 font-bold',
     tertiary: 'bg-tertiary-fixed text-on-tertiary-fixed font-bold',
   };

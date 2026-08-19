@@ -7,17 +7,25 @@ import { speakText } from '../../../lib/speech';
 type TimingChoice = 'THIS_WEEK' | 'NEXT_MONTH' | 'CUSTOM_DATE';
 
 export const SowingSeasonCard: React.FC = () => {
-  const { farmData, updateFarmData, fetchRecommendations, isLoadingRecommendation, prevCard } = useWizard();
+  const { farmData, updateFarmData, nextCard, prevCard } = useWizard();
   const { language, t } = useLanguage();
 
-  const [selectedTiming, setSelectedTiming] = useState<TimingChoice | null>(null);
-  
-  // Format today's date + offsets for ISO format (YYYY-MM-DD)
+  // Helper to format ISO date strings (YYYY-MM-DD)
   const getOffsetDateIso = (daysAhead: number) => {
     const d = new Date();
     d.setDate(d.getDate() + daysAhead);
     return d.toISOString().split('T')[0];
   };
+
+  const todayIso = getOffsetDateIso(0);
+  const maxDateIso = getOffsetDateIso(365);
+
+  const [selectedTiming, setSelectedTiming] = useState<TimingChoice>(() => {
+    if (farmData.plannedSowingDate) {
+      return 'CUSTOM_DATE';
+    }
+    return 'THIS_WEEK';
+  });
 
   const [customDate, setCustomDate] = useState<string>(
     farmData.plannedSowingDate || getOffsetDateIso(14)
@@ -38,36 +46,47 @@ export const SowingSeasonCard: React.FC = () => {
     }
   };
 
-  const handleCustomDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+  const handleCustomDateChange = (val: string) => {
+    if (!val) return;
     setCustomDate(val);
+    setSelectedTiming('CUSTOM_DATE');
     updateFarmData({ season: 'KHARIF', plannedSowingDate: val });
   };
 
-  const isSelectedAny = selectedTiming !== null && (selectedTiming !== 'CUSTOM_DATE' || Boolean(customDate));
-
-  const timingSummaryText =
-    selectedTiming === 'THIS_WEEK'
-      ? t('sowingTimingWeek')
-      : selectedTiming === 'NEXT_MONTH'
-      ? t('sowingTimingMonth')
-      : selectedTiming === 'CUSTOM_DATE' && customDate
-      ? `तारीख: ${new Date(customDate).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`
-      : '';
+  const formatDisplayDate = (isoStr: string) => {
+    try {
+      const parts = isoStr.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        return d.toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+      return isoStr;
+    } catch {
+      return isoStr;
+    }
+  };
 
   const handleAudio = () => {
     triggerHaptic('light');
     let msg = `${t('card5Title')}। सही बुवाई समय से मानसूनी बारिश का अधिकतम लाभ और कीट-रोग का जोखिम कम होता है। `;
     if (selectedTiming === 'THIS_WEEK') msg += 'वर्तमान चयन: इसी हफ्ते।';
     else if (selectedTiming === 'NEXT_MONTH') msg += 'वर्तमान चयन: अगले एक महीने में।';
-    else if (selectedTiming === 'CUSTOM_DATE') msg += `वर्तमान चयन: तारीख ${customDate}।`;
+    else if (selectedTiming === 'CUSTOM_DATE') msg += `वर्तमान चयन: तारीख ${formatDisplayDate(customDate)}।`;
     speakText(msg, language);
   };
 
   const handleSubmit = () => {
-    if (!isSelectedAny || isLoadingRecommendation) return;
     triggerHaptic('success');
-    fetchRecommendations();
+    if (selectedTiming === 'CUSTOM_DATE') {
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: customDate || getOffsetDateIso(14) });
+    } else if (selectedTiming === 'NEXT_MONTH') {
+      const date = getOffsetDateIso(25);
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: date });
+    } else {
+      const date = getOffsetDateIso(3);
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: date });
+    }
+    nextCard();
   };
 
   const handleBack = () => {
@@ -75,122 +94,182 @@ export const SowingSeasonCard: React.FC = () => {
     prevCard();
   };
 
-  const TIMING_OPTIONS: {
-    id: TimingChoice;
-    title: string;
-    sub: string;
-    icon: string;
-    iconBg: string;
-  }[] = [
-    {
-      id: 'THIS_WEEK',
-      title: t('sowingTimingWeek'),
-      sub: 'तुरंत बुवाई की तैयारी के लिए मौसम अनुसार सलाह',
-      icon: 'bolt',
-      iconBg: 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 shadow-xs',
-    },
-    {
-      id: 'NEXT_MONTH',
-      title: t('sowingTimingMonth'),
-      sub: 'मानसूनी बारिश के आगमन अनुसार योजना',
-      icon: 'cloud_sync',
-      iconBg: 'bg-sky-100 dark:bg-sky-950/70 text-sky-700 dark:text-sky-300 border border-sky-500/30 shadow-xs',
-    },
-    {
-      id: 'CUSTOM_DATE',
-      title: t('sowingTimingCustomDate'),
-      sub: 'कैलेंडर से अपनी सुविधानुसार सटीक तारीख चुनें',
-      icon: 'edit_calendar',
-      iconBg: 'bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 border border-amber-500/30 shadow-xs',
-    },
-  ];
-
   return (
-    <div className="space-y-6 animate-fadeIn pb-24">
+    <div className="space-y-4 animate-fadeIn">
       
       {/* Question Title & Reassurance Subtitle with Audio */}
-      <div className="space-y-2 pb-1">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="text-xl sm:text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
-            {t('card5Title')}
-          </h2>
+      <div className="space-y-2 pt-1 pb-1">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
+            {t('card5Category')}
+          </span>
           <button
             type="button"
             onClick={handleAudio}
-            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
+            aria-label={t('listen')}
+            className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15 active:scale-95 transition-all cursor-pointer shadow-none"
           >
             <span className="material-symbols-outlined text-base">volume_up</span>
             <span>{t('listen')}</span>
           </button>
         </div>
-        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
-          सही बुवाई समय से मानसूनी बारिश का अधिकतम लाभ और कीट-रोग का जोखिम कम होता है।
+
+        <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
+          {t('card5Title')}
+        </h2>
+
+        <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
+          {t('card5Sub')}
         </p>
       </div>
 
-      {/* Sowing Timing Options List */}
+      {/* Sowing Options List */}
       <div className="space-y-3.5">
-        {TIMING_OPTIONS.map((opt) => {
-          const isSelected = selectedTiming === opt.id;
-          return (
-            <div
-              key={opt.id}
-              onClick={() => handleSelectTiming(opt.id)}
-              className={`p-4 sm:p-4.5 rounded-2xl border-2 transition-all cursor-pointer space-y-3 active:scale-[0.99] shadow-2xs ${
-                isSelected
-                  ? 'bg-emerald-50/40 dark:bg-emerald-950/30 border-emerald-700 dark:border-emerald-500 shadow-sm ring-2 ring-emerald-700/20'
-                  : 'bg-white dark:bg-[#1E231B] border-stone-300 dark:border-stone-700 hover:border-emerald-600/40'
-              }`}
-            >
-              <div className="flex items-center gap-3.5">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-xs ${opt.iconBg}`}>
-                  <span className="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_1]">{opt.icon}</span>
-                </div>
+        
+        {/* Option 1: THIS WEEK */}
+        <button
+          type="button"
+          onClick={() => handleSelectTiming('THIS_WEEK')}
+          className={`w-full text-left p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer ${
+            selectedTiming === 'THIS_WEEK'
+              ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-md ring-2 ring-primary/20'
+              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
+          }`}
+        >
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
+            <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">bolt</span>
+          </div>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-extrabold text-[#1A1C18] dark:text-[#E2E3DC] font-headline">
-                      {opt.title}
-                    </h3>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected ? 'border-emerald-700 bg-emerald-700 text-white' : 'border-stone-400'
-                    }`}>
-                      {isSelected && <span className="material-symbols-outlined text-[10px] font-black">check</span>}
-                    </div>
-                  </div>
-                  <p className="text-xs text-stone-600 dark:text-stone-400 mt-0.5 leading-relaxed">
-                    {opt.sub}
-                  </p>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-lg sm:text-xl font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
+                {t('sowingTimingWeek')}
+              </h3>
+              <div
+                className={`w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                  selectedTiming === 'THIS_WEEK'
+                    ? 'border-primary bg-primary text-white'
+                    : 'border-stone-300 dark:border-stone-600 bg-transparent'
+                }`}
+              >
+                {selectedTiming === 'THIS_WEEK' && (
+                  <span className="material-symbols-outlined text-sm font-black leading-none">check</span>
+                )}
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1.5 leading-relaxed">
+              तुरंत बुवाई की तैयारी के लिए मौसम अनुसार उपयुक्त विकल्प
+            </p>
+          </div>
+        </button>
+
+        {/* Option 2: NEXT MONTH */}
+        <button
+          type="button"
+          onClick={() => handleSelectTiming('NEXT_MONTH')}
+          className={`w-full text-left p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer ${
+            selectedTiming === 'NEXT_MONTH'
+              ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-md ring-2 ring-primary/20'
+              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
+          }`}
+        >
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
+            <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">cloud_sync</span>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-lg sm:text-xl font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
+                {t('sowingTimingMonth')}
+              </h3>
+              <div
+                className={`w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                  selectedTiming === 'NEXT_MONTH'
+                    ? 'border-primary bg-primary text-white'
+                    : 'border-stone-300 dark:border-stone-600 bg-transparent'
+                }`}
+              >
+                {selectedTiming === 'NEXT_MONTH' && (
+                  <span className="material-symbols-outlined text-sm font-black leading-none">check</span>
+                )}
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1.5 leading-relaxed">
+              मानसूनी बारिश के आगमन अनुसार योजना
+            </p>
+          </div>
+        </button>
+
+        {/* Option 3: CUSTOM CALENDAR DATE (Fully Integrated & Interactive) */}
+        <div
+          onClick={() => handleSelectTiming('CUSTOM_DATE')}
+          className={`w-full p-5 rounded-3xl border-2 transition-all cursor-pointer space-y-3 ${
+            selectedTiming === 'CUSTOM_DATE'
+              ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-md ring-2 ring-primary/20'
+              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
+          }`}
+        >
+          <div className="flex gap-4 items-center">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
+              <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">calendar_month</span>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-lg sm:text-xl font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
+                  {t('sowingTimingCustomDate')}
+                </h3>
+                <div
+                  className={`w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                    selectedTiming === 'CUSTOM_DATE'
+                      ? 'border-primary bg-primary text-white'
+                      : 'border-stone-300 dark:border-stone-600 bg-transparent'
+                  }`}
+                >
+                  {selectedTiming === 'CUSTOM_DATE' && (
+                    <span className="material-symbols-outlined text-sm font-black leading-none">check</span>
+                  )}
                 </div>
               </div>
-
-              {/* Seamless Integrated Date Picker with Clean Hierarchy */}
-              {opt.id === 'CUSTOM_DATE' && isSelected && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="pt-3 border-t border-emerald-700/20 dark:border-emerald-500/20 animate-fadeIn"
-                >
-                  <div className="relative flex items-center">
-                    <input
-                      type="date"
-                      value={customDate}
-                      onChange={handleCustomDateChange}
-                      className="w-full h-12 pl-4 pr-10 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 font-bold text-sm focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20 focus:outline-none transition-all cursor-pointer shadow-2xs"
-                    />
-                    <span className="material-symbols-outlined absolute right-3 text-stone-400 pointer-events-none text-xl">
-                      calendar_month
-                    </span>
-                  </div>
-                </div>
-              )}
+              <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1 leading-relaxed">
+                कैलेंडर से अपनी सुविधानुसार सटीक तारीख चुनें
+              </p>
             </div>
-          );
-        })}
+          </div>
+
+          {/* Interactive Date Picker Container */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="pt-2 border-t border-stone-200/80 dark:border-stone-800 space-y-2"
+          >
+            <div className="flex items-center justify-between text-xs font-bold text-stone-600 dark:text-stone-300">
+              <span className="flex items-center gap-1.5 text-primary">
+                <span className="material-symbols-outlined text-base">event</span>
+                <span>चयनित बुवाई तारीख:</span>
+              </span>
+              <span className="text-sm font-black text-stone-900 dark:text-stone-100 bg-stone-100 dark:bg-stone-800 px-3 py-1 rounded-xl">
+                {formatDisplayDate(customDate)}
+              </span>
+            </div>
+
+            <div className="relative">
+              <input
+                type="date"
+                min={todayIso}
+                max={maxDateIso}
+                value={customDate}
+                onChange={(e) => handleCustomDateChange(e.target.value)}
+                className="w-full bg-stone-50 dark:bg-stone-900 border-2 border-primary/40 focus:border-primary rounded-2xl px-4 py-3.5 text-stone-900 dark:text-stone-100 font-bold focus:outline-none text-base cursor-pointer shadow-2xs"
+              />
+            </div>
+          </div>
+        </div>
+
       </div>
 
       {/* True Progressive Blur Layer with Gradient Mask */}
       <div
-        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-28"
+        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-20"
         style={{
           background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
           backdropFilter: 'blur(14px)',
@@ -206,7 +285,7 @@ export const SowingSeasonCard: React.FC = () => {
           <button
             type="button"
             onClick={handleBack}
-            className="py-3.5 px-5 rounded-full bg-white/95 dark:bg-[#1E231B]/95 backdrop-blur-sm border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-md hover:shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            className="py-3.5 px-5 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-none"
           >
             <span className="material-symbols-outlined text-base">arrow_back</span>
             <span>{t('back')}</span>
@@ -215,22 +294,10 @@ export const SowingSeasonCard: React.FC = () => {
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={!isSelectedAny || isLoadingRecommendation}
-            className={`flex-1 py-3.5 px-6 rounded-full font-extrabold text-base shadow-xl transition-all flex items-center justify-center gap-2 ${
-              isSelectedAny && !isLoadingRecommendation
-                ? 'bg-amber-400 hover:bg-amber-300 text-stone-950 active:scale-[0.98] cursor-pointer'
-                : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
-            }`}
+            className="flex-1 py-3.5 px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-base transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer shadow-none"
           >
-            {isLoadingRecommendation ? (
-              <span className="material-symbols-outlined text-xl animate-spin">progress_activity</span>
-            ) : (
-              <>
-                <span className="material-symbols-outlined text-xl">psychology_alt</span>
-                <span>{t('seeRecommendations')}</span>
-                <span className="material-symbols-outlined text-lg">arrow_forward</span>
-              </>
-            )}
+            <span>{t('continue')}</span>
+            <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HomeTopAppBar } from '../components/home/HomeTopAppBar';
 import { HomeBottomNav, NavTab } from '../components/home/HomeBottomNav';
 import { MilestoneCalendarStep } from '../components/wizard/MilestoneCalendarStep';
@@ -20,14 +20,20 @@ export const ActiveCropPlanPage: React.FC<ActiveCropPlanPageProps> = ({
   onOpenSettings,
   onStartNewRecommendation,
 }) => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
   const { topRecommendation } = useWizard();
   const { language, t } = useLanguage();
 
-  const handleAudio = () => {
-    triggerHaptic('light');
-    const msg = `मेरी फसल पृष्ठ। आपकी चयनित फसल की १२०-दिवसीय कृषि कार्य-योजना यहां दी गई है।`;
-    speakText(msg, language);
-  };
+  const audioText = language === 'mr'
+    ? 'माझे पीक पृष्ठ. आपल्या निवडलेल्या पिकाचे १२० दिवसांचे कृषी वेळापत्रक येथे दिले आहे.'
+    : language === 'gu'
+    ? 'મારો પાક પેજ. તમારા પસંદ કરેલા પાકનું ૧૨૦ દિવસનું કૃષિ આયોજન અહીં આપેલ છે.'
+    : language === 'en'
+    ? 'My Crop page. Your selected crop 120-day agricultural action plan is shown below.'
+    : 'मेरी फसल पृष्ठ। आपकी चयनित फसल की १२०-दिवसीय संपूर्ण कृषि कार्य-योजना और आवश्यक कार्य यहां दिए गए हैं।';
 
   const handleNavChange = (tab: NavTab) => {
     if (tab === 'home') onGoToHome();
@@ -36,12 +42,12 @@ export const ActiveCropPlanPage: React.FC<ActiveCropPlanPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col pt-16 pb-20 font-body">
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col font-body">
       {/* 1. Top Status Bar */}
-      <HomeTopAppBar />
+      <HomeTopAppBar audioText={audioText} />
 
       {/* 2. Main Content */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-2 pb-2 animate-fadeIn">
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-[5.5rem] pb-24 animate-fadeIn">
         {/* 120-Day Action Plan Component */}
         <MilestoneCalendarStep onReturnHome={onGoToHome} />
       </main>

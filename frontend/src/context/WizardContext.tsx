@@ -1,70 +1,33 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { triggerHaptic } from '../lib/utils';
+import { authService } from '../lib/auth';
+import {
+  RecommendedCrop,
+  ComparisonCropItem,
+  IntendedVsRecommendedComparison,
+  CACPItemizedCost,
+} from '../types/crop';
+import { FarmQuestionnaireState } from '../types/wizard';
+import { MASTER_CROP_MAP, getDynamicCropDetail } from '../data/cropAgronomics';
+import { apiService } from '../services/api';
 
-export interface FarmQuestionnaireState {
-  landAcres: number | null;
-  landUnit: 'ACRE' | 'BIGHA' | 'GUNTHA';
-  soilType: string | null; // 'BLACK', 'LOAM', 'RED', 'SANDY', 'CLAY'
-  waterCapacity: string | null; // 'HIGH', 'MEDIUM', 'LOW'
-  waterSource: string | null; // 'CANAL', 'WELL', 'BOREWELL', 'RAINFED'
-  previousCrop: string | null; // e.g. 'WHEAT, GRAM'
-  previousCrops: string[]; // multi-crop list e.g. ['WHEAT', 'GRAM']
-  season: string | null; // 'KHARIF', 'RABI', 'ZAID'
-  plannedSowingDate: string | null;
-}
-
-export interface CACPItemizedCost {
-  seed_cost: number;
-  fertilizer_cost: number;
-  pesticide_cost: number;
-  machinery_rental_cost: number;
-  labour_cost: number;
-  irrigation_electricity_cost: number;
-  operational_cost_a2_inr_per_acre: number;
-  family_labor_cost_per_acre: number;
-  total_cost_a2_fl_inr_per_acre: number;
-}
-
-export interface RecommendedCrop {
-  crop_id: string;
-  crop_name_en: string;
-  crop_name_hi: string;
-  crop_name_mr?: string;
-  suitability_pct: number;
-  duration_days: number;
-  expected_yield_qtl_per_acre: number;
-  yield_range_qtl: string;
-  total_cost_inr_per_acre: number;
-  cost_breakdown?: CACPItemizedCost;
-  forecasted_mandi_price_inr_per_qtl: number;
-  expected_net_profit_per_acre_inr: number;
-  net_profit_per_day_inr: number;
-  price_volatility: string;
-  why_recommended: string[];
-}
-
-export interface ComparisonCropItem {
-  crop_id: string;
-  crop_name_en: string;
-  crop_name_hi: string;
-  crop_name_mr?: string;
-  suitability_pct: number;
-  sowing_window_status: string;
-  total_cost_inr_per_acre: number;
-  cost_breakdown?: CACPItemizedCost;
-  expected_yield_qtl_per_acre: number;
-  forecasted_mandi_price_inr_per_qtl: number;
-  expected_net_profit_per_acre_inr: number;
-  duration_days: number;
-  net_profit_per_day_inr: number;
-}
+export type {
+  RecommendedCrop,
+  ComparisonCropItem,
+  IntendedVsRecommendedComparison,
+  CACPItemizedCost,
+  FarmQuestionnaireState,
+};
 
 interface WizardContextType {
-  currentCard: number; // 1 to 5 (Question Cards), 6 (Recommendations), 7 (What-If), 8 (120-Day Plan)
+  currentCard: number; // 1 to 6 (Question Cards), 7 (Recommendations), 8 (What-If), 9 (120-Day Plan)
   farmData: FarmQuestionnaireState;
   updateFarmData: (data: Partial<FarmQuestionnaireState>) => void;
   topRecommendation: RecommendedCrop | null;
+  activeCropPlan: RecommendedCrop | null;
+  chooseCropForMyCropPlan: (crop: RecommendedCrop) => void;
   comparisonMatrix: ComparisonCropItem[];
+  intendedVsRecommended: IntendedVsRecommendedComparison | null;
   isLoadingRecommendation: boolean;
   fetchRecommendations: () => Promise<void>;
   goToCard: (card: number) => void;
@@ -84,6 +47,7 @@ const DEFAULT_FARM_DATA: FarmQuestionnaireState = {
   waterSource: null,
   previousCrop: null,
   previousCrops: [],
+  intendedCrops: [],
   season: null,
   plannedSowingDate: null,
 };
@@ -187,20 +151,49 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [farmData, setFarmData] = useState<FarmQuestionnaireState>(DEFAULT_FARM_DATA);
 
   const [topRecommendation, setTopRecommendation] = useState<RecommendedCrop | null>(DEFAULT_TOP_RECOMMENDATION);
+  const [activeCropPlan, setActiveCropPlan] = useState<RecommendedCrop | null>(() => {
+    try {
+      const saved = localStorage.getItem('krishi_active_crop_plan');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.warn('Failed to parse krishi_active_crop_plan', e);
+    }
+    return DEFAULT_TOP_RECOMMENDATION;
+  });
+
   const [comparisonMatrix, setComparisonMatrix] = useState<ComparisonCropItem[]>(DEFAULT_COMPARISON_MATRIX);
+  const [intendedVsRecommended, setIntendedVsRecommended] = useState<IntendedVsRecommendedComparison | null>(null);
   const [selectedCropId, setSelectedCropId] = useState<string>('SOYBEAN');
   const [isLoadingRecommendation, setIsLoadingRecommendation] = useState<boolean>(false);
 
+  const chooseCropForMyCropPlan = (crop: RecommendedCrop) => {
+    triggerHaptic('success');
+    setActiveCropPlan(crop);
+    localStorage.setItem('krishi_active_crop_plan', JSON.stringify(crop));
+    localStorage.setItem(
+      'krishi_recent_analysis',
+      JSON.stringify({
+        cropName: crop.crop_name_hi,
+        profitPerAcre: crop.expected_net_profit_per_acre_inr,
+        yieldQtl: crop.expected_yield_qtl_per_acre,
+        date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+        landArea: farmData.landAcres || 2.5,
+      })
+    );
+  };
+
   // Android Hardware Back Gesture integration
   useEffect(() => {
-    const handlePopState = () => {
-      if (currentCard > 1) {
-        setCurrentCard((prev) => prev - 1);
+    const handlePopState = (e: PopStateEvent) => {
+      if (e.state && typeof e.state.card === 'number') {
+        setCurrentCard(e.state.card);
       }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [currentCard]);
+  }, []);
 
   const goToCard = (card: number) => {
     triggerHaptic('light');
@@ -230,48 +223,41 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const fetchRecommendations = async () => {
     setIsLoadingRecommendation(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/crop/recommend', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          total_land_acres: farmData.landAcres || 2.5,
-          soil_type: farmData.soilType || 'BLACK',
-          water_source: farmData.waterSource || 'WELL',
-          water_capacity_level: farmData.waterCapacity || 'MEDIUM',
-          working_capital_inr: 80000.0,
-          previous_season_crop: farmData.previousCrops && farmData.previousCrops.length > 0
-            ? farmData.previousCrops[0]
-            : (farmData.previousCrop || 'WHEAT'),
-          planned_sowing_date: farmData.plannedSowingDate || '2026-06-25',
-        }),
+      const data = await apiService.recommendCrops({
+        total_land_acres: farmData.landAcres || 2.5,
+        soil_type: farmData.soilType || 'BLACK',
+        water_source: farmData.waterSource || 'WELL',
+        water_capacity_level: farmData.waterCapacity || 'MEDIUM',
+        working_capital_inr: 80000.0,
+        previous_season_crop: farmData.previousCrops && farmData.previousCrops.length > 0
+          ? farmData.previousCrops[0]
+          : (farmData.previousCrop || 'WHEAT'),
+        planned_sowing_date: farmData.plannedSowingDate || '2026-06-25',
+        intended_crops: farmData.intendedCrops || [],
+        lang: 'hi',
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.top_recommendation) {
-          setTopRecommendation(data.top_recommendation);
-          setSelectedCropId(data.top_recommendation.crop_id);
-          // Persist recent analysis for home screen
-          localStorage.setItem(
-            'krishi_recent_analysis',
-            JSON.stringify({
-              cropName: data.top_recommendation.crop_name_hi,
-              profitPerAcre: data.top_recommendation.expected_net_profit_per_acre_inr,
-              yieldQtl: data.top_recommendation.expected_yield_qtl_per_acre,
-              date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
-              landArea: farmData.landAcres || 2.5,
-            })
-          );
+      if (data && data.top_recommendation) {
+        setTopRecommendation(data.top_recommendation);
+        setSelectedCropId(data.top_recommendation.crop_id);
+        // If the farmer has not chosen a specific crop yet, seed it once
+        if (!localStorage.getItem('krishi_active_crop_plan')) {
+          setActiveCropPlan(data.top_recommendation);
         }
-        if (data.comparison_matrix) {
-          setComparisonMatrix(data.comparison_matrix);
-        }
+      }
+      if (data && data.comparison_matrix) {
+        setComparisonMatrix(data.comparison_matrix);
+      }
+      if (data && data.intended_vs_recommended) {
+        setIntendedVsRecommended(data.intended_vs_recommended);
+      } else {
+        setIntendedVsRecommended(null);
       }
     } catch (e) {
       console.warn('API error, using cached benchmark recommendations:', e);
     } finally {
       setIsLoadingRecommendation(false);
-      goToCard(6); // Move to recommendations view
+      goToCard(7); // Move to recommendations view (Step 7)
     }
   };
 
@@ -287,7 +273,10 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         farmData,
         updateFarmData,
         topRecommendation,
+        activeCropPlan,
+        chooseCropForMyCropPlan,
         comparisonMatrix,
+        intendedVsRecommended,
         isLoadingRecommendation,
         fetchRecommendations,
         goToCard,

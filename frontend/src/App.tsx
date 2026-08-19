@@ -34,7 +34,21 @@ const AppContent: React.FC = () => {
   });
 
   const { language, setLanguage } = useLanguage();
-  const { resetWizard, goToCard } = useWizard();
+  const { resetWizard, goToCard, updateFarmData, setSelectedCropId } = useWizard();
+  const [openedFromHistory, setOpenedFromHistory] = useState<boolean>(false);
+
+  const handleOpenAnalysisFromHistory = (historyItem: any) => {
+    setOpenedFromHistory(true);
+    updateFarmData({
+      landAcres: historyItem.total_land_acres || 2.5,
+      soilType: historyItem.soil_type === 'काली मिट्टी' ? 'BLACK' : 'LOAM',
+      intendedCrops: (historyItem.compared_crops || []).map((c: any) => c.crop_id),
+    });
+    setSelectedCropId(historyItem.winner_crop?.crop_id || 'SOYBEAN');
+    goToCard(7);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    navigateTo('wizard');
+  };
 
   const [viewMode, setViewMode] = useState<AppViewMode>(() => {
     const hash = window.location.hash.replace('#', '');
@@ -91,9 +105,14 @@ const AppContent: React.FC = () => {
     navigateTo('language-confirm');
   };
 
-  // 3. Language Confirmation -> Audio Guide
+  // 3. Language Confirmation -> Settings (if onboarded) or Audio Guide (if first time)
   const handleConfirmLanguage = () => {
-    navigateTo('audio-guide');
+    const hasOnboarded = localStorage.getItem('krishi_has_onboarded');
+    if (hasOnboarded === 'true') {
+      navigateTo('settings');
+    } else {
+      navigateTo('audio-guide');
+    }
   };
 
   const handleChangeLanguage = () => {
@@ -119,12 +138,14 @@ const AppContent: React.FC = () => {
 
   // Navigation handlers
   const handleStartWizard = () => {
+    setOpenedFromHistory(false);
     resetWizard();
     goToCard(1);
     navigateTo('wizard');
   };
 
   const handleOpenMyCropPlan = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     navigateTo('my-crop');
   };
 
@@ -214,6 +235,7 @@ const AppContent: React.FC = () => {
           onOpenMyCropPlan={handleOpenMyCropPlan}
           onOpenHistory={handleOpenHistory}
           onOpenSettings={handleOpenSettings}
+          openedFromHistory={openedFromHistory}
         />
       )}
 
@@ -234,6 +256,7 @@ const AppContent: React.FC = () => {
           onGoToHome={handleReturnHome}
           onOpenMyCropPlan={handleOpenMyCropPlan}
           onOpenSettings={handleOpenSettings}
+          onOpenAnalysisFromHistory={handleOpenAnalysisFromHistory}
         />
       )}
 

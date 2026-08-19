@@ -8,22 +8,22 @@
     --primary-container: 46 125 50;
     --on-primary: 255 255 255;
     --background: 245 252 237;
-    --on-background: 23 29 20;
+    --on-background: 24 28 24;
     --surface-lowest: 255 255 255;
-    --surface-low: 239 246 231;
-    --surface-container: 233 240 225;
+    --surface-low: 243 246 240;
+    --surface-container: 236 240 232;
     --outline: 112 122 108;
-    --outline-variant: 191 202 186;
+    --outline-variant: 216 224 212;
   }
 
   * {
-    border-color: #dee5d6;
+    border-color: #e2e8dc;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
     font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #171d14;
+    color: #181c18;
     background-color: #f5fced;
     overflow-x: hidden;
     line-height: 1.5;

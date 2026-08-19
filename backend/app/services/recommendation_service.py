@@ -215,6 +215,7 @@ def recommend_crops_engine(
     owns_sprayer: bool = False,
     planned_sowing_date: str = "2027-06-25",
     candidate_crops: Optional[List[str]] = None,
+    intended_crops: Optional[List[str]] = None,
     sowing_delay_override: int = 0,
     rainfall_deficit_pct: float = 0.0,
     price_shock_pct: float = 0.0,
@@ -225,7 +226,7 @@ def recommend_crops_engine(
 ) -> Dict[str, Any]:
     """
     Core Recommendation Engine with itemized CACP cost breakdowns,
-    dynamic local crop discovery (Agmarknet Mandi & ICRISAT), and 100+ language i18n support.
+    dynamic local crop discovery (Agmarknet Mandi & ICRISAT), intended crop comparison, and 100+ language i18n support.
     """
     # 1. Season Detection
     season_info = get_current_season(planned_sowing_date)
@@ -240,9 +241,16 @@ def recommend_crops_engine(
     )
 
     if not candidate_crops or len(candidate_crops) == 0:
-        active_candidates = local_crop_discovery["raw_crop_ids"]
+        active_candidates = list(local_crop_discovery["raw_crop_ids"])
     else:
         active_candidates = [c.upper().strip() for c in candidate_crops]
+
+    # If the farmer has specific intended crops, ensure they are in active candidates so they get evaluated
+    if intended_crops:
+        for ic in intended_crops:
+            norm_ic = ic.upper().strip()
+            if norm_ic in CROP_NAMES and norm_ic not in active_candidates:
+                active_candidates.append(norm_ic)
 
     valid_candidates = [c for c in active_candidates if c in CROP_NAMES]
     if not valid_candidates:
@@ -415,6 +423,68 @@ def recommend_crops_engine(
             "rotation_benefit": item.get("rotation_benefit")
         })
 
+    # 9. Compute Farmer Intended vs Recommended Head-to-Head Comparison
+    intended_vs_recommended = None
+    if intended_crops:
+        clean_intended = [c.upper().strip() for c in intended_crops if c and c.upper().strip() not in ["NONE", "NOT_SURE", "OTHER"]]
+        if clean_intended:
+            # Find the best crop among farmer's intended choices
+            matched_intended = [c for c in evaluated_crops if c["crop_id"] in clean_intended]
+            if matched_intended:
+                matched_intended.sort(key=lambda x: x["sort_score"], reverse=True)
+                intended_best = matched_intended[0]
+
+                profit_diff = round(top_recommendation["expected_net_profit_per_acre_inr"] - intended_best["expected_net_profit_per_acre_inr"], 2)
+                is_already_best = (top_recommendation["crop_id"] == intended_best["crop_id"]) or (profit_diff <= 200)
+
+                gain_pct = 0.0
+                if not is_already_best and intended_best["expected_net_profit_per_acre_inr"] > 0:
+                    gain_pct = round((profit_diff / intended_best["expected_net_profit_per_acre_inr"]) * 100, 1)
+
+                if is_already_best:
+                    insight_hi = f"शानदार निर्णय! आपकी सोची हुई फसल ({intended_best['crop_name_hi']}) ही आपकी जमीन के लिए सबसे उत्तम और सर्वाधिक मुनाफा देने वाली है।"
+                    insight_en = f"Great choice! Your considered crop ({intended_best['crop_name_en']}) is already the optimal, high-yielding choice for your farm conditions."
+                else:
+                    insight_hi = f"अगर आप अपनी सोची हुई फसल ({intended_best['crop_name_hi']}) की जगह AI अनुशंसित ({top_recommendation['crop_name_hi']}) लगाते हैं, तो आपको प्रति एकड़ ₹{int(profit_diff):,} (+{gain_pct}%) अधिक शुद्ध मुनाफा मिल सकता है!"
+                    insight_en = f"Switching from your intended {intended_best['crop_name_en']} to AI recommended {top_recommendation['crop_name_en']} can yield ₹{int(profit_diff):,} (+{gain_pct}%) extra net profit per acre!"
+
+                intended_vs_recommended = {
+                    "has_intended_crops": True,
+                    "is_intended_already_best": is_already_best,
+                    "profit_difference_per_acre_inr": max(0.0, profit_diff),
+                    "profit_gain_pct": gain_pct,
+                    "intended_crop": {
+                        "crop_id": intended_best["crop_id"],
+                        "crop_name": intended_best["crop_name"],
+                        "crop_name_en": intended_best["crop_name_en"],
+                        "crop_name_hi": intended_best["crop_name_hi"],
+                        "crop_name_mr": intended_best.get("crop_name_mr"),
+                        "crop_name_gu": intended_best.get("crop_name_gu"),
+                        "crop_name_raj": intended_best.get("crop_name_raj"),
+                        "suitability_pct": intended_best["suitability_pct"],
+                        "total_cost_inr_per_acre": intended_best["total_cost_inr_per_acre"],
+                        "expected_yield_qtl_per_acre": intended_best["expected_yield_qtl_per_acre"],
+                        "expected_net_profit_per_acre_inr": intended_best["expected_net_profit_per_acre_inr"],
+                        "duration_days": intended_best["duration_days"],
+                    },
+                    "recommended_crop": {
+                        "crop_id": top_recommendation["crop_id"],
+                        "crop_name": top_recommendation["crop_name"],
+                        "crop_name_en": top_recommendation["crop_name_en"],
+                        "crop_name_hi": top_recommendation["crop_name_hi"],
+                        "crop_name_mr": top_recommendation.get("crop_name_mr"),
+                        "crop_name_gu": top_recommendation.get("crop_name_gu"),
+                        "crop_name_raj": top_recommendation.get("crop_name_raj"),
+                        "suitability_pct": top_recommendation["suitability_pct"],
+                        "total_cost_inr_per_acre": top_recommendation["total_cost_inr_per_acre"],
+                        "expected_yield_qtl_per_acre": top_recommendation["expected_yield_qtl_per_acre"],
+                        "expected_net_profit_per_acre_inr": top_recommendation["expected_net_profit_per_acre_inr"],
+                        "duration_days": top_recommendation["duration_days"],
+                    },
+                    "recommendation_insight": insight_hi,
+                    "recommendation_insight_en": insight_en
+                }
+
     data_sources_info = {
         "district_profile": f"{district or 'Pune'} District ({local_crop_discovery['agro_climatic_zone']})",
         "mandi_source": f"{local_crop_discovery['mandi_source']} (Agmarknet Live Pipeline)",
@@ -436,5 +506,6 @@ def recommend_crops_engine(
             "badge_color": overall_sowing_eval["badge_color"]
         },
         "top_recommendation": top_recommendation,
-        "comparison_matrix": comparison_matrix
+        "comparison_matrix": comparison_matrix,
+        "intended_vs_recommended": intended_vs_recommended
     }
