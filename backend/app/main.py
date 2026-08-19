@@ -10,8 +10,14 @@ from backend.app.api.v1.auth_routes import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize database tables on application start
-    Base.metadata.create_all(bind=engine)
+    # Safely initialize database tables on application start
+    try:
+        from backend.app.models.farmer import Farmer, Farm
+        from backend.app.models.crop import Crop, CropCostCACP, MandiPriceHistorical, DistrictSowingWindow, RecommendationLog
+        Base.metadata.create_all(bind=engine)
+        print("[DATABASE] PostgreSQL tables verified and initialized successfully.")
+    except Exception as e:
+        print(f"[DATABASE NOTICE] Startup schema check warning: {e}")
     yield
 
 app = FastAPI(

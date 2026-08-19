@@ -5,7 +5,7 @@ from backend.app.core.config import settings
 
 # Production-Grade PostgreSQL Engine with connection pooling and health pre-ping
 engine = create_engine(
-    settings.DATABASE_URL,
+    settings.SQLALCHEMY_DATABASE_URI,
     poolclass=QueuePool,
     pool_size=settings.DB_POOL_SIZE,
     max_overflow=settings.DB_MAX_OVERFLOW,
