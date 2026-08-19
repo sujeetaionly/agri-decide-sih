@@ -7,7 +7,8 @@ Populates PostgreSQL / SQLite database with complete benchmark datasets:
 4. District Sowing Windows (ICAR benchmarks)
 """
 from backend.app.core.database import SessionLocal, Base, engine
-from backend.app.models.crop import Crop, CropCostCACP, MandiPriceHistorical, DistrictSowingWindow
+from backend.app.models.farmer import Farmer, Farm
+from backend.app.models.crop import Crop, CropCostCACP, MandiPriceHistorical, DistrictSowingWindow, RecommendationLog
 
 # 15 Master Crops
 SEED_CROPS = [
