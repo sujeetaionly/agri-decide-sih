@@ -206,32 +206,43 @@ def seed_database():
     db = SessionLocal()
 
     try:
-        # 1. Seed Crops
+        # 1. Seed Master Crops with PostgreSQL JSONB and Array fields
         for c in SEED_CROPS:
             existing = db.query(Crop).filter(Crop.crop_id == c["crop_id"]).first()
             if not existing:
+                soil_list = [s.strip() for s in c["suitable_soil_types"].split(",") if s.strip()]
+                loc_names = {
+                    "en": c["crop_name_en"],
+                    "hi": c["crop_name_hi"],
+                    "mr": c["crop_name_mr"],
+                    "gu": c["crop_name_hi"],
+                    "raj": c["crop_name_hi"],
+                }
                 crop = Crop(
                     crop_id=c["crop_id"],
                     crop_name_en=c["crop_name_en"],
                     crop_name_hi=c["crop_name_hi"],
                     crop_name_mr=c["crop_name_mr"],
+                    localized_names=loc_names,
                     category=c["category"],
                     duration_days_standard=c["duration_days_standard"],
                     water_requirement_mm=c["water_requirement_mm"],
-                    suitable_soil_types=c["suitable_soil_types"]
+                    suitable_soil_types=soil_list,
+                    why_recommended=["क्षेत्र के लिए अनुशंसित प्रमुख फसल", "स्थानीय मंडी मांग के अनुसार अनुकूल"],
+                    cons=["उचित जल प्रबंधन व कीट निगरानी आवश्यक"],
+                    description_en=f"{c['crop_name_en']} standard cultivation benchmark",
+                    description_hi=f"{c['crop_name_hi']} आधिकारिक कृषि उत्पादन बेंचमार्क"
                 )
                 db.add(crop)
-            else:
-                existing.crop_name_hi = c["crop_name_hi"]
-                existing.crop_name_mr = c["crop_name_mr"]
 
         db.commit()
 
-        # 2. Seed CACP Costs
+        # 2. Seed CACP Itemized Cost Breakdown with PostgreSQL JSONB
         for cost in SEED_CACP_COSTS:
             existing = db.query(CropCostCACP).filter(
                 CropCostCACP.crop_id == cost["crop_id"],
-                CropCostCACP.state == "Maharashtra"
+                CropCostCACP.state == "Maharashtra",
+                CropCostCACP.district == "Pune"
             ).first()
 
             if not existing:
@@ -245,7 +256,18 @@ def seed_database():
                     machinery_rental_cost=cost["machinery_rental_cost"],
                     labour_cost=cost["labour_cost"],
                     irrigation_electricity_cost=cost["irrigation_electricity_cost"],
-                    total_cost_per_acre=cost["total_cost_per_acre"]
+                    total_cost_per_acre=cost["total_cost_per_acre"],
+                    itemized_breakdown={
+                        "seed_cost": cost["seed_cost"],
+                        "fertilizer_cost": cost["fertilizer_cost"],
+                        "pesticide_cost": cost["pesticide_cost"],
+                        "machinery_rental_cost": cost["machinery_rental_cost"],
+                        "labour_cost": cost["labour_cost"],
+                        "irrigation_electricity_cost": cost["irrigation_electricity_cost"],
+                        "operational_cost_a2_inr_per_acre": cost["total_cost_per_acre"],
+                        "family_labor_cost_per_acre": round(cost["total_cost_per_acre"] * 0.12, 2),
+                        "total_cost_a2_fl_inr_per_acre": round(cost["total_cost_per_acre"] * 1.12, 2)
+                    }
                 )
                 db.add(cacp)
 
@@ -270,7 +292,7 @@ def seed_database():
                 db.add(window)
 
         db.commit()
-        print("[SUCCESS] Database successfully seeded with 15 crops, CACP cost breakdowns, and sowing windows!")
+        print("[SUCCESS] PostgreSQL database successfully seeded with 15 crops, JSONB CACP cost breakdowns, and sowing windows!")
 
     except Exception as e:
         db.rollback()

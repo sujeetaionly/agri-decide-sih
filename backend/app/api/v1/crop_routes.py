@@ -17,12 +17,17 @@ from backend.app.schemas.crop_schema import (
     CropSearchItem,
     SaveAnalysisRequest,
     AnalysisHistoryItem,
-    AnalysisHistoryResponse
+    AnalysisHistoryResponse,
+    LocalCropsResponse,
+    MasterCropItem,
+    MasterCropsResponse,
+    CostBreakdownItem
 )
 from backend.app.services.recommendation_service import (
     recommend_crops_engine,
     CROP_NAMES
 )
+from backend.app.services.local_crop_service import get_local_crops_for_district
 
 router = APIRouter(tags=["Crops & Recommendations"])
 
@@ -77,10 +82,27 @@ CROP_MILESTONES_DB = {
     ]
 }
 
+@router.get("/crop/local-crops", response_model=LocalCropsResponse)
+def get_local_crops_endpoint(
+    district: str = Query("Pune", description="District name"),
+    state: str = Query("Maharashtra", description="State name"),
+    season: str = Query("KHARIF", description="Agricultural season (KHARIF, RABI, ZAID)"),
+    lang: str = Query("hi", description="ISO language code (hi, mr, gu, raj, en, pa, kn, te, ta, bn)")
+):
+    """
+    Endpoint: Discovers authentic local crops grown & traded in the specified District & Mandi.
+    """
+    return get_local_crops_for_district(
+        district=district,
+        state=state,
+        season=season,
+        lang=lang
+    )
+
 @router.post("/crop/recommend", response_model=RecommendCropResponse)
 def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)):
     """
-    Endpoint: Run AI Crop Recommendation & Comparison Matrix with Itemized CACP Costs.
+    Endpoint: Run AI Crop Recommendation & Comparison Matrix with Itemized CACP Costs and Local Mandi crops.
     """
     soil = payload.soil_type or "BLACK"
     water_source = payload.water_source or "WELL"
@@ -89,6 +111,9 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
     previous_crop = payload.previous_season_crop or "WHEAT"
     owns_tractor = payload.owns_tractor or False
     owns_sprayer = payload.owns_sprayer or False
+    district = payload.district or "Pune"
+    state = payload.state or "Maharashtra"
+    lang = payload.lang or "hi"
 
     if payload.farmer_id:
         farmer = db.query(Farmer).filter(Farmer.farmer_id == payload.farmer_id).first()
@@ -101,6 +126,10 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
             previous_crop = farm.previous_season_crop
             owns_tractor = farm.owns_tractor
             owns_sprayer = farm.owns_sprayer
+            if farmer.district:
+                district = farmer.district
+            if farmer.state:
+                state = farmer.state
 
     result = recommend_crops_engine(
         soil_type=soil,
@@ -112,6 +141,10 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
         owns_sprayer=owns_sprayer,
         planned_sowing_date=payload.planned_sowing_date,
         candidate_crops=payload.candidate_crops,
+        intended_crops=payload.intended_crops,
+        district=district,
+        state=state,
+        lang=lang,
         db=db
     )
 
@@ -138,9 +171,13 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
 
     return RecommendCropResponse(
         status="success",
+        current_season=result.get("current_season", "KHARIF"),
+        season_display_name=result.get("season_display_name", "खरीफ मौसम 2026-27"),
+        data_sources=result.get("data_sources"),
         sowing_window=result["sowing_window"],
         top_recommendation=top_crop,
-        comparison_matrix=result["comparison_matrix"]
+        comparison_matrix=result["comparison_matrix"],
+        intended_vs_recommended=result.get("intended_vs_recommended")
     )
 
 @router.post("/crop/what-if-simulate", response_model=WhatIfSimulateResponse)
@@ -151,6 +188,9 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
     soil = payload.soil_type or "BLACK"
     water_capacity = payload.water_capacity_level or "MEDIUM"
     capital = payload.working_capital_inr or 80000.0
+    district = payload.district or "Pune"
+    state = payload.state or "Maharashtra"
+    lang = payload.lang or "hi"
 
     if payload.farmer_id:
         farmer = db.query(Farmer).filter(Farmer.farmer_id == payload.farmer_id).first()
@@ -159,6 +199,10 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
             soil = farm.soil_type
             water_capacity = farm.water_capacity_level
             capital = farm.working_capital_inr
+            if farmer.district:
+                district = farmer.district
+            if farmer.state:
+                state = farmer.state
 
     sim_result = recommend_crops_engine(
         soil_type=soil,
@@ -168,6 +212,9 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
         rainfall_deficit_pct=payload.rainfall_deficit_pct,
         price_shock_pct=payload.mandi_price_shock_pct,
         candidate_crops=payload.candidate_crops,
+        district=district,
+        state=state,
+        lang=lang,
         db=db
     )
 
@@ -177,7 +224,7 @@ def what_if_simulate(payload: WhatIfSimulateRequest, db: Session = Depends(get_d
     delay_msg = f"{payload.sowing_delay_days} दिन की देरी" if payload.sowing_delay_days > 0 else "सामान्य बुवाई"
     rain_msg = f"{abs(int(payload.rainfall_deficit_pct))}% कम बारिश" if payload.rainfall_deficit_pct < 0 else "सामान्य वर्षा"
     
-    alert_msg = f"{delay_msg} और {rain_msg} में {top_crop['crop_name_hi']} सबसे सुरक्षित और लाभदायी फसल है।"
+    alert_msg = f"{delay_msg} और {rain_msg} में {top_crop['crop_name']} सबसे सुरक्षित और लाभदायी फसल है।"
     resilience = "उच्च प्रतिरोधक क्षमता" if top_id in ["MOONG", "BAJRA", "TUR", "JOWAR"] else "मध्यम संवेदनशीलता"
 
     return WhatIfSimulateResponse(
@@ -345,3 +392,105 @@ def save_analysis(payload: SaveAnalysisRequest, db: Session = Depends(get_db)):
         "rec_id": rec_log.rec_id,
         "message": "Analysis successfully saved to farmer history"
     }
+
+@router.get("/crop/master-crops", response_model=MasterCropsResponse)
+def get_master_crops(db: Session = Depends(get_db)):
+    """
+    Endpoint: Returns all master benchmark crops with full Indic localization,
+    CACP itemized cultivation costs, and standard economic indicators directly from the database.
+    """
+    db_crops = db.query(Crop).all()
+    results = []
+
+    # Benchmark default economics lookup
+    BENCHMARK_ECONOMICS = {
+        "SOYBEAN": {"yield": 9.5, "price": 4625.0, "profit": 24525.0, "why": ["कम लागत व 95 दिनों में तैयार", "काली व दोमट मिट्टी के लिए सर्वोत्तम अनुकूलता"], "cons": ["फूल आते समय अत्यधिक जलभराव से बचाव आवश्यक"]},
+        "MAIZE": {"yield": 24.5, "price": 2193.0, "profit": 35473.0, "why": ["पशु आहार व औद्योगिक मांग के कारण त्वरित बाजार", "प्रति एकड़ उच्च बायोमास व पैदावार"], "cons": ["सिट्टे बनते समय समय पर खाद-पानी आवश्यक"]},
+        "TUR": {"yield": 8.5, "price": 7550.0, "profit": 39739.0, "why": ["उच्च मंडी भाव व न्यूनतम सिंचाई में सुरक्षित लाभ", "मिट्टी में प्राकृतिक नाइट्रोजन स्थिरीकरण"], "cons": ["180 दिनों की लंबी अवधि, फली छेदक कीट से सुरक्षा जरूरी"]},
+        "COTTON": {"yield": 10.0, "price": 7120.0, "profit": 44900.0, "why": ["व्यावसायिक नकदी फसल, उच्च सकल आय", "गहरी काली मिट्टी में बेहतरीन प्रदर्शन"], "cons": ["गुलाबी सुंडी व रस चूसक कीटों की समय पर निगरानी आवश्यक"]},
+        "BAJRA": {"yield": 12.0, "price": 2500.0, "profit": 12736.0, "why": ["सूखा व कम वर्षा के प्रति अत्यंत प्रतिरोधी", "कम लागत में 85 दिनों में सुरक्षित कटाई"], "cons": ["अत्यधिक नमी वाले खेतों के लिए अनुपयुक्त"]},
+        "MOONG": {"yield": 5.5, "price": 8558.0, "profit": 33054.0, "why": ["मात्र 70 दिनों में तैयार, अगली फसल के लिए खेत जल्दी खाली", "मिट्टी की उर्वरता में प्राकृतिक वृद्धि"], "cons": ["कटाई के समय बारिश होने पर दाना खराब होने का जोखिम"]},
+        "GROUNDNUT": {"yield": 11.0, "price": 6780.0, "profit": 44229.0, "why": ["उच्च तेल मात्रा व लगातार मजबूत बाजार भाव", "दोमट व रेतीली मिट्टी में उत्तम फलन"], "cons": ["सुइयां बनते समय (Pegging) हल्की सिंचाई आवश्यक"]},
+        "WHEAT": {"yield": 18.0, "price": 2275.0, "profit": 24368.0, "why": ["निश्चित सरकारी एमएसपी खरीद व स्थिर भाव", "सर्दियों में कम जोखिम वाली प्रमुख फसल"], "cons": ["3-4 समयबद्ध सिंचाइयों की आवश्यकता"]},
+        "GRAM": {"yield": 7.5, "price": 5440.0, "profit": 27335.0, "why": ["कम पानी में भरपूर पैदावार, दालों में उच्च मांग", "जमीन की सेहत सुधारने वाली दलहनी फसल"], "cons": ["उकठा रोग (Wilt) से बचाव हेतु बीज उपचार जरूरी"]},
+        "URAD": {"yield": 5.1, "price": 7313.0, "profit": 25094.0, "why": ["कम अवधि व दालों में निरंतर मजबूत मांग", "मिश्रित व अंतर्वर्ती खेती के लिए उपयुक्त"], "cons": ["पीला मोजेक वायरस की समय पर रोकथाम जरूरी"]},
+        "ONION": {"yield": 90.0, "price": 2127.0, "profit": 150152.0, "why": ["नगदी फसल, अनुकूल बाजार में अप्रत्याशित उच्च लाभ", "दोमट मिट्टी में उत्कृष्ट कंद विकास"], "cons": ["मंडी भाव में उच्च उतार-चढ़ाव व भंडारण जोखिम"]},
+        "TOMATO": {"yield": 110.0, "price": 1850.0, "profit": 151498.0, "why": ["निरंतर तुड़ाई व दैनिक नकदी प्रवाह", "उन्नत संकर किस्मों से बंपर पैदावार"], "cons": ["झुलसा रोग व मूल्य गिरावट की संवेदनशीलता"]}
+    }
+
+    if db_crops:
+        for c in db_crops:
+            cid = c.crop_id.upper()
+            meta = CROP_NAMES.get(cid, {})
+            bench = BENCHMARK_ECONOMICS.get(cid, {
+                "yield": 10.0, "price": 4000.0, "profit": 25000.0,
+                "why": ["क्षेत्र के लिए अनुशंसित प्रमुख फसल"],
+                "cons": ["उचित कृषि प्रबंधन आवश्यक"]
+            })
+
+            # Fetch CACP cost from database relationship if exists
+            cacp_cost = 20000.0
+            cb_item = None
+            if c.costs:
+                first_cost = c.costs[0]
+                cacp_cost = first_cost.total_cost_per_acre
+                cb_item = CostBreakdownItem(
+                    seed_cost=first_cost.seed_cost,
+                    fertilizer_cost=first_cost.fertilizer_cost,
+                    pesticide_cost=first_cost.pesticide_cost,
+                    machinery_rental_cost=first_cost.machinery_rental_cost,
+                    labour_cost=first_cost.labour_cost,
+                    irrigation_electricity_cost=first_cost.irrigation_electricity_cost,
+                    operational_cost_a2_inr_per_acre=cacp_cost,
+                    family_labor_cost_per_acre=round(cacp_cost * 0.12, 2),
+                    total_cost_a2_fl_inr_per_acre=round(cacp_cost * 1.12, 2)
+                )
+
+            results.append(MasterCropItem(
+                crop_id=c.crop_id,
+                crop_name_en=c.crop_name_en,
+                crop_name_hi=c.crop_name_hi,
+                crop_name_mr=c.crop_name_mr or meta.get("mr", c.crop_name_hi),
+                crop_name_gu=meta.get("gu", c.crop_name_hi),
+                crop_name_raj=meta.get("raj", c.crop_name_hi),
+                category=c.category,
+                duration_days=c.duration_days_standard,
+                total_cost_per_acre=cacp_cost,
+                expected_yield_qtl_per_acre=bench["yield"],
+                forecasted_mandi_price_inr_per_qtl=bench["price"],
+                expected_profit_per_acre=bench["profit"],
+                cost_breakdown=cb_item,
+                why_recommended=bench["why"],
+                cons=bench["cons"]
+            ))
+    else:
+        # Fallback to CROP_NAMES if DB table not yet populated
+        for cid, meta in CROP_NAMES.items():
+            bench = BENCHMARK_ECONOMICS.get(cid, {
+                "yield": 10.0, "price": 4000.0, "profit": 25000.0,
+                "why": ["क्षेत्र के लिए अनुशंसित प्रमुख फसल"],
+                "cons": ["उचित कृषि प्रबंधन आवश्यक"]
+            })
+            results.append(MasterCropItem(
+                crop_id=cid,
+                crop_name_en=meta.get("en", cid),
+                crop_name_hi=meta.get("hi", cid),
+                crop_name_mr=meta.get("mr", cid),
+                crop_name_gu=meta.get("gu", cid),
+                crop_name_raj=meta.get("raj", cid),
+                category=meta.get("category", "FIELD_CROP"),
+                duration_days=meta.get("duration", 95),
+                total_cost_per_acre=20000.0,
+                expected_yield_qtl_per_acre=bench["yield"],
+                forecasted_mandi_price_inr_per_qtl=bench["price"],
+                expected_profit_per_acre=bench["profit"],
+                why_recommended=bench["why"],
+                cons=bench["cons"]
+            ))
+
+    return MasterCropsResponse(
+        status="success",
+        total_crops=len(results),
+        crops=results
+    )
+

@@ -9,9 +9,10 @@ export interface LanguageOption {
 }
 
 export const LANGUAGE_OPTIONS: LanguageOption[] = [
-  { code: 'hi', name: 'Hindi', nativeName: 'हिंदी', glyph: 'अ' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', glyph: 'अ' },
   { code: 'mr', name: 'Marathi', nativeName: 'मराठी', glyph: 'म' },
   { code: 'gu', name: 'Gujarati', nativeName: 'ગુજરાતી', glyph: 'ગ' },
+  { code: 'raj', name: 'Rajasthani', nativeName: 'राजस्थानी', glyph: 'रा' },
   { code: 'en', name: 'English', nativeName: 'English', glyph: 'A' },
 ];
 

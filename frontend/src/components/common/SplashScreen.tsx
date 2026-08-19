@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLanguage } from '@/context/LanguageContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface SplashScreenProps {
   onFinish?: () => void;
@@ -10,7 +10,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
   onFinish,
   durationMs = 2000,
 }) => {
-  const { isHindi } = useLanguage();
+  const { t } = useLanguage();
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
@@ -37,11 +37,11 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
         isFading ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      {/* Top spacing / Network Live Dot */}
+      {/* Top Network Live Dot */}
       <div className="w-full flex justify-center items-center gap-2 pt-4">
         <span className="w-2 h-2 rounded-full bg-[#3e6a00] animate-pulse"></span>
-        <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant/80">
-          KrishiWise AI • Agri-Decide
+        <span className="text-xs font-bold uppercase tracking-wider text-on-surface-variant/80">
+          {t('appName')}
         </span>
       </div>
 
@@ -62,19 +62,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           </div>
         </div>
 
-        {/* Brand Typography */}
+        {/* Clean Brand Typography (No English Duplicates or Overexplaining) */}
         <div className="space-y-1.5">
-          <h1 className="font-headline-lg text-headline-lg text-3xl md:text-4xl font-bold tracking-tight text-primary">
-            Agri-Decide
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-primary font-headline">
+            {t('appName')}
           </h1>
-          <div className="text-sm md:text-base font-semibold text-secondary">
-            {isHindi ? 'कृषि-वाइज़ एआई (KrishiWise AI)' : 'KrishiWise AI Platform'}
+          <div className="text-sm md:text-base font-semibold text-primary dark:text-primary-fixed">
+            {t('appTagline')}
           </div>
-          <p className="text-xs md:text-sm text-on-surface-variant font-medium pt-1 max-w-[280px] mx-auto leading-relaxed">
-            {isHindi
-              ? 'स्मार्ट सटीक कृषि एवं मौसम आधारित फसल निर्णय इंजन'
-              : 'Precision Crop Advisory & Climate Resilience Engine'}
-          </p>
         </div>
 
         {/* Indeterminate Loading Bar */}
@@ -84,13 +79,9 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       </div>
 
       {/* Footer Attribution */}
-      <div className="text-center space-y-1 pb-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low border border-outline-variant/60 text-xs font-semibold text-on-surface-variant">
-          <span className="material-symbols-outlined text-[16px] text-primary">verified</span>
-          <span>{isHindi ? 'मौसम एवं मृदा विश्लेषण' : 'Weather & Soil Intelligence'}</span>
-        </div>
-        <p className="text-[11px] text-on-surface-variant/70">
-          v1.0.0 • {isHindi ? 'भारत के किसानों के लिए समर्पित' : 'Built for Indian Farmers'}
+      <div className="text-center pb-2">
+        <p className="text-xs text-on-surface-variant/80 font-medium">
+          {t('dedicatedToFarmers')}
         </p>
       </div>
     </div>

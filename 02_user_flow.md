@@ -1,18 +1,31 @@
 # 🧭 02. Streamlined User Flow & Application Journey
-### System: **AGRI-DECIDE — AI Crop Recommendation Engine (PS #24)**
+### System: **Krishi-Wise AI (Agri-Decide) — Intelligent Multilingual Crop Advisory Engine**
 
 ---
 
-## 1. End-to-End Flow Overview
+## 1. End-to-End User Flow Architecture
 
 ```mermaid
 flowchart TD
-    S0[Screen 1: First-Time Language Preference\nPrompt: 'Which language do you prefer?' → English / हिंदी] --> S1[Screen 2: Location Selection\nDistrict & Taluka Dropdown or GPS Detection]
-    S1 --> S2[Screen 3: Farm Profile Cards\nLand Area, Soil Type, Water Source, Budget, Past Crop, Machinery]
-    S2 --> S3[Screen 4: Sowing Date & Crop Selection\nSowing Date Picker + Crop Search/Dropdown + 🎤 Voice Input]
-    S3 --> S4[Screen 5: Recommendation & Comparison Scorecard\nTop Pick Card with 'Why' Reasoning + 4-Crop Comparison Matrix]
-    S4 --> S5[Screen 6: 'What-If' Climate Sensitivity Sandbox\nLive Sliders: Sowing Delay, Rainfall Deficit, Price Shock]
-    S5 --> S6[Screen 7: Crop Milestone Calendar\n120-Day Action Timeline: Sowing, Fertilizer, Harvest]
+    L1[🌐 Screen 1: Regional Language Selection\n5 Languages: हिन्दी, English, मराठी, ગુજરાતી, राजस्थानी\nInteractive Audio Pronunciation] --> L2[✅ Screen 2: Language Confirmation\nInstant localized verification card with audio playback]
+    L2 --> H1[🏠 Screen 3: Farmer Dashboard Home Hub\nReal-time Weather & Mandi Ticker + GPS / Location Detection\nPrimary CTA: 'नई फसल सलाह शुरू करें']
+    
+    subgraph WIZARD ["🚜 5-Card Focused Question Wizard (Single-Concept Cards)"]
+        W1[Card 1: Farm Size & Land Units\nKeypad + Acre / Bigha / Guntha Live Conversion]
+        W2[Card 2: Soil Type Selection\n5 Real Macro DSLR Soil Photos + Moisture Retention Badges]
+        W3[Card 3: Water Availability\nCanal / Well / Rainfed Irrigation Capacities]
+        W4[Card 4: Previous Crop Rotation\nClean Typography Grid + Voice Multi-Crop Input]
+        W5[Card 5: Sowing Timing\nImmediate / Next Month / Seamless Integrated Date Picker]
+        
+        W1 --> W2 --> W3 --> W4 --> W5
+    end
+    
+    H1 --> W1
+    
+    W5 --> R1[📊 Screen 4: Recommendation & Interactive Candidate Scorecards\nTop Choice Hero + Interactive Candidate Crops\n3-Pillar Metrics: Net Profit ₹, Yield qtl, CACP Cost Breakdown, AI Rationale]
+    R1 --> R2[🎛️ Screen 5: Weather & Risk Simulation Sandbox\nLive Sliders: Rainfall Deficit & Mandi Price Volatility]
+    R2 --> R3[📅 Screen 6: 120-Day Milestone Action Plan & Advisory Slip\nVoice-enabled stage timeline + PDF Download + WhatsApp Sharing]
+    R3 --> H1
 ```
 
 ---
@@ -21,95 +34,124 @@ flowchart TD
 
 ---
 
-### 🌐 Screen 1: First-Time Language Preference & Location
-* **First-Time Welcome Modal:**
-  * Displays two large touch buttons:
-    * `[ 🇬🇧 English ]`
-    * `[ 🇮🇳 हिंदी (Hindi) ]`
-* **Location Selection (after language is set):**
-  * Option A: `📍 Use My GPS Location` (Auto-detects District & Taluka).
-  * Option B: Clean Dropdowns (`State: Rajasthan / Maharashtra` $\rightarrow$ `District: Jaipur / Pune` $\rightarrow$ `Taluka`).
-* **Next Action:** Button $\rightarrow$ `आगे बढ़ें / Continue to Farm Details`.
+### 🌐 Screen 1: Regional Language Selection (`LanguageSelectionPage.tsx`)
+* **5 Primary Agricultural Languages**:
+  * `[ 🇮🇳 हिन्दी (Hindi) ]`
+  * `[ 🇬🇧 English ]`
+  * `[ 🌾 मराठी (Marathi) ]`
+  * `[ 🌻 ગુજરાતી (Gujarati) ]`
+  * `[ 🏜️ राजस्थानी (Rajasthani) ]`
+* **Interactive Features**:
+  * Tap any language to trigger instant native audio voice pronunciation and haptic vibration.
+  * Audio guide button `[ 🔊 सुनें ]` on the header for zero-literacy audio assistance.
+  * Selection directly moves to the confirmation screen.
 
 ---
 
-### 📋 Screen 2: Interactive Question Cards (Farm Profile)
-A clean, card-based wizard with large visual tiles (in English or Hindi based on preference):
-1. **Land Area (जमीन का क्षेत्रफल):** `[ 5.0 ]` Acres.
-2. **Soil Type (मिट्टी का प्रकार):** 
-   * `[⬛ Deep Black / काली मिट्टी]` | `[🟫 Medium Loam / दोमट मिट्टी]` | `[🟥 Red / लाल मिट्टी]` | `[🟨 Sandy / बलुई मिट्टी]`.
-3. **Water Source & Availability (पानी का स्रोत व उपलब्धता):**
-   * Source: `[🚰 Borewell / नलकूप]` | `[🌊 Open Well / कुआं]` | `[🏞️ Canal / नहर]` | `[🌧️ Rainfed / केवल वर्षा आधारित]`.
-   * Capacity: `[💧 Low (1-2 irrigations)]` | `[💧💧 Medium (4-6)]` | `[💧💧💧 High (Perennial)]`.
-4. **Available Working Capital (उपलब्ध बजट):** `₹80,000`.
-5. **Previous Season Crop (पिछली फसल):** `[Wheat / गेहूं]` (Enables crop rotation bonus).
-6. **Machinery Ownership (कृषि यंत्र):** `[x] Own Tractor` | `[x] Own Sprayer` (Adjusts machinery rental costs).
+### ✅ Screen 2: Language Confirmation (`LanguageConfirmPage.tsx`)
+* **Visual Confirmation Card**:
+  * Displays the selected language with its native flag/icon.
+  * Automatic voice prompt in the selected language welcoming the farmer.
+* **Actions**:
+  * `[ ✓ आगे बढ़ें / Continue ]` $\rightarrow$ Enters Dashboard Home.
+  * `[ ↩️ भाषा बदलें / Change Language ]` $\rightarrow$ Returns to selection.
 
 ---
 
-### 🌾 Screen 3: Sowing Date & Candidate Crop Selection
-* **Planned Sowing Date (बुवाई की तारीख):** `📅 20th June 2027` (Quick buttons: `[Today]`, `[Next 7 Days]`).
-* **Crop Selection Methods (Search + Dropdown + Voice):**
-  1. **🔍 Search Bar & Dropdown Multi-Select:** Type or select from the regional crop list (Soybean, Maize, Tur, Cotton, Bajra, Mustard, Groundnut, etc.).
-  2. **🎤 Voice Input Button:** A dedicated microphone button specifically for speaking the crops the farmer is considering:
-     * *Farmer speaks:* *"सोयाबीन, मक्का, कपास और अरहर"*
-     * *System automatically populates the candidate crop chips!*
-  3. **Auto-Recommend Option:** Button $\rightarrow$ `[🌟 सर्वश्रेष्ठ फसलें सुझाएं / Auto-Recommend Best Crops]`.
-* **Next Action:** Button $\rightarrow$ `फसल अनुशंसा देखें / Run AI Crop Recommendation`.
+### 🏠 Screen 3: Farmer Dashboard Home Hub (`HomePage.tsx`)
+* **Location & Top Bar**:
+  * Automatic GPS / Taluka detection with manual switcher (`📍 जयपुर, राजस्थान` / `📍 पुणे, महाराष्ट्र`).
+  * Live online status badge and quick language modal toggle.
+* **Real-time Live Widgets**:
+  * ⛅ **Local Weather Widget**: Current temperature, humidity, and rainfall forecast.
+  * 📈 **Live Mandi Price Ticker**: Real-time mandi prices for regional Kharif/Rabi crops.
+* **Primary Decision CTA**:
+  * Large touch card: **`🌾 नई फसल सलाह शुरू करें (Start AI Crop Advisory)`** $\rightarrow$ Launches Wizard.
+* **Persistent Bottom Navigation**:
+  * `[ 🏠 होम (Home) ]` | `[ 📅 मेरी फसल (My Crop) ]` | `[ 📜 इतिहास (History) ]` | `[ ⚙️ सेटिंग्स (Settings) ]`.
 
 ---
 
-### 📊 Screen 4: Recommendation & 4-Crop Comparison Scorecard
-The core decision screen:
+### 🚜 Screen 4: 5-Card Focused Question Wizard (`WizardPage.tsx`)
 
-#### 🏆 Top Recommended Crop Card:
-* **Primary Recommendation:** `🌱 Soybean (JS-335) / सोयाबीन`
-* **Key Numbers:**
-  * Expected Yield: `9.5 Quintals/Acre` (Range: 8.5 – 10.5 qtl)
-  * Total Input Cost: `₹24,500/Acre` (Adjusted for owned tractor)
-  * Expected Mandi Price: `₹4,800/Quintal` (Projected for October harvest)
-  * **Expected Net Profit:** `₹21,100 / Acre`
-  * Duration: `95 Days` | **Profit per Day:** `₹222 / Day`
-* **Explainability ("Why this crop is recommended / यह फसल क्यों चुनें?"):**
-  * ✅ काली मिट्टी और खरीफ मौसम के साथ 92% अनुकूलता।
-  * ✅ कुएं के पानी की मध्यम उपलब्धता 95 दिनों की फसल के लिए पर्याप्त है।
-  * ✅ आपके ₹80,000 के बजट के पूर्णतः अनुकूल।
-  * ✅ गेहूं के बाद दाल/तिलहन फसल चक्र (Crop Rotation) के लिए सर्वोत्तम।
-* **Audio Voice Summary:** `🔊 सुनें (Listen to summary in Hindi/English)`.
+Every question is presented on an isolated single-concept card with a top 5-step progress pill, top-aligned `[ 🔊 सुनें ]` audio narration, and docked bottom navigation (`← पीछे जाएं` / `आगे बढ़ें →`):
 
-#### 📋 4-Crop Comparison Matrix (Side-by-Side):
-```
-┌──────────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
-│ Metric           │ 🌱 Soybean   │ 🌾 Maize     │ 🌿 Tur/Arhar │ 🪴 Cotton    │
-├──────────────────┼──────────────┼──────────────┼──────────────┼──────────────┤
-│ Agronomic Fit    │ 92% 🟢       │ 84% 🟢       │ 88% 🟢       │ 75% 🟡       │
-│ Sowing Window    │ Optimal 🟢   │ Optimal 🟢   │ Optimal 🟢   │ Late 🟡      │
-│ Total Input Cost │ ₹24,500/acre │ ₹22,000/acre │ ₹20,000/acre │ ₹36,000/acre │
-│ Expected Yield   │ 9.5 qtl/acre │ 24.0 qtl/acre│ 6.5 qtl/acre │ 7.8 qtl/acre │
-│ Harvest Price    │ ₹4,800/qtl   │ ₹2,150/qtl   │ ₹7,200/qtl   │ ₹6,400/qtl   │
-│ Net Profit / Acre│ ₹21,100/acre │ ₹29,600/acre │ ₹26,800/acre │ ₹13,920/acre │
-│ Duration (Days)  │ 95 Days      │ 105 Days     │ 180 Days     │ 160 Days     │
-├──────────────────┼──────────────┼──────────────┼──────────────┼──────────────┤
-│ 🏆 Net ₹ / Day   │ ₹222 / Day   │ ₹281 / Day   │ ₹148 / Day   │ ₹87 / Day    │
-└──────────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
-```
+#### 1️⃣ Card 1: Farm Size (`FarmSizeCard.tsx`)
+* Numeric touch keypad for entering land area.
+* Regional unit toggle pills (`एकड़ (Acre)`, `बीघा (Bigha)`, `गुंठा (Guntha)`).
+* Live mathematical conversion badge (e.g., *"3.0 बीघा = 1.88 एकड़"*).
+
+#### 2️⃣ Card 2: Soil Type (`SoilTypeCard.tsx`)
+* **5 Authentic Macro DSLR Farm Soil Photos**:
+  1. **काली मिट्टी (Black Cotton Soil)**: Heavy clay Regur soil with high moisture retention.
+  2. **दोमट मिट्टी (Alluvial Loam Soil)**: Crumbly organic-rich balanced soil.
+  3. **लाल मिट्टी (Red Laterite Soil)**: Porous, iron-rich well-drained soil.
+  4. **बलुई / रेतीली मिट्टी (Sandy Soil)**: Desert sand granules with fast drainage.
+  5. **मटियार / चिकनी मिट्टी (Clayey Soil)**: Heavy density water-holding soil.
+* **Physical Property Badge**: Clean moisture capacity pill (`[ 💧 नमी धारण: उच्च / मध्यम / कम ]`).
+
+#### 3️⃣ Card 3: Water Availability (`WaterSourceCard.tsx`)
+* **भरपूर पानी (High Irrigation)**: नहर या बारहमासी ट्यूबवेल (All crop types compatible).
+* **मध्यम पानी (Medium Irrigation)**: कुआं या सीमित ट्यूबवेल (2-3 irrigations).
+* **कम पानी / वर्षा आधारित (Rainfed)**: केवल मानसूनी बारिश पर निर्भर (Drought-resilient crops).
+
+#### 4️⃣ Card 4: Previous Crop Rotation (`PreviousCropCard.tsx`)
+* Clean 2-column typography selection grid without generic icons:
+  * `[ गेहूं ]`, `[ चना ]`, `[ धान ]`, `[ सोयाबीन ]`, `[ कपास ]`, `[ मक्का ]`, `[ बाजरा ]`, `[ अन्य / खाली ]`.
+* Dedicated **🎤 Voice Input**: Farmer speaks their previous crop names for automated chip selection.
+
+#### 5️⃣ Card 5: Sowing Timing (`SowingSeasonCard.tsx`)
+* ⚡ **इसी हफ्ते (अगले ७ दिनों में)**: Immediate sowing with weather forecast alignment.
+* 🌧️ **अगले एक महीने में**: Planned seasonal monsoon timing.
+* 📅 **निश्चित तारीख चुनें**: Seamless integrated calendar input bar without nested boxes.
 
 ---
 
-### 🎛️ Screen 5: "What-If" Sensitivity Sandbox (For Evaluators & Farmers)
-Interactive sliders to demonstrate dynamic AI adaptation:
-* **Slider 1: Sowing Date Delay (बुवाई में देरी: 0 से 30 दिन)**
-  * *Drag to +20 Days:* Watch Cotton yield drop sharply (-25%) due to shortened boll-filling window, while short-duration Soybean and Moong remain resilient.
-* **Slider 2: Rainfall Deficit (बारिश की कमी: 0% से -40%)**
-  * *Drag to -30%:* Watch the system boost drought-tolerant Pulses (Tur/Moong) over high-water crops.
-* **Slider 3: Mandi Price Fluctuation (बाजार भाव में उतार-चढ़ाव: -25% से +25%)**
+### 📊 Screen 5: AI Recommendation & Interactive Candidate Scorecards (`RecommendationsStep.tsx`)
+
+#### 🏆 Active Selected Crop Hero Card:
+* **Top Header Banner**: `★ सर्वोत्तम फसल विकल्प (94% मैच स्कोर)` or `चयनित फसल विवरण (88% मैच स्कोर)`.
+* **3-Pillar Balanced Scorecard** (Disciplined neutral stone palette with forest emerald profit highlight):
+  1. **अनुमानित शुद्ध लाभ (Net Profit)**: `₹24,525 / एकड़` (Primary metric).
+  2. **अनुमानित पैदावार (Expected Yield)**: `9.5 क्विंटल / एकड़`.
+  3. **अनुमानित लागत (Working Cost)**: `₹19,412 / एकड़`.
+* **CACP Itemized Cost Breakdown Accordion (A2)**:
+  * Seed cost (`बीज लागत`), Fertilizer (`उर्वरक/खाद`), Pesticide (`कीटनाशक`), Machinery rental (`कृषि यंत्र`), Labour (`मजदूरी`), Irrigation (`सिंचाई`).
+* **AI Explainability ("चयन का कारण")**:
+  * 4 tailored bullet points explaining soil suitability, water compatibility, profit margin, and crop rotation benefits.
+
+#### 📋 Interactive Candidate Crop Selection:
+* Displays all regional candidate crops (**सोयाबीन**, **मक्का**, **बाजरा**, **मूंगफली**).
+* **Instant Dynamic Switch**: Clicking **ANY** candidate crop immediately updates the main hero card to display that crop's full 3-pillar metrics, CACP cost breakdown, and AI rationale!
+
+#### 🚀 Primary Action:
+* Floating action bar docked at `bottom-16` with progressive backdrop blur:
+  `[ {चयनित फसल} के साथ मौसम व जोखिम जांचें → ]`.
 
 ---
 
-### 📅 Screen 6: Crop Milestone Calendar
-An actionable 120-day timeline for the recommended crop:
-* **Day 0 (20 June):** Sowing & Trichoderma Seed Treatment (बुवाई व बीज उपचार).
-* **Day 21 (11 July):** First Weeding & Fertilizer Top-Dress (पहली निराई-गुड़ाई व खाद).
-* **Day 45 (04 August):** Pod Initiation Stage — Water check (फलियां बनने की अवस्था - सिंचाई जांच).
-* **Day 80 (08 September):** Pre-Harvest Inspection & Mandi Price Tracking (कटाई पूर्व निरीक्षण).
-* **Day 95 (23 September):** Optimal Harvest Window (कटाई का सही समय).
+### 🎛️ Screen 6: Weather & Risk Simulation Sandbox (`WhatIfStep.tsx`)
+* **Interactive Live Sliders**:
+  1. **बारिश में बदलाव (-35% से +25%)**: Simulates drought stress vs. abundant monsoon rainfall.
+  2. **मंडी भाव में उतार-चढ़ाव (-25% से +25%)**: Simulates market price crashes vs. harvest price rallies.
+* **Real-time Modified Outcomes**:
+  * Live adjusted yield (`संशोधित पैदावार: X क्विंटल`) and net profit (`संशोधित शुद्ध लाभ: ₹X`).
+  * AI Risk Guidance callout explaining crop stability under climate/market stress.
+* **Next Action**: Button $\rightarrow$ `[ कृषि कार्य-योजना देखें / View 120-Day Action Plan ]`.
+
+---
+
+### 📅 Screen 7: 120-Day Milestone Action Plan & Advisory Slip (`MilestoneCalendarStep.tsx`)
+* **Stage-by-Stage Agronomic Timeline**:
+  * **दिन 0**: राइजोबियम व ट्राइकोडर्मा से बीज उपचार एवं बुवाई.
+  * **दिन 21**: पहली निराई-गुड़ाई एवं खरपतवार नियंत्रण.
+  * **दिन 45**: फूल आने की अवस्था एवं फेरोमोन ट्रैप कीट निगरानी.
+  * **दिन 75**: दाना भराव अवस्था एवं घुलनशील उर्वरक पोषण प्रबंधन.
+  * **दिन 95**: फसल कटाई, धूप में सुखाना एवं 12% नमी पर सुरक्षित भंडारण.
+* **Interactive Features**:
+  * 🔊 Voice audio readout for every individual farming stage.
+  * ☑️ Completion checkboxes to track farm activities.
+* **Export & Sharing Actions**:
+  * 📥 **[ 📄 पीडीएफ सलाह पर्ची डाउनलोड करें (Download Advisory Slip) ]**: Generates clean printable A4 PDF advisory slip (`PrintableAdvisorySlip.tsx`).
+  * 💬 **[ 📱 व्हाट्सएप पर साझा करें (Share to WhatsApp) ]**: Sends structured advisory summary directly to farmer WhatsApp groups.
+

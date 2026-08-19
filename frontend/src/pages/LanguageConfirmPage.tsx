@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SupportedLanguage, getTranslation } from '../data/translations';
+import { SupportedLanguage, getTranslation, LANGUAGE_REGISTRY } from '../data/translations';
 import { triggerHaptic } from '../lib/utils';
 import { speakText, stopSpeaking } from '../lib/speech';
 
@@ -56,15 +56,9 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
     onChangeLanguage();
   };
 
-  const getLanguageDisplayName = (l: SupportedLanguage) => {
-    switch (l) {
-      case 'mr': return 'मराठी';
-      case 'gu': return 'ગુજરાતી';
-      case 'raj': return 'राजस्थानी';
-      case 'en': return 'English';
-      default: return 'हिंदी';
-    }
-  };
+  const currentLangMeta = (LANGUAGE_REGISTRY as any)[language];
+  const displayName = currentLangMeta?.nativeName || 'हिन्दी';
+  const glyph = currentLangMeta?.glyph || 'अ';
 
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
@@ -73,15 +67,18 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
       <div className="flex items-center justify-between pt-4">
         <button
           onClick={handleChange}
-          className="flex items-center gap-1 text-sm font-semibold text-emerald-800 dark:text-emerald-200 active:scale-95 cursor-pointer"
+          className="flex items-center gap-1 text-sm font-semibold text-stone-700 dark:text-stone-300 hover:text-primary active:scale-95 transition-colors cursor-pointer"
         >
           <span className="material-symbols-outlined text-lg">arrow_back</span>
           <span>{getTranslation('back', language)}</span>
         </button>
+
         <button
           onClick={handlePlayVoice}
-          className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-500/30 transition-all cursor-pointer ${
-            isSpeaking ? 'bg-emerald-700 text-white animate-pulse' : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200'
+          className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+            isSpeaking
+              ? 'bg-primary text-white border-primary animate-pulse shadow-md'
+              : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary/15'
           }`}
         >
           <span className="material-symbols-outlined text-base">volume_up</span>
@@ -89,19 +86,21 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
         </button>
       </div>
 
-      {/* Confirmation Hero Card */}
-      <div className="my-auto w-full bg-white dark:bg-[#1E231B] border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-7 shadow-md text-center space-y-5">
-        <div className="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-700 dark:text-emerald-300 shadow-sm">
-          <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">check_circle</span>
+      {/* Confirmation Hero Card with Strong Visual Hierarchy */}
+      <div className="my-auto w-full bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-8 shadow-sm text-center space-y-5">
+        {/* Native Script Glyph instead of generic tick */}
+        <div className="w-16 h-16 rounded-2xl bg-primary text-white flex items-center justify-center mx-auto text-3xl font-extrabold shadow-md mb-1">
+          {glyph}
         </div>
 
-        <div className="space-y-2">
-          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] tracking-tight">
+        <div className="space-y-2.5">
+          <h2 className="text-2xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
             {getTranslation('confirmLangTitle', language)}
           </h2>
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 rounded-full text-sm font-bold border border-emerald-500/20">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>{getLanguageDisplayName(language)}</span>
+
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-stone-100 dark:bg-stone-800 text-on-surface-light dark:text-on-surface-dark rounded-full text-sm font-bold border border-stone-200 dark:border-stone-700">
+            <span className="w-2 h-2 rounded-full bg-primary" />
+            <span>{displayName}</span>
           </div>
         </div>
 
@@ -113,16 +112,18 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
       {/* Action Buttons */}
       <div className="space-y-3 pb-6">
         <button
+          type="button"
           onClick={handleYes}
-          className="w-full py-4 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>{getTranslation('confirmLangYes', language)}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>
         </button>
 
         <button
+          type="button"
           onClick={handleChange}
-          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 hover:border-emerald-600/40 text-stone-800 dark:text-stone-200 font-bold text-sm shadow-sm hover:shadow-md active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-1.5"
+          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-700 hover:border-primary/40 text-on-surface-light dark:text-on-surface-dark font-bold text-sm shadow-xs hover:shadow-md active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
         >
           <span className="material-symbols-outlined text-base text-stone-500">translate</span>
           <span>{getTranslation('confirmLangChange', language)}</span>

@@ -1,95 +1,54 @@
-import React, { useState } from 'react';
-import { SupportedLanguage, getTranslation } from '../data/translations';
+import React, { useState, useMemo } from 'react';
+import { SupportedLanguage, getTranslation, getLanguagesForState, LanguageMeta, matchLanguage } from '../data/translations';
 import { triggerHaptic } from '../lib/utils';
 import { speakText, stopSpeaking } from '../lib/speech';
-
-interface LanguageOption {
-  code: SupportedLanguage;
-  nativeName: string;
-  englishName: string;
-  glyph: string;
-  audioLabel: string;
-  sampleAudio: string;
-}
-
-const LANGUAGES: LanguageOption[] = [
-  {
-    code: 'hi',
-    nativeName: 'हिन्दी',
-    englishName: 'Hindi',
-    glyph: 'अ',
-    audioLabel: 'सुनें',
-    sampleAudio: 'नमस्ते किसान भाई, आपका कृषि-वाइज़ में स्वागत है।',
-  },
-  {
-    code: 'en',
-    nativeName: 'English',
-    englishName: 'English',
-    glyph: 'A',
-    audioLabel: 'Listen',
-    sampleAudio: 'Hello farmer friend, welcome to Krishi-Wise crop decision support.',
-  },
-  {
-    code: 'mr',
-    nativeName: 'मराठी',
-    englishName: 'Marathi',
-    glyph: 'म',
-    audioLabel: 'ऐका',
-    sampleAudio: 'नमस्कार शेतकरी मित्रांनो, कृषी-वाइज ॲपमध्ये आपले स्वागत आहे.',
-  },
-  {
-    code: 'gu',
-    nativeName: 'ગુજરાતી',
-    englishName: 'Gujarati',
-    glyph: 'ગ',
-    audioLabel: 'સાંભળો',
-    sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, કૃષિ-વાઇઝમાં આપનું સ્વાગત છે.',
-  },
-  {
-    code: 'raj',
-    nativeName: 'राजस्थानी',
-    englishName: 'Rajasthani',
-    glyph: 'रा',
-    audioLabel: 'सुणो',
-    sampleAudio: 'खम्मा घणी किसान भाई, आपरो कृषि-वाइज़ में स्वागत है।',
-  },
-];
 
 interface LanguageSelectionPageProps {
   currentLanguage: SupportedLanguage;
   onSelectLanguage: (lang: SupportedLanguage) => void;
   onConfirm: () => void;
+  detectedState?: string;
 }
 
 export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
-  currentLanguage: _currentLanguage,
+  currentLanguage,
   onSelectLanguage,
   onConfirm,
+  detectedState = 'Rajasthan',
 }) => {
-  const [selected, setSelected] = useState<SupportedLanguage | null>(null);
+  const [selected, setSelected] = useState<SupportedLanguage>(currentLanguage || 'hi');
   const [playingCode, setPlayingCode] = useState<string | null>(null);
+  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isListeningVoiceSearch, setIsListeningVoiceSearch] = useState(false);
 
-  const handleSelect = (lang: LanguageOption) => {
+  // Dynamically resolve primary and additional languages from centralized i18n engine
+  const { primary: primaryLanguages, additional: additionalLanguages } = useMemo(
+    () => getLanguagesForState(detectedState),
+    [detectedState]
+  );
+
+  const handleSelect = (code: string | SupportedLanguage) => {
     triggerHaptic('medium');
-    setSelected(lang.code);
-    onSelectLanguage(lang.code);
+    setSelected(code as SupportedLanguage);
+    onSelectLanguage(code as SupportedLanguage);
   };
 
-  const handlePlaySample = (lang: LanguageOption, e?: React.MouseEvent) => {
+  const handlePlaySample = (sample: string, code: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     triggerHaptic('light');
 
-    if (playingCode === lang.code) {
+    if (playingCode === code) {
       stopSpeaking();
       setPlayingCode(null);
       return;
     }
 
-    setPlayingCode(lang.code);
+    setPlayingCode(code);
     speakText(
-      lang.sampleAudio,
-      lang.code,
-      () => setPlayingCode(lang.code),
+      sample,
+      code as SupportedLanguage,
+      () => setPlayingCode(code),
       () => setPlayingCode(null),
       () => setPlayingCode(null)
     );
@@ -99,10 +58,8 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
     if (e) e.stopPropagation();
     triggerHaptic('light');
 
-    const effectiveLang = selected || 'en';
-    const headerText = effectiveLang === 'en'
-      ? 'Which language do you prefer? Choose your preferred language to continue using Krishi-Wise.'
-      : 'आप कौन सी भाषा पसंद करते हैं? कृषि-वाइज़ का उपयोग करने के लिए अपनी पसंदीदा भाषा चुनें।';
+    const effectiveLang = selected || 'hi';
+    const headerText = getTranslation('chooseLanguageTitle', effectiveLang);
 
     if (playingCode === 'header') {
       stopSpeaking();
@@ -120,107 +77,132 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
     );
   };
 
+  const handleVoiceSearch = () => {
+    triggerHaptic('medium');
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      speakText('कृपया भाषा का नाम टाइप करें।', selected || 'hi');
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'hi-IN';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      setIsListeningVoiceSearch(true);
+      recognition.start();
+
+      recognition.onresult = (event: any) => {
+        const rawTranscript = event.results[0][0].transcript || '';
+        // Strip punctuation like ?, ., !, quotes, extra spaces
+        const cleanedTranscript = rawTranscript.replace(/[?.,!/\\()_#@$%^&*~`'"+=\-[\]{}|:;<>]/g, ' ').trim();
+        setSearchQuery(cleanedTranscript);
+        setIsListeningVoiceSearch(false);
+      };
+
+      recognition.onerror = () => {
+        setIsListeningVoiceSearch(false);
+      };
+
+      recognition.onend = () => {
+        setIsListeningVoiceSearch(false);
+      };
+    } catch {
+      setIsListeningVoiceSearch(false);
+    }
+  };
+
   const handleProceed = () => {
-    if (!selected) return;
     stopSpeaking();
     triggerHaptic('success');
     onConfirm();
   };
 
-  const titleText = selected
-    ? getTranslation('chooseLanguageTitle', selected)
-    : 'Which language do you prefer?';
+  const isAdditionalSelected = additionalLanguages.some((l) => l.code === selected);
+  const currentAdditionalLang = additionalLanguages.find((l) => l.code === selected);
 
-  const subText = selected
-    ? getTranslation('chooseLanguageSub', selected)
-    : 'Choose your preferred language to continue using Krishi-Wise.';
+  const titleText = getTranslation('chooseLanguageTitle', selected);
+  const buttonText = getTranslation('getStarted', selected);
 
-  const buttonText = selected
-    ? getTranslation('getStarted', selected)
-    : 'Get Started';
+  const filteredAdditionalLanguages = additionalLanguages.filter((l) =>
+    matchLanguage(searchQuery, l)
+  );
 
   return (
-    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-5 max-w-md mx-auto">
+    <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-4 max-w-md mx-auto">
       
-      {/* Header - Spacious, Centered & Clean */}
-      <header className="pt-6 pb-2 text-center space-y-2.5">
-        <div className="w-14 h-14 bg-emerald-700 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
-          <span className="material-symbols-outlined text-[28px]">language</span>
-        </div>
+      {/* Top Header matching app design system */}
+      <header className="pt-3 pb-2">
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-3xl">translate</span>
+          </div>
 
-        <div className="space-y-1">
-          <h1 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] tracking-tight flex items-center justify-center gap-2">
-            <span>{titleText}</span>
+          <h1 className="text-xl font-bold font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight text-center flex-1">
+            {titleText}
           </h1>
 
           <button
             type="button"
             onClick={handleHeaderAudio}
             aria-label="Listen to heading"
-            className={`inline-flex items-center justify-center w-9 h-9 rounded-full transition-all cursor-pointer ${
+            className={`inline-flex items-center justify-center w-9 h-9 rounded-full transition-all cursor-pointer border ${
               playingCode === 'header'
-                ? 'text-emerald-700 bg-emerald-100 dark:bg-emerald-950 animate-pulse'
-                : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+                ? 'text-primary bg-primary/15 border-primary/40 animate-pulse'
+                : 'text-primary border-primary/20 hover:bg-primary/5'
             }`}
           >
-            <span className="material-symbols-outlined text-[22px]">volume_up</span>
+            <span className="material-symbols-outlined text-xl">volume_up</span>
           </button>
-
-          <p className="text-xs text-stone-500 dark:text-stone-400 font-medium max-w-xs mx-auto leading-relaxed">
-            {subText}
-          </p>
         </div>
       </header>
 
-      {/* Language Options - 2x2 Square Cards Grid + English Full Width */}
+      {/* 2x2 Square Cards Grid */}
       <div className="grid grid-cols-2 gap-3 my-auto py-2">
-        {/* 4 Square Indic Cards */}
-        {[
-          { code: 'hi', nativeName: 'हिन्दी', glyph: 'अ', audioLabel: 'सुनें', sampleAudio: 'नमस्ते किसान भाई, आपका कृषि-वाइज़ में स्वागत है।' },
-          { code: 'mr', nativeName: 'मराठी', glyph: 'म', audioLabel: 'ऐका', sampleAudio: 'नमस्कार शेतकरी मित्रांनो, कृषी-वाइज ॲपमध्ये आपले स्वागत आहे।' },
-          { code: 'gu', nativeName: 'ગુજરાતી', glyph: 'ગ', audioLabel: 'સાંભળો', sampleAudio: 'નમસ્તે ખેડૂત મિત્રો, કૃષિ-વાઇઝમાં આપનું સ્વાગત છે।' },
-          { code: 'raj', nativeName: 'राजस्थानी', glyph: 'रा', audioLabel: 'सुणो', sampleAudio: 'खम्मा घणी किसान भाई, आपरो कृषि-वाइज़ में स्वागत है।' },
-        ].map((lang) => {
+        {/* 3 Primary Cards */}
+        {primaryLanguages.map((lang) => {
           const isSelected = selected === lang.code;
           const isItemPlaying = playingCode === lang.code;
 
           return (
             <div
               key={lang.code}
-              onClick={() => handleSelect(lang as any)}
-              className={`relative flex flex-col items-center justify-center p-4 rounded-3xl border-2 transition-all active:scale-[0.97] cursor-pointer shadow-sm ${
+              onClick={() => handleSelect(lang.code)}
+              className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
                 isSelected
-                  ? 'border-emerald-700 bg-emerald-50/70 dark:bg-emerald-950/40 ring-1 ring-emerald-600/30'
-                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B] hover:border-emerald-500/40'
+                  ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/30'
+                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 hover:border-primary/40'
               }`}
             >
               {isSelected && (
-                <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shadow">
+                <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center shadow">
                   <span className="material-symbols-outlined text-xs">check</span>
                 </div>
               )}
 
               <div
-                className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-black mb-2 shadow-sm ${
+                className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-extrabold mb-1.5 shadow-sm ${
                   isSelected
-                    ? 'bg-emerald-700 text-white'
-                    : 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200'
+                    ? 'bg-primary text-white'
+                    : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200'
                 }`}
               >
                 {lang.glyph}
               </div>
 
-              <span className="text-base font-bold tracking-wide font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
+              <span className="text-base font-bold tracking-wide font-headline text-on-surface-light dark:text-on-surface-dark">
                 {lang.nativeName}
               </span>
 
               <button
                 type="button"
-                onClick={(e) => handlePlaySample(lang as any, e)}
-                className={`flex items-center gap-1 text-xs mt-1.5 font-bold px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                onClick={(e) => handlePlaySample(lang.sampleAudio, lang.code, e)}
+                className={`flex items-center gap-1 text-xs mt-1.5 font-semibold px-2.5 py-0.5 rounded-full transition-all cursor-pointer border ${
                   isItemPlaying
-                    ? 'text-emerald-700 bg-emerald-100 dark:bg-emerald-950 animate-pulse'
-                    : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100/50'
+                    ? 'text-primary bg-primary/15 border-primary/40 animate-pulse'
+                    : 'text-primary border-primary/20 hover:bg-primary/10'
                 }`}
               >
                 <span className="material-symbols-outlined text-xs">volume_up</span>
@@ -230,78 +212,213 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
           );
         })}
 
-        {/* 5th Option: English as a comfortable wide tile */}
-        {(() => {
-          const eng = { code: 'en', nativeName: 'English', glyph: 'A', audioLabel: 'Listen', sampleAudio: 'Hello farmer friend, welcome to Krishi-Wise crop decision support.' };
-          const isSelected = selected === eng.code;
-          const isItemPlaying = playingCode === eng.code;
-
-          return (
-            <div
-              key={eng.code}
-              onClick={() => handleSelect(eng as any)}
-              className={`col-span-2 relative flex items-center justify-between px-5 py-3.5 rounded-3xl border-2 transition-all active:scale-[0.98] cursor-pointer shadow-sm ${
-                isSelected
-                  ? 'border-emerald-700 bg-emerald-50/70 dark:bg-emerald-950/40 ring-1 ring-emerald-600/30'
-                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-[#1E231B] hover:border-emerald-500/40'
-              }`}
-            >
-              <div className="flex items-center gap-3.5">
-                <div
-                  className={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg font-black shadow-sm ${
-                    isSelected
-                      ? 'bg-emerald-700 text-white'
-                      : 'bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200'
-                  }`}
-                >
-                  {eng.glyph}
-                </div>
-                <div className="text-left">
-                  <div className="text-sm font-bold tracking-wide text-[#1A1C18] dark:text-[#E2E3DC]">{eng.nativeName}</div>
-                  <div className="text-[11px] text-stone-500">Universal fallback</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={(e) => handlePlaySample(eng as any, e)}
-                  className={`flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full transition-all cursor-pointer ${
-                    isItemPlaying
-                      ? 'text-emerald-700 bg-emerald-100 dark:bg-emerald-950 animate-pulse'
-                      : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100/50'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-xs">volume_up</span>
-                  <span>{eng.audioLabel}</span>
-                </button>
-                {isSelected && (
-                  <div className="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center shadow">
-                    <span className="material-symbols-outlined text-xs">check</span>
-                  </div>
-                )}
-              </div>
+        {/* 4th Square Card: Other Languages Option (Lighter action appearance) */}
+        <div
+          onClick={() => {
+            triggerHaptic('light');
+            setIsMoreModalOpen(true);
+          }}
+          className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
+            isAdditionalSelected
+              ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/30'
+              : 'border-dashed border-stone-300 dark:border-stone-700 bg-stone-50/70 dark:bg-stone-900/40 hover:border-primary/50 shadow-xs'
+          }`}
+        >
+          {isAdditionalSelected && (
+            <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center shadow">
+              <span className="material-symbols-outlined text-xs">check</span>
             </div>
-          );
-        })()}
+          )}
+
+          <div
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-extrabold mb-1.5 shadow-xs ${
+              isAdditionalSelected
+                ? 'bg-primary text-white'
+                : 'bg-stone-200/70 dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-300/40 dark:border-stone-700'
+            }`}
+          >
+            {isAdditionalSelected && currentAdditionalLang ? (
+              currentAdditionalLang.glyph
+            ) : (
+              <span className="font-headline font-black text-xl tracking-tighter">अ/A</span>
+            )}
+          </div>
+
+          <span className={`text-base font-bold tracking-wide font-headline ${
+            isAdditionalSelected
+              ? 'text-on-surface-light dark:text-on-surface-dark'
+              : 'text-stone-700 dark:text-stone-300'
+          }`}>
+            {isAdditionalSelected && currentAdditionalLang
+              ? currentAdditionalLang.nativeName
+              : 'अन्य भाषा चुनें'}
+          </span>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isAdditionalSelected && currentAdditionalLang) {
+                handlePlaySample(currentAdditionalLang.sampleAudio, currentAdditionalLang.code, e);
+              } else {
+                handlePlaySample('अन्य भाषाओं में से चुनने के लिए यहाँ दबाएं।', 'more', e);
+              }
+            }}
+            className={`flex items-center gap-1 text-xs mt-1.5 font-semibold px-2.5 py-0.5 rounded-full transition-all cursor-pointer border ${
+              playingCode === (isAdditionalSelected && currentAdditionalLang ? currentAdditionalLang.code : 'more')
+                ? 'text-primary bg-primary/15 border-primary/40 animate-pulse'
+                : isAdditionalSelected
+                ? 'text-primary border-primary/20 hover:bg-primary/10'
+                : 'text-stone-600 dark:text-stone-400 border-stone-300/70 dark:border-stone-700 hover:bg-stone-200/50'
+            }`}
+          >
+            <span className="material-symbols-outlined text-xs">volume_up</span>
+            <span>{isAdditionalSelected && currentAdditionalLang ? currentAdditionalLang.audioLabel : 'सुनें'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Bottom Action Button - Disabled & Greyed Out when unselected */}
+      {/* Bottom Action Button */}
       <div className="pt-2 pb-4">
         <button
           type="button"
           onClick={handleProceed}
-          disabled={!selected}
-          className={`w-full py-4 px-6 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
-            selected
-              ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xl active:scale-[0.98] cursor-pointer'
-              : 'bg-stone-300 dark:bg-stone-800 text-stone-500 dark:text-stone-400 cursor-not-allowed shadow-none'
-          }`}
+          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
         >
           <span>{buttonText}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>
         </button>
       </div>
+
+      {/* Additional Languages Modal Sheet with Proper Visual Hierarchy */}
+      {isMoreModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="w-full max-w-md bg-white dark:bg-stone-900 rounded-[32px] p-6 shadow-2xl border border-stone-200 dark:border-stone-700 space-y-5 animate-scaleUp">
+            
+            {/* Prominent Modal Header */}
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-3.5">
+              <div className="flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-primary text-2xl">translate</span>
+                <h2 className="text-xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
+                  अन्य भाषा चुनें
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setIsMoreModalOpen(false);
+                }}
+                className="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors cursor-pointer"
+                aria-label="Close modal"
+              >
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
+            </div>
+
+            {/* Redesigned Search & Voice Bar */}
+            <div className="space-y-2.5">
+              <div className="relative flex items-center">
+                <span className="material-symbols-outlined absolute left-3.5 text-stone-400 text-xl pointer-events-none">
+                  search
+                </span>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="भाषा खोजें..."
+                  className="w-full pl-11 pr-10 py-3 bg-stone-100/90 dark:bg-stone-800/90 rounded-2xl border border-stone-200 dark:border-stone-700 text-sm text-on-surface-light dark:text-on-surface-dark placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-primary/30 font-medium"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 w-6 h-6 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-600 cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-base">clear</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Bol Ke Bataye Voice Button */}
+              <button
+                type="button"
+                onClick={handleVoiceSearch}
+                className={`w-full py-2.5 px-4 rounded-2xl flex items-center justify-center gap-2 text-xs font-bold tracking-wide transition-all cursor-pointer border shadow-xs ${
+                  isListeningVoiceSearch
+                    ? 'bg-primary text-white border-primary animate-pulse'
+                    : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary/15 active:scale-[0.98]'
+                }`}
+              >
+                <span className="material-symbols-outlined text-lg">
+                  {isListeningVoiceSearch ? 'mic' : 'keyboard_voice'}
+                </span>
+                <span>{isListeningVoiceSearch ? 'सुन रहे हैं... बोलें' : 'बोल के बताएं'}</span>
+              </button>
+            </div>
+
+            {/* Languages Grid with Consistent Full-Scale Cards */}
+            <div className="grid grid-cols-2 gap-3 py-1 max-h-[320px] overflow-y-auto pr-0.5">
+              {filteredAdditionalLanguages.length === 0 ? (
+                <div className="col-span-2 text-center py-8 text-xs font-medium text-stone-500">
+                  कोई भाषा नहीं मिली
+                </div>
+              ) : (
+                filteredAdditionalLanguages.map((lang) => {
+                  const isSelected = selected === lang.code;
+                  const isItemPlaying = playingCode === lang.code;
+
+                  return (
+                    <div
+                      key={lang.code}
+                      onClick={() => {
+                        handleSelect(lang.code);
+                        setSearchQuery('');
+                        setIsMoreModalOpen(false);
+                      }}
+                      className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer shadow-xs ${
+                        isSelected
+                          ? 'border-primary bg-primary/10 ring-1 ring-primary/30'
+                          : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 hover:border-primary/40'
+                      }`}
+                    >
+                      <div
+                        className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl font-extrabold mb-1.5 shadow-sm ${
+                          isSelected
+                            ? 'bg-primary text-white'
+                            : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200'
+                        }`}
+                      >
+                        {lang.glyph}
+                      </div>
+
+                      <span className="text-base font-bold tracking-wide font-headline text-on-surface-light dark:text-on-surface-dark">
+                        {lang.nativeName}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePlaySample(lang.sampleAudio, lang.code, e);
+                        }}
+                        className={`flex items-center gap-1 text-xs mt-1.5 font-semibold px-2.5 py-0.5 rounded-full transition-all cursor-pointer border ${
+                          isItemPlaying
+                            ? 'text-primary bg-primary/15 border-primary/30 animate-pulse'
+                            : 'text-primary border-primary/20 hover:bg-primary/10'
+                        }`}
+                      >
+                        <span className="material-symbols-outlined text-xs">volume_up</span>
+                        <span>{lang.audioLabel}</span>
+                      </button>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

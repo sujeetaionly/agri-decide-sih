@@ -17,8 +17,8 @@ interface CropItem {
   keywords: string[];
 }
 
-export const PreviousCropCard: React.FC = () => {
-  const { farmData, updateFarmData, nextCard, prevCard } = useWizard();
+export const IntendedCropCard: React.FC = () => {
+  const { farmData, updateFarmData, fetchRecommendations, isLoadingRecommendation, prevCard } = useWizard();
   const { language, t } = useLanguage();
 
   const [isOtherModalOpen, setIsOtherModalOpen] = useState(false);
@@ -26,47 +26,11 @@ export const PreviousCropCard: React.FC = () => {
   const [isListeningVoiceSearch, setIsListeningVoiceSearch] = useState(false);
   const [voiceSession, setVoiceSession] = useState<VoiceRecognitionSession | null>(null);
 
-  const selectedList = farmData.previousCrops || [];
+  const selectedList = farmData.intendedCrops || [];
   const isSelectedAny = selectedList.length > 0;
 
-  // Primary 8 Standard Options
+  // Primary 10 Local/Regional Crops
   const PRIMARY_CROPS: CropItem[] = [
-    {
-      id: 'WHEAT',
-      title: 'गेहूं',
-      titleMr: 'गहू',
-      titleGu: 'ઘઉં',
-      titleRaj: 'गेहूं',
-      category: 'रबी अनाज',
-      categoryMr: 'रब्बी धान्य',
-      categoryGu: 'રવી ધાન્ય',
-      categoryRaj: 'रबी अनाज',
-      keywords: ['गेहूं', 'wheat', 'गहू', 'ઘઉં', 'गेहू'],
-    },
-    {
-      id: 'GRAM',
-      title: 'चना',
-      titleMr: 'हरभरा (चना)',
-      titleGu: 'ચણા',
-      titleRaj: 'चणो',
-      category: 'दलहन फसल',
-      categoryMr: 'कडधान्य पीक',
-      categoryGu: 'કઠોળ પાક',
-      categoryRaj: 'दाल री फसल',
-      keywords: ['चना', 'gram', 'हरभरा', 'chana', 'चणा', 'छोला', 'चणो'],
-    },
-    {
-      id: 'PADDY',
-      title: 'धान (चावल)',
-      titleMr: 'भात (धान)',
-      titleGu: 'ડાંગર (ચોખા)',
-      titleRaj: 'धान (चावल)',
-      category: 'खरीफ खाद्यान्न',
-      categoryMr: 'खरीप धान्य',
-      categoryGu: 'ખરીફ અનાજ',
-      categoryRaj: 'खरीफ खाद्यान्न',
-      keywords: ['धान', 'चावल', 'rice', 'paddy', 'भात', 'ડાંગર', 'ચોખા'],
-    },
     {
       id: 'SOYBEAN',
       title: 'सोयाबीन',
@@ -104,6 +68,30 @@ export const PreviousCropCard: React.FC = () => {
       keywords: ['मक्का', 'maize', 'corn', 'मका', 'મકાઈ', 'भुट्टा', 'मक्की'],
     },
     {
+      id: 'GROUNDNUT',
+      title: 'मूंगफली',
+      titleMr: 'भुईमूग',
+      titleGu: 'મગફળી',
+      titleRaj: 'मूंगफली',
+      category: 'तिलहन फसल',
+      categoryMr: 'गळीतधान्य',
+      categoryGu: 'તેલીબિયાં પાક',
+      categoryRaj: 'तेल री फसल',
+      keywords: ['मूंगफली', 'groundnut', 'peanut', 'भुईमूग', 'મગફળી'],
+    },
+    {
+      id: 'PADDY',
+      title: 'धान (चावल)',
+      titleMr: 'भात (धान)',
+      titleGu: 'ડાંગર (ચોખા)',
+      titleRaj: 'धान (चावल)',
+      category: 'खरीफ खाद्यान्न',
+      categoryMr: 'खरीप धान्य',
+      categoryGu: 'ખરીફ અનાજ',
+      categoryRaj: 'खरीफ खाद्यान्न',
+      keywords: ['धान', 'चावल', 'rice', 'paddy', 'भात', 'ડાંગર', 'ચોખા'],
+    },
+    {
       id: 'BAJRA',
       title: 'बाजरा',
       titleMr: 'बाजरी',
@@ -114,34 +102,6 @@ export const PreviousCropCard: React.FC = () => {
       categoryGu: 'બાજરી પાક',
       categoryRaj: 'शुष्क अनाज',
       keywords: ['बाजरा', 'bajra', 'बाजरी', 'બાજરી', 'millet'],
-    },
-    {
-      id: 'FALLOW',
-      title: 'खाली खेत (पड़त)',
-      titleMr: 'पडीक शेत (रिकामे)',
-      titleGu: 'પડતર / ખાલી ખેતર',
-      titleRaj: 'खाली खेत (पड़त)',
-      category: 'कोई फसल नहीं थी',
-      categoryMr: 'कोणतेही पीक नव्हते',
-      categoryGu: 'કોઈ પાક નહોતો',
-      categoryRaj: 'कोई फसल कोनी लगाई ही',
-      keywords: ['खाली', 'पडीक', 'none', 'fallow', 'कुछ नहीं', 'પડતર'],
-    },
-  ];
-
-  // Extended Crops Database for "अन्य फसल" Modal Sheet
-  const EXTENDED_CROPS: CropItem[] = [
-    {
-      id: 'MUSTARD',
-      title: 'सरसों',
-      titleMr: 'मोहरी',
-      titleGu: 'રાઈ',
-      titleRaj: 'रायड़ो',
-      category: 'तिलहन फसल',
-      categoryMr: 'गळीतधान्य',
-      categoryGu: 'તેલીબિયાં પાક',
-      categoryRaj: 'तेल री फसल',
-      keywords: ['सरसों', 'mustard', 'मोहरी', 'રાઈ', 'रायड़ो', 'राई'],
     },
     {
       id: 'TUR',
@@ -155,6 +115,46 @@ export const PreviousCropCard: React.FC = () => {
       categoryRaj: 'दाल री फसल',
       keywords: ['अरहर', 'तुअर', 'tur', 'arhar', 'तूर', 'તુવેર', 'तूवर'],
     },
+    {
+      id: 'GRAM',
+      title: 'चना',
+      titleMr: 'हरभरा (चना)',
+      titleGu: 'ચણા',
+      titleRaj: 'चणो',
+      category: 'दलहन फसल',
+      categoryMr: 'कडधान्य पीक',
+      categoryGu: 'કઠોળ પાક',
+      categoryRaj: 'दाल री फसल',
+      keywords: ['चना', 'gram', 'हरभरा', 'chana', 'चणा', 'छोला', 'चणो'],
+    },
+    {
+      id: 'WHEAT',
+      title: 'गेहूं',
+      titleMr: 'गहू',
+      titleGu: 'ઘઉં',
+      titleRaj: 'गेहूं',
+      category: 'रबी अनाज',
+      categoryMr: 'रब्बी धान्य',
+      categoryGu: 'રવી ધાન્ય',
+      categoryRaj: 'रबी अनाज',
+      keywords: ['गेहूं', 'wheat', 'गहू', 'ઘઉં', 'गेहू'],
+    },
+    {
+      id: 'MUSTARD',
+      title: 'सरसों',
+      titleMr: 'मोहरी',
+      titleGu: 'રાઈ',
+      titleRaj: 'रायड़ो',
+      category: 'तिलहन फसल',
+      categoryMr: 'गळीतधान्य',
+      categoryGu: 'તેલીબિયાં પાક',
+      categoryRaj: 'तेल री फसल',
+      keywords: ['सरसों', 'mustard', 'मोहरी', 'રાઈ', 'रायड़ो', 'राई'],
+    },
+  ];
+
+  // Extended Crops Database for "अन्य फसल" Modal Sheet
+  const EXTENDED_CROPS: CropItem[] = [
     {
       id: 'MOONG',
       title: 'मूंग',
@@ -178,18 +178,6 @@ export const PreviousCropCard: React.FC = () => {
       categoryGu: 'કઠોળ પાક',
       categoryRaj: 'दाल री फसल',
       keywords: ['उड़द', 'urad', 'उडीद', 'અડદ'],
-    },
-    {
-      id: 'GROUNDNUT',
-      title: 'मूंगफली',
-      titleMr: 'भुईमूग',
-      titleGu: 'મગફળી',
-      titleRaj: 'मूंगफली',
-      category: 'तिलहन फसल',
-      categoryMr: 'गळीतधान्य',
-      categoryGu: 'તેલીબિયાં પાક',
-      categoryRaj: 'तेल री फसल',
-      keywords: ['मूंगफली', 'groundnut', 'peanut', 'भुईमूग', 'મગફળી'],
     },
     {
       id: 'JOWAR',
@@ -271,10 +259,10 @@ export const PreviousCropCard: React.FC = () => {
     triggerHaptic('medium');
     let updated: string[];
 
-    if (cropId === 'FALLOW') {
-      updated = selectedList.includes('FALLOW') ? [] : ['FALLOW'];
+    if (cropId === 'NOT_SURE') {
+      updated = selectedList.includes('NOT_SURE') ? [] : ['NOT_SURE'];
     } else {
-      const filtered = selectedList.filter((id) => id !== 'FALLOW');
+      const filtered = selectedList.filter((id) => id !== 'NOT_SURE');
       if (filtered.includes(cropId)) {
         updated = filtered.filter((id) => id !== cropId);
       } else {
@@ -282,7 +270,7 @@ export const PreviousCropCard: React.FC = () => {
       }
     }
 
-    updateFarmData({ previousCrops: updated });
+    updateFarmData({ intendedCrops: updated });
   };
 
   // Filtered extended crops for modal
@@ -349,8 +337,8 @@ export const PreviousCropCard: React.FC = () => {
     setIsOtherModalOpen(false);
   };
 
-  const isOtherActive = selectedList.some((id) => !PRIMARY_CROPS.map((p) => p.id).includes(id));
-  const activeOtherNames = selectedList.filter((id) => !PRIMARY_CROPS.map((p) => p.id).includes(id));
+  const isOtherActive = selectedList.some((id) => !PRIMARY_CROPS.map((p) => p.id).includes(id) && id !== 'NOT_SURE');
+  const activeOtherNames = selectedList.filter((id) => !PRIMARY_CROPS.map((p) => p.id).includes(id) && id !== 'NOT_SURE');
 
   const allKnownCrops = [...PRIMARY_CROPS, ...EXTENDED_CROPS];
   const selectedCropObjs = allKnownCrops.filter((c) => selectedList.includes(c.id));
@@ -362,15 +350,15 @@ export const PreviousCropCard: React.FC = () => {
   const handleAudio = () => {
     triggerHaptic('light');
     const msg = isSelectedAny
-      ? `${t('card4Title')}। वर्तमान चयन: ${selectedTitles.join(', ')} है।`
-      : `${t('card4Title')}। ${t('card4Sub')}`;
+      ? `${t('card6Title')}। वर्तमान चयन: ${selectedTitles.join(', ')} है।`
+      : `${t('card6Title')}। ${t('card6Sub')}`;
     speakText(msg, language);
   };
 
-  const handleContinue = () => {
-    if (!isSelectedAny) return;
+  const handleContinue = async () => {
+    if (!isSelectedAny || isLoadingRecommendation) return;
     triggerHaptic('success');
-    nextCard();
+    await fetchRecommendations();
   };
 
   const handleBack = () => {
@@ -385,7 +373,7 @@ export const PreviousCropCard: React.FC = () => {
       <div className="space-y-2 pt-1 pb-1">
         <div className="flex items-center justify-between">
           <span className="text-xs font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
-            {t('card4Category')}
+            {t('card6Category')}
           </span>
           <button
             type="button"
@@ -399,15 +387,15 @@ export const PreviousCropCard: React.FC = () => {
         </div>
 
         <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
-          {t('card4Title')}
+          {t('card6Title')}
         </h2>
 
         <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
-          {t('card4Sub')}
+          {t('card6Sub')}
         </p>
       </div>
 
-      {/* 2-Column Primary Crop Selection Tiles with Clear Hierarchy */}
+      {/* 2-Column Primary Local Crop Selection Tiles with Clear Hierarchy */}
       <div className="grid grid-cols-2 gap-3">
         {PRIMARY_CROPS.map((c) => {
           const isSelected = selectedList.includes(c.id);
@@ -481,6 +469,39 @@ export const PreviousCropCard: React.FC = () => {
           <div className="flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
             <span className="material-symbols-outlined text-sm">search</span>
             <span>खोजें</span>
+          </div>
+        </div>
+
+        {/* Dedicated "निश्चित नहीं / सर्वोत्तम सुझाव दें" Full-Width Card */}
+        <div
+          onClick={() => handleToggleCrop('NOT_SURE')}
+          className={`col-span-2 p-3.5 rounded-2xl border-2 transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between ${
+            selectedList.includes('NOT_SURE')
+              ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-sm ring-2 ring-primary/20'
+              : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
+          }`}
+        >
+          <div className="min-w-0 pr-2">
+            <h3 className="text-base font-black font-headline text-stone-950 dark:text-stone-50 leading-tight">
+              {t('notDecided')}
+            </h3>
+            <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mt-0.5">
+              AI द्वारा सर्वोत्तम फसल चयन
+            </span>
+          </div>
+
+          <div
+            className={`w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+              selectedList.includes('NOT_SURE')
+                ? 'bg-primary border-primary text-white'
+                : 'border-stone-300 dark:border-stone-600 bg-transparent'
+            }`}
+          >
+            {selectedList.includes('NOT_SURE') && (
+              <span className="material-symbols-outlined text-xs font-black">
+                check
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -658,15 +679,24 @@ export const PreviousCropCard: React.FC = () => {
           <button
             type="button"
             onClick={handleContinue}
-            disabled={!isSelectedAny}
+            disabled={!isSelectedAny || isLoadingRecommendation}
             className={`flex-1 py-3.5 px-6 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
-              isSelectedAny
+              isSelectedAny && !isLoadingRecommendation
                 ? 'bg-primary hover:bg-primary/95 text-white active:scale-[0.98] cursor-pointer shadow-none'
                 : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
             }`}
           >
-            <span>{t('continue')}</span>
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+            {isLoadingRecommendation ? (
+              <>
+                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>{t('calculating')}</span>
+              </>
+            ) : (
+              <>
+                <span>{t('getCropRecButton')}</span>
+                <span className="material-symbols-outlined text-lg">auto_awesome</span>
+              </>
+            )}
           </button>
         </div>
       </div>

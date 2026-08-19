@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SupportedLanguage, getTranslation } from '../data/translations';
 import { triggerHaptic } from '../lib/utils';
 import { speakText, stopSpeaking } from '../lib/speech';
@@ -14,24 +14,81 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
 }) => {
   const [hasTestedAudio, setHasTestedAudio] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakingSource, setSpeakingSource] = useState<'intro' | 'test' | null>(null);
+
+  // Automatically play voice guidance onboarding on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handlePlayIntroAudio();
+    }, 400);
+
+    return () => {
+      clearTimeout(timer);
+      stopSpeaking();
+    };
+  }, [language]);
+
+  const handlePlayIntroAudio = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    triggerHaptic('light');
+
+    if (speakingSource === 'intro' && isSpeaking) {
+      stopSpeaking();
+      setIsSpeaking(false);
+      setSpeakingSource(null);
+      return;
+    }
+
+    const introMsg = getTranslation('audioGuideIntroSpeech', language) || getTranslation('audioGuideLine1', language);
+    setIsSpeaking(true);
+    setSpeakingSource('intro');
+
+    speakText(
+      introMsg,
+      language,
+      () => {
+        setIsSpeaking(true);
+        setSpeakingSource('intro');
+      },
+      () => {
+        setIsSpeaking(false);
+        setSpeakingSource(null);
+      },
+      () => {
+        setIsSpeaking(false);
+        setSpeakingSource(null);
+      }
+    );
+  };
 
   const handleTestAudio = () => {
     triggerHaptic('medium');
-    const msg = `${getTranslation('audioGuideLine1', language)} ${getTranslation('audioGuideSuccess', language)}`;
-    
+    const msg = getTranslation('audioGuideSuccess', language);
+
+    setIsSpeaking(true);
+    setSpeakingSource('test');
+    setHasTestedAudio(true);
+
     speakText(
       msg,
       language,
       () => {
         setIsSpeaking(true);
-        setHasTestedAudio(true);
+        setSpeakingSource('test');
       },
-      () => setIsSpeaking(false),
-      () => setIsSpeaking(false)
+      () => {
+        setIsSpeaking(false);
+        setSpeakingSource(null);
+      },
+      () => {
+        setIsSpeaking(false);
+        setSpeakingSource(null);
+      }
     );
   };
 
   const handleContinue = () => {
+    if (!hasTestedAudio) return;
     stopSpeaking();
     triggerHaptic('success');
     onProceed();
@@ -40,51 +97,71 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Title */}
+      {/* Top Header with Title & Speaker Button */}
       <header className="pt-6 space-y-2 text-center">
-        <div className="w-14 h-14 rounded-3xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 flex items-center justify-center mx-auto shadow-sm">
-          <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">volume_up</span>
+        <div className="flex items-center justify-center gap-2">
+          <h1 className="text-2xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
+            {getTranslation('audioGuideTitle', language)}
+          </h1>
+
+          <button
+            type="button"
+            onClick={handlePlayIntroAudio}
+            aria-label="Listen to instructions"
+            className={`inline-flex items-center justify-center w-9 h-9 rounded-full transition-all cursor-pointer border ${
+              speakingSource === 'intro' && isSpeaking
+                ? 'text-primary bg-primary/15 border-primary/40 animate-pulse'
+                : 'text-primary border-primary/20 hover:bg-primary/5'
+            }`}
+          >
+            <span className="material-symbols-outlined text-xl">volume_up</span>
+          </button>
         </div>
-        <h1 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] tracking-tight">
-          {getTranslation('audioGuideTitle', language)}
-        </h1>
+
         <p className="text-xs text-stone-500 dark:text-stone-400 font-medium max-w-xs mx-auto leading-relaxed">
           {getTranslation('audioGuideLine1', language)}
         </p>
       </header>
 
-      {/* Center Interactive Circular Speaker Button */}
-      <div className="my-auto text-center space-y-6">
+      {/* Center Interactive Speaker Button - Direct on surface without artificial box */}
+      <div className="my-auto text-center space-y-4">
         <button
           type="button"
           onClick={handleTestAudio}
           aria-label="Test Speaker Audio"
-          className={`relative w-28 h-28 rounded-full border-4 flex items-center justify-center mx-auto transition-all cursor-pointer shadow-lg active:scale-95 ${
-            isSpeaking
-              ? 'bg-emerald-700 text-white border-emerald-500 shadow-2xl ring-8 ring-emerald-500/25 scale-105 animate-pulse'
-              : 'bg-white dark:bg-[#1E231B] border-emerald-600/40 text-emerald-700 dark:text-emerald-300 hover:border-emerald-600 hover:scale-105 shadow-md'
+          className={`relative w-20 h-20 rounded-full border-2 flex items-center justify-center mx-auto transition-all cursor-pointer shadow-md active:scale-95 ${
+            speakingSource === 'test' && isSpeaking
+              ? 'bg-primary text-white border-primary ring-4 ring-primary/20 scale-105 animate-pulse shadow-lg'
+              : hasTestedAudio
+              ? 'bg-primary/10 border-primary text-primary hover:bg-primary/15'
+              : 'bg-primary/10 border-primary/30 text-primary hover:bg-primary/15 hover:border-primary'
           }`}
         >
-          <span className="material-symbols-outlined text-5xl [font-variation-settings:'FILL'_1]">
-            {isSpeaking ? 'graphic_eq' : 'volume_up'}
+          <span className="material-symbols-outlined text-4xl">
+            volume_up
           </span>
         </button>
 
-        <div className="space-y-1.5">
-          <p className="text-base font-bold font-headline text-[#1A1C18] dark:text-[#E2E3DC]">
-            {isSpeaking ? '🔊 आवाज बज रही है...' : 'दबाकर आवाज की जांच करें'}
-          </p>
-          <p className="text-xs text-stone-500 dark:text-stone-400 max-w-xs mx-auto leading-relaxed font-medium">
-            यह बटन ऐप के हर पृष्ठ पर सबसे ऊपर उपलब्ध रहेगा।
-          </p>
-        </div>
+        <p className="text-sm font-bold font-headline text-on-surface-light dark:text-on-surface-dark tracking-wide">
+          {speakingSource === 'test' && isSpeaking
+            ? 'आवाज बज रही है...'
+            : hasTestedAudio
+            ? 'बहुत बढ़िया! आवाज सही चल रही है'
+            : 'दबाकर आवाज की जांच करें'}
+        </p>
       </div>
 
-      {/* Bottom Action Button */}
+      {/* Bottom Action Button - Disabled & Greyed out until user tests audio */}
       <div className="pb-6">
         <button
+          type="button"
           onClick={handleContinue}
-          className="w-full py-4 px-6 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+          disabled={!hasTestedAudio}
+          className={`w-full py-4 px-6 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
+            hasTestedAudio
+              ? 'bg-primary text-on-primary shadow-xl active:scale-[0.98] cursor-pointer'
+              : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed shadow-none'
+          }`}
         >
           <span>{getTranslation('audioGuideProceed', language)}</span>
           <span className="material-symbols-outlined text-lg">arrow_forward</span>

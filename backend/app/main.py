@@ -6,6 +6,7 @@ from backend.app.core.config import settings
 from backend.app.core.database import Base, engine
 from backend.app.api.v1.farm_routes import router as farm_router
 from backend.app.api.v1.crop_routes import router as crop_router
+from backend.app.api.v1.auth_routes import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,8 +15,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title="AGRI-DECIDE API",
-    description="AI-Based Crop Recommendation Engine & Decision Support System (SIH PS #24)",
+    title="फसल-दिशा (Fasal Disha) API",
+    description="AI-Based Crop Recommendation Engine & Multi-Region Decision Support System — हर खेत को मिले सही दिशा",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -30,14 +31,16 @@ app.add_middleware(
 )
 
 # Register API routers
+app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(farm_router, prefix=settings.API_V1_STR)
 app.include_router(crop_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():
     return {
-        "project": "AGRI-DECIDE",
-        "description": "AI-Based Crop Recommendation Engine for Farmers",
+        "project": "Fasal Disha (फसल-दिशा)",
+        "tagline": "हर खेत को मिले सही दिशा",
+        "description": "AI-Based Intelligent Multilingual Crop Recommendation Engine for Farmers",
         "status": "online",
         "docs_url": "/docs",
         "version": settings.VERSION
