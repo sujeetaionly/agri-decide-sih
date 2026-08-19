@@ -64,24 +64,91 @@ DEFAULT_CACP_COSTS = {
     "TOMATO": 52002.0
 }
 
-# Clean Pure Indic Names (No Hybrid English Clutter)
+# Clean Pure Indic Names across 5 Supported Regional Languages
 CROP_NAMES = {
-    "SOYBEAN": {"en": "Soybean", "hi": "सोयाबीन", "mr": "सोयाबीन", "duration": 95, "category": "OILSEED"},
-    "MAIZE": {"en": "Maize", "hi": "मक्का", "mr": "मका", "duration": 105, "category": "CEREAL"},
-    "TUR": {"en": "Tur", "hi": "अरहर", "mr": "तूर", "duration": 180, "category": "PULSE"},
-    "COTTON": {"en": "Cotton", "hi": "कपास", "mr": "कापूस", "duration": 160, "category": "FIBRE"},
-    "BAJRA": {"en": "Bajra", "hi": "बाजरा", "mr": "बाजरी", "duration": 85, "category": "CEREAL"},
-    "MOONG": {"en": "Moong", "hi": "मूंग", "mr": "मूग", "duration": 70, "category": "PULSE"},
-    "GROUNDNUT": {"en": "Groundnut", "hi": "मूंगफली", "mr": "भुईमूग", "duration": 120, "category": "OILSEED"},
-    "WHEAT": {"en": "Wheat", "hi": "गेहूं", "mr": "गहू", "duration": 125, "category": "CEREAL"},
-    "GRAM": {"en": "Gram", "hi": "चना", "mr": "हरभरा", "duration": 110, "category": "PULSE"},
-    "JOWAR": {"en": "Jowar", "hi": "ज्वार", "mr": "ज्वारी", "duration": 100, "category": "CEREAL"},
-    "URAD": {"en": "Urad", "hi": "उड़द", "mr": "उडीद", "duration": 75, "category": "PULSE"},
-    "SUNFLOWER": {"en": "Sunflower", "hi": "सूरजमुखी", "mr": "सूर्यफूल", "duration": 90, "category": "OILSEED"},
-    "SUGARCANE": {"en": "Sugarcane", "hi": "गन्ना", "mr": "ऊस", "duration": 360, "category": "COMMERCIAL"},
-    "ONION": {"en": "Onion", "hi": "प्याज", "mr": "कांदा", "duration": 120, "category": "HORTICULTURE"},
-    "TOMATO": {"en": "Tomato", "hi": "टमाटर", "mr": "टोमॅटो", "duration": 130, "category": "HORTICULTURE"},
+    "SOYBEAN": {"en": "Soybean", "hi": "सोयाबीन", "mr": "सोयाबीन", "gu": "સોયાબીન", "raj": "सोयाबीन", "duration": 95, "category": "OILSEED", "season": "KHARIF"},
+    "MAIZE": {"en": "Maize", "hi": "मक्का", "mr": "मका", "gu": "મકાઈ", "raj": "मक्का", "duration": 105, "category": "CEREAL", "season": "KHARIF"},
+    "TUR": {"en": "Tur", "hi": "अरहर", "mr": "तूर", "gu": "તુવેર", "raj": "अरहर", "duration": 180, "category": "PULSE", "season": "KHARIF"},
+    "COTTON": {"en": "Cotton", "hi": "कपास", "mr": "कापूस", "gu": "કપાસ", "raj": "कपास", "duration": 160, "category": "FIBRE", "season": "KHARIF"},
+    "BAJRA": {"en": "Bajra", "hi": "बाजरा", "mr": "बाजरी", "gu": "બાજરી", "raj": "बाजरो", "duration": 85, "category": "CEREAL", "season": "KHARIF"},
+    "MOONG": {"en": "Moong", "hi": "मूंग", "mr": "मूग", "gu": "મગ", "raj": "मूंग", "duration": 70, "category": "PULSE", "season": "KHARIF"},
+    "GROUNDNUT": {"en": "Groundnut", "hi": "मूंगफली", "mr": "भुईमूग", "gu": "મગફળી", "raj": "मूंगफली", "duration": 120, "category": "OILSEED", "season": "KHARIF"},
+    "WHEAT": {"en": "Wheat", "hi": "गेहूं", "mr": "गहू", "gu": "ઘઉં", "raj": "गेहूं", "duration": 125, "category": "CEREAL", "season": "RABI"},
+    "GRAM": {"en": "Gram", "hi": "चना", "mr": "हरभरा", "gu": "ચણા", "raj": "चणो", "duration": 110, "category": "PULSE", "season": "RABI"},
+    "JOWAR": {"en": "Jowar", "hi": "ज्वार", "mr": "ज्वारी", "gu": "જુવાર", "raj": "ज्वार", "duration": 100, "category": "CEREAL", "season": "KHARIF"},
+    "URAD": {"en": "Urad", "hi": "उड़द", "mr": "उडीद", "gu": "અડદ", "raj": "उड़द", "duration": 75, "category": "PULSE", "season": "KHARIF"},
+    "MUSTARD": {"en": "Mustard", "hi": "सरसों", "mr": "मोहरी", "gu": "રાઈ", "raj": "रायड़ो", "duration": 115, "category": "OILSEED", "season": "RABI"},
+    "SUNFLOWER": {"en": "Sunflower", "hi": "सूरजमुखी", "mr": "सूर्यफूल", "gu": "સૂર્યમુખી", "raj": "सूरजमुखी", "duration": 90, "category": "OILSEED", "season": "KHARIF"},
+    "SUGARCANE": {"en": "Sugarcane", "hi": "गन्ना", "mr": "ऊस", "gu": "શેરડી", "raj": "गन्नो", "duration": 360, "category": "COMMERCIAL", "season": "ANNUAL"},
+    "ONION": {"en": "Onion", "hi": "प्याज", "mr": "कांदा", "gu": "ડુંગળી", "raj": "कांदो", "duration": 120, "category": "HORTICULTURE", "season": "RABI"},
+    "TOMATO": {"en": "Tomato", "hi": "टमाटर", "mr": "टोमॅटो", "gu": "ટામેટા", "raj": "टमाटर", "duration": 130, "category": "HORTICULTURE", "season": "RABI"},
 }
+
+def get_current_season(planned_sowing_date: Optional[str] = None) -> Dict[str, str]:
+    """
+    Auto-detects agricultural season (KHARIF, RABI, ZAID) from sowing date or current calendar month.
+    """
+    month = 6
+    if planned_sowing_date:
+        try:
+            month = int(planned_sowing_date.split("-")[1])
+        except Exception:
+            pass
+    else:
+        from datetime import datetime
+        month = datetime.now().month
+
+    if 6 <= month <= 10:
+        return {"code": "KHARIF", "display": "खरीफ मौसम 2026-27"}
+    elif month >= 11 or month <= 2:
+        return {"code": "RABI", "display": "रबी मौसम 2026-27"}
+    else:
+        return {"code": "ZAID", "display": "जायद / ग्रीष्म मौसम 2026-27"}
+
+def calculate_crop_rotation_adjustment(previous_crop: Optional[str], candidate_crop_id: str) -> Dict[str, Any]:
+    """
+    Calculates agronomic soil rotation bonus / monoculture penalty.
+    """
+    if not previous_crop:
+        return {"multiplier": 1.0, "reason": None, "benefit_tag": None}
+    
+    prev = previous_crop.upper().strip()
+    cand_info = CROP_NAMES.get(candidate_crop_id, {})
+    cand_cat = cand_info.get("category", "")
+
+    # Monoculture penalty: planting same crop consecutive seasons
+    if prev == candidate_crop_id:
+        return {
+            "multiplier": 0.85,
+            "reason": f"लगातार एक ही फसल ({prev}) उगाने से मिट्टी में पोषक तत्वों का असंतुलन और कीट-रोग का जोखिम बढ़ता है।",
+            "benefit_tag": "मोनोकल्चर जोखिम (-15%)"
+        }
+    
+    # Cereal -> Legume/Oilseed (Nitrogen Fixation bonus)
+    if prev in ["WHEAT", "RICE", "MAIZE", "BAJRA", "JOWAR"] and cand_cat in ["PULSE", "OILSEED"]:
+        return {
+            "multiplier": 1.12,
+            "reason": f"पिछली अनाज फसल ({prev}) के बाद दलहन/तिलहन उगाने से मिट्टी में प्राकृतिक नाइट्रोजन स्थिरीकरण होकर खेत की उर्वरा शक्ति बढ़ती है।",
+            "benefit_tag": "फसल चक्र लाभ (+12%)"
+        }
+
+    # Legume -> Cereal (Nitrogen enriched soil bonus)
+    if prev in ["MOONG", "GRAM", "TUR", "GROUNDNUT", "SOYBEAN", "URAD"] and cand_cat == "CEREAL":
+        return {
+            "multiplier": 1.10,
+            "reason": f"पिछली दलहनी फसल के बाद अनाज फसल उगाने से संचित नाइट्रोजन का भरपूर लाभ मिलता है और पैदावार बढ़ती है।",
+            "benefit_tag": "पोषक तत्व लाभ (+10%)"
+        }
+
+    # Heavy feeder -> Legume
+    if prev in ["COTTON", "SUGARCANE"] and cand_cat in ["PULSE", "OILSEED"]:
+        return {
+            "multiplier": 1.15,
+            "reason": f"कपास/गन्ना के बाद मिट्टी को पुनः उपजाऊ बनाने के लिए दलहन/तिलहन फसल चक्र सर्वोत्तम प्राकृतिक उपाय है।",
+            "benefit_tag": "मृदा पुनर्जनन लाभ (+15%)"
+        }
+
+    return {"multiplier": 1.0, "reason": None, "benefit_tag": None}
 
 def generate_why_recommended(
     crop_id: str,
@@ -92,7 +159,8 @@ def generate_why_recommended(
     adjusted_cost: float,
     previous_crop: Optional[str],
     sowing_status: str,
-    suitability_pct: float
+    suitability_pct: float,
+    rotation_reason: Optional[str] = None
 ) -> List[str]:
     """
     Generates explainable, localized rationale bullets in pure Indic language.
@@ -108,7 +176,7 @@ def generate_why_recommended(
         "CLAY": "चिकनी मिट्टी"
     }
     soil_desc = soil_names.get(soil_type.upper(), "दोमट मिट्टी")
-    bullets.append(f"{soil_desc} और स्थानीय मौसम के साथ {round(suitability_pct)}% सबसे उत्तम कृषि अनुकूलता।")
+    bullets.append(f"{soil_desc} और क्षेत्रीय मौसम के साथ {round(suitability_pct)}% सबसे उत्तम कृषि अनुकूलता।")
 
     water_source_names = {
         "WELL": "कुआं",
@@ -126,10 +194,12 @@ def generate_why_recommended(
     else:
         bullets.append(f"लागत ₹{int(adjusted_cost):,}/एकड़ के साथ सर्वाधिक शुद्ध मुनाफा।")
 
-    if previous_crop and previous_crop.upper() in ["WHEAT", "RICE", "MAIZE"] and crop_info["category"] in ["PULSE", "OILSEED"]:
-        bullets.append(f"पिछली फसल के बाद दलहन/तिलहन फसल चक्र से खेत की उर्वरा शक्ति में वृद्धि।")
+    if rotation_reason:
+        bullets.append(rotation_reason)
+    elif previous_crop and previous_crop.upper() in ["WHEAT", "RICE", "MAIZE"] and crop_info["category"] in ["PULSE", "OILSEED"]:
+        bullets.append("पिछली फसल के बाद दलहन/तिलहन फसल चक्र से खेत की उर्वरा शक्ति में वृद्धि।")
     else:
-        bullets.append("क्षेत्रीय कृषि मंडी में सुलभ मांग और स्थिर भाव।")
+        bullets.append("क्षेत्रीय कृषि मंडी में निरंतर स्थिर मांग और नकद तरलता।")
 
     return bullets
 
@@ -146,12 +216,18 @@ def recommend_crops_engine(
     sowing_delay_override: int = 0,
     rainfall_deficit_pct: float = 0.0,
     price_shock_pct: float = 0.0,
+    district: Optional[str] = "Pune",
+    state: Optional[str] = "Maharashtra",
     db: Optional[Session] = None
 ) -> Dict[str, Any]:
     """
     Core Recommendation Engine with itemized CACP cost breakdowns and pure Indic output.
     """
-    # 1. Resolve candidate crop list
+    # 1. Season Detection
+    season_info = get_current_season(planned_sowing_date)
+    current_season_code = season_info["code"]
+
+    # 2. Resolve candidate crop list
     if not candidate_crops or len(candidate_crops) == 0:
         if soil_type.upper() in ["SANDY", "RED"]:
             active_candidates = ["BAJRA", "MOONG", "GROUNDNUT", "SOYBEAN"]
@@ -164,7 +240,7 @@ def recommend_crops_engine(
     if not valid_candidates:
         valid_candidates = ["SOYBEAN", "MAIZE", "TUR", "COTTON"]
 
-    # 2. Evaluate Sowing Window
+    # 3. Evaluate Sowing Window
     overall_sowing_eval = evaluate_sowing_window(planned_sowing_date)
     effective_sowing_delay = overall_sowing_eval["sowing_delay_days"] + sowing_delay_override
 
@@ -174,7 +250,7 @@ def recommend_crops_engine(
         crop_info = CROP_NAMES[crop_id]
         sowing_status_text = "Optimal" if effective_sowing_delay <= 0 else ("Moderate" if effective_sowing_delay <= 15 else "Late")
 
-        # 3. Itemized CACP Cost Breakdown
+        # 4. Itemized CACP Cost Breakdown
         cost_breakdown_dict = ITEMIZED_CACP_COSTS.get(crop_id)
         if not cost_breakdown_dict:
             base_cost = DEFAULT_CACP_COSTS.get(crop_id, 20000.0)
@@ -193,7 +269,7 @@ def recommend_crops_engine(
         base_cacp = cost_breakdown_dict["operational_cost_a2_inr_per_acre"]
         adj_cost = calculate_adjusted_cost(base_cacp, owns_tractor, owns_sprayer)
 
-        # 4. ML Yield Prediction
+        # 5. ML Yield Prediction
         yield_pred = predict_crop_yield(
             crop_id=crop_id,
             soil_type=soil_type,
@@ -204,7 +280,7 @@ def recommend_crops_engine(
         )
         exp_yield = yield_pred["expected_yield"]
 
-        # 5. Price Forecast
+        # 6. Price Forecast
         price_info = get_harvest_mandi_price(
             crop_id=crop_id,
             harvest_month=10,
@@ -212,12 +288,12 @@ def recommend_crops_engine(
         )
         fc_price = price_info["forecasted_price_per_qtl"]
 
-        # 6. Economics
+        # 7. Economics
         gross_rev = calculate_gross_revenue(exp_yield, fc_price)
         net_profit = calculate_net_profit(gross_rev, adj_cost)
         profit_per_day = calculate_net_profit_per_day(net_profit, crop_info["duration"])
 
-        # 7. Suitability % Calculation
+        # 8. Suitability % Calculation with Rotation Intelligence
         score = 80.0
         if soil_type.upper() == "BLACK" and crop_id in ["SOYBEAN", "COTTON", "TUR", "MAIZE"]:
             score += 10.0
@@ -237,8 +313,9 @@ def recommend_crops_engine(
             else:
                 score -= min(25.0, effective_sowing_delay * 0.8)
 
-        if previous_season_crop and previous_season_crop.upper() in ["WHEAT", "RICE", "MAIZE"] and crop_info["category"] in ["PULSE", "OILSEED"]:
-            score += 6.0
+        # Crop Rotation Factor
+        rotation_eval = calculate_crop_rotation_adjustment(previous_season_crop, crop_id)
+        score *= rotation_eval["multiplier"]
 
         suitability_pct = min(98.0, max(50.0, round(score, 1)))
 
@@ -247,6 +324,8 @@ def recommend_crops_engine(
             "crop_name_en": crop_info["en"],
             "crop_name_hi": crop_info["hi"],
             "crop_name_mr": crop_info.get("mr", crop_info["hi"]),
+            "crop_name_gu": crop_info.get("gu", crop_info["hi"]),
+            "crop_name_raj": crop_info.get("raj", crop_info["hi"]),
             "suitability_pct": suitability_pct,
             "duration_days": crop_info["duration"],
             "expected_yield_qtl_per_acre": exp_yield,
@@ -258,6 +337,8 @@ def recommend_crops_engine(
             "net_profit_per_day_inr": profit_per_day,
             "price_volatility": price_info["price_volatility"],
             "sowing_window_status": sowing_status_text,
+            "rotation_benefit": rotation_eval.get("benefit_tag"),
+            "rotation_reason": rotation_eval.get("reason"),
             "sort_score": (suitability_pct * 0.5) + (profit_per_day * 0.5)
         })
 
@@ -274,7 +355,8 @@ def recommend_crops_engine(
         adjusted_cost=top_crop["total_cost_inr_per_acre"],
         previous_crop=previous_season_crop,
         sowing_status=top_crop["sowing_window_status"],
-        suitability_pct=top_crop["suitability_pct"]
+        suitability_pct=top_crop["suitability_pct"],
+        rotation_reason=top_crop.get("rotation_reason")
     )
 
     top_recommendation = {
@@ -282,6 +364,8 @@ def recommend_crops_engine(
         "crop_name_en": top_crop["crop_name_en"],
         "crop_name_hi": top_crop["crop_name_hi"],
         "crop_name_mr": top_crop["crop_name_mr"],
+        "crop_name_gu": top_crop["crop_name_gu"],
+        "crop_name_raj": top_crop["crop_name_raj"],
         "suitability_pct": top_crop["suitability_pct"],
         "duration_days": top_crop["duration_days"],
         "expected_yield_qtl_per_acre": top_crop["expected_yield_qtl_per_acre"],
@@ -292,6 +376,7 @@ def recommend_crops_engine(
         "expected_net_profit_per_acre_inr": top_crop["expected_net_profit_per_acre_inr"],
         "net_profit_per_day_inr": top_crop["net_profit_per_day_inr"],
         "price_volatility": top_crop["price_volatility"],
+        "rotation_benefit": top_crop.get("rotation_benefit"),
         "why_recommended": why_bullets
     }
 
@@ -302,6 +387,8 @@ def recommend_crops_engine(
             "crop_name_en": item["crop_name_en"],
             "crop_name_hi": item["crop_name_hi"],
             "crop_name_mr": item["crop_name_mr"],
+            "crop_name_gu": item["crop_name_gu"],
+            "crop_name_raj": item["crop_name_raj"],
             "suitability_pct": item["suitability_pct"],
             "sowing_window_status": item["sowing_window_status"],
             "total_cost_inr_per_acre": item["total_cost_inr_per_acre"],
@@ -310,10 +397,25 @@ def recommend_crops_engine(
             "forecasted_mandi_price_inr_per_qtl": item["forecasted_mandi_price_inr_per_qtl"],
             "expected_net_profit_per_acre_inr": item["expected_net_profit_per_acre_inr"],
             "duration_days": item["duration_days"],
-            "net_profit_per_day_inr": item["net_profit_per_day_inr"]
+            "net_profit_per_day_inr": item["net_profit_per_day_inr"],
+            "rotation_benefit": item.get("rotation_benefit")
         })
 
+    data_sources_info = {
+        "district_profile": f"{district or 'Pune'} District (Benchmark Route)",
+        "mandi_source": "Baramati APMC, Pune District (Agmarknet Live Pipeline)",
+        "soil_source": "SoilGrids ISRIC Global 250m Spatial Model [18.15°N, 74.58°E]",
+        "sowing_calendar": "ICAR-CRIDA District Crop Calendar Benchmark",
+        "yield_model": "ICRISAT 10-Year District Panel Random Forest Engine",
+        "cost_benchmarks": "CACP (Commission for Agricultural Costs & Prices) Official A2/A2+FL",
+        "routing_note": "For production demo, queries across all states route to verified Pune/Maharashtra ICRISAT & Agmarknet baseline."
+    }
+
     return {
+        "status": "success",
+        "current_season": current_season_code,
+        "season_display_name": season_info["display"],
+        "data_sources": data_sources_info,
         "sowing_window": {
             "status": overall_sowing_eval["status"],
             "badge_text": overall_sowing_eval["badge_text"],

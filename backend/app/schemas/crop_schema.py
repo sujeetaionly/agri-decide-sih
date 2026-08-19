@@ -37,6 +37,8 @@ class TopRecommendation(BaseModel):
     crop_name_en: str
     crop_name_hi: str
     crop_name_mr: Optional[str] = None
+    crop_name_gu: Optional[str] = None
+    crop_name_raj: Optional[str] = None
     suitability_pct: float
     duration_days: int
     expected_yield_qtl_per_acre: float
@@ -47,6 +49,7 @@ class TopRecommendation(BaseModel):
     expected_net_profit_per_acre_inr: float
     net_profit_per_day_inr: float
     price_volatility: str
+    rotation_benefit: Optional[str] = None
     why_recommended: List[str]
 
 class ComparisonMatrixItem(BaseModel):
@@ -54,6 +57,8 @@ class ComparisonMatrixItem(BaseModel):
     crop_name_en: str
     crop_name_hi: str
     crop_name_mr: Optional[str] = None
+    crop_name_gu: Optional[str] = None
+    crop_name_raj: Optional[str] = None
     suitability_pct: float
     sowing_window_status: str
     total_cost_inr_per_acre: float
@@ -63,9 +68,13 @@ class ComparisonMatrixItem(BaseModel):
     expected_net_profit_per_acre_inr: float
     duration_days: int
     net_profit_per_day_inr: float
+    rotation_benefit: Optional[str] = None
 
 class RecommendCropResponse(BaseModel):
     status: str = "success"
+    current_season: Optional[str] = "KHARIF"
+    season_display_name: Optional[str] = "खरीफ मौसम 2026-27"
+    data_sources: Optional[Dict[str, str]] = None
     sowing_window: SowingWindowBadge
     top_recommendation: TopRecommendation
     comparison_matrix: List[ComparisonMatrixItem]
