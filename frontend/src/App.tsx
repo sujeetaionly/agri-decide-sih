@@ -15,6 +15,7 @@ import { ActiveCropPlanPage } from './pages/ActiveCropPlanPage';
 import { MyCropsPage } from './pages/MyCropsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SupportedLanguage } from './data/translations';
+import { pingBackendWakeup } from './services/api';
 
 export type AppViewMode =
   | 'language-select'
@@ -36,6 +37,11 @@ const AppContent: React.FC = () => {
   const { language, setLanguage } = useLanguage();
   const { resetWizard, goToCard, updateFarmData, setSelectedCropId } = useWizard();
   const [openedFromHistory, setOpenedFromHistory] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Proactively wake up free-tier backend servers on application startup
+    pingBackendWakeup();
+  }, []);
 
   const handleOpenAnalysisFromHistory = (historyItem: any) => {
     setOpenedFromHistory(true);

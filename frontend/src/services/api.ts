@@ -9,7 +9,21 @@ import { MASTER_CROP_MAP, getDynamicCropDetail } from '../data/cropAgronomics';
 import { RecommendedCrop, ComparisonCropItem, IntendedVsRecommendedComparison } from '../types/crop';
 
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
-const REQUEST_TIMEOUT_MS = 6000;
+// Extended to 65 seconds to comfortably accommodate Render free-tier cold-start wake-up times (up to 50s)
+const REQUEST_TIMEOUT_MS = 65000;
+
+// Proactively send a non-blocking background ping to wake up free-tier backend as soon as app opens
+export function pingBackendWakeup(): void {
+  try {
+    const base = API_BASE_URL.replace('/api/v1', '');
+    fetch(`${base}/health`, { method: 'GET', mode: 'cors' }).catch(() => {});
+  } catch {
+    // Non-blocking
+  }
+}
+
+// Trigger warmup ping immediately on module load
+pingBackendWakeup();
 
 async function fetchWithTimeout(url: string, options: RequestInit = {}, timeout = REQUEST_TIMEOUT_MS): Promise<Response> {
   const controller = new AbortController();
