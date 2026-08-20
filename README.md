@@ -57,30 +57,35 @@ Over 95% of conventional crop recommendation systems suffer from critical real-w
 
 ```mermaid
 flowchart TD
-    subgraph UI_Layer ["🖥️ Presentation PWA Layer (React 18 + TypeScript + Tailwind CSS)"]
-        A1["🌐 Digital India BHASHINI Voice Engine\n(MeitY Indic Speech ASR & Audio TTS)"]
-        A2["📍 6-Card Intuitive Wizard\n(Farm Size → Soil Photo → Water → Rotation → Sowing Date → Intended)"]
-        A3["📊 Decision Scorecard & Head-to-Head Matrix\n(Ranked by Net ₹/Acre + CACP Breakdown)"]
-        A4["🎛️ Interactive 'What-If' Sandbox\n(Monsoon Deficit & Price Shock Sliders)"]
+    subgraph UI ["📱 Presentation Tier: Progressive Web App (React 18 + Vite + Tailwind CSS)"]
+        direction LR
+        U1["🌐 BHASHINI Voice AI<br><sub>MeitY Indic Speech ASR & Audio TTS</sub>"]
+        U2["📍 6-Card Farm Wizard<br><sub>GPS, DSLR Soil, Water & Rotation History</sub>"]
+        U3["📊 Ranked Decision Scorecard<br><sub>Net ₹/Acre + Head-to-Head Delta</sub>"]
+        U4["🎛️ 'What-If' Sandbox<br><sub>Rainfall Deficit & Price Shock Sliders</sub>"]
     end
 
-    subgraph Core_Engine ["⚡ High-Performance Core Engine (Python 3.11 + FastAPI Async)"]
-        B1["🌍 Geo-Agronomic Engine\nSoilGrids GIS (250m) + IMD Climatology Norms"]
-        B2["📅 Season Classifier & Sowing Validator\nKharif/Rabi/Zaid + ICAR Delay Penalty Curves"]
-        B3["🔄 Soil Rotation Intelligence Engine\nMonoculture Penalty (-15%) + Cereal↔Legume Bonus (+12%)"]
-        B4["🤖 Primary Yield Regressor\nXGBoost Regressor (R² = 0.9907, RMSE = 0.397 qtl/acre)"]
-        B5["📈 Mandi Price Forecaster\nXGBoost Regressor (14,786 Real Agmarknet Daily Transactions)"]
-        B6["💰 CACP Economic Engine\nOfficial Cost A₂+FL Itemized - Owned Machinery Deductions"]
-        B7["🧠 Explainable Reasoning Generator\nSoil + Water + Climate + Rotation → Localized Language Insights"]
+    subgraph CORE ["⚡ Application Tier: Core Intelligence Engine (Python 3.11 + FastAPI Async)"]
+        direction LR
+        C1["🌍 Geo-Agronomics<br><sub>SoilGrids GIS (250m) + IMD Normals</sub>"]
+        C2["📅 Season & Rotation<br><sub>Kharif/Rabi + Sowing Delay Curves</sub>"]
+        C3["🤖 XGBoost Regressors<br><sub>Yield R²=0.9907 + Mandi Price Trends</sub>"]
+        C4["💰 CACP Economic Engine<br><sub>Cost A₂+FL - Owned Machinery Offset</sub>"]
     end
 
-    subgraph Data_Warehouse ["💾 Data Warehouse & Storage Layer"]
-        C1[("PostgreSQL / SQLite Storage\nCACP Costs, Agmarknet Mandis, ICAR Crop Calendars,\nDistrict-APMC Registries, Farmer Advisory History")]
+    subgraph DATA ["💾 Data Tier: 100% Real Government Datasets & Registries (PostgreSQL / SQLite)"]
+        direction LR
+        D1[("Agmarknet Mandis<br><sub>14,786 Daily Transactions</sub>")]
+        D2[("CACP Cost Norms<br><sub>Official State-wise A₂+FL</sub>")]
+        D3[("SoilGrids GIS<br><sub>Taluka-level Soil Texture</sub>")]
+        D4[("ICAR-CRIDA<br><sub>Regional Agro Sowing Windows</sub>")]
     end
 
-    A1 & A2 --> Core_Engine
-    Core_Engine <--> Data_Warehouse
-    Core_Engine --> A3 & A4
+    U1 --> CORE
+    U2 --> CORE
+    CORE <--> DATA
+    CORE --> U3
+    CORE --> U4
 ```
 
 ---
