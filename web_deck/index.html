@@ -190,44 +190,72 @@
         }
         .slide-1-brand-header {
             position: absolute;
-            top: 290px;
+            top: 340px;
             left: 68px;
             width: 880px;
             z-index: 15;
         }
-        .slide-1-brand-title {
-            font-family: 'Newsreader', 'Times New Roman', Georgia, serif;
-            font-size: 36px;
-            font-weight: 800;
-            color: #15803d;
+        .slide-1-brand-top {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 16px;
+        }
+        .slide-1-brand-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #15803d, #166534);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+            border: 2px solid #86efac;
+            flex-shrink: 0;
+        }
+        .slide-1-brand-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #ffffff;
+        }
+        .slide-1-brand-title {
+            font-family: 'Newsreader', 'Times New Roman', Georgia, serif;
+            font-size: 38px;
+            font-weight: 800;
+            color: #15803d;
+            letter-spacing: 0.5px;
             line-height: 1.1;
         }
-        .slide-1-brand-sub {
-            font-size: 20px;
+        .slide-1-brand-tagline-hi {
+            font-size: 21px;
+            font-weight: 700;
+            color: #166534;
+            font-style: italic;
+            margin-top: 8px;
+            font-family: 'Inter', Calibri, Arial, sans-serif;
+        }
+        .slide-1-brand-sub-en {
+            font-size: 18px;
             font-weight: 600;
             color: #475569;
-            font-style: italic;
-            margin-top: 6px;
+            margin-top: 3px;
             font-family: 'Inter', Calibri, Arial, sans-serif;
+            letter-spacing: 0.2px;
         }
         .slide-1-brand-divider {
             height: 2.5px;
-            width: 620px;
+            width: 640px;
             background: linear-gradient(to right, #15803d, #38bdf8, transparent);
-            margin-top: 10px;
+            margin-top: 12px;
             border-radius: 2px;
         }
         .slide-1-form {
             position: absolute;
-            top: 440px;
+            top: 505px;
             left: 68px;
             width: 930px;
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 44px;
             z-index: 15;
         }
         .slide-1-row {
@@ -235,12 +263,12 @@
             align-items: baseline;
             gap: 14px;
             font-family: 'Inter', Calibri, Arial, sans-serif;
-            font-size: 30px;
+            font-size: 29px;
             line-height: 1.3;
             color: #0f172a;
         }
         .slide-1-bullet-dot {
-            font-size: 36px;
+            font-size: 34px;
             line-height: 0;
             font-weight: 900;
             color: #0072bc;
@@ -494,11 +522,21 @@
     <div class="slide-wrapper" id="slide-1">
         <!-- App Title & Tagline Branding Header -->
         <div class="slide-1-brand-header">
-            <div class="slide-1-brand-title">
-                <span>🌾 Fasal Disha (फसल दिशा)</span>
+            <div class="slide-1-brand-top">
+                <div class="slide-1-brand-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                </div>
+                <div class="slide-1-brand-title">
+                    Fasal Disha (फसल दिशा)
+                </div>
             </div>
-            <div class="slide-1-brand-sub">
-                "हर खेत को मिले सही दिशा" — Hyper-Local Crop Decision Intelligence Platform
+            <div class="slide-1-brand-tagline-hi">
+                "हर खेत को मिले सही दिशा"
+            </div>
+            <div class="slide-1-brand-sub-en">
+                Hyper-Local Agro-Economic Crop Decision Intelligence Platform
             </div>
             <div class="slide-1-brand-divider"></div>
         </div>
