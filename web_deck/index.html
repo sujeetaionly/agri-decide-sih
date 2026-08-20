@@ -188,14 +188,46 @@
         #slide-1 {
             background: #ffffff url('presentation_assets/slide_1_template_bg.png') no-repeat center / 100% 100%;
         }
+        .slide-1-brand-header {
+            position: absolute;
+            top: 290px;
+            left: 68px;
+            width: 880px;
+            z-index: 15;
+        }
+        .slide-1-brand-title {
+            font-family: 'Newsreader', 'Times New Roman', Georgia, serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: #15803d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.1;
+        }
+        .slide-1-brand-sub {
+            font-size: 20px;
+            font-weight: 600;
+            color: #475569;
+            font-style: italic;
+            margin-top: 6px;
+            font-family: 'Inter', Calibri, Arial, sans-serif;
+        }
+        .slide-1-brand-divider {
+            height: 2.5px;
+            width: 620px;
+            background: linear-gradient(to right, #15803d, #38bdf8, transparent);
+            margin-top: 10px;
+            border-radius: 2px;
+        }
         .slide-1-form {
             position: absolute;
-            top: 400px;
+            top: 440px;
             left: 68px;
-            width: 1020px;
+            width: 930px;
             display: flex;
             flex-direction: column;
-            gap: 46px;
+            gap: 40px;
             z-index: 15;
         }
         .slide-1-row {
@@ -221,17 +253,6 @@
         .slide-1-val-text {
             font-weight: 600;
             color: #1e293b;
-        }
-        .category-badge {
-            display: inline-block;
-            background: #e0f2fe;
-            color: #0284c7;
-            font-weight: 800;
-            font-size: 24px;
-            padding: 2px 14px;
-            border-radius: 6px;
-            border: 1.5px solid #bae6fd;
-            vertical-align: middle;
         }
 
         /* Content List Styles */
@@ -471,11 +492,22 @@
 
     <!-- SLIDE 1: TITLE PAGE -->
     <div class="slide-wrapper" id="slide-1">
+        <!-- App Title & Tagline Branding Header -->
+        <div class="slide-1-brand-header">
+            <div class="slide-1-brand-title">
+                <span>🌾 Fasal Disha (फसल दिशा)</span>
+            </div>
+            <div class="slide-1-brand-sub">
+                "हर खेत को मिले सही दिशा" — Hyper-Local Crop Decision Intelligence Platform
+            </div>
+            <div class="slide-1-brand-divider"></div>
+        </div>
+
         <div class="slide-1-form">
             <div class="slide-1-row">
                 <span class="slide-1-bullet-dot">•</span>
                 <span class="slide-1-lbl-text">Problem Statement ID –</span>
-                <span class="slide-1-val-text" style="color: #0072bc; font-weight: 800;">PS24 / SIH2025-PS24</span>
+                <span class="slide-1-val-text" style="color: #0072bc; font-weight: 800;">PS24</span>
             </div>
             
             <div class="slide-1-row">
@@ -493,7 +525,7 @@
             <div class="slide-1-row">
                 <span class="slide-1-bullet-dot">•</span>
                 <span class="slide-1-lbl-text">PS Category-</span>
-                <span class="category-badge">Software</span>
+                <span class="slide-1-val-text" style="font-weight: 700; color: #0f172a;">Software</span>
             </div>
             
             <div class="slide-1-row">
