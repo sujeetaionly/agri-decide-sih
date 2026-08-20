@@ -12,9 +12,9 @@
 
 ---
 
-### 🎥 Live Demo & Application Links
-[![Watch Demo Video](https://img.shields.io/badge/🎬_YouTube-Watch_2--Minute_Demo_Walkthrough-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com)
-[![Live Interactive App](https://img.shields.io/badge/🌐_Live_App-Launch_Fasal_Disha_PWA-00C853?style=for-the-badge&logo=vercel&logoColor=white)](https://agri-decide-sih.vercel.app)
+### 🎥 Demonstration & Video Walkthrough
+[![Watch Demo Video](https://img.shields.io/badge/🎬_YouTube-Watch_2--Minute_Android_Demo_Walkthrough-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com)
+[![Platform](https://img.shields.io/badge/📱_Platform-Android_Mobile_App-3DDC84?style=for-the-badge&logo=android&logoColor=white)](#-quickstart--local-reproduction)
 
 > **Fasal Disha** is an explainable agricultural decision intelligence platform that delivers **pan-India hyper-local crop advisories** based on live GPS location, regional agro-climatic zones, nearest APMC wholesale mandi price trends, and SoilGrids soil properties.
 > 
@@ -57,7 +57,7 @@ Over 95% of conventional crop recommendation systems suffer from critical real-w
 
 ```mermaid
 flowchart TD
-    subgraph UI ["📱 Presentation Tier: Progressive Web App (React 18 + Vite + Tailwind CSS)"]
+    subgraph UI ["📱 Presentation Tier: Android Mobile App (Capacitor + React 18 + Tailwind CSS)"]
         direction LR
         U1["🌐 BHASHINI Voice AI<br><sub>MeitY Indic Speech ASR & Audio TTS</sub>"]
         U2["📍 6-Card Farm Wizard<br><sub>GPS, DSLR Soil, Water & Rotation History</sub>"]
@@ -195,11 +195,13 @@ python -m app.seed
 uvicorn app.main:app --reload --port 8000
 ```
 
-### 2. Frontend Client (React + Vite PWA):
+### 2. Android Mobile App Client:
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run build
+npx cap sync android  # Synchronizes native Android project
+npm run dev           # For local mobile-viewport preview
 ```
 
 ### 3. Automated Tests:
