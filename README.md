@@ -18,7 +18,7 @@
 
 > **Fasal Disha** is an explainable agricultural decision intelligence platform that delivers **pan-India hyper-local crop advisories** based on live GPS location, regional agro-climatic zones, nearest APMC wholesale mandi price trends, and SoilGrids soil properties.
 > 
-> It auto-detects the current crop season (Kharif/Rabi/Zaid), validates planned sowing dates against regional ICAR agronomic cutoffs, applies **crop rotation intelligence** (penalizing monoculture and rewarding cereal↔legume rotation), enables **head-to-head economic comparison** against farmer-intended crops, and ranks recommendations by **Net Profit per Day ($\text{₹}/\text{Day}$)** — all accessible through **Digital India BHASHINI (MeitY)** multilingual voice AI.
+> It auto-detects the current crop season (Kharif/Rabi/Zaid), validates planned sowing dates against regional ICAR agronomic cutoffs, applies **crop rotation intelligence** (penalizing monoculture and rewarding cereal↔legume rotation), enables **head-to-head economic comparison** against farmer-intended crops, and ranks recommendations by **Net Profit per Acre ($\text{₹}/\text{Acre}$)** — all accessible through **Digital India BHASHINI (MeitY)** multilingual voice AI.
 
 ---
 
@@ -33,7 +33,7 @@ Over 95% of conventional crop recommendation systems suffer from critical real-w
 * **Black-Box Single-Crop Prediction:** Outputting a single opaque recommendation without economic comparison against the farmer's intended crop.
 
 > [!NOTE]
-> In India, **86.2% of farmers are small and marginal ($<2$ hectares)**. They need actionable economic clarity: *"If I sow Soybean today on my 2-acre black soil farm with borewell water, how much ₹/Day net profit will I make compared to Maize?"*
+> In India, **86.2% of farmers are small and marginal ($<2$ hectares)**. They need actionable economic clarity: *"If I sow Soybean today on my 2-acre black soil farm with borewell water, how much ₹/Acre net profit will I make compared to Maize?"*
 
 ---
 
@@ -46,7 +46,7 @@ Over 95% of conventional crop recommendation systems suffer from critical real-w
 | **🔄 Crop Rotation Engine** | Penalizes monoculture (−15%), rewards cereal $\rightarrow$ legume (+12%), legume $\rightarrow$ cereal (+10%), cotton $\rightarrow$ legume (+15%). | Restores organic soil fertility and breaks pest cycles. |
 | **🆚 Head-to-Head Comparison** | Directly compares farmer's intended crop against AI-recommended champion with exact ₹ and % delta. | Gives farmers quantifiable evidence to switch crops. |
 | **💰 CACP Economic Engine** | Uses official Ministry of Agriculture CACP $A_2+FL$ norms and offsets owned machinery rental. | Saves ₹3,500–₹4,300/acre in custom hiring expenses. |
-| **📊 Net ₹/Day Ranking** | Ranks crops by daily earning potential ($\text{Net Profit} / \text{Duration}$). | Fairly compares 70-day Moong (₹360/day) vs 180-day Cotton (₹263/day). |
+| **📊 Net ₹/Acre Profitability** | Ranks crops by total net seasonal earning potential per acre ($\text{Gross Revenue} - \text{CACP Cost}_{\mathrm{adjusted}}$). | Delivers clear, bankable seasonal return projections. |
 | **🧠 Explainable Reasoning** | Generates plain-language localized reasoning citing soil drainage, water capacity, and rotation benefits. | Transparent, trust-building AI decision support. |
 | **🎛️ Interactive What-If Sandbox** | Real-time sliders for monsoon rainfall deficit and mandi price volatility. | Risk-free scenario simulation before committing working capital. |
 | **🌐 Digital India BHASHINI Voice** | Powered by MeitY Digital India BHASHINI for dialect-aware Indic ASR and natural TTS narration. | Zero-barrier accessibility for low-literacy rural farmers. |
@@ -60,7 +60,7 @@ flowchart TD
     subgraph UI_Layer ["🖥️ Presentation PWA Layer (React 18 + TypeScript + Tailwind CSS)"]
         A1["🌐 Digital India BHASHINI Voice Engine\n(MeitY Indic Speech ASR & Audio TTS)"]
         A2["📍 6-Card Intuitive Wizard\n(Farm Size → Soil Photo → Water → Rotation → Sowing Date → Intended)"]
-        A3["📊 Decision Scorecard & Head-to-Head Matrix\n(Ranked by Net ₹/Day + CACP Breakdown)"]
+        A3["📊 Decision Scorecard & Head-to-Head Matrix\n(Ranked by Net ₹/Acre + CACP Breakdown)"]
         A4["🎛️ Interactive 'What-If' Sandbox\n(Monsoon Deficit & Price Shock Sliders)"]
     end
 
@@ -94,8 +94,10 @@ $$\Delta d = \max\left(0,\, d_{\mathrm{sow}} - d_{\mathrm{optimal\_end}}\right) 
 $$\text{Score}_{\mathrm{adjusted}} = \text{Score}_{\mathrm{base}} \times R_{\mathrm{rotation}}$$
 *(Monoculture: $0.85$, Cereal $\rightarrow$ Legume: $1.12$, Legume $\rightarrow$ Cereal: $1.10$, Heavy-Feeder $\rightarrow$ Legume: $1.15$)*
 
-### 3. Net Realization per Day ($\text{₹}/\text{Day}$)
-$$\text{Net Realization per Day} = \frac{(\hat{Y} \times P_{\mathrm{mandi}}) - \left(\text{Cost}_{\mathrm{CACP}} - \mathbb{I}_{\mathrm{tractor}} \cdot \delta_{\mathrm{tractor}} - \mathbb{I}_{\mathrm{sprayer}} \cdot \delta_{\mathrm{sprayer}}\right)}{\text{Crop Duration (Days)}}$$
+### 3. Net Profit per Acre ($\text{₹}/\text{Acre}$)
+$$\text{Gross Revenue} = \hat{Y} \times P_{\mathrm{mandi}}$$
+
+$$\text{Net Profit per Acre} = \text{Gross Revenue} - \left(\text{Cost}_{\mathrm{CACP}} - \mathbb{I}_{\mathrm{tractor}} \cdot \delta_{\mathrm{tractor}} - \mathbb{I}_{\mathrm{sprayer}} \cdot \delta_{\mathrm{sprayer}}\right)$$
 
 ---
 
