@@ -50,7 +50,7 @@ export const HomeTopAppBar: React.FC<HomeTopAppBarProps> = ({
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40 bg-surface-light/85 dark:bg-surface-dark/85 backdrop-blur-xl border-b border-stone-300/80 dark:border-stone-700/80 px-4 pt-[calc(env(safe-area-inset-top)+0.5rem)] pb-3 shadow-xs">
+    <header className="sticky top-0 z-40 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-xl border-b border-stone-300/80 dark:border-stone-700/80 px-4 pt-[calc(env(safe-area-inset-top)+0.5rem)] pb-3 shadow-xs">
       <div className="flex items-center justify-between max-w-md mx-auto">
         
         {/* Exact Brand Branding */}

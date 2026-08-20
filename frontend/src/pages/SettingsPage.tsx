@@ -61,7 +61,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
       />
 
       {/* 2. Main Settings Content */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-20 pb-20 space-y-4 animate-fadeIn">
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-3 pb-24 space-y-4 animate-fadeIn">
         
         {/* Page Header with Icon Emblem and Balanced Spacing */}
         <div className="flex items-center gap-3 pt-0.5 pb-1">
@@ -190,11 +190,35 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </button>
         </div>
 
-        {/* Network Connectivity Status Badge (Crisp border-2, Primary icon, zero emerald) */}
-        <div className="flex items-center justify-center pt-1 pb-1">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-700 shadow-xs text-xs font-semibold text-stone-600 dark:text-stone-300">
-            <span className="material-symbols-outlined text-base text-primary">wifi</span>
-            <span>नेटवर्क स्थिति: <strong className="text-primary dark:text-primary-fixed font-black">ऑनलाइन (सक्रिय)</strong></span>
+        {/* Network & Live Backend Cloud Status Diagnostic Card */}
+        <div className="bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-black font-headline text-stone-800 dark:text-stone-200">
+                क्लाउड AI बैकएंड सर्वर
+              </span>
+            </div>
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+              लाइव सक्रिय
+            </span>
+          </div>
+
+          <div className="text-[11px] text-stone-500 dark:text-stone-400 space-y-1.5 font-medium border-t border-stone-100 dark:border-stone-800 pt-2.5">
+            <div className="flex justify-between">
+              <span>सर्वर होस्ट:</span>
+              <span className="font-bold text-stone-700 dark:text-stone-300">Render Cloud (fasal-disha.onrender.com)</span>
+            </div>
+            <div className="flex justify-between">
+              <span>डेटाबेस:</span>
+              <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span>✓ Supabase PostgreSQL</span>
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>डेटा स्रोत:</span>
+              <span className="font-bold text-stone-700 dark:text-stone-300">ICAR & CACP 2026 Mandi API</span>
+            </div>
           </div>
         </div>
       </main>

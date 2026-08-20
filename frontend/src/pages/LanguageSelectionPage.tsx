@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { SupportedLanguage, getTranslation, getLanguagesForState, LanguageMeta, matchLanguage } from '../data/translations';
 import { triggerHaptic } from '../lib/utils';
 import { speakText, stopSpeaking } from '../lib/speech';
+import { requestDeviceLocation } from '../lib/location';
 
 interface LanguageSelectionPageProps {
   currentLanguage: SupportedLanguage;
@@ -117,6 +118,8 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
   const handleProceed = () => {
     stopSpeaking();
     triggerHaptic('success');
+    requestDeviceLocation().catch(() => {});
+    onSelectLanguage(selected);
     onConfirm();
   };
 
@@ -133,14 +136,14 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-4 max-w-md mx-auto">
       
-      {/* Top Header matching app design system */}
-      <header className="pt-3 pb-2">
+      {/* Top Header with Safe Area Inset Support */}
+      <header className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3">
         <div className="relative flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-3xl">translate</span>
           </div>
 
-          <h1 className="text-xl font-bold font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight text-center flex-1">
+          <h1 className="text-xl font-bold font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight text-center flex-1 px-2">
             {titleText}
           </h1>
 
@@ -148,7 +151,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
             type="button"
             onClick={handleHeaderAudio}
             aria-label="Listen to heading"
-            className={`inline-flex items-center justify-center w-9 h-9 rounded-full transition-all cursor-pointer border ${
+            className={`inline-flex items-center justify-center w-9 h-9 rounded-full flex-shrink-0 aspect-square transition-all cursor-pointer border ${
               playingCode === 'header'
                 ? 'text-primary bg-primary/15 border-primary/40 animate-pulse'
                 : 'text-primary border-primary/20 hover:bg-primary/5'
@@ -278,15 +281,15 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
         </div>
       </div>
 
-      {/* Bottom Action Button */}
-      <div className="pt-2 pb-4">
+      {/* Bottom Action Button with Safe-Area Padding */}
+      <div className="pt-3 pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] flex justify-center">
         <button
           type="button"
           onClick={handleProceed}
-          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+          className="max-w-[280px] w-full py-3.5 px-8 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
         >
           <span>{buttonText}</span>
-          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
       </div>
 

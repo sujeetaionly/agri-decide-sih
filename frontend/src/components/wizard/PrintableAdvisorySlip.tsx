@@ -14,6 +14,7 @@ interface PrintableAdvisorySlipProps {
 
 export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
   isOpen,
+  onClose,
 }) => {
   const { activeCropPlan, topRecommendation, farmData } = useWizard();
   const { language } = useLanguage();
@@ -85,11 +86,44 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
     desc: m.desc[langKey] || m.desc.hi,
   }));
 
+  const handleWhatsAppShareFromSlip = () => {
+    const text = `🌾 *फसल-दिशा (Fasal Disha)* 🌾\n_हर खेत को मिले सही दिशा | डिजिटल फसल रिपोर्ट_\n━━━━━━━━━━━━━━━━━━━\n\n🌱 *अनुशंसित फसल*: *${cropName}*\n💰 *अनुमानित शुद्ध लाभ*: *${formatCurrencyINR(crop.expected_net_profit_per_acre_inr)} / एकड़*\n💵 *कुल उत्पादन लागत*: *${formatCurrencyINR(crop.total_cost_inr_per_acre)} / एकड़*\n⚖️ *अनुमानित पैदावार*: *${crop.expected_yield_qtl_per_acre} क्विंटल / एकड़*\n\n━━━━━━━━━━━━━━━━━━━\n📞 *किसान हेल्पलाइन*: 1800-180-1551 (टोल-फ्री २४x७)\n🌐 *फसल-दिशा डिजिटल कृषि सलाहकार*`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  };
+
   const modalContent = (
     <div
       id="printable-slip-modal-backdrop"
-      className="hidden print:block print:p-0 print:bg-white print:static print:overflow-visible"
+      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-start p-3 sm:p-4 overflow-y-auto print:static print:bg-white print:p-0"
     >
+      {/* Screen-only Modal Control Bar */}
+      <div className="w-full max-w-lg mb-2 flex items-center justify-between bg-white dark:bg-stone-900 px-4 py-2.5 rounded-2xl shadow-lg print:hidden">
+        <span className="font-bold text-sm text-stone-900 dark:text-white flex items-center gap-1.5 font-headline">
+          <span className="material-symbols-outlined text-primary text-lg">description</span>
+          <span>{L.slipTitle}</span>
+        </span>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleWhatsAppShareFromSlip}
+            className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-sm">share</span>
+            <span>WhatsApp</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-base">close</span>
+          </button>
+        </div>
+      </div>
+
       <style>{`
         @media print {
           @page {

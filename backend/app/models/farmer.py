@@ -1,5 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, ForeignKey, Index
-from sqlalchemy.dialects.postgresql import JSONB, ARRAY, UUID
+from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, ForeignKey, Index, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
@@ -10,26 +9,21 @@ class Farmer(Base):
     __tablename__ = "farmers"
 
     farmer_id = Column(String(50), primary_key=True, index=True)
-    farmer_uuid = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, index=True)
+    farmer_uuid = Column(String(36), default=lambda: str(uuid.uuid4()), unique=True, index=True)
     name = Column(String(100), nullable=False)
     mobile = Column(String(15), nullable=False, unique=True, index=True)
     language_preference = Column(String(10), default="hi")
-    preferred_languages = Column(ARRAY(String(10)), default=lambda: ["hi", "mr"])
+    preferred_languages = Column(JSON, default=lambda: ["hi", "mr"])
     state = Column(String(50), default="Maharashtra")
     district = Column(String(50), nullable=False, index=True)
     taluka = Column(String(50), nullable=False)
     
-    # PostgreSQL JSONB for custom farmer preferences, notification settings, and telemetry
-    preferences = Column(JSONB, nullable=True, default=dict)
+    preferences = Column(JSON, nullable=True, default=dict)
     
     created_at = Column(DateTime, default=datetime.utcnow)
 
     farms = relationship("Farm", back_populates="farmer", cascade="all, delete-orphan")
     recommendations = relationship("RecommendationLog", back_populates="farmer")
-
-    __table_args__ = (
-        Index('ix_farmer_preferences_gin', preferences, postgresql_using='gin'),
-    )
 
 class Farm(Base):
     __tablename__ = "farms"
@@ -42,16 +36,15 @@ class Farm(Base):
     water_capacity_level = Column(String(20), nullable=False)  # 'LOW', 'MEDIUM', 'HIGH'
     working_capital_inr = Column(Float, nullable=False)
     
-    # PostgreSQL ARRAY for multi-crop previous rotation history
-    previous_crops_history = Column(ARRAY(String(50)), nullable=True, default=list)
+    previous_crops_history = Column(JSON, nullable=True, default=list)
     previous_season_crop = Column(String(50), nullable=True)
     
-    # PostgreSQL JSONB for precision farm equipment & irrigation sensor telemetry
-    farm_equipment = Column(JSONB, nullable=True, default=dict)
+    farm_equipment = Column(JSON, nullable=True, default=dict)
     
     owns_tractor = Column(Boolean, default=False)
     owns_sprayer = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     farmer = relationship("Farmer", back_populates="farms")
+
 

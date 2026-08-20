@@ -1,5 +1,11 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import pytest
 from fastapi.testclient import TestClient
+
 from backend.app.main import app
 from backend.app.seed import seed_database
 
@@ -45,7 +51,7 @@ def test_endpoint_1_assess_soil_weather():
 def test_endpoint_2_farmer_profile():
     payload = {
         "farmer_name": "Ramesh Choudhary",
-        "mobile": "9876543210",
+        "mobile": "9911223344",
         "language_preference": "hi",
         "district": "Jaipur",
         "taluka": "Sanganer",

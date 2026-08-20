@@ -253,13 +253,24 @@ export const SowingSeasonCard: React.FC = () => {
             </div>
 
             <div className="relative">
+              <div className="w-full bg-white dark:bg-stone-900 border-2 border-primary/50 rounded-2xl px-4 py-3 flex items-center justify-between shadow-2xs">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary text-xl">calendar_today</span>
+                  <span className="text-base font-black text-stone-900 dark:text-stone-100 tracking-wider">
+                    {customDate.split('-').length === 3
+                      ? `${customDate.split('-')[2]}/${customDate.split('-')[1]}/${customDate.split('-')[0]}`
+                      : customDate}
+                  </span>
+                </div>
+                <span className="text-[11px] font-bold text-stone-400">DD/MM/YYYY</span>
+              </div>
               <input
                 type="date"
                 min={todayIso}
                 max={maxDateIso}
                 value={customDate}
                 onChange={(e) => handleCustomDateChange(e.target.value)}
-                className="w-full bg-stone-50 dark:bg-stone-900 border-2 border-primary/40 focus:border-primary rounded-2xl px-4 py-3.5 text-stone-900 dark:text-stone-100 font-bold focus:outline-none text-base cursor-pointer shadow-2xs"
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
               />
             </div>
           </div>
@@ -267,39 +278,25 @@ export const SowingSeasonCard: React.FC = () => {
 
       </div>
 
-      {/* True Progressive Blur Layer with Gradient Mask */}
-      <div
-        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-20"
-        style={{
-          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-        }}
-      />
+      {/* Inline Pill Action Buttons (Tight to Card) */}
+      <div className="pt-4 pb-4 flex items-center justify-center gap-3 max-w-[300px] mx-auto w-full">
+        <button
+          type="button"
+          onClick={handleBack}
+          className="h-13 min-h-[50px] px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-extrabold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs"
+        >
+          <span className="material-symbols-outlined text-base">arrow_back</span>
+          <span>{t('back')}</span>
+        </button>
 
-      {/* Action Buttons Floating on top of Progressive Blur */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="py-3.5 px-5 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-none"
-          >
-            <span className="material-symbols-outlined text-base">arrow_back</span>
-            <span>{t('back')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="flex-1 py-3.5 px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-base transition-all flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer shadow-none"
-          >
-            <span>{t('continue')}</span>
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="flex-1 h-13 min-h-[50px] px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-sm transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-md whitespace-nowrap"
+        >
+          <span>{t('continue')}</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
+        </button>
       </div>
     </div>
   );

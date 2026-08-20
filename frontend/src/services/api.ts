@@ -8,7 +8,7 @@ import { authService } from '../lib/auth';
 import { MASTER_CROP_MAP, getDynamicCropDetail } from '../data/cropAgronomics';
 import { RecommendedCrop, ComparisonCropItem, IntendedVsRecommendedComparison } from '../types/crop';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
+const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'https://fasal-disha.onrender.com/api/v1';
 // Extended to 65 seconds to comfortably accommodate Render free-tier cold-start wake-up times (up to 50s)
 const REQUEST_TIMEOUT_MS = 65000;
 
