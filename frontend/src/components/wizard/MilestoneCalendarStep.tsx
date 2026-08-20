@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWizard } from '../../context/WizardContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { PrintableAdvisorySlip } from './PrintableAdvisorySlip';
 import { triggerHaptic, formatCurrencyINR } from '../../lib/utils';
 import { speakText, stopSpeaking } from '../../lib/speech';
 import { getCropSchedule } from '../../data/cropMilestones';
 import { getDynamicCropDetail } from '../../data/cropAgronomics';
+import { generateAndDownloadCropPdf } from '../../lib/pdfGenerator';
 
 const getLocalizedCropName = (
   crop: {
@@ -86,18 +86,31 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
 
   const handleWhatsAppShare = () => {
     triggerHaptic('light');
-    const text = `🌾 *फसल-दिशा (Fasal Disha) — डिजिटल फसल कार्ययोजना रिपोर्ट* 🌾\n_हर खेत को मिले सही दिशा_\n\n📌 *सुझाई गई फसल*: ${cropName}\n💰 *अनुमानित शुद्ध लाभ*: ${formatCurrencyINR(crop.expected_net_profit_per_acre_inr)} / एकड़\n💵 *अनुमानित लागत*: ${formatCurrencyINR(crop.total_cost_inr_per_acre)} / एकड़\n⚖️ *अनुमानित पैदावार*: ${crop.expected_yield_qtl_per_acre} क्विंटल / एकड़\n📅 *${durationLabel}*\n\n_कृषि एवं किसान कल्याण विभाग द्वारा प्रमाणित बेंचमार्क पर आधारित_`;
+    const milestonesSummary = MILESTONES.slice(0, 5).map(m => `• *दिन ${m.day}* (${m.badge}): ${m.title}`).join('\n');
+    
+    const text = `🌾 *फसल-दिशा (Fasal Disha)* 🌾\n_हर खेत को मिले सही दिशा | डिजिटल फसल रिपोर्ट_\n━━━━━━━━━━━━━━━━━━━\n\n🌱 *अनुशंसित फसल*: *${cropName}*\n⏳ *कालावधि*: ${durationLabel}\n\n💰 *अनुमानित शुद्ध लाभ*: *${formatCurrencyINR(crop.expected_net_profit_per_acre_inr)} / एकड़*\n💵 *कुल उत्पादन लागत*: *${formatCurrencyINR(crop.total_cost_inr_per_acre)} / एकड़*\n⚖️ *अनुमानित पैदावार*: *${crop.expected_yield_qtl_per_acre} क्विंटल / एकड़*\n\n━━━━━━━━━━━━━━━━━━━\n📅 *120-दिवसीय मुख्य कृषि कार्य*:\n${milestonesSummary}\n\n━━━━━━━━━━━━━━━━━━━\n📞 *किसान हेल्पलाइन*: 1800-180-1551 (टोल-फ्री २४x७)\n🌐 *फसल-दिशा डिजिटल कृषि सलाहकार*`;
+
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
   };
 
+  const handleDownloadReport = () => {
+    triggerHaptic('success');
+    generateAndDownloadCropPdf({
+      crop,
+      cropName,
+      language,
+      farmData,
+    });
+  };
+
   return (
-    <div className="space-y-4 animate-fadeIn pb-1">
+    <div className="space-y-5 animate-fadeIn pb-2">
       
       {/* Clean Title Header with Emblem */}
-      <div className="flex items-center gap-3 pt-1.5 pb-1">
+      <div className="flex items-center gap-3 pt-1.5 pb-0.5">
         <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 shadow-2xs">
-          <span className="material-symbols-outlined text-2xl font-bold">calendar_month</span>
+          <span className="material-symbols-outlined text-2xl font-bold">eco</span>
         </div>
         <h2 className="text-2xl font-black font-headline text-on-surface-light dark:text-on-surface-dark leading-snug">
           {t('planTitle')}
@@ -124,83 +137,93 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
             <span className="text-lg font-black text-primary dark:text-primary-fixed block">
               {formatCurrencyINR(crop.expected_net_profit_per_acre_inr)}
             </span>
-            <span className="text-[10px] text-stone-400 font-medium block">प्रति एकड़</span>
+            <span className="text-[11px] text-stone-500 block">प्रति एकड़</span>
           </div>
         </div>
       </div>
 
-      {/* Vertical Milestone Timeline */}
-      <div className="space-y-6 relative pl-6 ml-3 border-l-2 border-primary/40">
-        {MILESTONES.map((m, idx) => {
-          const isDone = completedSteps.includes(m.day);
+      {/* 120-Day Action Plan Vertical Timeline with Connected Track */}
+      <div className="relative pl-6 space-y-5 before:absolute before:left-2.5 before:top-4 before:bottom-4 before:w-0.5 before:bg-primary/25 dark:before:bg-primary/35">
+        {MILESTONES.map((item, idx) => {
+          const isDone = completedSteps.includes(item.day);
           const isSpeakingThis = activeSpeakingIdx === idx;
 
           return (
-            <div key={m.day} className="relative">
-              {/* Timeline Indicator Dot centered exactly on the vertical line (x = -13px) */}
-              <button
-                type="button"
-                onClick={() => handleToggleComplete(m.day)}
-                className={`absolute -left-[37px] top-4 w-6 h-6 rounded-full flex items-center justify-center transition-all cursor-pointer z-10 ${
-                  isDone
-                    ? 'bg-primary text-white ring-4 ring-primary/20 shadow-sm'
-                    : 'bg-white dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 text-transparent hover:border-primary shadow-sm'
-                }`}
-                title={isDone ? 'पूर्ण' : 'अपूर्ण'}
-              >
-                <span className="material-symbols-outlined text-xs">check</span>
-              </button>
+            <div key={item.day} className="relative">
+              {/* Connected Timeline Node Dot */}
+              <div className={`absolute -left-6 top-5 w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center z-10 ${
+                isDone
+                  ? 'bg-primary border-primary text-white shadow-2xs'
+                  : 'bg-white dark:bg-stone-900 border-primary/40'
+              }`}>
+                {isDone ? (
+                  <span className="material-symbols-outlined text-[10px] font-black">check</span>
+                ) : (
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+                )}
+              </div>
 
-              {/* Milestone Card */}
-              <div className="bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm hover:shadow-md transition-all space-y-3">
+              {/* Elevated Milestone Card */}
+              <div className={`rounded-3xl border-2 transition-all p-5 ${
+                isDone
+                  ? 'bg-primary/[0.03] border-primary/30 dark:bg-primary/10 dark:border-primary/40'
+                  : 'bg-white dark:bg-stone-900 border-stone-200/90 dark:border-stone-800 shadow-xs'
+              }`}>
                 
-                {/* Header: Day Number Badge + Category Badge + Voice button */}
-                <div className="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-stone-800">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="bg-primary/10 text-primary text-xs font-black px-2.5 py-0.5 rounded-lg border border-primary/20">
-                      दिन {m.day}
-                    </span>
-                    <span className="text-xs font-bold text-primary dark:text-primary-fixed">
-                      • {m.badge}
-                    </span>
+                {/* Header Pill & Audio Button */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary dark:text-primary-fixed text-xs font-black">
+                    <span>दिन {item.day}</span>
+                    <span>•</span>
+                    <span>{item.badge}</span>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleSpeakMilestone(idx, m)}
-                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                    onClick={() => handleSpeakMilestone(idx, item)}
+                    aria-label="Listen to milestone"
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer aspect-square ${
                       isSpeakingThis
-                        ? 'bg-primary text-white animate-pulse'
-                        : 'bg-stone-100 dark:bg-stone-800 text-stone-600 hover:text-primary'
+                        ? 'bg-primary text-white animate-pulse shadow-xs'
+                        : 'text-stone-400 hover:text-primary hover:bg-primary/10'
                     }`}
-                    title={t('listen')}
                   >
-                    <span className="material-symbols-outlined text-sm">volume_up</span>
+                    <span className="material-symbols-outlined text-lg">volume_up</span>
                   </button>
                 </div>
 
-                {/* Action Title */}
-                <h4 className="font-bold text-base text-on-surface-light dark:text-on-surface-dark leading-snug">
-                  {m.title}
+                {/* Milestone Title */}
+                <h4 className={`text-base font-black font-headline mt-3 ${
+                  isDone
+                    ? 'line-through text-stone-400 dark:text-stone-500'
+                    : 'text-stone-900 dark:text-stone-100'
+                }`}>
+                  {item.title}
                 </h4>
 
-                {/* Action Instructions */}
-                <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed bg-stone-50 dark:bg-stone-800/60 p-3 rounded-2xl border border-stone-200/70 dark:border-stone-700">
-                  {m.desc}
-                </p>
+                {/* Inner Nested Grey Container for Details */}
+                <div className="mt-3 p-3.5 rounded-2xl bg-stone-50/80 dark:bg-stone-800/60 border border-stone-100 dark:border-stone-800">
+                  <p className={`text-xs leading-relaxed ${
+                    isDone
+                      ? 'text-stone-400 dark:text-stone-500'
+                      : 'text-stone-700 dark:text-stone-300 font-medium'
+                  }`}>
+                    {item.desc}
+                  </p>
+                </div>
 
-                {/* Footer: Mark Complete Action */}
-                <div className="flex items-center justify-end pt-1">
+                {/* Bottom Right Checkbox / Toggle */}
+                <div className="mt-4 flex justify-end">
                   <button
                     type="button"
-                    onClick={() => handleToggleComplete(m.day)}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all cursor-pointer ${
+                    onClick={() => handleToggleComplete(item.day)}
+                    className={`inline-flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer py-1 px-3 rounded-full ${
                       isDone
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200'
+                        ? 'bg-primary/10 text-primary border border-primary/20'
+                        : 'text-stone-600 dark:text-stone-400 hover:text-primary hover:bg-stone-100 dark:hover:bg-stone-800'
                     }`}
                   >
-                    <span className="material-symbols-outlined text-sm">
+                    <span className="material-symbols-outlined text-base">
                       {isDone ? 'check_circle' : 'radio_button_unchecked'}
                     </span>
                     <span>{isDone ? 'पूर्ण' : 'पूरा करें'}</span>
@@ -213,33 +236,26 @@ export const MilestoneCalendarStep: React.FC<MilestoneCalendarStepProps> = ({
         })}
       </div>
 
-      {/* INLINE ACTION BUTTONS (Full-Width Standardized Pills) */}
-      <div className="space-y-3 pt-3 pb-2">
+      {/* INLINE ACTION BUTTONS */}
+      <div className="space-y-3 pt-3 pb-2 max-w-[300px] mx-auto w-full">
         <button
-          onClick={() => {
-            triggerHaptic('medium');
-            window.print();
-          }}
-          className="w-full py-4 px-6 rounded-full bg-primary hover:bg-primary/95 active:scale-[0.98] text-white font-extrabold text-base shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+          type="button"
+          onClick={handleDownloadReport}
+          className="w-full py-3.5 px-6 rounded-full bg-primary hover:bg-primary/95 active:scale-95 text-white font-extrabold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
         >
-          <span className="material-symbols-outlined text-xl">download</span>
+          <span className="material-symbols-outlined text-lg">download</span>
           <span>{t('printPdfBtn')}</span>
         </button>
 
         <button
+          type="button"
           onClick={handleWhatsAppShare}
-          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 font-bold text-sm hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
+          className="w-full py-3 px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-xs hover:bg-stone-50 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-2xs cursor-pointer whitespace-nowrap"
         >
-          <span className="material-symbols-outlined text-lg text-primary">share</span>
+          <span className="material-symbols-outlined text-base text-primary">share</span>
           <span>{t('shareWhatsappBtn')}</span>
         </button>
       </div>
-
-      {/* Printable Slip for Direct Download/Print */}
-      <PrintableAdvisorySlip
-        isOpen={true}
-        onClose={() => {}}
-      />
     </div>
   );
 };

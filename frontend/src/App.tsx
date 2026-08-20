@@ -4,7 +4,6 @@ import { AudioProvider } from './context/AudioContext';
 import { AuthProvider } from './context/AuthContext';
 import { WizardProvider, useWizard } from './context/WizardContext';
 import { SplashScreen } from './components/common/SplashScreen';
-import { AndroidGpsPermissionModal } from './components/common/AndroidGpsPermissionModal';
 import { LanguageSelectionPage } from './pages/LanguageSelectionPage';
 import { LanguageConfirmPage } from './pages/LanguageConfirmPage';
 import { AudioGuidePage } from './pages/AudioGuidePage';
@@ -16,6 +15,7 @@ import { MyCropsPage } from './pages/MyCropsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SupportedLanguage } from './data/translations';
 import { pingBackendWakeup } from './services/api';
+import { requestDeviceLocation } from './lib/location';
 
 export type AppViewMode =
   | 'language-select'
@@ -30,9 +30,6 @@ export type AppViewMode =
 
 const AppContent: React.FC = () => {
   const [showSplash, setShowSplash] = useState<boolean>(true);
-  const [showGpsModal, setShowGpsModal] = useState<boolean>(() => {
-    return !localStorage.getItem('krishi_gps_prompted');
-  });
 
   const { language, setLanguage } = useLanguage();
   const { resetWizard, goToCard, updateFarmData, setSelectedCropId } = useWizard();
@@ -41,6 +38,8 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     // Proactively wake up free-tier backend servers on application startup
     pingBackendWakeup();
+    // Direct native Android geolocation request on app start
+    requestDeviceLocation().catch(() => {});
   }, []);
 
   const handleOpenAnalysisFromHistory = (historyItem: any) => {
@@ -89,20 +88,7 @@ const AppContent: React.FC = () => {
     window.location.hash = mode;
   };
 
-  // 1. GPS Modal Handlers
-  const handleGpsAllow = (precise: boolean) => {
-    localStorage.setItem('krishi_gps_prompted', 'true');
-    localStorage.setItem('krishi_gps_granted', precise ? 'precise' : 'approx');
-    setShowGpsModal(false);
-  };
-
-  const handleGpsDeny = () => {
-    localStorage.setItem('krishi_gps_prompted', 'true');
-    localStorage.setItem('krishi_gps_granted', 'denied');
-    setShowGpsModal(false);
-  };
-
-  // 2. Language Selection -> Confirmation
+  // 1. Language Selection -> Confirmation
   const handleSelectLanguage = (lang: SupportedLanguage) => {
     setLanguage(lang);
   };
@@ -181,14 +167,6 @@ const AppContent: React.FC = () => {
           }}
         />
       )}
-
-      {/* 1. First-Open Android Native GPS Permission Popup */}
-      <AndroidGpsPermissionModal
-        isOpen={showGpsModal && !showSplash}
-        language={language}
-        onAllow={handleGpsAllow}
-        onDeny={handleGpsDeny}
-      />
 
       {/* Screen 1: Regional Language Selection */}
       {viewMode === 'language-select' && (

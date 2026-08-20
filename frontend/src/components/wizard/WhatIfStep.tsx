@@ -287,27 +287,15 @@ export const WhatIfStep: React.FC<WhatIfStepProps> = ({ onOpenMyCropPlan }) => {
         </div>
       </div>
 
-      {/* True Progressive Blur Layer with Gradient Mask */}
-      <div
-        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-20"
-        style={{
-          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-        }}
-      />
-
-      {/* Floating Action Bar with Proceed CTA */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2">
+      {/* Inline Pill Action Buttons */}
+      <div className="pt-4 pb-1 max-w-[300px] mx-auto w-full flex justify-center">
         <button
           type="button"
           onClick={handleProceed}
-          className="w-full py-4 px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-black text-base shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
         >
           <span>{t('chooseAndPlanBtn')}</span>
-          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
       </div>
     </div>

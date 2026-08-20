@@ -41,6 +41,8 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
     selectedCropId,
     setSelectedCropId,
     chooseCropForMyCropPlan,
+    isLiveServerResponse,
+    serverLatencyMs,
   } = useWizard();
   const { language, t } = useLanguage();
 
@@ -271,7 +273,7 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
         
         {/* Top Badges Row */}
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className={`inline-flex items-center gap-1 text-[11px] font-black tracking-wide px-3 py-1 rounded-full uppercase ${
               isTopChoice 
                 ? 'bg-primary text-white shadow-2xs' 
@@ -288,6 +290,13 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
             <span className="bg-primary/10 text-primary dark:text-primary-fixed border border-primary/30 text-[11px] font-extrabold px-2.5 py-1 rounded-full">
               {activeCrop.suitability_pct}% अनुकूलता
             </span>
+
+            {isLiveServerResponse && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[10px] font-black border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>लाइव सर्वर ({serverLatencyMs}ms)</span>
+              </span>
+            )}
           </div>
 
           <span className="text-xs font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800/80 px-2.5 py-1 rounded-full border border-stone-300 dark:border-stone-700">
@@ -574,34 +583,22 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
         </div>
       )}
 
-      {/* True Progressive Blur Layer with Gradient Mask */}
-      <div
-        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-24"
-        style={{
-          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-        }}
-      />
-
-      {/* Floating Action Bar with Primary Direct Choice & Weather Risk CTAs */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2 space-y-2">
+      {/* Inline Pill Action Buttons */}
+      <div className="space-y-2.5 pt-4 pb-1 max-w-[300px] mx-auto w-full">
         <button
           type="button"
           onClick={handleDirectChooseCrop}
-          className="w-full py-3.5 px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-black text-base shadow-xl active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
         >
-          <span className="material-symbols-outlined text-xl">check_circle</span>
-          <span>{t('chooseThisCropBtn')} ({activeCropName})</span>
-          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          <span className="material-symbols-outlined text-lg">check_circle</span>
+          <span className="truncate">{t('chooseThisCropBtn')} ({activeCropName})</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
 
         <button
           type="button"
           onClick={handleProceedToWhatIf}
-          className="w-full py-2.5 px-4 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs hover:bg-stone-100 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
+          className="w-full py-3 px-5 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs hover:bg-stone-100 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer whitespace-nowrap"
         >
           <span className="material-symbols-outlined text-base text-primary">tune</span>
           <span>{t('whatIfCardBtn')}</span>

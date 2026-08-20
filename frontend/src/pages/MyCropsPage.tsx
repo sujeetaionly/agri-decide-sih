@@ -283,7 +283,7 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
       <HomeTopAppBar audioText={audioText} />
 
       {/* Main Content */}
-      <main className="flex-1 px-4 pt-20 pb-24 max-w-md mx-auto w-full space-y-4 animate-fadeIn">
+      <main className="flex-1 px-4 pt-3 pb-28 max-w-md mx-auto w-full space-y-4 animate-fadeIn">
         
         {/* Page Title Header with Emblem */}
         <div className="flex items-center gap-3 pt-0.5 pb-1">

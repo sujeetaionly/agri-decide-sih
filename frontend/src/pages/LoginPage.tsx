@@ -6,11 +6,12 @@ import { speakText, stopSpeaking } from '../lib/speech';
 
 interface LoginPageProps {
   onLoginSuccess: (phone?: string) => void;
-  onSkip?: () => void;
+  onSkip: () => void;
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({
   onLoginSuccess,
+  onSkip,
 }) => {
   const { language, t } = useLanguage();
   const { sendOtp, verifyOtp, isLoading } = useAuth();
@@ -19,14 +20,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [demoCodeHint, setDemoCodeHint] = useState('');
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [demoCodeHint, setDemoCodeHint] = useState('');
 
   const handlePlayVoice = () => {
     triggerHaptic('light');
     const msg = isOtpSent
-      ? 'आपके मोबाइल नंबर पर भेजा गया ६ अंकों का ओटीपी कोड दर्ज करें।'
-      : `${t('loginTitle')}। अपना १० अंकों का मोबाइल नंबर दर्ज करें।`;
+      ? `${t('enterOtp')}। ६-अंकों का ओटीपी दर्ज करें।`
+      : `${t('loginTitle')}। ${t('loginSubtitle')}`;
 
     speakText(
       msg,
@@ -42,14 +43,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     triggerHaptic('medium');
     setErrorMessage('');
 
-    if (!phone || phone.length < 10) {
+    if (phone.length < 10) {
       setErrorMessage('कृपया १० अंकों का मान्य मोबाइल नंबर दर्ज करें।');
       return;
     }
 
     const res = await sendOtp(phone);
     if (!res.success) {
-      setErrorMessage(res.error || 'ओटीपी भेजने में असमर्थ, कृपया पुनः प्रयास करें।');
+      setErrorMessage(res.error || 'ओटीपी भेजने में त्रुटि हुई। पुनः प्रयास करें।');
       return;
     }
 
@@ -77,8 +78,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Branding Bar with Clear Hierarchy */}
-      <div className="pt-2 pb-2 flex items-center justify-between">
+      {/* Top Branding Bar with Safe Area Top Inset for Camera Punch-hole & Dynamic Island */}
+      <div className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center shadow-xs flex-shrink-0">
             <span className="material-symbols-outlined text-3xl">agriculture</span>
@@ -108,7 +109,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         </button>
       </div>
 
-      {/* Main Login Elevated Card - Distinct Visual Groups */}
+      {/* Main Login Elevated Card */}
       <div className="my-auto w-full max-w-sm mx-auto bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-3xl p-7 sm:p-8 shadow-sm space-y-6">
         
         {/* Visual Group 1: Header (Emblem + Title + Subtitle) */}
@@ -138,28 +139,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         {/* Step 1: Mobile Number Flow */}
         {!isOtpSent ? (
           <form onSubmit={handleSendOtp} className="space-y-6">
-            {/* Visual Group 2: Input Field + Demo Helper */}
+            {/* Phone Input */}
             <div className="space-y-2 text-left">
-              <div className="flex items-center justify-between px-1">
-                <label className="text-xs font-bold text-stone-700 dark:text-stone-300">
-                  {t('mobileNumberLabel')}
-                </label>
-                <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-full border border-stone-200 dark:border-stone-700">
-                  डेमो: <strong className="font-bold text-stone-800 dark:text-stone-200">9876543210</strong>
-                </span>
-              </div>
+              <label className="text-xs font-bold text-stone-700 dark:text-stone-300 px-1">
+                {t('mobileNumber')}
+              </label>
 
-              {/* Integrated Prefix Input with Native Numpad Trigger */}
-              <div className="flex items-center w-full h-14 rounded-2xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50/70 dark:bg-stone-800/60 focus-within:border-primary focus-within:bg-white dark:focus-within:bg-stone-900 focus-within:ring-2 focus-within:ring-primary/20 transition-all overflow-hidden shadow-xs">
-                <div className="flex-shrink-0 h-full px-4 text-sm font-extrabold text-stone-600 dark:text-stone-400 select-none border-r border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 flex items-center gap-1.5">
-                  <span className="text-xs text-stone-400 font-bold tracking-wide">IN</span>
-                  <span className="text-stone-700 dark:text-stone-200 font-bold">+91</span>
+              <div className="flex items-center h-14 rounded-2xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50/70 dark:bg-stone-800/60 focus-within:border-primary focus-within:bg-white dark:focus-within:bg-stone-900 focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-xs overflow-hidden">
+                <div className="flex items-center gap-1 px-3.5 border-r border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-extrabold text-sm select-none">
+                  <span>🇮🇳</span>
+                  <span>+91</span>
                 </div>
                 <input
                   type="tel"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  autoComplete="tel-national"
                   maxLength={10}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
@@ -170,71 +164,103 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               </div>
             </div>
 
-            {/* Visual Group 3: Action Button */}
-            <button
-              type="submit"
-              disabled={isLoading || phone.length < 10}
-              className={`w-full h-14 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
-                phone.length === 10
-                  ? 'bg-primary hover:bg-primary/90 text-on-primary shadow-xl active:scale-[0.98] cursor-pointer'
-                  : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed shadow-none'
-              }`}
-            >
-              {isLoading ? (
-                <span className="material-symbols-outlined text-2xl animate-spin">progress_activity</span>
-              ) : (
-                <>
-                  <span>{t('sendOtp')}</span>
-                  <span className="material-symbols-outlined text-2xl">arrow_forward</span>
-                </>
-              )}
-            </button>
-          </form>
-        ) : (
-          /* Step 2: 6-Digit OTP Flow */
-          <form onSubmit={handleVerifyOtp} className="space-y-6">
-            {/* Visual Group 2: Input Field + Demo Helper */}
-            <div className="space-y-2 text-left">
-              <div className="flex items-center justify-between px-1">
-                <label className="text-xs font-bold text-stone-700 dark:text-stone-300">
-                  {t('enterOtp')}
-                </label>
-                <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded-full border border-stone-200 dark:border-stone-700">
-                  डेमो: <strong className="font-bold text-stone-800 dark:text-stone-200">{demoCodeHint || '123456'}</strong>
-                </span>
-              </div>
-
-              <input
-                type="tel"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="one-time-code"
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                placeholder="• • • • • •"
-                className="w-full h-14 text-center rounded-2xl bg-stone-50/70 dark:bg-stone-800/60 border-2 border-stone-200 dark:border-stone-700 text-on-surface-light dark:text-on-surface-dark font-extrabold text-2xl tracking-[0.35em] focus:border-primary focus:outline-none shadow-xs"
-                autoFocus
-              />
-            </div>
-
-            {/* Visual Group 3: Action & Secondary Option */}
-            <div className="space-y-3">
+            {/* Action Button */}
+            <div className="flex justify-center">
               <button
                 type="submit"
-                disabled={isLoading || otp.length < 6}
-                className={`w-full h-14 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
-                  otp.length >= 6
-                    ? 'bg-primary hover:bg-primary/90 text-on-primary shadow-xl active:scale-[0.98] cursor-pointer'
+                disabled={isLoading || phone.length < 10}
+                className={`max-w-[280px] w-full py-3.5 px-8 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${
+                  phone.length === 10
+                    ? 'bg-primary hover:bg-primary/90 text-white shadow-md active:scale-95 cursor-pointer'
                     : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed shadow-none'
                 }`}
               >
                 {isLoading ? (
-                  <span className="material-symbols-outlined text-2xl animate-spin">progress_activity</span>
+                  <span className="material-symbols-outlined text-xl animate-spin">progress_activity</span>
+                ) : (
+                  <>
+                    <span>{t('sendOtp')}</span>
+                    <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        ) : (
+          /* Step 2: 6-Digit OTP Flow with Discrete Digits UI */
+          <form onSubmit={handleVerifyOtp} className="space-y-6">
+            <div className="space-y-3 text-left">
+              <div className="flex items-center justify-between px-1">
+                <label className="text-xs font-bold text-stone-700 dark:text-stone-300">
+                  {t('enterOtp')}
+                </label>
+                <span className="text-[11px] text-stone-400 font-medium">६-अंक दर्ज करें</span>
+              </div>
+
+              {/* 6 Discrete Digit Boxes */}
+              <div className="relative flex justify-center gap-2 py-1">
+                {[0, 1, 2, 3, 4, 5].map((index) => {
+                  const digit = otp[index] || '';
+                  const isFocused = otp.length === index || (index === 5 && otp.length === 6);
+                  return (
+                    <div
+                      key={index}
+                      className={`w-11 h-13 rounded-2xl border-2 flex items-center justify-center font-black text-xl transition-all ${
+                        digit
+                          ? 'bg-white dark:bg-stone-900 border-primary text-primary shadow-xs'
+                          : isFocused
+                          ? 'bg-primary/5 border-primary ring-2 ring-primary/20 text-stone-900 dark:text-stone-100'
+                          : 'bg-stone-50 dark:bg-stone-800/80 border-stone-200 dark:border-stone-700 text-stone-300'
+                      }`}
+                    >
+                      {digit || '•'}
+                    </div>
+                  );
+                })}
+                {/* Hidden Input for smooth mobile keyboard typing */}
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="one-time-code"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                  className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                  autoFocus
+                />
+              </div>
+
+              {/* 1-Tap Demo OTP Fill Helper */}
+              <div className="text-center pt-1">
+                <button
+                  type="button"
+                  onClick={() => setOtp(demoCodeHint || '123456')}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary dark:text-primary-fixed bg-primary/10 px-3.5 py-1.5 rounded-full hover:bg-primary/20 transition-colors cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-sm">key</span>
+                  <span>डेमो कोड: {demoCodeHint || '123456'} (टैप करें)</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Action & Secondary Option */}
+            <div className="space-y-3 flex flex-col items-center">
+              <button
+                type="submit"
+                disabled={isLoading || otp.length < 6}
+                className={`max-w-[280px] w-full py-3.5 px-8 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${
+                  otp.length >= 6
+                    ? 'bg-primary hover:bg-primary/90 text-white shadow-md active:scale-95 cursor-pointer'
+                    : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed shadow-none'
+                }`}
+              >
+                {isLoading ? (
+                  <span className="material-symbols-outlined text-xl animate-spin">progress_activity</span>
                 ) : (
                   <>
                     <span>{t('verifyOtp')}</span>
-                    <span className="material-symbols-outlined text-2xl">arrow_forward</span>
+                    <span className="material-symbols-outlined text-lg">arrow_forward</span>
                   </>
                 )}
               </button>
@@ -256,8 +282,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         )}
       </div>
 
-      {/* Reassurance Footer */}
-      <footer className="pt-3 pb-4 text-center">
+      {/* Reassurance Footer with Safe Area Bottom Inset */}
+      <footer className="pt-3 pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] text-center">
         <div className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs text-stone-400 dark:text-stone-500 font-medium">
           <span className="material-symbols-outlined text-lg">verified_user</span>
           <span>सुरक्षित एवं गोपनीयता संरक्षित</span>

@@ -63,8 +63,8 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Bar */}
-      <div className="flex items-center justify-between pt-4">
+      {/* Top Bar with Safe Area Top Inset */}
+      <div className="flex items-center justify-between pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-2">
         <button
           onClick={handleChange}
           className="flex items-center gap-1 text-sm font-semibold text-stone-700 dark:text-stone-300 hover:text-primary active:scale-95 transition-colors cursor-pointer"
@@ -109,23 +109,23 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
         </p>
       </div>
 
-      {/* Action Buttons */}
-      <div className="space-y-3 pb-6">
+      {/* Action Buttons with Sleek Width & Safe Area Inset */}
+      <div className="space-y-3 max-w-[290px] w-full mx-auto pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)]">
         <button
           type="button"
           onClick={handleYes}
-          className="w-full py-4 px-6 rounded-full bg-primary text-on-primary font-extrabold text-base shadow-xl active:scale-[0.98] transition-transform flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 px-6 rounded-full bg-primary text-white font-extrabold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap"
         >
           <span>{getTranslation('confirmLangYes', language)}</span>
-          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
 
         <button
           type="button"
           onClick={handleChange}
-          className="w-full py-3.5 px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-700 hover:border-primary/40 text-on-surface-light dark:text-on-surface-dark font-bold text-sm shadow-xs hover:shadow-md active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2"
+          className="w-full py-3 px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs shadow-2xs hover:bg-stone-50 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
         >
-          <span className="material-symbols-outlined text-base text-stone-500">translate</span>
+          <span className="material-symbols-outlined text-base text-primary">translate</span>
           <span>{getTranslation('confirmLangChange', language)}</span>
         </button>
       </div>

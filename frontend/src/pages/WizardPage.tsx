@@ -12,6 +12,7 @@ import { WhatIfStep } from '../components/wizard/WhatIfStep';
 import { MilestoneCalendarStep } from '../components/wizard/MilestoneCalendarStep';
 import { HomeBottomNav, NavTab } from '../components/home/HomeBottomNav';
 import { triggerHaptic } from '../lib/utils';
+import { speakText } from '../lib/speech';
 
 interface WizardPageProps {
   onReturnHome: () => void;
@@ -77,12 +78,35 @@ export const WizardPage: React.FC<WizardPageProps> = ({
     }
   };
 
+  const [isSpeakingHeader, setIsSpeakingHeader] = React.useState(false);
+
+  const handleHeaderSpeak = () => {
+    triggerHaptic('light');
+    setIsSpeakingHeader(true);
+    let msg = t('appName');
+    if (currentCard === 1) msg = `${t('farmSizeCardTitle')}। ${t('farmSizeCardSub')}`;
+    else if (currentCard === 2) msg = `${t('soilCardTitle')}। ${t('soilCardSub')}`;
+    else if (currentCard === 3) msg = `${t('waterCardTitle')}। ${t('waterCardSub')}`;
+    else if (currentCard === 4) msg = `${t('prevCropCardTitle')}। ${t('prevCropCardSub')}`;
+    else if (currentCard === 5) msg = `${t('sowingCardTitle')}। ${t('sowingCardSub')}`;
+    else if (currentCard === 6) msg = `${t('intendedCropTitle')}। ${t('intendedCropSub')}`;
+    else if (currentCard === 7) msg = t('bestCropRecommendations');
+
+    speakText(
+      msg,
+      language,
+      () => setIsSpeakingHeader(true),
+      () => setIsSpeakingHeader(false),
+      () => setIsSpeakingHeader(false)
+    );
+  };
+
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col font-body">
       
-      {/* Top Header */}
-      <header className="fixed top-0 inset-x-0 z-40 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 pt-[env(safe-area-inset-top)] shadow-2xs">
-        <div className="flex items-center justify-between h-14 px-4 max-w-md mx-auto">
+      {/* Top Sticky Header */}
+      <header className="sticky top-0 z-40 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 pt-[calc(env(safe-area-inset-top,32px)+0.5rem)] shadow-2xs">
+        <div className="flex items-center justify-between h-12 px-4 max-w-md mx-auto">
           <button
             onClick={handleHeaderBack}
             className="w-9 h-9 rounded-full flex items-center justify-center bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 active:scale-95 cursor-pointer transition-colors"
@@ -95,7 +119,18 @@ export const WizardPage: React.FC<WizardPageProps> = ({
             {t('appName')}
           </span>
 
-          <div className="w-9" />
+          <button
+            type="button"
+            onClick={handleHeaderSpeak}
+            aria-label="Listen"
+            className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all cursor-pointer aspect-square ${
+              isSpeakingHeader
+                ? 'bg-primary text-white border-primary animate-pulse shadow-md'
+                : 'bg-stone-100 dark:bg-stone-800 text-primary border-stone-200 dark:border-stone-700 hover:bg-primary/10'
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">volume_up</span>
+          </button>
         </div>
 
         {/* Segmented 6-Step Progress Bar Indicator & Step Header */}
@@ -126,7 +161,7 @@ export const WizardPage: React.FC<WizardPageProps> = ({
       </header>
 
       {/* Main Questionnaire / Recommendations / Action Plan Step */}
-      <main className={`flex-1 max-w-md mx-auto w-full px-4 ${currentCard <= 6 ? 'pt-[104px]' : 'pt-[68px]'} pb-24`}>
+      <main className="flex-1 max-w-md mx-auto w-full px-4 pt-3 pb-28 animate-fadeIn">
         {currentCard === 1 && <FarmSizeCard />}
         {currentCard === 2 && <SoilTypeCard />}
         {currentCard === 3 && <WaterSourceCard />}
@@ -139,7 +174,10 @@ export const WizardPage: React.FC<WizardPageProps> = ({
       </main>
 
       {/* Persistent Bottom Navigation Bar on Every Page */}
-      <HomeBottomNav onTabChange={handleNavChange} />
+      <HomeBottomNav
+        activeTab={currentCard === 9 ? 'my-crop' : undefined}
+        onTabChange={handleNavChange}
+      />
     </div>
   );
 };

@@ -458,11 +458,11 @@ export const translations: Record<string, TranslationStrings> = {
     raj: 'आपणी माटी, पाणी अर मंडी भाव रे आधार पर सबसूं उत्तम फसल जानो।',
   },
   getCropRecButton: {
-    en: 'Start New Crop Analysis',
-    hi: 'नया फसल विश्लेषण शुरू करें',
-    mr: 'नवीन पीक विश्लेषण सुरू करा',
-    gu: 'નવું પાક વિશ્લેષણ શરૂ કરો',
-    raj: 'नयो फसल विश्लेषण शुरू करो',
+    en: 'Start Analysis',
+    hi: 'नया विश्लेषण शुरू करें',
+    mr: 'नवीन विश्लेषण सुरू करा',
+    gu: 'નવું વિશ્લેષણ શરૂ કરો',
+    raj: 'नयो विश्लेषण शुरू करो',
   },
   recentAnalysisTitle: {
     en: 'Your Previous Crop Analysis',
@@ -1066,11 +1066,11 @@ export const translations: Record<string, TranslationStrings> = {
 
   // Action Plan Milestone Screen Keys
   planTitle: {
-    en: 'Crop Action Plan & Milestones',
-    hi: 'फसल कार्य-योजना व कैलेंडर',
-    mr: 'पीक कार्य-योजना व वेळापत्रक',
-    gu: 'પાક કાર્ય-યોજના અને કેલેન્ડર',
-    raj: 'फसल कार्य-योजना और पंचांग',
+    en: 'My Crop Action Plan',
+    hi: 'मेरी फसल कार्य-योजना',
+    mr: 'माझे पीक कार्य-योजना',
+    gu: 'મારી પાક કાર્ય-યોજના',
+    raj: 'म्हारी फसल कार्य-योजना',
   },
   planSubtitle: {
     en: 'Step-by-step guidance from sowing to harvest.',

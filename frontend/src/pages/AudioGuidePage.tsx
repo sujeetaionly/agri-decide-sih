@@ -97,8 +97,8 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Header with Title & Speaker Button */}
-      <header className="pt-6 space-y-2 text-center">
+      {/* Top Header with Title & Speaker Button & Safe Area Top Inset */}
+      <header className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3 space-y-2 text-center">
         <div className="flex items-center justify-center gap-2">
           <h1 className="text-2xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
             {getTranslation('audioGuideTitle', language)}
@@ -151,20 +151,20 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
         </p>
       </div>
 
-      {/* Bottom Action Button - Disabled & Greyed out until user tests audio */}
-      <div className="pb-6">
+      {/* Bottom Action Button with Sleek Width & Safe Area Padding */}
+      <div className="pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] flex justify-center">
         <button
           type="button"
           onClick={handleContinue}
           disabled={!hasTestedAudio}
-          className={`w-full py-4 px-6 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
+          className={`max-w-[280px] w-full py-3.5 px-8 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
             hasTestedAudio
-              ? 'bg-primary text-on-primary shadow-xl active:scale-[0.98] cursor-pointer'
+              ? 'bg-primary text-white shadow-md active:scale-95 cursor-pointer'
               : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed shadow-none'
           }`}
         >
           <span>{getTranslation('audioGuideProceed', language)}</span>
-          <span className="material-symbols-outlined text-lg">arrow_forward</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
         </button>
       </div>
     </div>

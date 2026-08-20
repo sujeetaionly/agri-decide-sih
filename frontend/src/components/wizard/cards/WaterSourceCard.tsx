@@ -145,44 +145,30 @@ export const WaterSourceCard: React.FC = () => {
         })}
       </div>
 
-      {/* True Progressive Blur Layer with Gradient Mask */}
-      <div
-        className="fixed bottom-16 inset-x-0 z-30 pointer-events-none max-w-md mx-auto h-20"
-        style={{
-          background: 'linear-gradient(to top, rgba(249,249,246,0.95) 20%, rgba(249,249,246,0.7) 60%, transparent 100%)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)',
-        }}
-      />
+      {/* Inline Pill Action Buttons (Tight to Card) */}
+      <div className="pt-4 pb-4 flex items-center justify-center gap-3 max-w-[300px] mx-auto w-full">
+        <button
+          type="button"
+          onClick={handleBack}
+          className="h-13 min-h-[50px] px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-extrabold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs"
+        >
+          <span className="material-symbols-outlined text-base">arrow_back</span>
+          <span>{t('back')}</span>
+        </button>
 
-      {/* Action Buttons Floating on top of Progressive Blur */}
-      <div className="fixed bottom-16 inset-x-0 z-40 px-4 max-w-md mx-auto pb-3 pt-2">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="py-3.5 px-5 rounded-full bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-bold text-sm active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-none"
-          >
-            <span className="material-symbols-outlined text-base">arrow_back</span>
-            <span>{t('back')}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleContinue}
-            disabled={!isSelectedAny}
-            className={`flex-1 py-3.5 px-6 rounded-full font-extrabold text-base transition-all flex items-center justify-center gap-2 ${
-              isSelectedAny
-                ? 'bg-primary hover:bg-primary/95 text-white active:scale-[0.98] cursor-pointer shadow-none'
-                : 'bg-stone-300 dark:bg-stone-800 text-stone-500 cursor-not-allowed opacity-60'
-            }`}
-          >
-            <span>{t('continue')}</span>
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleContinue}
+          disabled={!isSelectedAny}
+          className={`flex-1 h-13 min-h-[50px] px-6 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
+            isSelectedAny
+              ? 'bg-primary hover:bg-primary/95 text-white active:scale-95 cursor-pointer shadow-md'
+              : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed opacity-60'
+          }`}
+        >
+          <span>{t('continue')}</span>
+          <span className="material-symbols-outlined text-base">arrow_forward</span>
+        </button>
       </div>
     </div>
   );

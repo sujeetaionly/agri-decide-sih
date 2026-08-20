@@ -135,7 +135,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       <HomeTopAppBar />
 
       {/* 2. Main Dashboard */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-20 pb-20 space-y-4 animate-fadeIn">
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-3 pb-24 space-y-4 animate-fadeIn">
         
         {/* Cluster 1: Welcome Greeting with Official Material Namaste Vector */}
         <div className="flex items-center gap-3 pt-0.5 pb-1">
@@ -174,14 +174,16 @@ export const HomePage: React.FC<HomePageProps> = ({
             </p>
           </div>
 
-          <button
-            onClick={handleStartRecommendation}
-            className="w-full py-4 px-6 rounded-full bg-amber-400 hover:bg-amber-300 active:scale-[0.98] text-stone-950 font-black text-base shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10"
-          >
-            <span className="material-symbols-outlined text-xl [font-variation-settings:'FILL'_1]">eco</span>
-            <span>{t('getCropRecButton')}</span>
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
-          </button>
+          <div className="flex justify-center">
+            <button
+              onClick={handleStartRecommendation}
+              className="max-w-[280px] w-full py-3.5 px-8 rounded-full bg-amber-400 hover:bg-amber-300 active:scale-95 text-stone-950 font-black text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10 whitespace-nowrap"
+            >
+              <span className="material-symbols-outlined text-lg [font-variation-settings:'FILL'_1]">eco</span>
+              <span>{t('getCropRecButton')}</span>
+              <span className="material-symbols-outlined text-base">arrow_forward</span>
+            </button>
+          </div>
         </div>
 
         {/* Cluster 3: Recent Advisory Analysis Card (High visual hierarchy, clean typography) */}

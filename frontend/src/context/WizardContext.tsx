@@ -29,6 +29,8 @@ interface WizardContextType {
   comparisonMatrix: ComparisonCropItem[];
   intendedVsRecommended: IntendedVsRecommendedComparison | null;
   isLoadingRecommendation: boolean;
+  isLiveServerResponse: boolean;
+  serverLatencyMs: number | null;
   fetchRecommendations: () => Promise<void>;
   goToCard: (card: number) => void;
   nextCard: () => void;
@@ -220,8 +222,12 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     });
   };
 
+  const [isLiveServerResponse, setIsLiveServerResponse] = useState<boolean>(false);
+  const [serverLatencyMs, setServerLatencyMs] = useState<number | null>(null);
+
   const fetchRecommendations = async () => {
     setIsLoadingRecommendation(true);
+    const start = performance.now();
     try {
       const data = await apiService.recommendCrops({
         total_land_acres: farmData.landAcres || 2.5,
@@ -237,7 +243,11 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         lang: 'hi',
       });
 
+      const elapsed = Math.round(performance.now() - start);
+
       if (data && data.top_recommendation) {
+        setIsLiveServerResponse(true);
+        setServerLatencyMs(elapsed);
         setTopRecommendation(data.top_recommendation);
         setSelectedCropId(data.top_recommendation.crop_id);
         // If the farmer has not chosen a specific crop yet, seed it once
@@ -255,6 +265,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     } catch (e) {
       console.warn('API error, using cached benchmark recommendations:', e);
+      setIsLiveServerResponse(false);
     } finally {
       setIsLoadingRecommendation(false);
       goToCard(7); // Move to recommendations view (Step 7)
@@ -278,6 +289,8 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         comparisonMatrix,
         intendedVsRecommended,
         isLoadingRecommendation,
+        isLiveServerResponse,
+        serverLatencyMs,
         fetchRecommendations,
         goToCard,
         nextCard,
