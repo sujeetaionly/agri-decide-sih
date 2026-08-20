@@ -43,7 +43,7 @@ Over 95% of conventional crop recommendation systems suffer from critical real-w
 | :--- | :--- | :--- |
 | **📍 Pan-India GPS Intelligence** | Auto-fetches taluka soil texture (SoilGrids GIS 250m), nearest APMC wholesale mandi rates, and IMD normals. | Hyper-local calibration without relying on national averages. |
 | **📅 Auto Season & Sowing Validation** | Classifies Kharif (Jun–Oct), Rabi (Oct–Mar), Zaid (Mar–Jun); applies ICAR weekly biological delay penalties. | Eliminates out-of-season and delayed-sowing losses. |
-| **🔄 Crop Rotation Engine** | Penalizes monoculture (−15%), rewards cereal $\rightarrow$ legume (+12%), legume $\rightarrow$ cereal (+10%), cotton $\rightarrow$ legume (+15%). | Restores organic soil fertility and breaks pest cycles. |
+| **🔄 Crop Rotation Engine** | Penalizes monoculture (−15%), rewards cereal → legume (+12%), legume → cereal (+10%), cotton → legume (+15%). | Restores organic soil fertility and breaks pest cycles. |
 | **🆚 Head-to-Head Comparison** | Directly compares farmer's intended crop against AI-recommended champion with exact ₹ and % delta. | Gives farmers quantifiable evidence to switch crops. |
 | **💰 CACP Economic Engine** | Uses official Ministry of Agriculture CACP $A_2+FL$ norms and offsets owned machinery rental. | Saves ₹3,500–₹4,300/acre in custom hiring expenses. |
 | **📊 Net ₹/Acre Profitability** | Ranks crops by total net seasonal earning potential per acre ($\text{Gross Revenue} - \text{CACP Cost}_{\mathrm{adjusted}}$). | Delivers clear, bankable seasonal return projections. |
@@ -88,16 +88,31 @@ flowchart TD
 ## 📐 Mathematical Formulation & Decision Logic
 
 ### 1. Sowing Delay Yield Attenuation
-$$\Delta d = \max\left(0,\, d_{\mathrm{sow}} - d_{\mathrm{optimal\_end}}\right) \implies \hat{Y} = Y_{\mathrm{base}} \times \left(1 - \alpha_{\mathrm{crop}} \cdot \frac{\Delta d}{7}\right)$$
 
-### 2. Crop Rotation Adjustment
-$$\text{Score}_{\mathrm{adjusted}} = \text{Score}_{\mathrm{base}} \times R_{\mathrm{rotation}}$$
-*(Monoculture: $0.85$, Cereal $\rightarrow$ Legume: $1.12$, Legume $\rightarrow$ Cereal: $1.10$, Heavy-Feeder $\rightarrow$ Legume: $1.15$)*
+$$
+\Delta d = \max\left(0,\, d_{\mathrm{sow}} - d_{\mathrm{optimal\_end}}\right) \implies \hat{Y} = Y_{\mathrm{base}} \times \left(1 - \alpha_{\mathrm{crop}} \cdot \frac{\Delta d}{7}\right)
+$$
+
+### 2. Crop Rotation Multipliers
+
+$$
+\text{Score}_{\mathrm{adjusted}} = \text{Score}_{\mathrm{base}} \times R_{\mathrm{rotation}}
+$$
+
+* **Monoculture Penalty:** $R_{\mathrm{rotation}} = 0.85$ ($-15\%$)
+* **Cereal → Legume / Oilseed:** $R_{\mathrm{rotation}} = 1.12$ ($+12\%$)
+* **Legume → Cereal:** $R_{\mathrm{rotation}} = 1.10$ ($+10\%$)
+* **Cotton / Heavy-Feeder → Legume:** $R_{\mathrm{rotation}} = 1.15$ ($+15\%$)
 
 ### 3. Net Profit per Acre ($\text{₹}/\text{Acre}$)
-$$\text{Gross Revenue} = \hat{Y} \times P_{\mathrm{mandi}}$$
 
-$$\text{Net Profit per Acre} = \text{Gross Revenue} - \left(\text{Cost}_{\mathrm{CACP}} - \mathbb{I}_{\mathrm{tractor}} \cdot \delta_{\mathrm{tractor}} - \mathbb{I}_{\mathrm{sprayer}} \cdot \delta_{\mathrm{sprayer}}\right)$$
+$$
+\text{Gross Revenue} = \hat{Y} \times P_{\mathrm{mandi}}
+$$
+
+$$
+\text{Net Profit per Acre} = \text{Gross Revenue} - \left(\text{Cost}_{\mathrm{CACP}} - \mathbb{I}_{\mathrm{tractor}} \cdot \delta_{\mathrm{tractor}} - \mathbb{I}_{\mathrm{sprayer}} \cdot \delta_{\mathrm{sprayer}}\right)
+$$
 
 ---
 
