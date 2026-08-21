@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, securityLevel: "loose" });
+    </script>
+    <style>
+        body { margin: 0; padding: 6px; background: #ffffff; width: 710px; font-family: Arial, sans-serif; box-sizing: border-box; }
+        .mermaid { width: 100%; display: flex; justify-content: center; }
+        .mermaid svg { width: 100% !important; max-height: 750px !important; }
+    </style>
+</head>
+<body>
+    <div class="mermaid">
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#ffffff",
+    "primaryTextColor": "#0f172a",
+    "primaryBorderColor": "#94a3b8",
+    "lineColor": "#2563eb",
+    "secondaryColor": "#f8fafc",
+    "tertiaryColor": "#ffffff",
+    "fontSize": "11px",
+    "fontFamily": "Arial, Helvetica, sans-serif"
+  },
+  "flowchart": {
+    "nodeSpacing": 6,
+    "rankSpacing": 12,
+    "curve": "basis",
+    "htmlLabels": true
+  }
+}}%%
+flowchart TD
+    subgraph S1["STAGE 1: ONBOARDING &amp; VERNACULAR ACCESS (Steps 1–5)"]
+        direction LR
+        A1["<b>1. App Open</b><br/><span style='font-size:9px;color:#64748b;'>Splash PWA</span>"]
+        A2["<b>2. GPS Prompt</b><br/><span style='font-size:9px;color:#64748b;'>Auto-Zone</span>"]
+        A3["<b>3. Language</b><br/><span style='font-size:9px;color:#64748b;'>Auto/Voice</span>"]
+        A4["<b>4. Audio Guide</b><br/><span style='font-size:9px;color:#64748b;'>Speaker Demo</span>"]
+        A5["<b>5. OTP Login</b><br/><span style='font-size:9px;color:#64748b;'>Mobile Auth</span>"]
+        A1 --> A2 --> A3 --> A4 --> A5
+    end
+
+    S1 -->|"▼ Home Dashboard ➔ Click 'Analyze Crop (फसल विश्लेषण)'"| S2
+
+    subgraph S2["STAGE 2: 7-CARD GUIDED AGRONOMIC WIZARD (Steps 6–8 Voice Guided)"]
+        direction LR
+        Q1["<b>Q1. Land Size</b><br/><span style='font-size:9px;color:#64748b;'>Acreage</span>"]
+        Q2["<b>Q2. Soil Type</b><br/><span style='font-size:9px;color:#64748b;'>SoilGrids GIS</span>"]
+        Q3["<b>Q3. Water Source</b><br/><span style='font-size:9px;color:#64748b;'>Canal/Bore/Rain</span>"]
+        Q4["<b>Q4. Prev Crop</b><br/><span style='font-size:9px;color:#64748b;'>Legume Bonus</span>"]
+        Q5["<b>Q5. Sowing Date</b><br/><span style='font-size:9px;color:#64748b;'>Agro Window</span>"]
+        Q6["<b>Q6. Machinery</b><br/><span style='font-size:9px;color:#64748b;'>Owned Tractor</span>"]
+        Q7["<b>Q7. Thought Crop</b><br/><span style='font-size:9px;color:#64748b;'>Farmer Choice</span>"]
+        Q1 --- Q2 --- Q3 --- Q4 --- Q5 --- Q6 --- Q7
+    end
+
+    S2 -->|"▼ ML Yield Regressor (R²=0.99) &amp; CACP A₂+FL Optimization"| S3
+
+    subgraph S3["STAGE 3: AI EVALUATION &amp; WHAT-IF SIMULATION (Steps 9–11)"]
+        direction LR
+        C1["<b>9. Compare Crops</b><br/><span style='font-size:9px;color:#059669;font-weight:bold;'>Top 3 vs Farmer (+₹/Ac)</span>"]
+        C2["<b>10. What-If Sliders</b><br/><span style='font-size:9px;color:#d97706;font-weight:bold;'>-35% Rain &amp; Price Shock</span>"]
+        C3["<b>11. Finalize Crop</b><br/><span style='font-size:9px;color:#2563eb;font-weight:bold;'>1-Tap Lock Strategy</span>"]
+        C1 --> C2 --> C3
+    end
+
+    S3 -->|"▼ Deploys to Active Management Plan &amp; WhatsApp Slip"| S4
+
+    subgraph S4["STAGE 4: 'MERI FASAL' ACTIVE EXECUTION (Steps 12–13)"]
+        direction LR
+        E1["<b>12. 'Meri Fasal' Milestones Calendar</b><br/><span style='font-size:9px;color:#475569;'>Stage-wise fertilizer dates, pest alerts &amp; voice advisory</span>"]
+        E2["<b>13. 1-Click WhatsApp &amp; PDF Export</b><br/><span style='font-size:9px;color:#475569;'>Printable official vector slip &amp; instant share with KVK/family</span>"]
+        E1 --> E2
+    end
+
+    style S1 fill:#f0fdf4,stroke:#86efac,stroke-width:1.5px,color:#166534
+    style S2 fill:#eff6ff,stroke:#93c5fd,stroke-width:1.5px,color:#1e40af
+    style S3 fill:#fdf4ff,stroke:#f0abfc,stroke-width:1.5px,color:#86198f
+    style S4 fill:#fff7ed,stroke:#fdba74,stroke-width:1.5px,color:#9a3412
+
+    style A1 fill:#ffffff,stroke:#86efac,stroke-width:1px
+    style A2 fill:#ffffff,stroke:#86efac,stroke-width:1px
+    style A3 fill:#ffffff,stroke:#86efac,stroke-width:1px
+    style A4 fill:#ffffff,stroke:#86efac,stroke-width:1px
+    style A5 fill:#ffffff,stroke:#86efac,stroke-width:1px
+
+    style Q1 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+    style Q2 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+    style Q3 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+    style Q4 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+    style Q5 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+    style Q6 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+    style Q7 fill:#ffffff,stroke:#93c5fd,stroke-width:1px
+
+    style C1 fill:#ffffff,stroke:#f0abfc,stroke-width:1px
+    style C2 fill:#ffffff,stroke:#f0abfc,stroke-width:1px
+    style C3 fill:#ffffff,stroke:#f0abfc,stroke-width:1px
+
+    style E1 fill:#ffffff,stroke:#fdba74,stroke-width:1px
+    style E2 fill:#ffffff,stroke:#fdba74,stroke-width:1px
+
+    </div>
+</body>
+</html>

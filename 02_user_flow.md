@@ -1,5 +1,5 @@
 # 🧭 02. Streamlined User Flow & Application Journey
-### System: **Krishi-Wise AI (Agri-Decide) — Intelligent Multilingual Crop Advisory Engine**
+### System: **Fasal-Disha (फसल-दिशा) — Intelligent Multilingual Crop Advisory Engine**
 
 ---
 
@@ -7,24 +7,28 @@
 
 ```mermaid
 flowchart TD
-    L1[🌐 Screen 1: Regional Language Selection\n5 Languages: हिन्दी, English, मराठी, ગુજરાતી, राजस्थानी\nInteractive Audio Pronunciation] --> L2[✅ Screen 2: Language Confirmation\nInstant localized verification card with audio playback]
-    L2 --> H1[🏠 Screen 3: Farmer Dashboard Home Hub\nReal-time Weather & Mandi Ticker + GPS / Location Detection\nPrimary CTA: 'नई फसल सलाह शुरू करें']
+    L1[🌐 Screen 1: Regional Language Selection\n5 Languages: हिन्दी, मराठी, ગુજરાતી, राजस्थानी, English\nNative Audio Pronunciation & Voice Search] --> L2[✅ Screen 2: Language Confirmation\nVisual native glyph card with welcome audio]
+    L2 --> L3[🔊 Screen 3: Interactive Audio Guide\nSpeaker verification & volume check tutorial]
+    L3 --> L4[🔐 Screen 4: Passwordless Mobile Login\n10-digit phone + 6-digit OTP verification]
+    L4 --> H1[🏠 Screen 5: Farmer Dashboard Home Hub\nGreeting, recent advisory summary & primary CTA]
     
-    subgraph WIZARD ["🚜 5-Card Focused Question Wizard (Single-Concept Cards)"]
-        W1[Card 1: Farm Size & Land Units\nKeypad + Acre / Bigha / Guntha Live Conversion]
-        W2[Card 2: Soil Type Selection\n5 Real Macro DSLR Soil Photos + Moisture Retention Badges]
-        W3[Card 3: Water Availability\nCanal / Well / Rainfed Irrigation Capacities]
-        W4[Card 4: Previous Crop Rotation\nClean Typography Grid + Voice Multi-Crop Input]
-        W5[Card 5: Sowing Timing\nImmediate / Next Month / Seamless Integrated Date Picker]
+    subgraph WIZARD ["🚜 7-Card Guided Question Wizard"]
+        W1[Card 1: Farm Size & Units\nKeypad + Acre / Bigha / Guntha Live Conversion]
+        W2[Card 2: Soil Type Selection\n5 Photographic Soil Profiles with Moisture Badges]
+        W3[Card 3: Water Availability\nHigh Canal / Medium Well / Rainfed Dryland]
+        W4[Card 4: Owned Farm Equipment\nTractor -₹3500 / Sprayer -₹800 / Pump -₹600]
+        W5[Card 5: Previous Crop History\nCrop grid + speech-to-text voice chip input]
+        W6[Card 6: Sowing Timing\nThis Week +3d / Next Month +25d / Custom Calendar]
+        W7[Card 7: Intended Farmer Crop\nCaptures farmer's initial choice for 🆚 comparison]
         
-        W1 --> W2 --> W3 --> W4 --> W5
+        W1 --> W2 --> W3 --> W4 --> W5 --> W6 --> W7
     end
     
     H1 --> W1
     
-    W5 --> R1[📊 Screen 4: Recommendation & Interactive Candidate Scorecards\nTop Choice Hero + Interactive Candidate Crops\n3-Pillar Metrics: Net Profit ₹, Yield qtl, CACP Cost Breakdown, AI Rationale]
-    R1 --> R2[🎛️ Screen 5: Weather & Risk Simulation Sandbox\nLive Sliders: Rainfall Deficit & Mandi Price Volatility]
-    R2 --> R3[📅 Screen 6: 120-Day Milestone Action Plan & Advisory Slip\nVoice-enabled stage timeline + PDF Download + WhatsApp Sharing]
+    W7 --> R1[📊 Screen 6: Recommendations & Scorecard\nTop Choice Hero + Head-to-Head 🆚 Card\nNet Profit ₹, Yield qtl, CACP Itemized Cost Breakdown]
+    R1 --> R2[🎛️ Screen 7: Weather & Risk Simulation Sandbox\nLive Sliders: Rainfall Deficit -35% to +25% & Mandi Price Shock]
+    R2 --> R3[📅 Screen 8: 120-Day Milestone Action Plan & Advisory Slip\nVoice-enabled stage timeline + PDF Download + WhatsApp Sharing]
     R3 --> H1
 ```
 

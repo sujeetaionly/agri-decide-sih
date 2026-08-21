@@ -1,0 +1,205 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 780" width="100%" height="100%" style="display: block; background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Drop Shadow Filter -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+
+    <!-- Arrow Markers -->
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ea580c"/>
+    </marker>
+    <marker id="arrMagenta" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c026d3"/>
+    </marker>
+  </defs>
+
+  <!-- ==================== HEADER BAR ==================== -->
+  <rect x="16" y="14" width="688" height="40" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="360" y="39" text-anchor="middle" font-size="15" font-weight="800" fill="#1e3a8a" letter-spacing="0.5">🌾 FASAL-DISHA INTERACTIVE DECISION ECOSYSTEM</text>
+
+  <!-- ==================== QUADRANT 1: TOP-LEFT (Vernacular Onboarding) ==================== -->
+  <g transform="translate(16, 66)" filter="url(#cardShadow)">
+    <rect width="330" height="290" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1.8"/>
+    <!-- Stage Header -->
+    <rect width="330" height="34" rx="12" fill="#dcfce7"/>
+    <rect y="22" width="330" height="12" fill="#dcfce7"/>
+    <text x="16" y="22" font-size="12" font-weight="800" fill="#166534">1. VERNACULAR ONBOARDING</text>
+
+    <!-- Node 1: GPS -->
+    <g transform="translate(14, 46)">
+      <rect width="302" height="64" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.5"/>
+      <text x="24" y="38" font-size="20">📍</text>
+      <text x="56" y="30" font-size="12" font-weight="800" fill="#0f172a">GPS Location Permission</text>
+      <text x="56" y="48" font-size="10" font-weight="600" fill="#059669">Auto-detects district &amp; agro-climatic zone</text>
+    </g>
+
+    <!-- Arrow down -->
+    <line x1="165" y1="110" x2="165" y2="122" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+
+    <!-- Node 2: Regional Language -->
+    <g transform="translate(14, 124)">
+      <rect width="302" height="64" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.5"/>
+      <text x="24" y="38" font-size="20">🌐</text>
+      <text x="56" y="30" font-size="12" font-weight="800" fill="#0f172a">Regional Language Selection</text>
+      <text x="56" y="48" font-size="10" font-weight="600" fill="#059669">Auto-detect / Voice in Hindi, Marathi, etc.</text>
+    </g>
+
+    <!-- Arrow down -->
+    <line x1="165" y1="188" x2="165" y2="200" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+
+    <!-- Node 3: Mobile OTP -->
+    <g transform="translate(14, 202)">
+      <rect width="302" height="64" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.5"/>
+      <text x="24" y="38" font-size="20">🔐</text>
+      <text x="56" y="30" font-size="12" font-weight="800" fill="#0f172a">Mobile No. &amp; OTP Login</text>
+      <text x="56" y="48" font-size="10" font-weight="600" fill="#059669">Fast 1-tap rural phone authentication</text>
+    </g>
+  </g>
+
+  <!-- ==================== QUADRANT 2: BOTTOM-LEFT (Compact 7-Card Agronomic Wizard) ==================== -->
+  <g transform="translate(16, 372)" filter="url(#cardShadow)">
+    <rect width="330" height="388" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.8"/>
+    <!-- Stage Header -->
+    <rect width="330" height="34" rx="12" fill="#dbeafe"/>
+    <rect y="22" width="330" height="12" fill="#dbeafe"/>
+    <text x="16" y="22" font-size="12" font-weight="800" fill="#1e40af">2. 7-CARD AGRONOMIC PROFILE</text>
+    <rect x="226" y="7" width="94" height="20" rx="10" fill="#ffffff" stroke="#bfdbfe"/>
+    <text x="273" y="21" text-anchor="middle" font-size="9" font-weight="700" fill="#1d4ed8">🎙️ Voice Assisted</text>
+
+    <!-- Compact Chips Grid (7 Agronomic Parameters) -->
+    <g transform="translate(14, 46)">
+      <!-- Card 1 -->
+      <g transform="translate(0, 0)">
+        <rect width="146" height="42" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="73" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">📐 Q1. Farm Size</text>
+      </g>
+      <!-- Card 2 -->
+      <g transform="translate(156, 0)">
+        <rect width="146" height="42" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="73" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">🌱 Q2. Soil Type</text>
+      </g>
+      <!-- Card 3 -->
+      <g transform="translate(0, 50)">
+        <rect width="146" height="42" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="73" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">💧 Q3. Water Source</text>
+      </g>
+      <!-- Card 4 -->
+      <g transform="translate(156, 50)">
+        <rect width="146" height="42" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="73" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">🔄 Q4. Previous Crop</text>
+      </g>
+      <!-- Card 5 -->
+      <g transform="translate(0, 100)">
+        <rect width="146" height="42" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="73" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">📅 Q5. Sowing Date</text>
+      </g>
+      <!-- Card 6 -->
+      <g transform="translate(156, 100)">
+        <rect width="146" height="42" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="73" y="26" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">🚜 Q6. Equipment</text>
+      </g>
+      <!-- Card 7 (Wide) -->
+      <g transform="translate(0, 150)">
+        <rect width="302" height="42" rx="6" fill="#ffffff" stroke="#e11d48" stroke-width="1.5"/>
+        <text x="151" y="26" text-anchor="middle" font-size="11.5" font-weight="800" fill="#be123c">💭 Q7. Thought Crop (Farmer Baseline)</text>
+      </g>
+    </g>
+
+    <!-- Ingestion Engine Box inside Q2 -->
+    <g transform="translate(14, 252)">
+      <rect width="302" height="116" rx="8" fill="#ffffff" stroke="#60a5fa" stroke-width="1.5"/>
+      <rect width="302" height="24" rx="8" fill="#eff6ff"/>
+      <text x="151" y="16" text-anchor="middle" font-size="10" font-weight="800" fill="#1e40af">⚡ REAL-TIME ML &amp; COST INGESTION</text>
+      
+      <text x="14" y="44" font-size="9.5" font-weight="700" fill="#0f172a">• SoilGrids GIS + IMD Weather Mapping</text>
+      <text x="14" y="62" font-size="9.5" font-weight="700" fill="#0f172a">• XGBoost Yield ML Regressor</text>
+      <text x="14" y="80" font-size="9.5" font-weight="700" fill="#0f172a">• CACP A₂+FL Local Input Cost Engine</text>
+      <text x="14" y="98" font-size="9.5" font-weight="700" fill="#0f172a">• AgMarknet 5-Yr APMC Mandi Price Sync</text>
+    </g>
+  </g>
+
+  <!-- ==================== INTER-QUADRANT CONNECTORS ==================== -->
+  <!-- Connector Q1 -> Q2 (Vertical Drop) -->
+  <line x1="181" y1="356" x2="181" y2="370" stroke="#10b981" stroke-width="3" marker-end="url(#arrGreen)"/>
+
+  <!-- Bridge Q2 -> Q3 (Middle Rightward Bridge) -->
+  <path d="M 346 650 C 362 650, 362 236, 368 236" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrPurple)"/>
+
+  <!-- ==================== QUADRANT 3: TOP-RIGHT (AI Evaluation & What-If Studio) ==================== -->
+  <g transform="translate(374, 66)" filter="url(#cardShadow)">
+    <rect width="330" height="340" rx="12" fill="#fdf4ff" stroke="#f0abfc" stroke-width="1.8"/>
+    <!-- Stage Header -->
+    <rect width="330" height="34" rx="12" fill="#fae8ff"/>
+    <rect y="22" width="330" height="12" fill="#fae8ff"/>
+    <text x="16" y="22" font-size="12" font-weight="800" fill="#86198f">3. AI SIMULATION &amp; COMPARISON</text>
+
+    <!-- Card 1: Head to Head Comparison -->
+    <g transform="translate(14, 46)">
+      <rect width="302" height="84" rx="8" fill="#ffffff" stroke="#c026d3" stroke-width="1.5"/>
+      <text x="14" y="24" font-size="11.5" font-weight="800" fill="#86198f">📊 Crop Comparison (Top 3 vs Thought)</text>
+      <text x="14" y="44" font-size="9.5" fill="#475569">Ranks AI optimal crops against baseline</text>
+      <rect x="14" y="54" width="140" height="20" rx="4" fill="#dcfce7"/>
+      <text x="84" y="68" text-anchor="middle" font-size="9.5" font-weight="800" fill="#15803d">+₹/Acre Profit Delta</text>
+    </g>
+
+    <!-- Interactive Re-Simulation Loop (Bidirectional Flow) -->
+    <g transform="translate(14, 138)">
+      <rect width="302" height="106" rx="8" fill="#ffffff" stroke="#c026d3" stroke-width="1.5"/>
+      <text x="14" y="24" font-size="11.5" font-weight="800" fill="#86198f">🎛️ Interactive What-If Sliders</text>
+      <text x="14" y="44" font-size="9.5" fill="#475569">• Live Rainfall Deficit Slider (-35% to +25%)</text>
+      <text x="14" y="62" font-size="9.5" fill="#475569">• APMC Market Shock Sensitivity</text>
+      <rect x="14" y="74" width="170" height="20" rx="4" fill="#ffedd5"/>
+      <text x="99" y="88" text-anchor="middle" font-size="9.5" font-weight="800" fill="#c2410c">🔄 Dynamic Live Recalculation</text>
+    </g>
+
+    <!-- Finalize Button -->
+    <g transform="translate(14, 252)">
+      <rect width="302" height="68" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="14" y="28" font-size="12" font-weight="800" fill="#047857">✅ Finalize &amp; Lock Crop Strategy</text>
+      <text x="14" y="50" font-size="10" font-weight="600" fill="#059669">1-Tap Confirmed Crop Choice deploys active plan</text>
+    </g>
+  </g>
+
+  <!-- Arrow Q3 to Q4 (Vertical Drop) -->
+  <line x1="539" y1="406" x2="539" y2="422" stroke="#ea580c" stroke-width="3" marker-end="url(#arrOrange)"/>
+
+  <!-- ==================== QUADRANT 4: BOTTOM-RIGHT (Active Advisory & Distribution) ==================== -->
+  <g transform="translate(374, 424)" filter="url(#cardShadow)">
+    <rect width="330" height="336" rx="12" fill="#fff7ed" stroke="#fdba74" stroke-width="1.8"/>
+    <!-- Stage Header -->
+    <rect width="330" height="34" rx="12" fill="#ffedd5"/>
+    <rect y="22" width="330" height="12" fill="#ffedd5"/>
+    <text x="16" y="22" font-size="12" font-weight="800" fill="#9a3412">4. "MERI FASAL" EXECUTION HUB</text>
+
+    <!-- Delivery 1: Milestones Calendar -->
+    <g transform="translate(14, 46)">
+      <rect width="302" height="126" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="1.5"/>
+      <text x="14" y="26" font-size="12" font-weight="800" fill="#9a3412">📅 Milestones Action Calendar</text>
+      <text x="14" y="50" font-size="10" font-weight="600" fill="#0f172a">• Crop-specific Day 0–120 sowing timeline</text>
+      <text x="14" y="70" font-size="10" font-weight="600" fill="#0f172a">• Stage-wise NPK fertilizer &amp; irrigation dates</text>
+      <text x="14" y="90" font-size="10" font-weight="600" fill="#0f172a">• Pest alerts &amp; voice guidance updates</text>
+      <text x="14" y="110" font-size="9.5" font-weight="700" fill="#059669">✓ Synced to local agro-climatic zone</text>
+    </g>
+
+    <!-- Delivery 2: WhatsApp PDF Export -->
+    <g transform="translate(14, 184)">
+      <rect width="302" height="136" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="1.5"/>
+      <text x="14" y="26" font-size="12" font-weight="800" fill="#9a3412">📄 1-Click WhatsApp &amp; PDF Slip</text>
+      <text x="14" y="50" font-size="10" font-weight="600" fill="#0f172a">• Official printable vector advisory slip</text>
+      <text x="14" y="70" font-size="10" font-weight="600" fill="#0f172a">• 1-Tap instant share with family &amp; KVK officers</text>
+      <text x="14" y="90" font-size="10" font-weight="600" fill="#0f172a">• Complete offline PWA field access</text>
+      <rect x="14" y="102" width="220" height="22" rx="4" fill="#f0fdf4" stroke="#86efac"/>
+      <text x="124" y="117" text-anchor="middle" font-size="9.5" font-weight="800" fill="#15803d">⚡ Zero-Network Field Ready</text>
+    </g>
+  </g>
+</svg>

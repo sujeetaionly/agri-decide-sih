@@ -54,6 +54,11 @@ export interface RecommendPayload {
   water_capacity_level?: string;
   working_capital_inr?: number;
   previous_season_crop?: string;
+  equipments?: string[];
+  owns_tractor?: boolean;
+  owns_sprayer?: boolean;
+  owns_pump?: boolean;
+  owns_harvester?: boolean;
   planned_sowing_date?: string;
   candidate_crops?: string[];
   intended_crops?: string[];

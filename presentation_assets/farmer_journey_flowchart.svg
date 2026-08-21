@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 780" width="100%" height="100%" style="background: #ffffff; border-radius: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Drop Shadow -->
+    <filter id="nodeShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    
+    <!-- Arrow Markers -->
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrPurple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrOrange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ea580c"/>
+    </marker>
+    <marker id="arrGray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- ==================== HEADER ==================== -->
+  <rect x="16" y="12" width="688" height="38" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="360" y="36" text-anchor="middle" font-size="14.5" font-weight="800" fill="#1e3a8a" letter-spacing="0.5">🌾 FARMER ONBOARDING &amp; DECISION FLOWCHART</text>
+
+  <!-- ==================== STAGE 1: ONBOARDING & ACCESS (Green) ==================== -->
+  <rect x="16" y="58" width="688" height="120" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="30" y="80" font-size="11.5" font-weight="800" fill="#166534">STAGE 1: VERNACULAR ONBOARDING &amp; AUTH</text>
+  <rect x="580" y="68" width="112" height="18" rx="9" fill="#dcfce7"/>
+  <text x="636" y="81" text-anchor="middle" font-size="9.5" font-weight="700" fill="#15803d">Steps 01 – 05</text>
+
+  <!-- Nodes in Row 1 -->
+  <!-- 01 Start Oval -->
+  <g transform="translate(30, 95)" filter="url(#nodeShadow)">
+    <rect width="105" height="65" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <text x="52" y="24" text-anchor="middle" font-size="16">📱</text>
+    <text x="52" y="42" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0f172a">01. App Open</text>
+    <text x="52" y="55" text-anchor="middle" font-size="9" fill="#64748b">PWA Splash</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <line x1="135" y1="127" x2="160" y2="127" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+
+  <!-- 02 GPS -->
+  <g transform="translate(165, 95)" filter="url(#nodeShadow)">
+    <rect width="105" height="65" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <text x="52" y="24" text-anchor="middle" font-size="16">🛰️</text>
+    <text x="52" y="42" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0f172a">02. GPS Loc</text>
+    <text x="52" y="55" text-anchor="middle" font-size="9" fill="#059669">Auto District</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <line x1="270" y1="127" x2="295" y2="127" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+
+  <!-- 03 Language -->
+  <g transform="translate(300, 95)" filter="url(#nodeShadow)">
+    <rect width="105" height="65" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <text x="52" y="24" text-anchor="middle" font-size="16">🌐</text>
+    <text x="52" y="42" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0f172a">03. Language</text>
+    <text x="52" y="55" text-anchor="middle" font-size="9" fill="#64748b">Auto / Voice</text>
+  </g>
+
+  <!-- Arrow 3 -> 4 -->
+  <line x1="405" y1="127" x2="430" y2="127" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+
+  <!-- 04 Audio Guide -->
+  <g transform="translate(435, 95)" filter="url(#nodeShadow)">
+    <rect width="115" height="65" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <text x="57" y="24" text-anchor="middle" font-size="16">🎙️</text>
+    <text x="57" y="42" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0f172a">04. Audio Guide</text>
+    <text x="57" y="55" text-anchor="middle" font-size="9" fill="#059669">Speaker Demo</text>
+  </g>
+
+  <!-- Arrow 4 -> 5 -->
+  <line x1="550" y1="127" x2="575" y2="127" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+
+  <!-- 05 OTP Login -->
+  <g transform="translate(580, 95)" filter="url(#nodeShadow)">
+    <rect width="110" height="65" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <text x="55" y="24" text-anchor="middle" font-size="16">🔐</text>
+    <text x="55" y="42" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0f172a">05. OTP Login</text>
+    <text x="55" y="55" text-anchor="middle" font-size="9" fill="#64748b">Phone Auth</text>
+  </g>
+
+  <!-- ==================== FLOW CONNECTOR 1 ==================== -->
+  <path d="M 635 160 L 635 190 C 635 200, 360 200, 360 215" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <rect x="220" y="186" width="280" height="20" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="360" y="200" text-anchor="middle" font-size="9.5" font-weight="800" fill="#1d4ed8">▼ Home Screen ➔ Click "फसल विश्लेषण शुरू करें"</text>
+
+  <!-- ==================== STAGE 2: 7-CARD AGRONOMIC WIZARD (Blue) ==================== -->
+  <rect x="16" y="222" width="688" height="150" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="30" y="242" font-size="11.5" font-weight="800" fill="#1e40af">STAGE 2: THE 7-CARD AGRONOMIC WIZARD</text>
+  <rect x="540" y="230" width="152" height="18" rx="9" fill="#dbeafe"/>
+  <text x="616" y="243" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1d4ed8">🎙️ Voice &amp; STT Assisted</text>
+
+  <!-- Wizard Inputs Grid -->
+  <!-- Q1 -->
+  <g transform="translate(30, 255)" filter="url(#nodeShadow)">
+    <rect width="155" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">📐 Q1. Farm Size</text>
+    <text x="12" y="38" font-size="9" fill="#64748b">Acreage / Bigha</text>
+  </g>
+
+  <!-- Q2 -->
+  <g transform="translate(195, 255)" filter="url(#nodeShadow)">
+    <rect width="160" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">🌱 Q2. Soil Type</text>
+    <text x="12" y="38" font-size="9" fill="#2563eb">SoilGrids GIS + 5 Cards</text>
+  </g>
+
+  <!-- Q3 -->
+  <g transform="translate(365, 255)" filter="url(#nodeShadow)">
+    <rect width="155" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">💧 Q3. Water Source</text>
+    <text x="12" y="38" font-size="9" fill="#64748b">Canal / Bore / Rainfed</text>
+  </g>
+
+  <!-- Q4 -->
+  <g transform="translate(530, 255)" filter="url(#nodeShadow)">
+    <rect width="160" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">🔄 Q4. Prev Crop</text>
+    <text x="12" y="38" font-size="9" fill="#059669">+15% Legume Bonus</text>
+  </g>
+
+  <!-- Q5 -->
+  <g transform="translate(30, 310)" filter="url(#nodeShadow)">
+    <rect width="210" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">📅 Q5. Sowing Date</text>
+    <text x="12" y="38" font-size="9" fill="#64748b">Agro-Climatic Window Check</text>
+  </g>
+
+  <!-- Q6 -->
+  <g transform="translate(250, 310)" filter="url(#nodeShadow)">
+    <rect width="210" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">🚜 Q6. Owned Machinery</text>
+    <text x="12" y="38" font-size="9" fill="#2563eb">Custom Cost Deductions</text>
+  </g>
+
+  <!-- Q7 -->
+  <g transform="translate(470, 310)" filter="url(#nodeShadow)">
+    <rect width="220" height="46" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="12" y="22" font-size="10.5" font-weight="800" fill="#1e3a8a">💭 Q7. Thought Crop</text>
+    <text x="12" y="38" font-size="9" fill="#db2777">Farmer Baseline for 🆚</text>
+  </g>
+
+  <!-- ==================== FLOW CONNECTOR 2 ==================== -->
+  <line x1="360" y1="372" x2="360" y2="402" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#arrPurple)"/>
+  <rect x="170" y="378" width="380" height="20" rx="10" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="360" y="392" text-anchor="middle" font-size="9.5" font-weight="800" fill="#6d28d9">▼ XGBoost ML Yield Regressor &amp; CACP A₂+FL Profit Optimization</text>
+
+  <!-- ==================== STAGE 3: AI EVALUATION & WHAT-IF (Purple) ==================== -->
+  <rect x="16" y="410" width="688" height="150" rx="10" fill="#fdf4ff" stroke="#f0abfc" stroke-width="1.5"/>
+  <text x="30" y="432" font-size="11.5" font-weight="800" fill="#86198f">STAGE 3: AI EVALUATION &amp; WHAT-IF SIMULATION</text>
+  <rect x="560" y="420" width="132" height="18" rx="9" fill="#fae8ff"/>
+  <text x="626" y="433" text-anchor="middle" font-size="9.5" font-weight="700" fill="#a21caf">Steps 09 – 11</text>
+
+  <!-- Step 09 Comparison Diamond/Card -->
+  <g transform="translate(30, 448)" filter="url(#nodeShadow)">
+    <rect width="200" height="92" rx="8" fill="#ffffff" stroke="#c026d3" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="5" rx="2.5" fill="#c026d3"/>
+    <text x="15" y="24" font-size="11" font-weight="800" fill="#86198f">📊 09. Crop Comparison</text>
+    <text x="15" y="44" font-size="9.5" fill="#475569">Top 3 AI Recommended Crops</text>
+    <text x="15" y="60" font-size="9.5" fill="#475569">vs. Farmer Thought Choice</text>
+    <rect x="15" y="68" width="125" height="16" rx="4" fill="#dcfce7"/>
+    <text x="77" y="80" text-anchor="middle" font-size="9" font-weight="800" fill="#15803d">+₹/Acre Profit Delta</text>
+  </g>
+
+  <!-- Arrow 09 -> 10 -->
+  <line x1="230" y1="494" x2="260" y2="494" stroke="#c026d3" stroke-width="2.5" marker-end="url(#arrPurple)"/>
+
+  <!-- Step 10 What-If Sliders -->
+  <g transform="translate(265, 448)" filter="url(#nodeShadow)">
+    <rect width="200" height="92" rx="8" fill="#ffffff" stroke="#c026d3" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="5" rx="2.5" fill="#c026d3"/>
+    <text x="15" y="24" font-size="11" font-weight="800" fill="#86198f">🎛️ 10. What-If Sliders</text>
+    <text x="15" y="44" font-size="9.5" fill="#475569">Rainfall Deficit (-35% to +25%)</text>
+    <text x="15" y="60" font-size="9.5" fill="#475569">APMC Market Price Shocks</text>
+    <rect x="15" y="68" width="130" height="16" rx="4" fill="#ffedd5"/>
+    <text x="80" y="80" text-anchor="middle" font-size="9" font-weight="800" fill="#c2410c">Live Resilience Stress</text>
+  </g>
+
+  <!-- Arrow 10 -> 11 -->
+  <line x1="465" y1="494" x2="495" y2="494" stroke="#c026d3" stroke-width="2.5" marker-end="url(#arrPurple)"/>
+
+  <!-- Step 11 Finalize -->
+  <g transform="translate(500, 448)" filter="url(#nodeShadow)">
+    <rect width="190" height="92" rx="8" fill="#ffffff" stroke="#c026d3" stroke-width="2"/>
+    <rect x="0" y="0" width="190" height="5" rx="2.5" fill="#c026d3"/>
+    <text x="15" y="24" font-size="11" font-weight="800" fill="#86198f">✅ 11. Finalize Crop</text>
+    <text x="15" y="44" font-size="9.5" fill="#475569">1-Tap Confirmed Pick</text>
+    <text x="15" y="60" font-size="9.5" fill="#475569">Locks Optimal Economics</text>
+    <rect x="15" y="68" width="125" height="16" rx="4" fill="#eff6ff"/>
+    <text x="77" y="80" text-anchor="middle" font-size="9" font-weight="800" fill="#1d4ed8">Deploys Strategy</text>
+  </g>
+
+  <!-- ==================== FLOW CONNECTOR 3 ==================== -->
+  <line x1="595" y1="540" x2="595" y2="570" stroke="#ea580c" stroke-width="2.5" marker-end="url(#arrOrange)"/>
+  <rect x="420" y="548" width="260" height="20" rx="10" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="550" y="562" text-anchor="middle" font-size="9.5" font-weight="800" fill="#c2410c">▼ Deploys Active Management Plan</text>
+
+  <!-- ==================== STAGE 4: ACTION EXECUTION & SLIP (Orange) ==================== -->
+  <rect x="16" y="575" width="688" height="145" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="30" y="597" font-size="11.5" font-weight="800" fill="#9a3412">STAGE 4: "MERI FASAL" ACTIVE EXECUTION &amp; ADVISORY</text>
+  <rect x="560" y="585" width="132" height="18" rx="9" fill="#ffedd5"/>
+  <text x="626" y="598" text-anchor="middle" font-size="9.5" font-weight="700" fill="#c2410c">Steps 12 – 13</text>
+
+  <!-- Step 12 Milestones Calendar -->
+  <g transform="translate(30, 612)" filter="url(#nodeShadow)">
+    <rect width="320" height="92" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="2"/>
+    <rect x="0" y="0" width="320" height="5" rx="2.5" fill="#ea580c"/>
+    <text x="15" y="24" font-size="11.5" font-weight="800" fill="#9a3412">📅 12. "Meri Fasal" Milestones Calendar</text>
+    <text x="15" y="44" font-size="9.5" fill="#475569">• Crop-specific Day 0–120 timeline</text>
+    <text x="15" y="60" font-size="9.5" fill="#475569">• Stage-wise NPK fertilizer &amp; irrigation dates</text>
+    <text x="15" y="76" font-size="9.5" fill="#475569">• Voice advisory &amp; pest vulnerability alerts</text>
+  </g>
+
+  <!-- Arrow 12 -> 13 -->
+  <line x1="350" y1="658" x2="375" y2="658" stroke="#ea580c" stroke-width="2.5" marker-end="url(#arrOrange)"/>
+
+  <!-- Step 13 1-Click WhatsApp PDF -->
+  <g transform="translate(380, 612)" filter="url(#nodeShadow)">
+    <rect width="310" height="92" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="2"/>
+    <rect x="0" y="0" width="310" height="5" rx="2.5" fill="#ea580c"/>
+    <text x="15" y="24" font-size="11.5" font-weight="800" fill="#9a3412">📄 13. 1-Click WhatsApp &amp; PDF Slip</text>
+    <text x="15" y="44" font-size="9.5" fill="#475569">• Official printable vector advisory slip</text>
+    <text x="15" y="60" font-size="9.5" fill="#475569">• 1-Tap instant share with family &amp; KVK officers</text>
+    <text x="15" y="76" font-size="9.5" font-weight="700" fill="#ea580c">• 100% Offline PWA Field Access</text>
+  </g>
+
+  <!-- Bottom Badge Guarantee -->
+  <rect x="16" y="730" width="688" height="32" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1"/>
+  <text x="360" y="751" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">⚡ Total User Journey Time: &lt; 90 Seconds • 100% Vernacular Guided • Zero Internet Mode</text>
+</svg>

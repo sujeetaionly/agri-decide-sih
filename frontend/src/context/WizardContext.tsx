@@ -47,6 +47,7 @@ const DEFAULT_FARM_DATA: FarmQuestionnaireState = {
   soilType: null,
   waterCapacity: null,
   waterSource: null,
+  equipments: [],
   previousCrop: null,
   previousCrops: [],
   intendedCrops: [],
@@ -229,6 +230,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setIsLoadingRecommendation(true);
     const start = performance.now();
     try {
+      const eqList = farmData.equipments || [];
       const data = await apiService.recommendCrops({
         total_land_acres: farmData.landAcres || 2.5,
         soil_type: farmData.soilType || 'BLACK',
@@ -238,6 +240,11 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         previous_season_crop: farmData.previousCrops && farmData.previousCrops.length > 0
           ? farmData.previousCrops[0]
           : (farmData.previousCrop || 'WHEAT'),
+        equipments: eqList,
+        owns_tractor: eqList.includes('TRACTOR'),
+        owns_sprayer: eqList.includes('SPRAYER'),
+        owns_pump: eqList.includes('PUMP'),
+        owns_harvester: eqList.includes('HARVESTER'),
         planned_sowing_date: farmData.plannedSowingDate || '2026-06-25',
         intended_crops: farmData.intendedCrops || [],
         lang: 'hi',
@@ -266,9 +273,13 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (e) {
       console.warn('API error, using cached benchmark recommendations:', e);
       setIsLiveServerResponse(false);
+      // Fallback: Compute dynamic recommendation adjusting for soil, water & equipment
+      const fallbackTop = getDynamicCropDetail('SOYBEAN', farmData);
+      setTopRecommendation(fallbackTop);
+      setSelectedCropId('SOYBEAN');
     } finally {
       setIsLoadingRecommendation(false);
-      goToCard(7); // Move to recommendations view (Step 7)
+      goToCard(8); // Move to recommendations view (Step 8)
     }
   };
 
