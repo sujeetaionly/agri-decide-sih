@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+    <!-- Soft Background Hexagons -->
+    <polygon points="140,240 175,180 245,180 280,240 245,300 175,300" fill="#F1F5F9" opacity="0.9"/>
+    <polygon points="50,380 85,320 155,320 190,380 155,440 85,440" fill="#E2E8F0" opacity="0.8"/>
+    <polygon points="340,90 375,30 445,30 480,90 445,150 375,150" fill="#F1F5F9" opacity="0.9"/>
+    <polygon points="410,420 445,360 515,360 550,420 515,480 445,480" fill="#E2E8F0" opacity="0.8"/>
+    
+    <!-- Radial Rays -->
+    <line x1="300" y1="60" x2="300" y2="105" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+    <line x1="160" y1="140" x2="190" y2="170" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+    <line x1="440" y1="140" x2="410" y2="170" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+    <line x1="100" y1="280" x2="145" y2="280" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+    <line x1="500" y1="280" x2="455" y2="280" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+    <line x1="160" y1="420" x2="190" y2="390" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+    <line x1="440" y1="420" x2="410" y2="390" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Main Brain Bulb -->
+    <g transform="translate(155, 95) scale(3.1)">
+        <!-- Left Brain: Orange Circuit -->
+        <path d="M 45 15 C 30 15 20 25 20 40 C 20 50 25 58 32 65 C 38 71 42 76 43 82 L 47 82 L 47 15 Z" fill="#F37023"/>
+        <circle cx="30" cy="30" r="3.5" fill="#FFFFFF"/>
+        <circle cx="26" cy="45" r="3" fill="#FFFFFF"/>
+        <circle cx="36" cy="55" r="3" fill="#FFFFFF"/>
+        <path d="M 30 30 L 30 42 L 26 45 M 30 42 L 36 55 L 43 55" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+        <circle cx="38" cy="24" r="2.5" fill="#FFFFFF"/>
+        <path d="M 38 24 L 45 24" stroke="#FFFFFF" stroke-width="1.8" fill="none"/>
+        
+        <!-- Right Brain: Green Matrix -->
+        <path d="M 49 15 L 49 82 L 53 82 C 54 76 58 71 64 65 C 71 58 76 50 76 40 C 76 25 66 15 51 15 Z" fill="#009E4D"/>
+        <!-- Matrix Text centered in right brain -->
+        <text x="51" y="27" font-family="'Courier New', monospace" font-weight="900" font-size="8.5" fill="#FFFFFF">101</text>
+        <text x="51" y="38" font-family="'Courier New', monospace" font-weight="900" font-size="8.5" fill="#FFFFFF">01010</text>
+        <text x="51" y="49" font-family="'Courier New', monospace" font-weight="900" font-size="8.5" fill="#FFFFFF">101010</text>
+        <text x="51" y="60" font-family="'Courier New', monospace" font-weight="900" font-size="8.5" fill="#FFFFFF">010101</text>
+        <text x="51" y="71" font-family="'Courier New', monospace" font-weight="900" font-size="8.5" fill="#FFFFFF">10101</text>
+        <text x="51" y="80" font-family="'Courier New', monospace" font-weight="900" font-size="8" fill="#FFFFFF">010</text>
+        
+        <!-- Bulb Base -->
+        <rect x="41" y="84" width="14" height="3.5" rx="1" fill="#475569"/>
+        <rect x="43" y="89" width="10" height="3" rx="1" fill="#475569"/>
+        <path d="M 45 93 L 51 93 L 48 96.5 Z" fill="#475569"/>
+        <text x="48" y="106" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="10.5" fill="#1E293B" text-anchor="middle">SIH</text>
+    </g>
+</svg>

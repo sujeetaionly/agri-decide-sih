@@ -62,9 +62,9 @@ Thumbs.db
 # Local Backup & Archives
 archive_24h_ago/
 
-# Presentations & PPTs
-presentation/
-presentation_assets/
-ppt/
-*.pptx
+# Android Build Output
+frontend/android/app/build/
+frontend/android/.gradle/
+frontend/android/build/
+.gradle/
 

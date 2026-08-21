@@ -22,17 +22,19 @@ async def capture_slides():
             await slide_locator.screenshot(path=str(screenshot_path))
             print(f"Captured slide {i} (Green Theme) -> {screenshot_path}")
             
-        # Capture dedicated green slide 2 and slide 3
+        # Capture dedicated green slides
         await page.locator("#slide-2").screenshot(path=str(output_dir / "slide_2_agritech_green.png"))
         await page.locator("#slide-3").screenshot(path=str(output_dir / "slide_3_agritech_green.png"))
-        print("Captured dedicated -> slide_2_agritech_green.png & slide_3_agritech_green.png")
+        await page.locator("#slide-4").screenshot(path=str(output_dir / "slide_4_agritech_green.png"))
+        print("Captured dedicated -> slide_2, 3, 4 agritech_green.png")
         
         # 2. Capture in Executive Blue Theme
         await page.goto(f"{html_path.as_uri()}?theme=blue", wait_until="networkidle")
         await page.wait_for_timeout(1000)
         await page.locator("#slide-2").screenshot(path=str(output_dir / "slide_2_executive_blue.png"))
         await page.locator("#slide-3").screenshot(path=str(output_dir / "slide_3_executive_blue.png"))
-        print("Captured dedicated -> slide_2_executive_blue.png & slide_3_executive_blue.png")
+        await page.locator("#slide-4").screenshot(path=str(output_dir / "slide_4_executive_blue.png"))
+        print("Captured dedicated -> slide_2, 3, 4 executive_blue.png")
             
         await browser.close()
         print("All slides and dual-theme variants captured successfully.")
