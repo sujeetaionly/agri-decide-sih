@@ -1689,8 +1689,7 @@
     <!-- SLIDE 4: FEASIBILITY AND VIABILITY -->
     <div class="slide-wrapper" id="slide-4">
         <div class="team-oval">
-            <span>Fasal Disha</span>
-            <span style="font-size: 15px; color: #475569;">(AGRI-DECIDE)</span>
+            <span>Almost AC</span>
         </div>
         <div class="slide-title-serif">FEASIBILITY AND VIABILITY</div>
         <!-- SIH Corner Logo (Inline SVG) -->
@@ -1723,93 +1722,113 @@
             </g>
         </svg>
 
-        <div class="content-area">
-            <div class="sub-header-blue" style="text-decoration: none;">
-                • Empirical Ground Truth Validation & Risk Mitigation
+        <div class="content-area" style="padding-top: 4px; height: calc(100% - 115px); display: flex; flex-direction: column;">
+            <div class="sub-header-blue" style="text-decoration: none; margin-bottom: 10px;">
+                • Analysis of the feasibility of the idea &nbsp;|&nbsp; • Potential challenges and risks &nbsp;|&nbsp; • Strategies for overcoming these challenges
             </div>
 
-            <!-- Top Visual: Ground Truth Validation Table -->
-            <div style="margin-bottom: 20px;">
-                <div style="font-size: 19px; font-weight: 800; color: #0f2744; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline;">
-                    <span>🎯 Model Predictions vs. Official Government Ground Truth</span>
-                    <span style="font-size: 14px; color: #64748b; font-weight: 600;">Verified against Ministry of Agriculture, CACP, Agmarknet and ICAR portals</span>
-                </div>
-
-                <table class="sih-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">What We Predict</th>
-                            <th style="width: 26%;">Official Government Source</th>
-                            <th style="width: 18%; text-align: center;">Official Govt Value</th>
-                            <th style="width: 20%; text-align: center;">Fasal Disha Output</th>
-                            <th style="width: 16%; text-align: center;">Ground-Truth Match</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>District Crop Yield</strong></td>
-                            <td>MoA&FW DES Census (Soybean, Wardha)</td>
-                            <td style="text-align: center;">8.50 qtl/acre</td>
-                            <td style="text-align: center;"><strong>8.85 qtl/acre</strong></td>
-                            <td class="adv-cell" style="text-align: center;">95.9% Match</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Cultivation Cost</strong></td>
-                            <td>CACP Kharif A₂+FL Cost Bulletin</td>
-                            <td style="text-align: center;">₹21,400 / acre</td>
-                            <td style="text-align: center;"><strong>₹18,200 / acre</strong></td>
-                            <td class="adv-cell" style="text-align: center;">100% CACP (−₹3.2k)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Wholesale Mandi Rate</strong></td>
-                            <td>Agmarknet Wardha APMC Modal Price</td>
-                            <td style="text-align: center;">₹4,920 / qtl</td>
-                            <td style="text-align: center;"><strong>₹4,850 / qtl</strong></td>
-                            <td class="adv-cell" style="text-align: center;">98.6% Match</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Sowing Delay Yield Loss</strong></td>
-                            <td>ICAR-CRIDA Sowing Window Trials</td>
-                            <td style="text-align: center;">−5% / week late</td>
-                            <td style="text-align: center;"><strong>−5.0% / week late</strong></td>
-                            <td class="adv-cell" style="text-align: center;">100% ICAR Align</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Soil Texture & pH</strong></td>
-                            <td>ISRIC SoilGrids 250m Spatial Grid</td>
-                            <td style="text-align: center;">38% Clay (Heavy Vertisol)</td>
-                            <td style="text-align: center;"><strong>Auto-detected</strong></td>
-                            <td class="adv-cell" style="text-align: center;">100% Geofenced</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Bottom: Risks and Mitigations (Paired Flow) -->
-            <div>
-                <div style="font-size: 19px; font-weight: 800; color: #0f2744; margin-bottom: 8px;">
-                    🛡️ Potential Real-World Challenges → Engineered Built-In Mitigations
-                </div>
-
-                <div class="risk-sol-grid">
-                    <div class="risk-sol-row">
-                        <div class="risk-box">🌧️ <strong>Extreme Weather Volatility:</strong> Sudden drought or late monsoon disrupts yield estimates</div>
-                        <div class="arrow-box">➔</div>
-                        <div class="sol-box">🎛️ <strong>"What-If" Sensitivity Sandbox:</strong> Lets farmers stress-test rainfall deficit (0% to −50%) & price drop before planting</div>
+            <!-- Main Grid: Left 50% vs Right 50% -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; flex: 1; align-items: stretch;">
+                
+                <!-- LEFT COLUMN: Analysis of Feasibility & Viability -->
+                <div style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+                    
+                    <!-- Card 1: Feasibility Analysis -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-left: 4.5px solid var(--theme-primary); border-radius: 8px; padding: 13px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 7px;">
+                        <div style="font-size: 16.5px; font-weight: 900; color: var(--theme-primary); display: flex; align-items: center; gap: 8px; letter-spacing: 0.3px;">
+                            <span>⚖️</span> 1. ANALYSIS OF FEASIBILITY :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; line-height: 1.44;">
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Technical Feasibility:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Production stack with FastAPI Python 3.11 ASGI backend, React 18 PWA frontend, XGBoost ML (R²=0.9907), &amp; MeitY Bhashini Voice AI.</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Operational Feasibility:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Zero lab test barrier; auto-derives soil texture &amp; pH from 250m GIS + 5-macro photo wizard cards in &lt;90 seconds.</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Economic Feasibility:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Ultra-low query overhead (&lt;₹0.02/query); offline SQLite edge fallback with zero proprietary licensing costs.</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Modular Micro-Services:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Independent engines for Recommendation Orchestration, CACP Economics, Sowing Window &amp; Geo-Agronomics.</span></div>
+                        </div>
                     </div>
 
-                    <div class="risk-sol-row">
-                        <div class="risk-box">📵 <strong>Rural Connectivity Gaps:</strong> Low/intermittent 2G/3G connectivity in remote farm plots</div>
-                        <div class="arrow-box">➔</div>
-                        <div class="sol-box">📄 <strong>Printable A4 Advisory Slip + Offline PWA:</strong> Device caching enables full offline view + one-tap physical paper printout</div>
+                    <!-- Card 2: Viability & Business Potential -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-left: 4.5px solid var(--theme-primary); border-radius: 8px; padding: 13px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column; justify-content: flex-start; gap: 7px;">
+                        <div style="font-size: 16.5px; font-weight: 900; color: var(--theme-primary); display: flex; align-items: center; gap: 8px; letter-spacing: 0.3px;">
+                            <span>💰</span> 2. VIABILITY &amp; BUSINESS POTENTIAL :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; line-height: 1.44;">
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Quantified Farmer Value:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Ranks crops by Net Profit (₹/Acre) with head-to-head delta (+₹10,370/acre verified in Wardha field validation).</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Massive Addressable Base:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">120M+ Indian smallholders (&lt;2 Ha), 10,000+ active FPOs, and 731 Krishi Vigyan Kendras (KVKs).</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ National DPI Scalability:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Free core public utility integrable with PM-Kisan, Kisan Call Centers (1551), and AgriStack registry.</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Long-Term Soil Equity:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Restores soil health via legume rotation rewards (+12%) and monoculture depletion penalties (-15%).</span></div>
+                        </div>
                     </div>
 
-                    <div class="risk-sol-row">
-                        <div class="risk-box">👨‍🌾 <strong>Low Digital Literacy:</strong> Complex text forms and numerical inputs alienate smallholders</div>
-                        <div class="arrow-box">➔</div>
-                        <div class="sol-box">🎤 <strong>BHASHINI Voice AI Narration:</strong> Multilingual voice TTS in local language delivers zero-reading audio guidance</div>
+                    <!-- Card 3: Primary Use Cases -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-left: 4.5px solid var(--theme-primary); border-radius: 8px; padding: 13px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); flex: 1.05; display: flex; flex-direction: column; justify-content: flex-start; gap: 7px;">
+                        <div style="font-size: 16.5px; font-weight: 900; color: var(--theme-primary); display: flex; align-items: center; gap: 8px; letter-spacing: 0.3px;">
+                            <span>👥</span> 3. PRIMARY TARGET USE CASES :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; line-height: 1.44;">
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ Small &amp; Marginal Farmers (&lt;2 Ha):</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Crop decision support with owned machinery deductions (-₹3,500/ac tractor offset).</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ FPOs &amp; Village Cooperatives:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Cluster crop planning for synchronized harvesting, bulk procurement &amp; mandi bargaining.</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ KVK Officers &amp; Kisan Mitras:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Verifiable, print-ready agronomic advisory slips for field-level farmer counseling.</span></div>
+                            <div><span style="font-size: 13.8px; font-weight: 800; color: #0f172a;">❖ State Agriculture Departments:</span> <span style="font-size: 13.2px; font-weight: 500; color: #334155;">Hyper-local crop pattern tracking, drought vulnerability, and sowing window monitoring.</span></div>
+                        </div>
                     </div>
+
                 </div>
+
+                <!-- RIGHT COLUMN: Challenges, Strategies, Supporting Facts -->
+                <div style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+
+                    <!-- Card 4: Potential Challenges vs Engineered Strategies -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-left: 4.5px solid #10b981; border-radius: 8px; padding: 13px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); flex: 1.45; display: flex; flex-direction: column; justify-content: flex-start; gap: 7px;">
+                        <div style="font-size: 16.5px; font-weight: 900; color: #047857; display: flex; align-items: center; gap: 8px; letter-spacing: 0.3px;">
+                            <span>🛡️</span> POTENTIAL CHALLENGES &amp; STRATEGIES TO OVERCOME :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px; line-height: 1.42;">
+                            <div>
+                                <div style="font-size: 13.8px; font-weight: 800; color: #b91c1c;">⚠️ Challenge 1: Extreme Weather Volatility &amp; Market Price Shocks</div>
+                                <div style="font-size: 13.2px; font-weight: 500; color: #065f46; margin-left: 14px; margin-top: 1px;">➔ <strong>Strategy:</strong> Interactive <em>What-If Sandbox</em> lets farmers stress-test rainfall deficit (0% to -50%) and price drops before sowing.</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13.8px; font-weight: 800; color: #b91c1c;">⚠️ Challenge 2: Rural 2G/3G Connectivity Gaps</div>
+                                <div style="font-size: 13.2px; font-weight: 500; color: #065f46; margin-left: 14px; margin-top: 1px;">➔ <strong>Strategy:</strong> <em>Offline-first PWA caching</em> + instant <em>jsPDF A4 Advisory Slip</em> for physical printouts and WhatsApp forwarding.</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13.8px; font-weight: 800; color: #b91c1c;">⚠️ Challenge 3: Low Digital Literacy &amp; Language Barriers</div>
+                                <div style="font-size: 13.2px; font-weight: 500; color: #065f46; margin-left: 14px; margin-top: 1px;">➔ <strong>Strategy:</strong> <em>MeitY BHASHINI Voice AI</em> delivers dialect-aware Indic voice narration (Hindi, Marathi, Gujarati, Rajasthani).</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13.8px; font-weight: 800; color: #b91c1c;">⚠️ Challenge 4: Traditional Habit Inertia &amp; Skepticism</div>
+                                <div style="font-size: 13.2px; font-weight: 500; color: #065f46; margin-left: 14px; margin-top: 1px;">➔ <strong>Strategy:</strong> <em>Head-to-Head Evidence Card</em> directly proves economic superiority over monoculture with explainable AI.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Supporting Facts for Feasibility & Viability (Star Callout Box) -->
+                    <div style="background: #f8fafc; border: 2px solid var(--theme-primary); border-radius: 8px; padding: 13px 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); flex: 1.55; display: flex; flex-direction: column; justify-content: flex-start; gap: 7px;">
+                        <div style="font-size: 15.5px; font-weight: 900; color: var(--theme-primary); text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.3px;">
+                            <span>★</span> SUPPORTING FACTS FOR FEASIBILITY &amp; VIABILITY <span>★</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 7px; line-height: 1.4;">
+                            <div style="display: flex; gap: 8px; align-items: flex-start;">
+                                <span style="color: var(--theme-primary); font-weight: 900; font-size: 14px;">➔</span>
+                                <div><span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">86.2% of Indian farmers are small/marginal (&lt;2 Ha)</span> <span style="font-size: 13px; font-weight: 500; color: #334155;">lacking chemical lab tests — zero-lab GIS profiling removes India's #1 crop app adoption barrier.</span></div>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: flex-start;">
+                                <span style="color: var(--theme-primary); font-weight: 900; font-size: 14px;">➔</span>
+                                <div><span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">XGBoost ML Regressor achieves R² = 0.9907</span> <span style="font-size: 13px; font-weight: 500; color: #334155;">yield accuracy (RMSE 0.397 qtl/acre) trained on 10-year ICRISAT district panel &amp; 14,786 Agmarknet APMC records.</span></div>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: flex-start;">
+                                <span style="color: var(--theme-primary); font-weight: 900; font-size: 14px;">➔</span>
+                                <div><span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">Wardha (Maharashtra) validation proves +72.3% profit gain (+₹10,370/acre)</span> <span style="font-size: 13px; font-weight: 500; color: #334155;">by switching from monoculture Cotton (₹14,352/ac) to optimal Soybean rotation (₹24,722/ac).</span></div>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: flex-start;">
+                                <span style="color: var(--theme-primary); font-weight: 900; font-size: 14px;">➔</span>
+                                <div><span style="font-size: 13.5px; font-weight: 800; color: #0f172a;">100% authentic government data fidelity:</span> <span style="font-size: 13px; font-weight: 500; color: #334155;">CACP itemized A₂+FL cost bulletins, ICAR-CRIDA sowing window trials, and ISRIC SoilGrids 250m GIS properties.</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
 
