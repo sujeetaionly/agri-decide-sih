@@ -114,7 +114,7 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
   const handleProceedToWhatIf = () => {
     triggerHaptic('medium');
     setSelectedCropId(activeCropId);
-    goToCard(8); // Proceed to Weather & Risk Simulator
+    goToCard(9); // Proceed to Weather & Risk Simulator
   };
 
   const handleDirectChooseCrop = () => {

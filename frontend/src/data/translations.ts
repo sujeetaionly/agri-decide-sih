@@ -697,7 +697,100 @@ export const translations: Record<string, TranslationStrings> = {
     raj: 'सिंचाई रो कोई साधन कोनी, खेती पूरी तरह बारिश माथे निर्भर।',
   },
 
-  // Wizard Card 4: Previous Crop
+  // Wizard Card 4: Farming Equipment
+  cardEquipmentTitle: {
+    en: 'What farming equipment & machinery do you own?',
+    hi: 'आपके पास कौन-से कृषि उपकरण व यंत्र हैं?',
+    mr: 'तुमच्याकडे कोणती शेती अवजारे व यंत्रे आहेत?',
+    gu: 'તમારી પાસે કયા ખેતીના ઓજારો અને સાધનો છે?',
+    raj: 'थांके कनै कौन-सा खेती का औजार व यंत्र है?',
+  },
+  cardEquipmentCategory: {
+    en: 'Farm Machinery & Equipment',
+    hi: 'कृषि यंत्र व उपकरण',
+    mr: 'शेती अवजारे व यंत्रे',
+    gu: 'ખેતીના ઓજારો અને યંત્રો',
+    raj: 'खेती रा औजार व यंत्र',
+  },
+  cardEquipmentSub: {
+    en: 'Owning equipment eliminates rental overheads and saves operational cost per acre.',
+    hi: 'खुद के यंत्र होने पर जुताई, छिड़काव और सिंचाई के किराए में भारी बचत होती है।',
+    mr: 'स्वतःची यंत्रे असल्यास मशागत, फवारणी व सिंचनाच्या खर्चात मोठी बचत होते.',
+    gu: 'પોતાના સાધનો હોવાથી ખેડ, છંટકાવ અને સિંચાઈના ખર્ચમાં મોટો ફાયદો થાય છે.',
+    raj: 'खुद रा यंत्र होबा सूं जुताई, छिड़काव अर सिंचाई रे भाड़े में मोटी बचत होवे है।',
+  },
+  equipmentTractor: {
+    en: 'Tractor & Tillage Tools',
+    hi: 'ट्रैक्टर एवं जुताई यंत्र',
+    mr: 'ट्रॅक्टर व मशागत यंत्रे',
+    gu: 'ટ્રેક્ટર અને ખેડના સાધનો',
+    raj: 'ट्रैक्टर अर जुताई रा यंत्र',
+  },
+  equipmentTractorDesc: {
+    en: 'Tractor, rotavator or cultivator. Saves plowing & land prep rental.',
+    hi: 'ट्रैक्टर, रोटावेटर या कल्टीवेटर उपलब्ध। जुताई व तैयारी के किराए में बचत।',
+    mr: 'ट्रॅक्टर, रोटाव्हेटर किंवा कल्टिव्हेटर. मशागतीचा खर्च वाचतो.',
+    gu: 'ટ્રેક્ટર, રોટાવેટર કે કલ્ટીવેટર. ખેડ ભાડામાં બચત થાય છે.',
+    raj: 'ट्रैक्टर, रोटावेटर या कल्टीवेटर। जुताई भाड़े में बचत।',
+  },
+  equipmentPump: {
+    en: 'Water Pump / Motor (Engine / Submersible)',
+    hi: 'पानी का पंप / मोटर (इंजन / समर्सिबल)',
+    mr: 'पाण्याचा पंप / मोटर (इंजिन / सबमर्सिबल)',
+    gu: 'પાણીનો પંપ / મોટર (એન્જિન / સબમર્સિબલ)',
+    raj: 'पाणी रो पंप / मोटर (इंजन / बोरवेल मोटर)',
+  },
+  equipmentPumpDesc: {
+    en: 'Diesel pump, electric motor or borewell pump for direct field irrigation.',
+    hi: 'डीजल पंपसेट, बिजली मोटर या बोरवेल पंप। सिंचाई पर पूरा नियंत्रण व कम खर्च।',
+    mr: 'डिझेल पंप, वीज मोटर किंवा बोअरवेल पंप. सिंचनाचा खर्च कमी.',
+    gu: 'ડીઝલ પંપસેટ, ઇલેક્ટ્રિક મોટર કે બોરવેલ પંપ. પિયતનો ખર્ચ ઘટે છે.',
+    raj: 'डीजल पंपसेट, बिजली मोटर या बोरवेल पंप। पाणी देणे रो पूरो साधन।',
+  },
+  equipmentSprayer: {
+    en: 'Sprayer Pump (Battery / Power Sprayer)',
+    hi: 'दवा छिड़काव पंप (स्प्रेयर)',
+    mr: 'औषध फवारणी पंप (स्प्रेअर)',
+    gu: 'દવા છંટકાવ પંપ (સ્પ્રેયર)',
+    raj: 'दवाई छिड़काव पंप (स्प्रेयर)',
+  },
+  equipmentSprayerDesc: {
+    en: 'Battery or engine power sprayer for pest & foliar nutrient management.',
+    hi: 'बैटरी चलित या पावर स्प्रेयर। कीटनाशक व टॉनिक छिड़काव आसान व सस्ता।',
+    mr: 'बॅटरी किंवा पॉवर स्प्रेअर. कीटकनाशक फवारणीचा खर्च वाचतो.',
+    gu: 'બેટરી કે પાવર સ્પ્રેયર. કીટનાશક છંટકાવ સરળ અને સસ્તો.',
+    raj: 'बैटरी या पावर स्प्रेयर। कीटनाशक छिड़काव आसान अर बचत।',
+  },
+  equipmentHarvester: {
+    en: 'Thresher / Harvesting Machine',
+    hi: 'थ्रेशर / कटाई मशीन',
+    mr: 'थ्रेशर / कापणी यंत्र',
+    gu: 'થ્રેશર / કાપણી મશીન',
+    raj: 'थ्रेशर / कटाई री मशीन',
+  },
+  equipmentHarvesterDesc: {
+    en: 'Thresher, reaper or harvesting machine. Saves harvest labor & time.',
+    hi: 'फसल कटाई या दाना निकालने का थ्रेशर उपलब्ध। समय व मजदूरी की बचत।',
+    mr: 'कापणी किंवा मळणी यंत्र. वेळ आणि मजुरीची बचत.',
+    gu: 'પાક કાપણી કે દાણા છૂટા પાડવાનું થ્રેશર. મજૂરી ખર્ચમાં રાહત.',
+    raj: 'फसल कटाई या दाणा निकाळबा रो थ्रेशर। टेम अर मजदूरी री बचत।',
+  },
+  equipmentManual: {
+    en: 'Traditional Tools / Custom Hiring (Rent)',
+    hi: 'पारंपरिक औजार / किराए पर लेते हैं',
+    mr: 'पारंपरिक अवजारे / भाड्याने घेतात',
+    gu: 'પરંપરાગત ઓજારો / ભાડે લઈએ છીએ',
+    raj: 'पारंपरिक औजार / भाड़े लेवां हां',
+  },
+  equipmentManualDesc: {
+    en: 'Rely on hand tools; hire machinery on rent as needed.',
+    hi: 'केवल हाथ के औजार। आवश्यकतानुसार मशीनरी किराए पर लेते हैं।',
+    mr: 'केवळ हाताची अवजारे. गरजेनुसार यंत्रे भाड्याने घेतो.',
+    gu: 'માત્ર હાથના ઓજારો. જરૂરિયાત મુજબ મશીન ભાડે રાખીએ છીએ.',
+    raj: 'केवल हाथ रा औजार। जरूरत पड़बा पर भाड़े लेवां हां।',
+  },
+
+  // Wizard Card 5: Previous Crop
   card4Title: {
     en: 'Which crop was planted previously in your field?',
     hi: 'पिछली बार खेत में कौन सी फसल लगाई थी?',

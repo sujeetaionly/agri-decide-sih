@@ -213,6 +213,9 @@ def recommend_crops_engine(
     previous_season_crop: Optional[str] = "WHEAT",
     owns_tractor: bool = False,
     owns_sprayer: bool = False,
+    owns_pump: bool = False,
+    owns_harvester: bool = False,
+    equipments: Optional[List[str]] = None,
     planned_sowing_date: str = "2027-06-25",
     candidate_crops: Optional[List[str]] = None,
     intended_crops: Optional[List[str]] = None,
@@ -283,7 +286,14 @@ def recommend_crops_engine(
             }
 
         base_cacp = cost_breakdown_dict["operational_cost_a2_inr_per_acre"]
-        adj_cost = calculate_adjusted_cost(base_cacp, owns_tractor, owns_sprayer)
+        adj_cost = calculate_adjusted_cost(
+            base_cacp,
+            owns_tractor=owns_tractor,
+            owns_sprayer=owns_sprayer,
+            owns_pump=owns_pump,
+            owns_harvester=owns_harvester,
+            equipments=equipments
+        )
 
         # 5. ML Yield Prediction
         yield_pred = predict_crop_yield(

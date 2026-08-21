@@ -25,8 +25,11 @@ class RecommendCropRequest(BaseModel):
     water_capacity_level: Optional[str] = "MEDIUM"
     working_capital_inr: Optional[float] = 80000.0
     previous_season_crop: Optional[str] = "WHEAT"
+    equipments: Optional[List[str]] = None
     owns_tractor: Optional[bool] = False
     owns_sprayer: Optional[bool] = False
+    owns_pump: Optional[bool] = False
+    owns_harvester: Optional[bool] = False
     planned_sowing_date: str = "2027-06-25"
     candidate_crops: Optional[List[str]] = None
     intended_crops: Optional[List[str]] = None

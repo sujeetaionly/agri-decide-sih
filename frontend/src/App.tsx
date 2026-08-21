@@ -50,7 +50,7 @@ const AppContent: React.FC = () => {
       intendedCrops: (historyItem.compared_crops || []).map((c: any) => c.crop_id),
     });
     setSelectedCropId(historyItem.winner_crop?.crop_id || 'SOYBEAN');
-    goToCard(7);
+    goToCard(8);
     window.scrollTo({ top: 0, behavior: 'instant' });
     navigateTo('wizard');
   };

@@ -15,6 +15,30 @@
             margin: 0;
         }
 
+        :root, body.theme-green {
+            --theme-primary: #14532d;
+            --theme-accent: #15803d;
+            --theme-border: #d8e0d4;
+            --theme-surface-subtle: #f4f7f2;
+            --theme-surface-card: #fbfdfa;
+            --theme-pill-bg: #e2e8dc;
+            --theme-text-dark: #181c18;
+            --theme-text-body: #374151;
+            --theme-text-muted: #4b5563;
+        }
+
+        body.theme-blue {
+            --theme-primary: #1e3a8a;
+            --theme-accent: #2563eb;
+            --theme-border: #cbd5e1;
+            --theme-surface-subtle: #f8fafc;
+            --theme-surface-card: #f8fafc;
+            --theme-pill-bg: #e2e8f0;
+            --theme-text-dark: #0f172a;
+            --theme-text-body: #334155;
+            --theme-text-muted: #475569;
+        }
+
         html, body {
             width: 100%;
             height: 100%;
@@ -161,7 +185,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-family: 'Newsreader', 'Times New Roman', serif;
+            font-family: 'Times New Roman', Times, serif;
             font-size: 19px;
             font-weight: 700;
             line-height: 1.1;
@@ -175,19 +199,19 @@
             top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            font-family: 'Newsreader', 'Times New Roman', Georgia, serif;
-            font-size: 50px;
-            font-weight: 800;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 48px;
+            font-weight: 700;
             color: #000000;
-            letter-spacing: 2px;
+            letter-spacing: 0.5px;
             text-align: center;
             z-index: 20;
         }
 
         .sub-header-blue {
-            font-family: 'Newsreader', 'Times New Roman', Georgia, serif;
+            font-family: 'Times New Roman', Times, serif;
             font-size: 34px;
-            font-weight: 800;
+            font-weight: 700;
             color: #0066a1;
             text-decoration: underline;
             margin-bottom: 24px;
@@ -286,6 +310,428 @@
             font-size: 46px;
             font-weight: normal;
             color: #000000;
+        }
+
+        /* Slide 2 Master Proposed Solution Layout (58% Content / 40% Architecture) */
+        #slide-2 {
+            background: #ffffff url('presentation_assets/slide_2_template_clean.png') no-repeat center / 100% 100%;
+        }
+        .slide-2-team-oval-text {
+            position: absolute;
+            top: 40px;
+            left: 52px;
+            width: 197px;
+            height: 127px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #000000;
+            z-index: 30;
+            background: transparent;
+        }
+        .slide-2-idea-title-box {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .slide-2-idea-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 1.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .slide-2-idea-tagline {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--theme-primary);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .slide-2-content {
+            position: absolute;
+            top: 195px;
+            left: 48px;
+            width: 1824px;
+            height: 770px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        .slide-2-sub-header {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f497d;
+            text-decoration: underline;
+            margin-bottom: 12px;
+            line-height: 1.1;
+        }
+        .slide-2-grid {
+            display: grid;
+            grid-template-columns: 58% 40%;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+            box-sizing: border-box;
+        }
+        .slide-2-left-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 8px;
+            padding-right: 4px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .slide-2-feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3.5px;
+        }
+        .slide-2-pair-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-family: Arial, Helvetica, sans-serif;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #94a3b8;
+            background: transparent;
+        }
+        .slide-2-pair-box:last-child {
+            border-bottom: none;
+            padding-bottom: 0px;
+        }
+        .slide-2-prob-row {
+            display: flex;
+            align-items: baseline;
+            gap: 7px;
+            line-height: 1.25;
+        }
+        .slide-2-sol-row {
+            display: flex;
+            align-items: baseline;
+            gap: 7px;
+            line-height: 1.25;
+        }
+        .slide-2-prob-badge {
+            font-size: 12px;
+            font-weight: 800;
+            color: #991b1b;
+            background: #fee2e2;
+            padding: 1px 6px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            letter-spacing: 0.3px;
+        }
+        .slide-2-sol-badge {
+            font-size: 12px;
+            font-weight: 800;
+            color: #166534;
+            background: #dcfce7;
+            padding: 1px 6px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            letter-spacing: 0.3px;
+        }
+        .slide-2-prob-text {
+            font-size: 14.5px;
+            color: #334155;
+        }
+        .slide-2-sol-text {
+            font-size: 15px;
+            color: #0f172a;
+        }
+        .slide-2-other-box {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 2px;
+        }
+        .slide-2-other-title {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+        .slide-2-tags-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .slide-2-tag-card {
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            border-radius: 5px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #1e3a8a;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        
+        /* Architecture Box on Right (40% width) */
+        .slide-2-right-col {
+            background: #ffffff;
+            border: 2px solid #94a3b8;
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Slide 3 Technical Approach Master Layout (Official Template) */
+        #slide-3 {
+            background: #ffffff url('presentation_assets/slide_3_template_clean.png') no-repeat center / 100% 100%;
+        }
+        .slide-3-team-oval-text {
+            position: absolute;
+            top: 40px;
+            left: 52px;
+            width: 197px;
+            height: 127px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #000000;
+            z-index: 30;
+            background: transparent;
+        }
+        .slide-3-title-box {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .slide-3-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 1.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .slide-3-subtitle {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--theme-primary);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .slide-3-content {
+            position: absolute;
+            top: 195px;
+            left: 48px;
+            width: 1824px;
+            height: 770px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 0 20px;
+        }
+        .tech-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #ffffff;
+            color: var(--theme-text-dark);
+            border: 1px solid var(--theme-border);
+            padding: 3.5px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .tech-badge img {
+            width: 13px;
+            height: 13px;
+            object-fit: contain;
+        }
+        /* Clean Tech Pill Badge */
+        .tech-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--theme-surface-subtle);
+            border: 1px solid var(--theme-border);
+            color: var(--theme-text-dark);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            white-space: nowrap;
+            line-height: 1.2;
+            vertical-align: middle;
+            margin: 1px 2px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .tech-pill img {
+            width: 14px !important;
+            height: 14px !important;
+            max-width: 14px !important;
+            max-height: 14px !important;
+            object-fit: contain !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        .tech-tier-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 12px;
+            line-height: 1.45;
+            color: var(--theme-text-body);
+        }
+        .tech-inline-icon {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+            margin-right: 2px;
+            margin-left: 2px;
+        }
+        .tech-inline-icon img {
+            width: 13px;
+            height: 13px;
+            vertical-align: middle;
+        }
+        .arch-box-title {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 17px;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-align: center;
+            margin-bottom: 2px;
+            padding-bottom: 3px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .arch-diagram {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            padding: 2px 0;
+        }
+        .arch-tier {
+            border-radius: 7px;
+            padding: 9px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .tier-client {
+            background: #f0fdf4;
+            border: 1.5px solid #86efac;
+        }
+        .tier-gov {
+            background: #fffbeb;
+            border: 1.5px solid #fde68a;
+        }
+        .tier-engine {
+            background: #eff6ff;
+            border: 1.5px solid #93c5fd;
+        }
+        .tier-output {
+            background: #fdf2f8;
+            border: 1.5px solid #fbcfe8;
+        }
+        .arch-tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            color: #334155;
+            letter-spacing: 0.5px;
+        }
+        .arch-cards-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .arch-card {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 8px 6px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .arch-card-title {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            color: #0f172a;
+            white-space: nowrap;
+        }
+        .arch-card-desc {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 1.5px;
+            line-height: 1.2;
+        }
+        .arch-connector-pill {
+            background: #eff6ff;
+            border: 1.5px solid #93c5fd;
+            border-radius: 20px;
+            padding: 3px 14px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            font-weight: 800;
+            color: #1d4ed8;
+            align-self: center;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
 
         /* Content List Styles */
@@ -569,275 +1015,674 @@
 
     <!-- SLIDE 2: PROPOSED SOLUTION -->
     <div class="slide-wrapper" id="slide-2">
-        <div class="team-oval">
-            <span>Fasal Disha</span>
-            <span style="font-size: 15px; color: #475569;">(AGRI-DECIDE)</span>
-        </div>
-        <div class="slide-title-serif">IDEA TITLE</div>
-        <!-- SIH Corner Logo (Inline SVG) -->
-        <svg class="sih-logo-top" viewBox="0 0 340 100" width="340" height="100" style="position: absolute; top: 20px; right: 40px; height: 80px; z-index: 30;">
-            <g transform="translate(12, 6) scale(0.85)">
-                <path d="M 45 15 C 30 15 20 25 20 40 C 20 50 25 58 32 65 C 38 71 42 76 43 82 L 47 82 L 47 15 Z" fill="#F37023"/>
-                <circle cx="30" cy="30" r="3" fill="#FFFFFF"/>
-                <circle cx="26" cy="45" r="2.5" fill="#FFFFFF"/>
-                <circle cx="36" cy="55" r="2.5" fill="#FFFFFF"/>
-                <path d="M 30 30 L 30 42 L 26 45 M 30 42 L 36 55 L 43 55" stroke="#FFFFFF" stroke-width="1.8" fill="none"/>
-                <circle cx="38" cy="24" r="2" fill="#FFFFFF"/>
-                <path d="M 38 24 L 45 24" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
-                
-                <path d="M 49 15 L 49 82 L 53 82 C 54 76 58 71 64 65 C 71 58 76 50 76 40 C 76 25 66 15 51 15 Z" fill="#009E4D"/>
-                <text x="53" y="27" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                <text x="53" y="38" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="49" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">1010</text>
-                <text x="53" y="60" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="71" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                
-                <rect x="41" y="84" width="14" height="3" rx="1" fill="#475569"/>
-                <rect x="43" y="88" width="10" height="3" rx="1" fill="#475569"/>
-                <path d="M 45 92 L 51 92 L 48 95 Z" fill="#475569"/>
-                <text x="48" y="104" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="10" fill="#1E293B" text-anchor="middle">SIH</text>
-            </g>
-            <g transform="translate(90, 20)">
-                <text x="0" y="20" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">SMART INDIA</text>
-                <text x="0" y="40" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">HACKATHON</text>
-                <text x="0" y="62" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="20" fill="#1E3A8A" letter-spacing="0.5">2025</text>
-            </g>
-        </svg>
-
-        <div class="content-area">
-            <div class="sub-header-blue">
-                ❖ Proposed Solution (Describe your Idea/Solution/Prototype)
-            </div>
-
-            <!-- Top Text: 3 Sections -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px;">
-                <div>
-                    <div class="section-header">• The Solution</div>
-                    <ul class="bullet-list">
-                        <li>Android app: farmer answers <strong>5 simple cards</strong> (farm size, soil photo, water, past crop, sowing date) → ranked crop comparison with full ₹/Acre economics in <strong>&lt; 90s</strong>.</li>
-                        <li>Uses <strong>hyper-local district data</strong> — nearest APMC mandi prices, taluka SoilGrids GIS soil, district climate normals — not national averages.</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <div class="section-header">• How It Solves the Problem</div>
-                    <ul class="bullet-list">
-                        <li>Zero lab testing — auto-fetches soil by GPS. Uses official <strong>CACP A₂+FL cost norms</strong>, deducts ₹3,500 if farmer owns tractor.</li>
-                        <li><strong>Crop rotation intelligence</strong> — penalizes monoculture (−15%), rewards cereal→legume (+12%) based on previous crop history.</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <div class="section-header">• What Makes It Unique</div>
-                    <ul class="bullet-list">
-                        <li><strong>🆚 Head-to-Head:</strong> Farmer selects intended crop → system compares against AI pick with <strong>exact ₹ and % profit delta</strong>.</li>
-                        <li><strong>Explainable AI:</strong> Tells farmer WHY in Hindi — <i>"काली मिट्टी में सोयाबीन को अधिक नमी मिलती है"</i>.</li>
-                        <li><strong>BHASHINI Voice:</strong> MeitY Digital India speech for hands-free rural access.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Bottom Visual: Real Field Case Study Table -->
-            <div>
-                <div style="font-size: 19px; font-weight: 800; color: #0f2744; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline;">
-                    <span>📊 Real Field Case Study: Wardha, Maharashtra</span>
-                    <span style="font-size: 14.5px; color: #64748b; font-weight: 600;">3.5-acre farmer, clay loam soil, borewell, owned tractor, was planning Cotton again</span>
-                </div>
-
-                <table class="sih-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Decision Metric</th>
-                            <th style="width: 25%; text-align: center;">Farmer's Plan (Cotton Again)</th>
-                            <th style="width: 30%; text-align: center;">Fasal Disha Recommendation (Soybean)</th>
-                            <th style="width: 20%; text-align: center;">Advantage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Predicted Yield</strong></td>
-                            <td style="text-align: center;">6.20 qtl/acre</td>
-                            <td style="text-align: center;"><strong>8.85 qtl/acre</strong></td>
-                            <td class="adv-cell" style="text-align: center;">+42.7%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Sowing Status</strong></td>
-                            <td style="text-align: center; color: #b91c1c;">Late (−12% penalty)</td>
-                            <td style="text-align: center; color: #15803d;"><strong>Optimal (0% penalty)</strong></td>
-                            <td class="adv-cell" style="text-align: center;">✅ Avoided Delay Drag</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Rotation Effect</strong></td>
-                            <td style="text-align: center;">0.85× (Monoculture Drag)</td>
-                            <td style="text-align: center;"><strong>1.15× (Cotton → Legume)</strong></td>
-                            <td class="adv-cell" style="text-align: center;">+30% Relative Soil Vitality</td>
-                        </tr>
-                        <tr>
-                            <td><strong>CACP Cost (A₂+FL)</strong></td>
-                            <td style="text-align: center;">₹24,150 / acre</td>
-                            <td style="text-align: center;"><strong>₹18,200 / acre</strong></td>
-                            <td class="adv-cell" style="text-align: center;">−₹3,200 (Owned Tractor)</td>
-                        </tr>
-                        <tr style="background: #f0fdf4;">
-                            <td><strong style="font-size: 18px; color: #0f172a;">Net Profit / Acre</strong></td>
-                            <td style="text-align: center; font-size: 18px; font-weight: 800; color: #b91c1c;">₹14,352</td>
-                            <td style="text-align: center; font-size: 19px; font-weight: 900; color: #15803d;">₹24,722</td>
-                            <td class="adv-cell" style="text-align: center; font-size: 18px; font-weight: 900; color: #15803d; background: #c8e6c9;">
-                                +₹10,370 (+72.3%)
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <!-- Team Oval (Top Left - Fits inside PDF vector oval) -->
+        <div class="slide-2-team-oval-text">
+            Almost AC
         </div>
 
-        <div class="footer-banner-blue">
-            <span>@SIH Idea submission- Template</span>
-            <span>2</span>
+        <!-- Idea Title (Top Center) -->
+        <div class="slide-2-idea-title-box">
+            <div class="slide-2-idea-title">Fasal-Disha (फसल-दिशा)</div>
+            <div class="slide-2-idea-tagline">हर खेत को मिले सही दिशा — AI-आधारित फसल अनुशंसा, फसल चक्र एवं वास्तविक लाभ (₹/Acre) विश्लेषण प्रणाली</div>
+        </div>
+
+        <div class="slide-2-content" style="padding: 0 20px;">
+            <!-- Two-Column Layout: Left (58%) = Problem-Solution Matrix | Right (40%) = End-to-End Architecture Flow -->
+            <div class="slide-2-grid" style="display: flex; gap: 24px; height: 100%; box-sizing: border-box; align-items: stretch;">
+                <!-- Left Column: IDEA/SOLUTION + Problem Resolution + UVP (58% Width) - Dynamically Themed -->
+                <div class="slide-2-left-col" style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%; gap: 10px; box-sizing: border-box; flex: 1.4;">
+                    
+                    <!-- BOX 1: IDEA / SOLUTION -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 3.5px solid var(--theme-primary); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: flex-start; gap: 5px; box-sizing: border-box;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 800; color: var(--theme-primary); border-bottom: 1px solid var(--theme-border); padding-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+                                <span style="color: var(--theme-accent);">❖</span> IDEA / PROPOSED SOLUTION :
+                            </div>
+                            <div style="font-size: 11px; font-weight: 600; color: var(--theme-text-dark); line-height: 1.34; background: var(--theme-surface-subtle); padding: 5px 8px; border-left: 3px solid var(--theme-accent); border-radius: 2px; margin-top: 4px;">
+                                <strong>Fasal-Disha</strong> gives farmers clear financial foresight before sowing. Instead of relying on guesswork or routine, it delivers field-specific yield forecasts, realistic crop cost breakdowns, and live risk simulation.
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 3.5px; font-size: 10.8px; color: var(--theme-text-body); line-height: 1.32; margin-top: 2px;">
+                            <div><strong style="color: var(--theme-primary);">❖ Digital Soil Health Mapping:</strong> Reads soil pH, texture, and organic carbon directly from GIS SoilGrids without waiting weeks for chemical lab test reports.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Smart Crop Rotation Guidance:</strong> Scientifically rewards legume crop rotations that restore soil nitrogen while warning against repetitive monoculture soil depletion.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Sowing Window Optimization:</strong> Recommends ideal sowing dates and calculates calibrated daily yield loss penalties if monsoon or planting is delayed.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Hyper-Local Mandi Sync:</strong> Detects major crops grown locally in the region and syncs 5-year APMC mandi auction rates with local input costs to forecast realistic harvest profits.</div>
+                        </div>
+                    </div>
+
+                    <!-- BOX 2: PROBLEM RESOLUTION -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 3.5px solid var(--theme-primary); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: flex-start; gap: 5px; box-sizing: border-box;">
+                        <div style="font-size: 13px; font-weight: 800; color: var(--theme-primary); border-bottom: 1px solid var(--theme-border); padding-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+                            <span style="color: var(--theme-accent);">❖</span> Problem Resolution :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 3.5px; font-size: 10.8px; color: var(--theme-text-body); line-height: 1.32; margin-top: 2px;">
+                            <div><strong style="color: var(--theme-primary);">❖ Focuses on In-Hand Net Profit:</strong> Moves farmers away from just chasing gross harvest volume to knowing their true pocket profit (₹/Acre) after deducting all seeds, fertilizer, and labor costs.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Restores Degraded Soil:</strong> Breaks harmful single-crop habits through multi-season rotation plans that naturally preserve nitrogen and organic soil health.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ De-Risks Weather &amp; Market Shocks:</strong> Lets farmers test "what if monsoon falls short" or "what if mandi prices crash" before investing hard-earned money in inputs.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Village-Level Advisory Precision:</strong> Replaces generic state-level averages with tailored guidance matching the farmer's exact village, soil type, water source, and owned machinery.</div>
+                        </div>
+                    </div>
+
+                    <!-- BOX 3: UNIQUE VALUE PROPOSITIONS (UVP) -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 3.5px solid var(--theme-primary); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: flex-start; gap: 5px; box-sizing: border-box;">
+                        <div style="font-size: 13px; font-weight: 800; color: var(--theme-primary); border-bottom: 1px solid var(--theme-border); padding-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+                            <span style="color: var(--theme-accent);">❖</span> Unique Value Propositions (UVP) :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 3.5px; font-size: 10.8px; color: var(--theme-text-body); line-height: 1.32; margin-top: 2px;">
+                            <div><strong style="color: var(--theme-primary);">❖ Side-by-Side Crop Comparison:</strong> Shows the exact profit delta (₹/Acre) comparing multiple crops the farmer is thinking of sowing against the AI recommendation.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Live "What-If" Risk Sliders:</strong> Interactive sliders allowing farmers to test how rainfall amounts or market price swings impact their expected profit in real time.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Farmer-Owned Machinery Savings:</strong> Automatically deducts cost savings if the farmer owns a tractor, pump, or thresher rather than assuming expensive rental rates.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ 100% Spoken Voice Guidance:</strong> Full speech recognition and audio playback in Hindi, Marathi, and regional languages for seamless adoption by any farmer.</div>
+                            <div><strong style="color: var(--theme-primary);">❖ Offline Printable Slip &amp; WhatsApp:</strong> 1-Click vector PDF advisory slip and instant WhatsApp sharing with family and local agricultural extension officers.</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Pure Graphical Vector Flowchart (40% Width) - Dynamically Themed -->
+                <div class="slide-2-right-col" style="padding: 0; background: #ffffff; border: 1.5px solid var(--theme-border); border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; height: 100%; overflow: hidden; box-sizing: border-box; flex: 1;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 740" width="100%" height="100%" style="display: block; background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                        <defs>
+                            <filter id="cardShadow" x="-10%" y="-10%" width="125%" height="125%">
+                                <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#0f172a" flood-opacity="0.04"/>
+                            </filter>
+                            <marker id="arrDynamic" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--theme-accent)"/>
+                            </marker>
+                        </defs>
+
+                        <!-- HEADER BAR -->
+                        <rect x="16" y="12" width="688" height="34" rx="6" fill="var(--theme-surface-subtle)" stroke="var(--theme-border)" stroke-width="1.2"/>
+                        <text x="360" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="var(--theme-primary)" letter-spacing="0.6">FASAL-DISHA INTERACTIVE DECISION ECOSYSTEM</text>
+
+                        <!-- STAGE 1: TOP-LEFT (Simple Onboarding) -->
+                        <g transform="translate(16, 56)" filter="url(#cardShadow)">
+                            <rect width="324" height="236" rx="8" fill="#ffffff" stroke="var(--theme-border)" stroke-width="1.4"/>
+                            <path d="M 0 8 Q 0 0 8 0 L 316 0 Q 324 0 324 8 L 324 30 L 0 30 Z" fill="var(--theme-surface-subtle)"/>
+                            <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-primary)">1. SIMPLE ONBOARDING</text>
+
+                            <!-- Node 1: Auto-Detect GPS -->
+                            <g transform="translate(12, 36)">
+                                <rect width="300" height="48" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-text-dark)">Auto-Detect GPS Location</text>
+                                <text x="14" y="36" font-size="9.5" font-weight="500" fill="var(--theme-text-muted)">Detects taluka, district &amp; agro-climatic zone</text>
+                            </g>
+
+                            <!-- Arrow down (Enlarged 22px conduit) -->
+                            <line x1="162" y1="84" x2="162" y2="106" stroke="var(--theme-accent)" stroke-width="2" marker-end="url(#arrDynamic)"/>
+
+                            <!-- Node 2: Regional Language -->
+                            <g transform="translate(12, 106)">
+                                <rect width="300" height="48" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-text-dark)">Regional Language Detection</text>
+                                <text x="14" y="36" font-size="9.5" font-weight="500" fill="var(--theme-text-muted)">Choose or speak to detect a language</text>
+                            </g>
+
+                            <!-- Arrow down (Enlarged 22px conduit) -->
+                            <line x1="162" y1="154" x2="162" y2="176" stroke="var(--theme-accent)" stroke-width="2" marker-end="url(#arrDynamic)"/>
+
+                            <!-- Node 3: Mobile OTP -->
+                            <g transform="translate(12, 176)">
+                                <rect width="300" height="48" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-text-dark)">Mobile Number &amp; OTP Login</text>
+                                <text x="14" y="36" font-size="9.5" font-weight="500" fill="var(--theme-text-muted)">Quick 1-tap phone verification</text>
+                            </g>
+                        </g>
+
+                        <!-- Big Arrow: Stage 1 -> Stage 2 -->
+                        <line x1="178" y1="292" x2="178" y2="346" stroke="var(--theme-accent)" stroke-width="2.2" marker-end="url(#arrDynamic)"/>
+
+                        <!-- STAGE 2: BOTTOM-LEFT (7-Question Farm Profile) -->
+                        <g transform="translate(16, 350)" filter="url(#cardShadow)">
+                            <rect width="324" height="376" rx="8" fill="#ffffff" stroke="var(--theme-border)" stroke-width="1.4"/>
+                            <path d="M 0 8 Q 0 0 8 0 L 316 0 Q 324 0 324 8 L 324 30 L 0 30 Z" fill="var(--theme-surface-subtle)"/>
+                            <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-primary)">2. 7-QUESTION FARM PROFILE</text>
+                            <rect x="228" y="5" width="84" height="20" rx="4" fill="#ffffff" stroke="var(--theme-border)"/>
+                            <text x="270" y="19" text-anchor="middle" font-size="9" font-weight="700" fill="var(--theme-accent)">Voice Enabled</text>
+
+                            <!-- 7 Question Chips -->
+                            <g transform="translate(12, 38)">
+                                <g transform="translate(0, 0)">
+                                    <rect width="144" height="34" rx="4" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                    <text x="72" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--theme-text-dark)">Q1. Land Size</text>
+                                </g>
+                                <g transform="translate(156, 0)">
+                                    <rect width="144" height="34" rx="4" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                    <text x="72" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--theme-text-dark)">Q2. Soil Type</text>
+                                </g>
+                                <g transform="translate(0, 42)">
+                                    <rect width="144" height="34" rx="4" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                    <text x="72" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--theme-text-dark)">Q3. Water Source</text>
+                                </g>
+                                <g transform="translate(156, 42)">
+                                    <rect width="144" height="34" rx="4" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                    <text x="72" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--theme-text-dark)">Q4. Last Season Crop</text>
+                                </g>
+                                <g transform="translate(0, 84)">
+                                    <rect width="144" height="34" rx="4" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                    <text x="72" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--theme-text-dark)">Q5. Sowing Date</text>
+                                </g>
+                                <g transform="translate(156, 84)">
+                                    <rect width="144" height="34" rx="4" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                    <text x="72" y="22" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--theme-text-dark)">Q6. Owned Equipment</text>
+                                </g>
+                                <g transform="translate(0, 126)">
+                                    <rect width="300" height="36" rx="4" fill="var(--theme-surface-subtle)" stroke="var(--theme-primary)" stroke-width="1.3"/>
+                                    <text x="150" y="23" text-anchor="middle" font-size="10.5" font-weight="800" fill="var(--theme-primary)">Q7. Crops Farmer is Thinking of Sowing</text>
+                                </g>
+                            </g>
+
+                            <!-- Processing Engine Box inside Stage 2 -->
+                            <g transform="translate(12, 212)">
+                                <rect width="300" height="150" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <rect width="300" height="24" rx="6" fill="var(--theme-pill-bg)"/>
+                                <text x="150" y="16" text-anchor="middle" font-size="10" font-weight="800" fill="var(--theme-primary)">DATA &amp; COST PROCESSING ENGINE</text>
+                                
+                                <text x="14" y="50" font-size="10" font-weight="600" fill="var(--theme-text-body)">• GIS SoilGrids &amp; Historical Weather Data</text>
+                                <text x="14" y="76" font-size="10" font-weight="600" fill="var(--theme-text-body)">• XGBoost ML Yield Prediction Model</text>
+                                <text x="14" y="102" font-size="10" font-weight="600" fill="var(--theme-text-body)">• CACP Itemized Cost of Cultivation (A₂+FL)</text>
+                                <text x="14" y="128" font-size="10" font-weight="600" fill="var(--theme-text-body)">• 5-Year APMC Mandi Price Trends</text>
+                            </g>
+                        </g>
+
+                        <!-- CLEAN CONDUIT PIPELINE (Stage 2 -> Stage 3) -->
+                        <path d="M 340 550 H 360 Q 364 550 364 542 V 78 Q 364 70 368 70 H 378" fill="none" stroke="var(--theme-accent)" stroke-width="2.2" marker-end="url(#arrDynamic)"/>
+
+                        <!-- STAGE 3: TOP-RIGHT (Simulation & Comparison) -->
+                        <g transform="translate(380, 56)" filter="url(#cardShadow)">
+                            <rect width="324" height="276" rx="8" fill="#ffffff" stroke="var(--theme-border)" stroke-width="1.4"/>
+                            <path d="M 0 8 Q 0 0 8 0 L 316 0 Q 324 0 324 8 L 324 30 L 0 30 Z" fill="var(--theme-surface-subtle)"/>
+                            <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-primary)">3. SIMULATION &amp; COMPARISON</text>
+
+                            <!-- Card 1: Side-by-Side Comparison (Fixed text length) -->
+                            <g transform="translate(12, 38)">
+                                <rect width="300" height="74" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="22" font-size="11.5" font-weight="800" fill="var(--theme-primary)">Side-by-Side Comparison</text>
+                                <text x="14" y="42" font-size="9.5" font-weight="500" fill="var(--theme-text-muted)">Compares farmer crops vs. AI recommendation</text>
+                                <rect x="14" y="48" width="136" height="18" rx="4" fill="var(--theme-pill-bg)"/>
+                                <text x="82" y="61" text-anchor="middle" font-size="9" font-weight="800" fill="var(--theme-accent)">+₹/Acre Profit Delta</text>
+                            </g>
+
+                            <!-- Card 2: What-If Sliders -->
+                            <g transform="translate(12, 120)">
+                                <rect width="300" height="96" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-primary)">Interactive "What-If" Sliders</text>
+                                <text x="14" y="40" font-size="9.5" font-weight="500" fill="var(--theme-text-muted)">• Live Rainfall Amount Slider</text>
+                                <text x="14" y="58" font-size="9.5" font-weight="500" fill="var(--theme-text-muted)">• Mandi Price Shock Sensitivity</text>
+                                <rect x="14" y="68" width="168" height="20" rx="4" fill="var(--theme-pill-bg)"/>
+                                <text x="98" y="82" text-anchor="middle" font-size="9" font-weight="800" fill="var(--theme-accent)">Instant Profit Recalculation</text>
+                            </g>
+
+                            <!-- Card 3: Finalize Button -->
+                            <g transform="translate(12, 224)">
+                                <rect width="300" height="40" rx="6" fill="var(--theme-surface-subtle)" stroke="var(--theme-accent)" stroke-width="1.5"/>
+                                <text x="150" y="25" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--theme-primary)">Finalize &amp; Save Crop Plan</text>
+                            </g>
+                        </g>
+
+                        <!-- Big Arrow: Stage 3 -> Stage 4 -->
+                        <line x1="542" y1="332" x2="542" y2="384" stroke="var(--theme-accent)" stroke-width="2.2" marker-end="url(#arrDynamic)"/>
+
+                        <!-- STAGE 4: BOTTOM-RIGHT (Execution Hub) -->
+                        <g transform="translate(380, 388)" filter="url(#cardShadow)">
+                            <rect width="324" height="338" rx="8" fill="#ffffff" stroke="var(--theme-border)" stroke-width="1.4"/>
+                            <path d="M 0 8 Q 0 0 8 0 L 316 0 Q 324 0 324 8 L 324 30 L 0 30 Z" fill="var(--theme-surface-subtle)"/>
+                            <text x="14" y="20" font-size="11.5" font-weight="800" fill="var(--theme-primary)">4. "MERI FASAL" ACTION HUB</text>
+
+                            <!-- Delivery 1: Milestones Calendar -->
+                            <g transform="translate(12, 38)">
+                                <rect width="300" height="130" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="24" font-size="11.5" font-weight="800" fill="var(--theme-primary)">Seasonal Action Calendar</text>
+                                <text x="14" y="48" font-size="9.5" font-weight="600" fill="var(--theme-text-body)">• Crop-dependent sowing and growth timeline</text>
+                                <text x="14" y="72" font-size="9.5" font-weight="600" fill="var(--theme-text-body)">• Exact dates for NPK fertilizer &amp; watering</text>
+                                <text x="14" y="96" font-size="9.5" font-weight="600" fill="var(--theme-text-body)">• Pest alerts with spoken voice reminders</text>
+                                <text x="14" y="118" font-size="9" font-weight="700" fill="var(--theme-accent)">✓ Tailored to farmer's district and sowing date</text>
+                            </g>
+
+                            <!-- Delivery 2: WhatsApp PDF Export -->
+                            <g transform="translate(12, 178)">
+                                <rect width="300" height="144" rx="6" fill="var(--theme-surface-card)" stroke="var(--theme-border)" stroke-width="1.1"/>
+                                <text x="14" y="24" font-size="11.5" font-weight="800" fill="var(--theme-primary)">1-Click WhatsApp &amp; PDF Slip</text>
+                                <text x="14" y="48" font-size="9.5" font-weight="600" fill="var(--theme-text-body)">• Clear 1-page printable crop advisory slip</text>
+                                <text x="14" y="72" font-size="9.5" font-weight="600" fill="var(--theme-text-body)">• Instant WhatsApp share with family &amp; KVK officers</text>
+                                <text x="14" y="96" font-size="9.5" font-weight="600" fill="var(--theme-text-body)">• Complete offline access in field</text>
+                                <text x="14" y="122" font-size="9" font-weight="700" fill="var(--theme-accent)">✓ Instant WhatsApp Share</text>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- SLIDE 3: TECHNICAL APPROACH -->
+    <!-- SLIDE 3: TECHNICAL APPROACH (OFFICIAL TEMPLATE) -->
     <div class="slide-wrapper" id="slide-3">
-        <div class="team-oval">
-            <span>Fasal Disha</span>
-            <span style="font-size: 15px; color: #475569;">(AGRI-DECIDE)</span>
-        </div>
-        <div class="slide-title-serif">TECHNICAL APPROACH</div>
-        <!-- SIH Corner Logo (Inline SVG) -->
-        <svg class="sih-logo-top" viewBox="0 0 340 100" width="340" height="100" style="position: absolute; top: 20px; right: 40px; height: 80px; z-index: 30;">
-            <g transform="translate(12, 6) scale(0.85)">
-                <path d="M 45 15 C 30 15 20 25 20 40 C 20 50 25 58 32 65 C 38 71 42 76 43 82 L 47 82 L 47 15 Z" fill="#F37023"/>
-                <circle cx="30" cy="30" r="3" fill="#FFFFFF"/>
-                <circle cx="26" cy="45" r="2.5" fill="#FFFFFF"/>
-                <circle cx="36" cy="55" r="2.5" fill="#FFFFFF"/>
-                <path d="M 30 30 L 30 42 L 26 45 M 30 42 L 36 55 L 43 55" stroke="#FFFFFF" stroke-width="1.8" fill="none"/>
-                <circle cx="38" cy="24" r="2" fill="#FFFFFF"/>
-                <path d="M 38 24 L 45 24" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
-                
-                <path d="M 49 15 L 49 82 L 53 82 C 54 76 58 71 64 65 C 71 58 76 50 76 40 C 76 25 66 15 51 15 Z" fill="#009E4D"/>
-                <text x="53" y="27" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                <text x="53" y="38" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="49" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">1010</text>
-                <text x="53" y="60" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="71" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                
-                <rect x="41" y="84" width="14" height="3" rx="1" fill="#475569"/>
-                <rect x="43" y="88" width="10" height="3" rx="1" fill="#475569"/>
-                <path d="M 45 92 L 51 92 L 48 95 Z" fill="#475569"/>
-                <text x="48" y="104" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="10" fill="#1E293B" text-anchor="middle">SIH</text>
-            </g>
-            <g transform="translate(90, 20)">
-                <text x="0" y="20" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">SMART INDIA</text>
-                <text x="0" y="40" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">HACKATHON</text>
-                <text x="0" y="62" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="20" fill="#1E3A8A" letter-spacing="0.5">2025</text>
-            </g>
-        </svg>
+        <!-- Team Name in Top-Left Template Oval -->
+        <div class="slide-3-team-oval-text">Almost AC</div>
 
-        <div class="content-area">
-            <div class="sub-header-blue" style="text-decoration: none;">
-                • Technologies to be used & Implementation Methodology
-            </div>
-
-            <!-- Top Tech Table -->
-            <table class="sih-table" style="margin-bottom: 18px;">
-                <thead>
-                    <tr>
-                        <th style="width: 18%;">Layer</th>
-                        <th style="width: 54%;">Technology & Frameworks</th>
-                        <th style="width: 28%; text-align: center;">Key Verified Metric</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>📱 Mobile Frontend</strong></td>
-                        <td>Android (Capacitor 8.5) + React 18 + TypeScript + Tailwind CSS</td>
-                        <td style="text-align: center;"><strong>5-Card Wizard • BHASHINI Voice</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>⚡ Core Backend API</strong></td>
-                        <td>Python 3.11 + FastAPI (Async) + Pydantic v2 + SQLAlchemy</td>
-                        <td style="text-align: center;"><strong>16 REST Endpoints (100% Tested)</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🧠 Predictive AI/ML</strong></td>
-                        <td>XGBoost Regressor × 3 trained models (Yield, Mandi Price, Delay)</td>
-                        <td style="text-align: center;"><strong style="color: #15803d;">R² = 0.9907 • RMSE 0.397 qtl</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>🔄 Agronomic Core</strong></td>
-                        <td>Season detector + Rotation matrix + Explainable reasoning generator</td>
-                        <td style="text-align: center;"><strong>Auto Kharif / Rabi / Zaid</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>💾 Data Warehousing</strong></td>
-                        <td>CACP Norms + Agmarknet (14,786 txns) + SoilGrids 250m GIS + ICRISAT</td>
-                        <td style="text-align: center;"><strong>100% Real Govt Datasets</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Bottom Flow: 3-Tier System Architecture -->
-            <div style="font-size: 18px; font-weight: 800; color: #0f2744; margin-bottom: 8px;">
-                🏗️ 3-Tier System Architecture & Implementation Flow
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-                <!-- Tier 1 -->
-                <div class="tier-band" style="background: #1565c0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="tier-title">📱 PRESENTATION TIER — Android Native Mobile App (Capacitor + React 18)</span>
-                        <span class="tier-sub">Touch Wizard & Voice AI</span>
-                    </div>
-                    <div class="tier-cards-row">
-                        <div class="tier-card">🎙️ BHASHINI Voice AI<br><span style="font-size: 12px; color: #64748b;">MeitY Speech TTS</span></div>
-                        <div class="tier-card">📍 5-Card Wizard<br><span style="font-size: 12px; color: #64748b;">GPS & Farm Intake</span></div>
-                        <div class="tier-card">📊 Ranked Scorecard<br><span style="font-size: 12px; color: #64748b;">Net ₹/Acre & H2H</span></div>
-                        <div class="tier-card">🎛️ What-If Sandbox<br><span style="font-size: 12px; color: #64748b;">Rain & Price Shocks</span></div>
-                    </div>
-                </div>
-
-                <div class="tier-connector">
-                    <span>▼ REST API (JSON Schema / Pydantic v2) ▼</span>
-                </div>
-
-                <!-- Tier 2 -->
-                <div class="tier-band" style="background: #2e7d32;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="tier-title">⚡ APPLICATION TIER — Python 3.11 + FastAPI Core Engine</span>
-                        <span class="tier-sub">Async Microservices Core</span>
-                    </div>
-                    <div class="tier-cards-row">
-                        <div class="tier-card">🗺️ Geo-Agro GIS<br><span style="font-size: 12px; color: #64748b;">SoilGrids 250m GPS</span></div>
-                        <div class="tier-card">🌱 Season & Rotation<br><span style="font-size: 12px; color: #64748b;">Cutoffs & Multipliers</span></div>
-                        <div class="tier-card">🤖 XGBoost AI Models<br><span style="font-size: 12px; color: #64748b;">R²=0.9907 Yield Regressor</span></div>
-                        <div class="tier-card">💰 CACP Cost Engine<br><span style="font-size: 12px; color: #64748b;">A₂+FL Itemized Norms</span></div>
-                    </div>
-                </div>
-
-                <div class="tier-connector">
-                    <span>▼ SQL Queries & Spatial GIS Indexing ▼</span>
-                </div>
-
-                <!-- Tier 3 -->
-                <div class="tier-band" style="background: #455a64;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="tier-title">💾 DATA TIER — 100% Verified Government Data Repositories</span>
-                        <span class="tier-sub">District-APMC Resolution</span>
-                    </div>
-                    <div class="tier-cards-row">
-                        <div class="tier-card">📈 Agmarknet Mandis<br><span style="font-size: 12px; color: #64748b;">14,786 APMC Txns</span></div>
-                        <div class="tier-card">🏛️ CACP Cost Bulletins<br><span style="font-size: 12px; color: #64748b;">State-wise Norms</span></div>
-                        <div class="tier-card">🌍 ISRIC SoilGrids<br><span style="font-size: 12px; color: #64748b;">Texture & pH GIS</span></div>
-                        <div class="tier-card">📅 ICAR-CRIDA Calendars<br><span style="font-size: 12px; color: #64748b;">Sowing Windows</span></div>
-                    </div>
-                </div>
-            </div>
+        <!-- Slide Title & Tagline -->
+        <div class="slide-3-title-box">
+            <h1 class="slide-3-title">TECHNICAL APPROACH</h1>
+            <p class="slide-3-subtitle">• Technologies to be used &amp; Implementation Methodology</p>
         </div>
 
-        <div class="footer-banner-blue">
-            <span>@SIH Idea submission- Template</span>
-            <span>3</span>
+        <!-- Content Area -->
+        <div class="slide-3-content">
+            <!-- Two-Column Grid: Left (44% Width Rich Content) | Right (54% Width Exact 1:1 Architecture Replica) -->
+            <div style="display: grid; grid-template-columns: 44% 54%; gap: 20px; height: 100%; box-sizing: border-box; align-items: stretch;">
+                
+                <!-- Left Column (44% Width): 2 High-Legibility Cards with Zero Dead Whitespace -->
+                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 18px; box-sizing: border-box;">
+                    
+                    <!-- CARD 1: CORE TECHNOLOGY STACK -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 4px solid var(--theme-primary); border-radius: 8px; padding: 16px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; box-sizing: border-box; flex: 1.2;">
+                        <div style="font-size: 16.5px; font-weight: 900; color: var(--theme-primary); border-bottom: 1.5px solid var(--theme-border); padding-bottom: 8px; letter-spacing: 0.3px;">
+                            TECHNOLOGY STACK &amp; FRAMEWORKS :
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1; margin-top: 10px; gap: 10px;">
+                            <!-- Tier 1: Client & Mobile Tier -->
+                            <div>
+                                <div style="color: var(--theme-primary); font-size: 15px; font-weight: 900; margin-bottom: 10px;">
+                                    • Client &amp; Mobile Tier:
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/android.svg" alt="Android" style="width: 15px; height: 15px;"> Android Native</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/pwa.svg" alt="Capacitor" style="width: 15px; height: 15px;"> Capacitor 8.5</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/react.svg" alt="React" style="width: 15px; height: 15px;"> React 18</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/vite.svg" alt="Vite" style="width: 15px; height: 15px;"> Vite</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/typescript.svg" alt="TS" style="width: 15px; height: 15px;"> TypeScript</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/tailwindcss.svg" alt="Tailwind" style="width: 15px; height: 15px;"> Tailwind CSS</span>
+                                </div>
+                            </div>
+
+                            <!-- Tier 2: High-Performance API Engine -->
+                            <div>
+                                <div style="color: var(--theme-primary); font-size: 15px; font-weight: 900; margin-bottom: 10px;">
+                                    • High-Performance API Engine:
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/python.svg" alt="Python" style="width: 15px; height: 15px;"> Python 3.11</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/fastapi.svg" alt="FastAPI" style="width: 15px; height: 15px;"> FastAPI Engine</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;">Pydantic v2</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;">SQLAlchemy 2.0 ORM</span>
+                                </div>
+                            </div>
+
+                            <!-- Tier 3: Indic Voice AI Pipeline -->
+                            <div>
+                                <div style="color: var(--theme-primary); font-size: 15px; font-weight: 900; margin-bottom: 10px;">
+                                    • Indic Voice AI Pipeline:
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span class="tech-pill" style="color: var(--theme-primary); font-weight: 900; font-size: 13px; padding: 3.5px 9px; background: var(--theme-surface-subtle); border-color: var(--theme-border);">Digital India BHASHINI</span>
+                                    <span class="tech-pill" style="color: var(--theme-primary); font-weight: 900; font-size: 13px; padding: 3.5px 9px; background: var(--theme-surface-subtle); border-color: var(--theme-border);">MeitY Indic Speech ASR / TTS</span>
+                                </div>
+                            </div>
+
+                            <!-- Tier 4: Persistence & Cloud Infrastructure -->
+                            <div>
+                                <div style="color: var(--theme-primary); font-size: 15px; font-weight: 900; margin-bottom: 10px;">
+                                    • Persistence &amp; Cloud Infrastructure:
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/postgresql.svg" alt="Postgres" style="width: 15px; height: 15px;"> PostgreSQL 16</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/sqlite.svg" alt="SQLite" style="width: 15px; height: 15px;"> SQLite 3 Fallback</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/render.svg" alt="Render" style="width: 15px; height: 15px;"> Render Cloud</span>
+                                    <span class="tech-pill" style="font-weight: 800; font-size: 13px; padding: 3.5px 9px;"><img src="presentation_assets/icons/docker.svg" alt="Docker" style="width: 15px; height: 15px;"> Docker Containers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: MACHINE LEARNING & CORE MODELS -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 4px solid var(--theme-accent); border-radius: 8px; padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; box-sizing: border-box; flex: 1.05;">
+                        <div style="font-size: 15.5px; font-weight: 900; color: var(--theme-primary); border-bottom: 1.5px solid var(--theme-border); padding-bottom: 6px; letter-spacing: 0.3px;">
+                            MACHINE LEARNING &amp; CORE MODELS :
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: space-between; flex: 1; margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--theme-text-dark); line-height: 1.45; gap: 8px;">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="color: var(--theme-primary); font-size: 15px; font-weight: 900;">•</span>
+                                <div><strong style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900;">Ground Yield Regressor:</strong> XGBoost ML model trained on 250m GIS soil &amp; climate data.</div>
+                            </div>
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="color: var(--theme-primary); font-size: 15px; font-weight: 900;">•</span>
+                                <div><strong style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900;">Mandi Price Forecaster:</strong> Time-series model trained on APMC historical modal prices.</div>
+                            </div>
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="color: var(--theme-primary); font-size: 15px; font-weight: 900;">•</span>
+                                <div><strong style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900;">Sowing Delay Decay:</strong> Mathematical decay equations modeling planting delay loss.</div>
+                            </div>
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="color: var(--theme-primary); font-size: 15px; font-weight: 900;">•</span>
+                                <div><strong style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900;">Crop Rotation Matrix:</strong> Mathematical scoring matrix for soil nutrients &amp; monoculture.</div>
+                            </div>
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="color: var(--theme-primary); font-size: 15px; font-weight: 900;">•</span>
+                                <div><strong style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900;">Sensitivity Simulator:</strong> Stress equations computing live net profit adjustments.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: PROJECT REPOSITORIES & VIDEO DEMO -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 4px solid var(--theme-primary); border-radius: 8px; padding: 13px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); display: flex; flex-direction: column; box-sizing: border-box; flex: 0.85;">
+                        <div style="font-size: 15.5px; font-weight: 900; color: var(--theme-primary); border-bottom: 1.5px solid var(--theme-border); padding-bottom: 6px; letter-spacing: 0.3px;">
+                            PROJECT REPOSITORIES &amp; VIDEO DEMO :
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: space-around; flex: 1; margin-top: 7px; font-size: 14px; font-weight: 700; color: var(--theme-text-dark); line-height: 1.4; gap: 7px;">
+                            <!-- Point 1: GitHub Link -->
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <div style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900; display: flex; align-items: center; gap: 6px;">
+                                    <span>•</span>
+                                    <img src="presentation_assets/icons/github.svg" alt="GitHub" style="width: 14px; height: 14px;">
+                                    <span>Open-Source GitHub Repository:</span>
+                                </div>
+                                <div style="padding-left: 18px;">
+                                    <a href="https://github.com/sujeetaionly/agri-decide-sih" target="_blank" style="color: var(--theme-accent); text-decoration: underline; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; word-break: break-all;">https://github.com/sujeetaionly/agri-decide-sih</a>
+                                </div>
+                            </div>
+
+                            <!-- Point 2: YouTube Link -->
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <div style="color: var(--theme-primary); font-size: 14.5px; font-weight: 900; display: flex; align-items: center; gap: 6px;">
+                                    <span>•</span>
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="#dc2626"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                    <span>Live Video Walkthrough &amp; Demonstration:</span>
+                                </div>
+                                <div style="padding-left: 18px;">
+                                    <a href="https://youtube.com/watch?v=fasal-disha-demo" target="_blank" style="color: var(--theme-accent); text-decoration: underline; font-weight: 800; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; word-break: break-all;">https://youtube.com/watch?v=fasal-disha-demo</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column (54% Width): Authentic Non-Linear System Architecture & Data Flow Diagram -->
+                <div style="display: flex; flex-direction: column; height: 100%; width: 100%; box-sizing: border-box; background: #ffffff; border: 1.5px solid var(--theme-border); border-top: 4px solid var(--theme-primary); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; padding: 4px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 860" width="100%" height="100%" style="display: block; background: #ffffff; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                        <defs>
+                            <marker id="arch-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0284c7"/>
+                            </marker>
+                            <marker id="arch-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#16a34a"/>
+                            </marker>
+                            <marker id="arch-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7c3aed"/>
+                            </marker>
+                            <marker id="arch-arrow-dark" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#475569"/>
+                            </marker>
+                            <filter id="box-shadow" x="-3%" y="-3%" width="106%" height="110%" filterUnits="userSpaceOnUse">
+                                <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-opacity="0.05"/>
+                            </filter>
+                        </defs>
+
+                        <!-- ======================================================= -->
+                        <!-- TOP-LEFT: CLIENT & PRESENTATION TIER                   -->
+                        <!-- ======================================================= -->
+                        <g filter="url(#box-shadow)">
+                            <rect x="15" y="10" width="435" height="210" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3"/>
+                            <rect x="15" y="10" width="435" height="24" rx="6" fill="#e2e8f0"/>
+                            <text x="25" y="27" font-size="12.5" font-weight="900" fill="#0f172a">Client &amp; Presentation Tier (Top Left)</text>
+
+                            <!-- Node 1: Indic Speech Subsystem -->
+                            <rect x="30" y="42" width="240" height="46" rx="6" fill="#ffffff" stroke="#7c3aed" stroke-width="1.3"/>
+                            <text x="150" y="61" text-anchor="middle" font-size="12.5" font-weight="900" fill="#6d28d9">Indic Speech Subsystem</text>
+                            <text x="150" y="79" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">[Capacitor TTS + Web Speech]</text>
+
+                            <!-- Flow arrow: Speech -> Mobile App -->
+                            <line x1="150" y1="88" x2="150" y2="110" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arch-arrow-purple)"/>
+                            <rect x="95" y="93" width="110" height="15" rx="3" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+                            <text x="150" y="104" text-anchor="middle" font-size="8.5" font-weight="800" fill="#6d28d9">native audio bridge</text>
+
+                            <!-- Node 2: Android Mobile App & PWA -->
+                            <rect x="30" y="112" width="250" height="50" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+                            <text x="155" y="133" text-anchor="middle" font-size="12.5" font-weight="900" fill="#0369a1">Android Mobile App &amp; PWA</text>
+                            <text x="155" y="151" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">[React + TypeScript + Vite + Capacitor]</text>
+
+                            <!-- Flow: Mobile App -> PDF Generator -->
+                            <path d="M 280 137 L 330 137 L 330 162" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                            <rect x="292" y="145" width="75" height="14" rx="2" fill="#ffffff" stroke="#0284c7" stroke-width="0.7"/>
+                            <text x="329" y="155" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">canvas render</text>
+
+                            <!-- Node 3: Advisory Document Generator -->
+                            <rect x="220" y="164" width="215" height="46" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.3"/>
+                            <text x="327" y="184" text-anchor="middle" font-size="12" font-weight="900" fill="#15803d">Advisory Document Generator</text>
+                            <text x="327" y="201" text-anchor="middle" font-size="10.5" font-weight="700" fill="#475569">[jsPDF Vector Engine]</text>
+                        </g>
+
+
+                        <!-- ======================================================= -->
+                        <!-- TOP-RIGHT: GOVERNMENT & SPATIAL DATA REPOSITORIES       -->
+                        <!-- ======================================================= -->
+                        <g filter="url(#box-shadow)">
+                            <rect x="465" y="10" width="520" height="90" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3"/>
+                            <rect x="465" y="10" width="520" height="24" rx="6" fill="#e2e8f0"/>
+                            <text x="475" y="27" font-size="12.5" font-weight="900" fill="#0f172a">Government &amp; Spatial Data Repositories (Top Right)</text>
+
+                            <!-- Repo 1: CACP -->
+                            <rect x="475" y="38" width="120" height="52" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+                            <text x="535" y="55" text-anchor="middle" font-size="10.5" font-weight="900" fill="#0f172a">CACP Cost Norms</text>
+                            <text x="535" y="70" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">[Itemized A2+FL</text>
+                            <text x="535" y="82" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">Database]</text>
+
+                            <!-- Repo 2: ISRIC SoilGrids -->
+                            <rect x="605" y="38" width="120" height="52" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+                            <text x="665" y="55" text-anchor="middle" font-size="10.5" font-weight="900" fill="#0369a1">ISRIC SoilGrids 250m</text>
+                            <text x="665" y="70" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">[Spatial Soil</text>
+                            <text x="665" y="82" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">GIS Profiling]</text>
+
+                            <!-- Repo 3: AgMarknet APMC -->
+                            <rect x="735" y="38" width="120" height="52" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+                            <text x="795" y="55" text-anchor="middle" font-size="10.5" font-weight="900" fill="#15803d">AgMarknet APMC Data</text>
+                            <text x="795" y="70" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">[14,786</text>
+                            <text x="795" y="82" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">Records]</text>
+
+                            <!-- Repo 4: ICAR / ICRISAT -->
+                            <rect x="865" y="38" width="110" height="52" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+                            <text x="920" y="55" text-anchor="middle" font-size="10.5" font-weight="900" fill="#0f172a">ICAR / ICRISAT Portal</text>
+                            <text x="920" y="70" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">[Agro-Windows</text>
+                            <text x="920" y="82" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">&amp; Bounds]</text>
+                        </g>
+
+
+                        <!-- ======================================================= -->
+                        <!-- INGRESS CONNECTORS: CLIENT/REPOS -> APPLICATION TIER     -->
+                        <!-- ======================================================= -->
+                        <!-- Route 1: POST /api/v1/crop/recommend -->
+                        <path d="M 55 162 L 55 236 Q 55 250 95 250 L 95 268" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                        <rect x="20" y="240" width="135" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                        <text x="87" y="251" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">POST /api/v1/crop/recommend</text>
+
+                        <!-- Route 2: POST /api/v1/farm/assess-risk-weather -->
+                        <path d="M 155 162 L 155 268" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                        <rect x="80" y="222" width="150" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                        <text x="155" y="233" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">POST /api/v1/farm/assess-risk-weather</text>
+
+                        <!-- Route 3: GET /api/v1/crop/local-crops -->
+                        <path d="M 210 162 L 210 236 Q 210 250 385 250 L 385 360" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                        <rect x="325" y="240" width="120" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                        <text x="385" y="251" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">GET /api/v1/crop/local-crops</text>
+
+                        <!-- Route 4: GET /api/v1/tts/... -->
+                        <path d="M 270 65 L 300 65 Q 310 65 310 85 L 310 225 Q 310 245 595 245 L 595 305" fill="none" stroke="#7c3aed" stroke-width="1.3" marker-end="url(#arch-arrow-purple)"/>
+                        <rect x="555" y="228" width="85" height="15" rx="3" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+                        <text x="597" y="239" text-anchor="middle" font-size="8" font-weight="800" fill="#6d28d9">GET /api/v1/tts/...</text>
+
+                        <!-- Route 5: POST /api/v1/auth/login -->
+                        <path d="M 255 162 L 255 215 Q 255 235 760 235 L 760 380" fill="none" stroke="#0f172a" stroke-width="1.3" marker-end="url(#arch-arrow-dark)"/>
+                        <rect x="710" y="240" width="105" height="15" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="0.8"/>
+                        <text x="762" y="251" text-anchor="middle" font-size="8" font-weight="800" fill="#0f172a">POST /api/v1/auth/login</text>
+
+                        <!-- Government & Spatial Ingestion Feeds -->
+                        <!-- CACP -> CACP Economics Engine -->
+                        <path d="M 535 90 L 535 150 Q 535 175 460 175 L 460 250 Q 460 255 105 255 L 105 360" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arch-arrow-dark)"/>
+                        <!-- SoilGrids -> Geo-Agronomics Engine -->
+                        <path d="M 665 90 L 665 170 Q 665 200 500 200 L 500 260 Q 500 265 375 265 L 375 360" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arch-arrow-dark)"/>
+                        <!-- AgMarknet -> Mandi Price Model -->
+                        <path d="M 795 90 L 795 200 Q 795 220 850 220 L 850 540 Q 850 560 425 560 L 425 635" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arch-arrow-dark)"/>
+                        <!-- ICAR -> Sowing Window Engine -->
+                        <path d="M 920 90 L 920 180 Q 920 210 470 210 L 470 260 Q 470 265 245 265 L 245 360" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arch-arrow-dark)"/>
+
+
+                        <!-- ======================================================= -->
+                        <!-- MIDDLE: APPLICATION & SERVICE TIER (FASTAPI ENGINE)     -->
+                        <!-- ======================================================= -->
+                        <g filter="url(#box-shadow)">
+                            <rect x="15" y="270" width="970" height="215" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3"/>
+                            <rect x="15" y="270" width="970" height="24" rx="6" fill="#e2e8f0"/>
+                            <text x="25" y="287" font-size="12.5" font-weight="900" fill="#0f172a">Application &amp; Service Tier (FastAPI Engine - Middle Center)</text>
+
+                            <!-- Sub-Block 1: Recommendation Orchestrator Container -->
+                            <rect x="25" y="300" width="435" height="175" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+                            
+                            <!-- Orchestrator Header Node -->
+                            <rect x="35" y="308" width="415" height="38" rx="5" fill="#0284c7"/>
+                            <text x="242" y="332" text-anchor="middle" font-size="13" font-weight="900" fill="#ffffff">Recommendation Orchestrator</text>
+
+                            <!-- Orchestrator Fan-Out Arrows to 3 Engines -->
+                            <!-- To Engine 1: CACP Economics -->
+                            <path d="M 100 346 L 100 368" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                            <rect x="42" y="350" width="116" height="14" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                            <text x="100" y="360" text-anchor="middle" font-size="7.5" font-weight="800" fill="#0369a1">Calculate Cost &amp; Deductions</text>
+
+                            <!-- To Engine 2: Sowing Window -->
+                            <path d="M 242 346 L 242 368" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                            <rect x="187" y="350" width="110" height="14" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                            <text x="242" y="360" text-anchor="middle" font-size="7.5" font-weight="800" fill="#0369a1">Validate Sowing Delay</text>
+
+                            <!-- To Engine 3: Geo-Agronomics -->
+                            <path d="M 385 346 L 385 368" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                            <rect x="330" y="350" width="110" height="14" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                            <text x="385" y="360" text-anchor="middle" font-size="7.5" font-weight="800" fill="#0369a1">Discover Viable Crops</text>
+
+                            <!-- Engine 1: CACP Economics Engine -->
+                            <rect x="35" y="370" width="130" height="92" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.3"/>
+                            <text x="100" y="402" text-anchor="middle" font-size="12" font-weight="900" fill="#15803d">CACP Economics</text>
+                            <text x="100" y="419" text-anchor="middle" font-size="12" font-weight="900" fill="#15803d">Engine</text>
+                            <text x="100" y="444" text-anchor="middle" font-size="10.5" font-weight="700" fill="#166534">[A2+FL Cost Norms]</text>
+
+                            <!-- Engine 2: Sowing Window Engine -->
+                            <rect x="178" y="370" width="130" height="92" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.3"/>
+                            <text x="243" y="402" text-anchor="middle" font-size="12" font-weight="900" fill="#0369a1">Sowing Window</text>
+                            <text x="243" y="419" text-anchor="middle" font-size="12" font-weight="900" fill="#0369a1">Engine</text>
+                            <text x="243" y="444" text-anchor="middle" font-size="10.5" font-weight="700" fill="#075985">[ICAR Delay Decay]</text>
+
+                            <!-- Engine 3: Geo-Agronomics Engine -->
+                            <rect x="320" y="370" width="130" height="92" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.3"/>
+                            <text x="385" y="402" text-anchor="middle" font-size="12" font-weight="900" fill="#0369a1">Geo-Agronomics</text>
+                            <text x="385" y="419" text-anchor="middle" font-size="12" font-weight="900" fill="#0369a1">Engine</text>
+                            <text x="385" y="444" text-anchor="middle" font-size="10.5" font-weight="700" fill="#075985">[Soil &amp; Crop Ledger]</text>
+
+                            <!-- Sub-Block 2: Indic Audio Stream Engine (Right Side - Vertically Stacked) -->
+                            <rect x="480" y="310" width="490" height="62" rx="6" fill="#ffffff" stroke="#7c3aed" stroke-width="1.3"/>
+                            <text x="725" y="336" text-anchor="middle" font-size="13.5" font-weight="900" fill="#6d28d9">Indic Audio Stream Engine</text>
+                            <text x="725" y="356" text-anchor="middle" font-size="11.5" font-weight="700" fill="#475569">[Bhashini Bridge]</text>
+
+                            <!-- Sub-Block 3: Authentication Service (Right Side - Vertically Stacked) -->
+                            <rect x="480" y="390" width="490" height="62" rx="6" fill="#ffffff" stroke="#0f172a" stroke-width="1.3"/>
+                            <text x="725" y="416" text-anchor="middle" font-size="13.5" font-weight="900" fill="#0f172a">Authentication Service</text>
+                            <text x="725" y="436" text-anchor="middle" font-size="11.5" font-weight="700" fill="#475569">[JWT Session]</text>
+                        </g>
+
+
+                        <!-- ======================================================= -->
+                        <!-- CONNECTORS: APPLICATION TIER -> BOTTOM TIERS            -->
+                        <!-- ======================================================= -->
+                        <!-- Route 1: POST /api/v1/crop/what-if-simulate -->
+                        <path d="M 60 462 L 60 520" fill="none" stroke="#16a34a" stroke-width="1.4" marker-end="url(#arch-arrow-green)"/>
+                        <rect x="15" y="475" width="145" height="15" rx="3" fill="#ffffff" stroke="#16a34a" stroke-width="0.8"/>
+                        <text x="87" y="486" text-anchor="middle" font-size="7.5" font-weight="800" fill="#15803d">POST /api/v1/crop/what-if-simulate</text>
+
+                        <!-- Route 2: Forecast Wholesale Price -->
+                        <path d="M 243 462 L 243 510 Q 243 525 345 525 L 345 615" fill="none" stroke="#0284c7" stroke-width="1.4" marker-end="url(#arch-arrow)"/>
+                        <rect x="185" y="495" width="120" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                        <text x="245" y="506" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">Forecast Wholesale Price</text>
+
+                        <!-- Route 3: Audio Log Instrumentation -->
+                        <path d="M 600 372 L 600 520" fill="none" stroke="#7c3aed" stroke-width="1.3" marker-end="url(#arch-arrow-purple)"/>
+                        <rect x="538" y="485" width="125" height="15" rx="3" fill="#ffffff" stroke="#7c3aed" stroke-width="0.8"/>
+                        <text x="600" y="496" text-anchor="middle" font-size="8" font-weight="800" fill="#6d28d9">Audio Log Instrumentation</text>
+
+                        <!-- Route 4: Query Farm Profile -->
+                        <path d="M 750 452 L 750 520" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                        <rect x="702" y="485" width="95" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                        <text x="749" y="496" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">Query Farm Profile</text>
+
+                        <!-- Route 5: Read / Write Queries (From Tier Border) -->
+                        <path d="M 890 485 L 890 520" fill="none" stroke="#0f172a" stroke-width="1.3" marker-end="url(#arch-arrow-dark)"/>
+                        <rect x="838" y="485" width="105" height="15" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="0.8"/>
+                        <text x="890" y="496" text-anchor="middle" font-size="8" font-weight="800" fill="#0f172a">Read / Write Queries</text>
+
+
+                        <!-- ======================================================= -->
+                        <!-- BOTTOM-LEFT: MACHINE LEARNING & INFERENCE TIER          -->
+                        <!-- ======================================================= -->
+                        <g filter="url(#box-shadow)">
+                            <rect x="15" y="525" width="445" height="235" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3"/>
+                            <rect x="15" y="525" width="445" height="24" rx="6" fill="#e2e8f0"/>
+                            <text x="25" y="542" font-size="12.5" font-weight="900" fill="#0f172a">Machine Learning &amp; Inference Tier (Bottom Left)</text>
+
+                            <!-- Node 1: Sensitivity Simulator -->
+                            <rect x="30" y="555" width="415" height="48" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.4"/>
+                            <text x="237" y="575" text-anchor="middle" font-size="13" font-weight="900" fill="#15803d">Sensitivity Simulator</text>
+                            <text x="237" y="594" text-anchor="middle" font-size="11.5" font-weight="700" fill="#475569">[What-If Stress Testing]</text>
+
+                            <!-- Fan out from Simulator to Yield Model & Price Model -->
+                            <!-- Branch 1: Simulate Gross Yield -->
+                            <path d="M 130 603 L 130 635" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                            <rect x="80" y="612" width="100" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                            <text x="130" y="623" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">Simulate Gross Yield</text>
+
+                            <!-- Branch 2: Simulate Price Shock -->
+                            <path d="M 345 603 L 345 635" fill="none" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arch-arrow)"/>
+                            <rect x="295" y="612" width="100" height="15" rx="3" fill="#ffffff" stroke="#0284c7" stroke-width="0.8"/>
+                            <text x="345" y="623" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">Simulate Price Shock</text>
+
+                            <!-- Model 1: Yield Regression Model -->
+                            <rect x="30" y="638" width="200" height="70" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+                            <text x="130" y="666" text-anchor="middle" font-size="12.5" font-weight="900" fill="#0369a1">Yield Regression Model</text>
+                            <text x="130" y="688" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">[XGBoost Regressor]</text>
+
+                            <!-- Model 2: Mandi Price Model -->
+                            <rect x="245" y="638" width="200" height="70" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.3"/>
+                            <text x="345" y="666" text-anchor="middle" font-size="12.5" font-weight="900" fill="#0369a1">Mandi Price Model</text>
+                            <text x="345" y="688" text-anchor="middle" font-size="11" font-weight="700" fill="#0284c7">[Time-Series Seasonal Index]</text>
+                        </g>
+
+
+                        <!-- ======================================================= -->
+                        <!-- BOTTOM-RIGHT: PERSISTENCE & DATA ACCESS TIER            -->
+                        <!-- ======================================================= -->
+                        <g filter="url(#box-shadow)">
+                            <rect x="475" y="525" width="510" height="235" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3"/>
+                            <rect x="475" y="525" width="510" height="24" rx="6" fill="#e2e8f0"/>
+                            <text x="485" y="542" font-size="12.5" font-weight="900" fill="#0f172a">Persistence &amp; Data Access Tier (Bottom Right)</text>
+
+                            <!-- Node 1: Database Access Layer -->
+                            <rect x="510" y="555" width="440" height="48" rx="6" fill="#ffffff" stroke="#0284c7" stroke-width="1.4"/>
+                            <text x="730" y="575" text-anchor="middle" font-size="13" font-weight="900" fill="#0369a1">Database Access Layer</text>
+                            <text x="730" y="594" text-anchor="middle" font-size="11.5" font-weight="700" fill="#475569">[SQLAlchemy ORM]</text>
+
+                            <!-- Flow down: psycopg2 Pool -->
+                            <line x1="730" y1="603" x2="730" y2="640" stroke="#0f172a" stroke-width="1.5" marker-end="url(#arch-arrow-dark)"/>
+                            <rect x="680" y="612" width="100" height="16" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="0.8"/>
+                            <text x="730" y="624" text-anchor="middle" font-size="9" font-weight="800" fill="#0f172a">psycopg2 Pool</text>
+
+                            <!-- Node 2: Relational Database PostgreSQL 16 Cylinder -->
+                            <path d="M 585 645 L 585 715 A 145 15 0 0 0 875 715 L 875 645 Z" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+                            <ellipse cx="730" cy="715" rx="145" ry="15" fill="#ffffff" stroke="#0284c7" stroke-width="1.5"/>
+                            <ellipse cx="730" cy="645" rx="145" ry="15" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+                            
+                            <text x="730" y="675" text-anchor="middle" font-size="13" font-weight="900" fill="#0369a1">Relational Database</text>
+                            <text x="730" y="696" text-anchor="middle" font-size="11.5" font-weight="700" fill="#334155">[PostgreSQL 16]</text>
+                        </g>
+
+                    </svg>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -1242,6 +2087,11 @@
         <div class="pdf-hud-divider"></div>
         <button class="pdf-hud-btn" onclick="fitToWidth()" title="Fit to Width (Ctrl + 0)" style="font-size: 13px; width: auto; padding: 0 8px;">Fit Width</button>
         <button class="pdf-hud-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)">⛶</button>
+        <div class="pdf-hud-divider"></div>
+        <!-- Dual Theme Toggle (App Theme vs. Executive Blue) -->
+        <button class="pdf-hud-btn" id="theme-toggle-btn" onclick="toggleDeckTheme()" title="Switch Theme (App Green / Executive Blue) [Key: T]" style="font-size: 12px; width: auto; padding: 0 10px; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); border-radius: 9999px;">
+            <span id="theme-icon">🌿</span> <span id="theme-label" style="font-weight: 700; letter-spacing: 0.2px;">App Theme</span>
+        </button>
     </div>
 
     <!-- PDF Viewer Navigation, Touchpad Gestures & Zoom Engine -->
@@ -1255,6 +2105,41 @@
         const hud = document.getElementById('pdf-hud');
         const hudPageText = document.getElementById('hud-page-text');
         const hudZoomText = document.getElementById('hud-zoom-text');
+
+        // ==================== DUAL THEME ENGINE ====================
+        function setDeckTheme(theme) {
+            const icon = document.getElementById('theme-icon');
+            const label = document.getElementById('theme-label');
+            if (theme === 'blue') {
+                document.body.classList.add('theme-blue');
+                document.body.classList.remove('theme-green');
+                if (icon) icon.textContent = '🔷';
+                if (label) label.textContent = 'Executive Blue';
+                localStorage.setItem('deck-theme', 'blue');
+            } else {
+                document.body.classList.remove('theme-blue');
+                document.body.classList.add('theme-green');
+                if (icon) icon.textContent = '🌿';
+                if (label) label.textContent = 'App Theme';
+                localStorage.setItem('deck-theme', 'green');
+            }
+            showHudTemporarily();
+        }
+
+        function toggleDeckTheme() {
+            const isBlue = document.body.classList.contains('theme-blue');
+            setDeckTheme(isBlue ? 'green' : 'blue');
+        }
+
+        // Initialize Theme from URL param ?theme=blue or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramTheme = urlParams.get('theme');
+        if (paramTheme) {
+            setDeckTheme(paramTheme);
+        } else {
+            const savedTheme = localStorage.getItem('deck-theme') || 'green';
+            setDeckTheme(savedTheme);
+        }
 
         // Calculate Responsive Fit-to-Width Scale
         function getFitWidthScale() {
@@ -1334,7 +2219,7 @@
             }
         }, { passive: true });
 
-        // Keyboard Shortcuts (Standard PDF Viewer Controls)
+        // Keyboard Shortcuts (Standard PDF Viewer Controls + Theme Toggle 'T')
         window.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
                 e.preventDefault(); zoomIn();
@@ -1354,6 +2239,9 @@
                 goToSlide(parseInt(e.key));
             } else if (e.key.toLowerCase() === 'f' && !e.ctrlKey && !e.altKey) {
                 toggleFullscreen();
+            } else if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.altKey) {
+                e.preventDefault();
+                toggleDeckTheme();
             }
         });
 

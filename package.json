@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@markdown-viewer/drawio2svg": "^1.5.5"
+  }
+}

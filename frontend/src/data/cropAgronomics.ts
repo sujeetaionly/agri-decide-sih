@@ -750,8 +750,43 @@ export const getDynamicCropDetail = (
 
   const finalSuit = Math.min(98, Math.max(50, suit));
 
+  // Equipment ownership savings adjustment
+  const equipments = (farmData?.equipments || []).map((e) => e.toUpperCase());
+  const ownsTractor = equipments.includes('TRACTOR');
+  const ownsSprayer = equipments.includes('SPRAYER');
+  const ownsPump = equipments.includes('PUMP');
+  const ownsHarvester = equipments.includes('HARVESTER');
+
+  let machineryDeduction = 0;
+  let pesticideDeduction = 0;
+  let irrigationDeduction = 0;
+
+  if (ownsTractor) machineryDeduction += Math.min(raw.cost_breakdown.machinery_rental_cost * 0.7, 2500);
+  if (ownsHarvester) machineryDeduction += Math.min(raw.cost_breakdown.machinery_rental_cost * 0.3, 1200);
+  if (ownsSprayer) pesticideDeduction += Math.min(raw.cost_breakdown.pesticide_cost * 0.3, 800);
+  if (ownsPump) irrigationDeduction += Math.min(raw.cost_breakdown.irrigation_electricity_cost * 0.5, 600);
+
+  const totalDeduction = machineryDeduction + pesticideDeduction + irrigationDeduction;
+
+  const adjustedCostBreakdown: CACPItemizedCost = {
+    ...raw.cost_breakdown,
+    machinery_rental_cost: Math.max(500, raw.cost_breakdown.machinery_rental_cost - machineryDeduction),
+    pesticide_cost: Math.max(400, raw.cost_breakdown.pesticide_cost - pesticideDeduction),
+    irrigation_electricity_cost: Math.max(200, raw.cost_breakdown.irrigation_electricity_cost - irrigationDeduction),
+    operational_cost_a2_inr_per_acre: Math.max(4000, raw.cost_breakdown.operational_cost_a2_inr_per_acre - totalDeduction),
+    total_cost_a2_fl_inr_per_acre: Math.max(5000, raw.cost_breakdown.total_cost_a2_fl_inr_per_acre - totalDeduction),
+  };
+
+  const adjustedTotalCost = Math.max(4000, raw.total_cost_inr_per_acre - totalDeduction);
+  const adjustedNetProfit = Math.round(raw.expected_net_profit_per_acre_inr + totalDeduction);
+  const adjustedProfitPerDay = Math.round((adjustedNetProfit / (raw.duration_days || 90)) * 100) / 100;
+
   return {
     ...raw,
     suitability_pct: finalSuit,
+    total_cost_inr_per_acre: adjustedTotalCost,
+    expected_net_profit_per_acre_inr: adjustedNetProfit,
+    net_profit_per_day_inr: adjustedProfitPerDay,
+    cost_breakdown: adjustedCostBreakdown,
   };
 };

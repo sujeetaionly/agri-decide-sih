@@ -4,12 +4,15 @@ export type WaterCapacity = 'HIGH' | 'MEDIUM' | 'LOW';
 export type WaterSource = 'CANAL' | 'WELL' | 'BOREWELL' | 'RAINFED';
 export type CropSeason = 'KHARIF' | 'RABI' | 'ZAID';
 
+export type FarmEquipment = 'TRACTOR' | 'PUMP' | 'SPRAYER' | 'HARVESTER' | 'MANUAL_TOOLS';
+
 export interface FarmQuestionnaireState {
   landAcres: number | null;
   landUnit: LandUnit;
   soilType: SoilType | string | null;
   waterCapacity: WaterCapacity | string | null;
   waterSource: WaterSource | string | null;
+  equipments: string[];
   previousCrop: string | null;
   previousCrops: string[];
   intendedCrops: string[];
