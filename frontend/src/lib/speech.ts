@@ -120,9 +120,10 @@ export async function speakText(
   onEnd?: () => void,
   onError?: (e: any) => void
 ): Promise<void> {
-  // Increment session ID to cancel any pending/in-flight playback immediately
-  const sessionId = ++currentSessionId;
+  // First, stop any prior audio (this increments currentSessionId)
   stopSpeaking();
+  // Capture this active session ID
+  const sessionId = currentSessionId;
 
   if (!text || !text.trim()) {
     if (onEnd) onEnd();
