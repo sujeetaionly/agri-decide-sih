@@ -18,11 +18,28 @@
 
 ---
 
+<div align="center">
+
+### 📱 2-Minute Android App Demonstration
+
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+  <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=640&q=80" alt="Fasal-Disha Android App Demo Walkthrough" width="340" style="border-radius: 24px; box-shadow: 0 12px 36px rgba(0,0,0,0.25); border: 4px solid #1E5622;" />
+</a>
+
+<p>
+  <strong>🎬 Watch the 2-minute silent walkthrough video (Android Portrait View)</strong><br />
+  <em>Demonstrating the 7-Step Zero-Lab Wizard, Live Mandi Trends, and Head-to-Head Crop Comparison.</em>
+</p>
+
+</div>
+
+---
+
 ## 📑 Table of Contents
 1. [Executive Summary & Core Value Proposition](#-1-executive-summary--core-value-proposition)
 2. [Key Feature Innovations](#-2-key-feature-innovations)
 3. [System Architecture & Data Pipeline](#-3-system-architecture--data-pipeline)
-4. [Mathematical Modeling & Optimization Functions](#-4-mathematical-modeling--optimization-functions)
+4. [Mathematical Formulations & Optimization Functions](#-4-mathematical-formulations--optimization-functions)
 5. [End-to-End User Journey](#-5-end-to-end-user-journey)
 6. [Machine Learning & Ground-Truth Benchmarks](#-6-machine-learning--ground-truth-benchmarks)
 7. [Technology Stack](#-7-technology-stack)
@@ -42,7 +59,7 @@ Traditional crop recommendation software often fails smallholder Indian farmers 
 **फसल-दिशा (Fasal-Disha)** redefines agro-advisory by shifting the core metric to **Net In-Hand Profit (₹/Acre)**:
 
 $$
-\text{Net Profit (₹/Acre)} = \left(\text{Yield} \times \text{Forecasted Mandi Price}\right) - \left(\text{CACP } A_2+FL \text{ Cost} - \text{Owned Machinery Savings}\right)
+\text{Net Profit} = (\text{Yield} \times \text{Forecasted Price}) - (\text{CACP Cost} - \text{Equipment Savings})
 $$
 
 ### 🛡️ Why Fasal-Disha Stands Out:
@@ -127,29 +144,28 @@ graph TD
 
 ---
 
-## 🔬 4. Mathematical Modeling & Optimization Functions
+## 🔬 4. Mathematical Formulations & Optimization Functions
 
 ### 4.1. Net Profit Objective Function
-For any candidate crop $i \in C$, the expected Net Profit per acre $\Pi_i$ is computed as:
+For any candidate crop $i$, the expected Net Profit per acre $\Pi_i$ is computed as:
 
 $$
-\Pi_i = \left( \hat{Y}_i \times \hat{P}_{i, \text{harvest}} \right) - \left( C_{i, \text{CACP } A_2+FL} - \sum_{k \in K} \delta_k \cdot \mathbb{I}_{\text{owned}}(k) \right)
-$$
-
-$$
-\Pi_{\text{per\_day}, i} = \frac{\Pi_i}{\text{Crop Duration (Days)}_i}
+\Pi_i = (\hat{Y}_i \times \hat{P}_i) - (C_i - \Delta_{\text{machinery}})
 $$
 
 $$
-\Delta \Pi = \Pi_{\text{AI\_Recommended}} - \Pi_{\text{Farmer\_Intended}}
+\Pi_{\text{daily}, i} = \frac{\Pi_i}{\text{Duration}_i}
+$$
+
+$$
+\Delta \Pi = \Pi_{\text{AI}} - \Pi_{\text{Farmer}}
 $$
 
 Where:
 - $\hat{Y}_i$: Expected harvest yield in quintals per acre ($\text{qtl/acre}$).
-- $\hat{P}_{i, \text{harvest}}$: Forecasted wholesale mandi price ($\text{₹/qtl}$).
-- $C_{i, \text{CACP } A_2+FL}$: Itemized input expenditure ($A_2$) + family labour ($FL$).
-- $\delta_k$: Cost savings for owned equipment $k \in \{\text{Tractor: -₹3,500}, \text{Sprayer: -₹800}, \text{Pump: -₹600}, \text{Harvester: -₹1,500}\}$.
-- $\mathbb{I}_{\text{owned}}(k)$: Binary indicator of machinery ownership.
+- $\hat{P}_i$: Forecasted wholesale mandi price ($\text{₹/qtl}$).
+- $C_i$: CACP itemized cultivation cost ($A_2+FL$) per acre.
+- $\Delta_{\text{machinery}}$: Cost deduction for owned equipment (Tractor: ₹3,500, Sprayer: ₹800, Pump: ₹600, Harvester: ₹1,500).
 
 ---
 
@@ -157,14 +173,14 @@ Where:
 Yield estimation integrates XGBoost regression with agronomic multipliers:
 
 $$
-\hat{Y}_i = f_{\text{XGBoost}}(\mathbf{x}_i) \cdot \mu_{\text{rotation}} \cdot \left( 1 - \lambda_{\text{delay}}(\Delta d) \right) \cdot \left( 1 - \gamma_{\text{rain}}(\Delta R) \right)
+\hat{Y}_i = \text{XGBoost}(\mathbf{x}_i) \cdot \mu_{\text{rotation}} \cdot (1 - \lambda_{\text{delay}}) \cdot (1 - \gamma_{\text{rain}})
 $$
 
 $$
-\mathbf{x}_i = \left[ \text{CropID}_i, \text{SoilType}_{\text{GIS}}, \text{WaterCapacity}, \text{OrganicCarbon}, \text{pH}, \text{SoilTexture} \right]
+\mathbf{x}_i = [\text{CropID}_i, \text{SoilGIS}_i, \text{WaterCapacity}_i, \text{OrganicCarbon}_i, \text{pH}_i, \text{Texture}_i]
 $$
 
-#### Agronomic Multipliers & Penalty Curves:
+#### Agronomic Multipliers & Penalty Parameters:
 
 | Agronomic Parameter | Multiplier / Formula | Agricultural Rationale |
 | :--- | :--- | :--- |
@@ -172,19 +188,22 @@ $$
 | **Legume $\rightarrow$ Cereal** | $\mu_{\text{rotation}} = 1.10$ | Residual soil nitrogen uptake from preceding pulse crop |
 | **Monoculture Penalty** | $\mu_{\text{rotation}} = 0.85$ | Nutrient exhaustion & pest cycle build-up from repeat planting |
 | **Standard Alternate Rotation**| $\mu_{\text{rotation}} = 1.00$ | Standard baseline rotation |
-| **Sowing Delay Decay Curve** | $\lambda(\Delta d) = \max(0, (\Delta d - d_{\text{cutoff}}) \times \beta)$ | $\beta \approx 0.5\%/\text{day}$ yield decay past optimal sowing window |
-| **Rainfall Deficit Penalty** | $\gamma(\Delta R) = \kappa_i \cdot \vert\Delta R\vert \quad (\Delta R < 0)$ | Crop-specific drought stress coefficient $\kappa_i$ |
+| **Sowing Delay Decay** | $\lambda_{\text{delay}} = \max(0, (\Delta d - d_{\text{cutoff}}) \times \beta)$ | $\beta \approx 0.5\%/\text{day}$ yield decay past optimal window |
+| **Rainfall Deficit Penalty** | $\gamma_{\text{rain}} = \kappa_i \cdot \vert\Delta R\vert \quad (\Delta R < 0)$ | Crop-specific drought stress coefficient $\kappa_i$ |
 
 ---
 
-### 4.3. Wholesale Mandi Price Forecasting ($\hat{P}_{i}$)
-Wholesale prices are modeled using 5-year multi-year AgMarknet modal trends combined with seasonal arrival factors:
+### 4.3. Wholesale Mandi Price Forecasting ($\hat{P}_i$)
+Wholesale prices are modeled using 5-year AgMarknet modal trends combined with seasonal arrival indices:
 
 $$
-\hat{P}_{i, \text{harvest}} = \bar{P}_{i, \text{5-yr Modal}} \times S_{i, m_{\text{harvest}}} \times \left( 1 + \Delta_{\text{price\_shock}} \right)
+\hat{P}_i = \bar{P}_i \times S_{i, m} \times (1 + \Delta_{\text{shock}})
 $$
 
-Where $S_{i, m}$ represents the historical seasonal arrival index factor for month $m \in \{1, \dots, 12\}$.
+Where:
+- $\bar{P}_i$: 5-Year historical average APMC modal price for crop $i$.
+- $S_{i, m}$: Seasonal arrival index factor for harvest month $m$.
+- $\Delta_{\text{shock}}$: Real-time price shock adjustment from sensitivity simulator.
 
 ---
 
@@ -386,7 +405,7 @@ cd android
 
 ## 📜 11. License & Attribution
 
-* **Project**: **फसल-दिशा (Fasal-Disha / Agri-Decide)**
+* **Project**: **फसल-दिशा (Fasal-Disha)**
 * **Initiative**: **Smart India Hackathon (SIH)**
 * **Problem Statement**: **PS #24 — AI-Based Crop Recommendation for Farmers**
 * **License**: Open-source under the [MIT License](https://opensource.org/licenses/MIT).
