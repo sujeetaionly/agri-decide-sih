@@ -296,11 +296,11 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
       {/* Additional Languages Modal Sheet with Proper Visual Hierarchy */}
       {isMoreModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-          <div className="w-full max-w-md bg-white dark:bg-stone-900 rounded-[32px] p-6 shadow-2xl border border-stone-200 dark:border-stone-700 space-y-5 animate-scaleUp">
+          <div className="w-full max-w-md bg-white dark:bg-stone-900 rounded-[32px] p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-stone-700 space-y-3.5 animate-scaleUp">
             
             {/* Prominent Modal Header */}
-            <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-3.5">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-2.5">
+              <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-2xl">translate</span>
                 <h2 className="text-xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
                   अन्य भाषा चुनें
@@ -312,15 +312,15 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
                   setSearchQuery('');
                   setIsMoreModalOpen(false);
                 }}
-                className="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
-                <span className="material-symbols-outlined text-xl">close</span>
+                <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
 
             {/* Redesigned Search & Voice Bar */}
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-3.5 text-stone-400 text-xl pointer-events-none">
                   search
