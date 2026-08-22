@@ -89,63 +89,55 @@ $$
 
 ```mermaid
 graph TD
-    subgraph ClientLayer ["📱 Client & Presentation Tier (Mobile & Web)"]
+    subgraph TIER1 ["1️⃣ Client & Presentation Tier (Mobile & Web)"]
+        direction LR
         PWA["React 18 + Vite PWA\n[TypeScript • Tailwind CSS]"]
         NativeBridge["Capacitor Android Container\n[Haptics • Native TTS • GPS]"]
         PDFModule["Vector PDF Engine\n[jsPDF A4 Advisory Slip]"]
+        PWA --- NativeBridge
+        PWA --> PDFModule
     end
 
-    subgraph ServiceLayer ["⚡ Application Service Tier (FastAPI Gateway)"]
+    subgraph TIER2 ["2️⃣ Application Service Tier (FastAPI Gateway)"]
+        direction TB
         RecEngine["Recommendation Orchestrator\n[recommendation_service.py]"]
         EconEngine["CACP Economics Engine\n[economics_service.py]"]
         WindowEngine["Sowing Window Service\n[sowing_window_service.py]"]
         GeoEngine["Local Crop Discovery\n[local_crop_service.py]"]
         AudioEngine["Indic Voice Stream Engine\n[tts_routes.py]"]
+        RecEngine --> EconEngine
+        RecEngine --> WindowEngine
+        RecEngine --> GeoEngine
     end
 
-    subgraph MLInferenceLayer ["🤖 Machine Learning & Sensitivity Layer"]
+    subgraph TIER3 ["3️⃣ Machine Learning & Sensitivity Tier"]
+        direction LR
         YieldModel["Yield Predictor\n[XGBoost Regressor • ICAR Baseline]"]
         PriceModel["Mandi Price Forecaster\n[5-Yr APMC Modal • Seasonal Indices]"]
         WhatIfEngine["Sensitivity Simulator\n[Rainfall Deficit & Price Shock]"]
     end
 
-    subgraph DataRepositories ["🗄️ Ground-Truth Data Repositories"]
+    subgraph TIER4 ["4️⃣ Ground-Truth Data Repositories"]
+        direction LR
         ISRIC["ISRIC SoilGrids 250m GIS\n[Organic Carbon • pH • Bulk Density]"]
         AgMarknet["AgMarknet APMC Mandi DB\n[14,780+ Historical Records]"]
         CACP["CACP Production Cost Norms\n[Itemized A2+FL Database]"]
         ICAR["ICAR Agro-Climatic Zones\n[State Sowing Calendars]"]
     end
 
-    %% Client Interactions
-    PWA --> NativeBridge
-    NativeBridge --> PWA
-    PWA --> PDFModule
-    PWA -->|"POST /api/v1/crop/recommend"| RecEngine
-    PWA -->|"POST /api/v1/crop/what-if-simulate"| WhatIfEngine
-    PWA -->|"GET /api/v1/tts"| AudioEngine
-
-    %% Service Layer Orchestration
-    RecEngine --> EconEngine
-    RecEngine --> WindowEngine
-    RecEngine --> GeoEngine
-    RecEngine --> YieldModel
-    RecEngine --> PriceModel
-
-    %% ML Sensitivity Connections
-    WhatIfEngine --> YieldModel
-    WhatIfEngine --> PriceModel
-    WhatIfEngine --> EconEngine
-
-    %% External Data Grounding
-    CACP -.->|"A2+FL Itemized Norms"| EconEngine
-    AgMarknet -.->|"5-Yr Modal Rates"| PriceModel
-    ISRIC -.->|"250m GIS Rasters"| GeoEngine
-    ICAR -.->|"Crop Calendars"| WindowEngine
+    %% Clean Top-Down Vertical Flow
+    TIER1 ==>|"REST API Requests (JSON)"| TIER2
+    TIER2 <==>|"Inference & Simulation"| TIER3
+    TIER4 -.->|"Ground-Truth Data Ingestion"| TIER2
+    TIER4 -.->|"Model Training & Weights"| TIER3
 ```
 
 ---
 
-## 🔬 4. Mathematical Formulations & Optimization Functions
+<details>
+<summary><b>🔬 4. Mathematical Formulations & Optimization Functions (Click to expand)</b></summary>
+
+<br />
 
 ### 4.1. Net Profit Objective Function
 For any candidate crop $i$, the expected Net Profit per acre $\Pi_i$ is computed as:
@@ -205,6 +197,8 @@ Where:
 - $\bar{P}_i$: 5-Year historical average APMC modal price for crop $i$.
 - $S_{i, m}$: Seasonal arrival index factor for harvest month $m$.
 - $\Delta_{\text{shock}}$: Real-time price shock adjustment from sensitivity simulator.
+
+</details>
 
 ---
 
