@@ -12,17 +12,24 @@ const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'https://fasal-di
 let activeAudio: HTMLAudioElement | null = null;
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 let keepAliveTimer: any = null;
+let currentSessionId = 0;
 
 function getSpeechSynthesisLang(lang: SpeechLanguage): string {
   if (lang === 'mr') return 'mr-IN';
   if (lang === 'gu') return 'gu-IN';
   if (lang === 'en') return 'en-IN';
+  if (lang === 'pa') return 'pa-IN';
+  if (lang === 'ta') return 'ta-IN';
+  if (lang === 'te') return 'te-IN';
+  if (lang === 'kn') return 'kn-IN';
+  if (lang === 'bn') return 'bn-IN';
   return 'hi-IN';
 }
 
 function playViaWebSpeech(
   cleanText: string,
   lang: SpeechLanguage,
+  sessionId: number,
   onStart?: () => void,
   onEnd?: () => void,
   onError?: (e: any) => void
@@ -39,6 +46,8 @@ function playViaWebSpeech(
       window.speechSynthesis.resume();
     }
 
+    if (sessionId !== currentSessionId) return;
+
     const targetLang = getSpeechSynthesisLang(lang);
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = targetLang;
@@ -49,6 +58,10 @@ function playViaWebSpeech(
     (window as any).__activeUtterance = utterance;
 
     utterance.onstart = () => {
+      if (sessionId !== currentSessionId) {
+        window.speechSynthesis.cancel();
+        return;
+      }
       if (onStart) onStart();
       clearInterval(keepAliveTimer);
       keepAliveTimer = setInterval(() => {
@@ -63,25 +76,33 @@ function playViaWebSpeech(
 
     utterance.onend = () => {
       clearInterval(keepAliveTimer);
-      activeUtterance = null;
-      (window as any).__activeUtterance = null;
-      if (onEnd) onEnd();
+      if (activeUtterance === utterance) {
+        activeUtterance = null;
+        (window as any).__activeUtterance = null;
+      }
+      if (sessionId === currentSessionId && onEnd) onEnd();
     };
 
     utterance.onerror = (e) => {
       clearInterval(keepAliveTimer);
-      activeUtterance = null;
-      (window as any).__activeUtterance = null;
-      if (onError) onError(e);
-      else if (onEnd) onEnd();
+      if (activeUtterance === utterance) {
+        activeUtterance = null;
+        (window as any).__activeUtterance = null;
+      }
+      if (sessionId === currentSessionId) {
+        if (onError) onError(e);
+        else if (onEnd) onEnd();
+      }
     };
 
     window.speechSynthesis.speak(utterance);
   } catch (err) {
     clearInterval(keepAliveTimer);
     activeUtterance = null;
-    if (onError) onError(err);
-    else if (onEnd) onEnd();
+    if (sessionId === currentSessionId) {
+      if (onError) onError(err);
+      else if (onEnd) onEnd();
+    }
   }
 }
 
@@ -92,6 +113,8 @@ export async function speakText(
   onEnd?: () => void,
   onError?: (e: any) => void
 ): Promise<void> {
+  // Increment session ID to cancel any pending/in-flight playback immediately
+  const sessionId = ++currentSessionId;
   stopSpeaking();
 
   if (!text || !text.trim()) {
@@ -107,6 +130,7 @@ export async function speakText(
     try {
       if (onStart) onStart();
       await TextToSpeech.stop();
+      if (sessionId !== currentSessionId) return;
       await TextToSpeech.speak({
         text: cleanText,
         lang: targetLang,
@@ -115,46 +139,21 @@ export async function speakText(
         volume: 1.0,
         category: 'ambient',
       });
-      if (onEnd) onEnd();
+      if (sessionId === currentSessionId && onEnd) onEnd();
       return;
     } catch (nativeErr) {
-      console.warn('[TTS] Native engine fallback to audio stream:', nativeErr);
+      console.warn('[TTS] Native engine fallback:', nativeErr);
     }
   }
 
-  // 2. Web Audio Stream from Backend
-  const ttsLang = lang === 'mr' ? 'mr' : lang === 'gu' ? 'gu' : lang === 'en' ? 'en' : 'hi';
-  try {
-    const audioUrl = `${API_BASE_URL}/tts?text=${encodeURIComponent(cleanText)}&lang=${ttsLang}`;
-    const audio = new Audio(audioUrl);
-    activeAudio = audio;
-
-    audio.onplay = () => {
-      if (onStart) onStart();
-    };
-
-    audio.onended = () => {
-      activeAudio = null;
-      if (onEnd) onEnd();
-    };
-
-    audio.onerror = () => {
-      activeAudio = null;
-      playViaWebSpeech(cleanText, lang, onStart, onEnd, onError);
-    };
-
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        playViaWebSpeech(cleanText, lang, onStart, onEnd, onError);
-      });
-    }
-  } catch {
-    playViaWebSpeech(cleanText, lang, onStart, onEnd, onError);
-  }
+  // 2. Browser Environment: Web Speech API with atomic session check
+  playViaWebSpeech(cleanText, lang, sessionId, onStart, onEnd, onError);
 }
 
 export function stopSpeaking(): void {
+  // Invalidate any active session
+  currentSessionId++;
+
   if (Capacitor.isNativePlatform()) {
     try {
       TextToSpeech.stop().catch(() => {});
@@ -164,7 +163,11 @@ export function stopSpeaking(): void {
   if (activeAudio) {
     try {
       activeAudio.pause();
-      activeAudio.currentTime = 0;
+      activeAudio.removeAttribute('src');
+      activeAudio.load();
+      activeAudio.onplay = null;
+      activeAudio.onended = null;
+      activeAudio.onerror = null;
     } catch {}
     activeAudio = null;
   }
