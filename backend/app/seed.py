@@ -1,6 +1,6 @@
 """
 Database Seed Script:
-Populates PostgreSQL / SQLite database with complete benchmark datasets:
+Populates PostgreSQL database with complete benchmark datasets:
 1. 15 Master Crops (with pure localized Indic names)
 2. Official CACP Cultivation Cost breakdown per acre
 3. Historical Mandi Wholesale Prices from Agmarknet
