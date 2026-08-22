@@ -63,8 +63,8 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Bar with Safe Area Top Inset */}
-      <div className="flex items-center justify-between pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-2">
+      {/* Top Bar with Clean Spacing */}
+      <div className="flex items-center justify-between pt-1 pb-2">
         <button
           onClick={handleChange}
           className="flex items-center gap-1 text-sm font-semibold text-stone-700 dark:text-stone-300 hover:text-primary active:scale-95 transition-colors cursor-pointer"

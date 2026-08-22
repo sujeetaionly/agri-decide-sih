@@ -136,8 +136,8 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-4 max-w-md mx-auto">
       
-      {/* Top Header with Safe Area Inset Support */}
-      <header className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3">
+      {/* Top Header with Clean Spacing */}
+      <header className="pt-1 pb-2">
         <div className="relative flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-3xl">translate</span>
