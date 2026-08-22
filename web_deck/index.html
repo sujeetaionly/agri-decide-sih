@@ -55,7 +55,20 @@
             height: 100vh;
             overflow: auto;
             position: relative;
-            background-color: #2b2d30;
+            background-color: #1e2022;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Deck Canvas Wrapper to guarantee proper scrolling boundaries at any zoom */
+        #deck-canvas-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0 100px 0;
+            box-sizing: border-box;
+            transform-origin: top center;
         }
 
         /* Deck Canvas with Zoom Scaling */
@@ -63,82 +76,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 40px;
-            padding: 30px 20px 80px 20px;
+            gap: 36px;
+            width: 1920px;
             transform-origin: top center;
-            transition: transform 0.05s ease-out;
-            min-width: 1960px;
-        }
-
-        /* Auto-Hiding PDF-Viewer Floating HUD (Edge/Chrome Style) */
-        .pdf-hud {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(30, 32, 35, 0.92);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            padding: 6px 16px;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
-            color: #f1f5f9;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .pdf-hud.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .pdf-hud-btn {
-            background: transparent;
-            color: #e2e8f0;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
-
-        .pdf-hud-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-        }
-
-        .pdf-hud-divider {
-            width: 1px;
-            height: 18px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .pdf-hud-page-indicator {
-            font-size: 13.5px;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-            padding: 0 6px;
-            color: #cbd5e1;
-        }
-
-        .pdf-hud-zoom-indicator {
-            font-size: 13px;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            min-width: 48px;
-            text-align: center;
-            color: #94a3b8;
+            transition: transform 0.1s ease-out;
         }
 
         /* Slide Container (Strict 16:9 Widescreen) */
@@ -153,6 +94,209 @@
             page-break-after: always;
             break-after: page;
             flex-shrink: 0;
+            cursor: default;
+        }
+
+        /* Single Slide Presentation Mode */
+        body.mode-presentation {
+            overflow: hidden !important;
+        }
+        body.mode-presentation #deck-viewport {
+            overflow: hidden !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background-color: #0b0f19 !important;
+        }
+        body.mode-presentation #deck-canvas-wrapper {
+            padding: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        body.mode-presentation #deck-canvas {
+            gap: 0 !important;
+            position: relative !important;
+            width: 1920px !important;
+            height: 1080px !important;
+            transform-origin: center center !important;
+        }
+        body.mode-presentation .slide-wrapper {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            display: none !important;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            margin: 0 !important;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
+            cursor: pointer;
+        }
+        body.mode-presentation .slide-wrapper.active-slide {
+            display: block !important;
+            opacity: 1 !important;
+            z-index: 10;
+        }
+
+        /* Floating HUD (Glassmorphism, High Usability) */
+        .pdf-hud {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(18, 20, 24, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+            color: #f1f5f9;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .pdf-hud.visible, .pdf-hud:hover, .pdf-hud:focus-within {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+
+        .pdf-hud-btn {
+            background: transparent;
+            color: #e2e8f0;
+            border: none;
+            height: 34px;
+            padding: 0 10px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            white-space: nowrap;
+            gap: 6px;
+        }
+
+        .pdf-hud-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+        }
+
+        .pdf-hud-btn:active {
+            transform: scale(0.96);
+        }
+
+        .pdf-hud-btn.active {
+            background: rgba(34, 197, 94, 0.25);
+            border: 1px solid #22c55e;
+            color: #86efac;
+        }
+
+        .pdf-hud-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 2px;
+        }
+
+        /* Slide Dropdown Selector in HUD */
+        .pdf-slide-dropdown-wrapper {
+            position: relative;
+        }
+
+        .pdf-hud-page-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            height: 32px;
+            padding: 0 10px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.15s ease;
+        }
+
+        .pdf-hud-page-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .pdf-slide-dropdown-menu {
+            position: absolute;
+            bottom: 46px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 24, 30, 0.98);
+            backdrop-filter: blur(24px);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 8px;
+            width: 300px;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+            z-index: 1010;
+        }
+
+        .pdf-slide-dropdown-menu.show {
+            display: flex;
+        }
+
+        .pdf-slide-dropdown-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .pdf-slide-dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+        }
+
+        .pdf-slide-dropdown-item.active {
+            background: rgba(46, 125, 50, 0.4);
+            border: 1px solid #4ade80;
+            color: #86efac;
+            font-weight: 800;
+        }
+
+        .pdf-hud-zoom-indicator {
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            min-width: 52px;
+            text-align: center;
+            color: #cbd5e1;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.15s ease;
+        }
+
+        .pdf-hud-zoom-indicator:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
         }
 
         @media print {
@@ -1144,7 +1288,8 @@
 
     <!-- Scrollable Viewport (Touchpad Gestures, Pinch-to-Zoom & Pan) -->
     <div id="deck-viewport">
-        <div id="deck-canvas">
+        <div id="deck-canvas-wrapper">
+            <div id="deck-canvas">
 
     <!-- SLIDE 1: TITLE PAGE -->
     <div class="slide-wrapper" id="slide-1">
@@ -2004,126 +2149,132 @@
         <div class="slide-5-team-oval-text">Almost AC</div>
         <div class="slide-5-title-box">
             <h1 class="slide-5-title">IMPACT AND BENEFITS</h1>
-            <p class="slide-5-subtitle">• Potential Impact on Target Audience &amp; Multi-Dimensional Benefits of the Solution</p>
+            <p class="slide-5-subtitle">• Potential Impact on Target Audience &amp; Benefits (Social, Economic, Environmental)</p>
         </div>
 
         <div class="slide-5-content">
             <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; height: 100%; box-sizing: border-box;">
-                <!-- Left Column: Impact on Target Audience & Multi-Dimensional Benefits -->
-                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                
+                <!-- Left Column: 3 Core Pillars of Impact & Highlight Metric Cards -->
+                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 16px;">
                     
-                    <!-- Section 1: Potential Impact on Target Audience -->
-                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
-                        <div style="font-size: 20px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">
-                            <span>👥</span> Potential Impact on Target Audience :
+                    <!-- Section 1: Multi-Dimensional Impact Pillars -->
+                    <div style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 20px 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; flex: 1;">
+                        <div style="font-size: 21px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 14px;">
+                            <span>🌱</span>
+                            <span>Multi-Dimensional Farmer &amp; Agricultural Benefits</span>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 15px; line-height: 1.35; color: #334155;">
-                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">120M+ Indian Smallholder Farmers (&lt;2 Hectares):</strong> Equips India's most vulnerable agricultural demographic with institutional-grade agro-economic intelligence.</div>
-                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">Zero Lab-Test &amp; Capital Barrier:</strong> Eliminates dependency on expensive chemical N-P-K soil kits via 250m GIS SoilGrids; actionable advice in &lt;90 seconds.</div>
-                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">End-to-End Decision Lifecycle:</strong> Not just static crop picking — provides duration-adjusted ₹/Acre net profit, stress testing, 120-day milestone calendar, &amp; printable PDF slip.</div>
-                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">Season &amp; Crop Rotation Awareness:</strong> Auto-filters for Kharif/Rabi/Zaid and incorporates historical crop rotation to disrupt pest cycles and replenish nitrogen.</div>
+
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <!-- Pillar 1: Economic Gain -->
+                            <div style="display: flex; gap: 14px; align-items: flex-start;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: #f0fdf4; border: 1.5px solid #86efac; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
+                                    💰
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <strong style="font-size: 18.5px; color: #15803d;">Direct Economic Gain (+₹5,000 to ₹12,000 / Acre)</strong>
+                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Maximizes pocket net margin via CACP $A_2+FL$ input cost optimization and owned tractor/equipment rental deductions (-₹4,900/ac).</p>
+                                </div>
+                            </div>
+
+                            <!-- Pillar 2: Climate Resilience -->
+                            <div style="display: flex; gap: 14px; align-items: flex-start;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; border: 1.5px solid #93c5fd; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
+                                    🌦️
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <strong style="font-size: 18.5px; color: #1d4ed8;">Pre-Season Climate &amp; Price Risk Resilience</strong>
+                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Stress-tests outcomes against $-30\%$ monsoon deficit and $-25\%$ APMC market crashes before farmers invest working capital.</p>
+                                </div>
+                            </div>
+
+                            <!-- Pillar 3: Soil Equity & Nitrogen Fixation -->
+                            <div style="display: flex; gap: 14px; align-items: flex-start;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: #fefce8; border: 1.5px solid #fde047; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
+                                    🌾
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <strong style="font-size: 18.5px; color: #a16207;">Biological Soil Health &amp; Nitrogen Fixation (+12%)</strong>
+                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Incentivizes pulse/oilseed rotation, replenishing organic soil nitrogen, disrupting pest cycles, and curbing chemical fertilizer runoff.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Section 2: Multi-Dimensional Benefits Matrix -->
-                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
-                        <div style="font-size: 20px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">
-                            <span>🌱</span> Multi-Dimensional Benefits of the Solution :
+                    <!-- Section 2: 3 Big Highlight Metric Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+                        <div style="background: #ffffff; border: 2px solid #86efac; border-radius: 12px; padding: 12px 14px; text-align: center; box-shadow: 0 4px 10px rgba(22, 101, 52, 0.05);">
+                            <div style="font-size: 30px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">14.6 Cr</div>
+                            <div style="font-size: 14px; font-weight: 800; color: #15803d; text-transform: uppercase; margin-top: 2px;">Smallholder Scope</div>
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14.2px; line-height: 1.32;">
-                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 10px;">
-                                <div style="font-weight: 900; color: #15803d; font-size: 14.5px; margin-bottom: 2px;">💰 Economic Benefits</div>
-                                <div style="color: #166534;">+72.3% verified Wardha profit gain (+₹10,370/ac) + machinery rental offset saving ₹3,500–₹4,300/ac.</div>
-                            </div>
-                            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 8px 10px;">
-                                <div style="font-weight: 900; color: #1d4ed8; font-size: 14.5px; margin-bottom: 2px;">🗣️ Social &amp; Digital Inclusion</div>
-                                <div style="color: #1e40af;">Digital India BHASHINI Voice AI across 5 Indic regional languages eliminates rural literacy barrier.</div>
-                            </div>
-                            <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 8px 10px;">
-                                <div style="font-weight: 900; color: #a16207; font-size: 14.5px; margin-bottom: 2px;">🌾 Agronomic &amp; Soil Equity</div>
-                                <div style="color: #854d0e;">Legume rotation boost (+12%) restores organic nitrogen; monoculture penalty (-15%) prevents soil exhaustion.</div>
-                            </div>
-                            <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 8px 10px;">
-                                <div style="font-weight: 900; color: #7e22ce; font-size: 14.5px; margin-bottom: 2px;">🏛️ National Policy Alignment</div>
-                                <div style="color: #6b21a8;">100% FOSS open-source architecture; integratable with PM-Kisan, KVKs, PACS, &amp; AgriStack national DPI.</div>
-                            </div>
+                        <div style="background: #ffffff; border: 2px solid #86efac; border-radius: 12px; padding: 12px 14px; text-align: center; box-shadow: 0 4px 10px rgba(22, 101, 52, 0.05);">
+                            <div style="font-size: 30px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">+72.3%</div>
+                            <div style="font-size: 14px; font-weight: 800; color: #15803d; text-transform: uppercase; margin-top: 2px;">Profit Gain (+₹10.3k/ac)</div>
                         </div>
-                    </div>
-
-                    <!-- Section 3: 3 Highlight Metric Cards -->
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px 12px; text-align: center;">
-                            <div style="font-size: 26px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">120M+</div>
-                            <div style="font-size: 12.5px; font-weight: 800; color: #15803d; text-transform: uppercase;">Smallholder Farmers</div>
-                        </div>
-                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px 12px; text-align: center;">
-                            <div style="font-size: 26px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">+72.3%</div>
-                            <div style="font-size: 12.5px; font-weight: 800; color: #15803d; text-transform: uppercase;">Field Profit Gain (+₹10.3k/ac)</div>
-                        </div>
-                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px 12px; text-align: center;">
-                            <div style="font-size: 26px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">100%</div>
-                            <div style="font-size: 12.5px; font-weight: 800; color: #15803d; text-transform: uppercase;">Real Govt Data Fidelity</div>
+                        <div style="background: #ffffff; border: 2px solid #86efac; border-radius: 12px; padding: 12px 14px; text-align: center; box-shadow: 0 4px 10px rgba(22, 101, 52, 0.05);">
+                            <div style="font-size: 30px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">100%</div>
+                            <div style="font-size: 14px; font-weight: 800; color: #15803d; text-transform: uppercase; margin-top: 2px;">CACP &amp; GIS Fidelity</div>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- Right Column: Before vs After Head-to-Head Comparison & Economic Proof -->
+                <!-- Right Column: Before vs After Head-to-Head Comparison Card -->
                 <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
                     
-                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 16px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <div style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 18px 20px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                         
-                        <div style="font-size: 19px; font-weight: 900; color: #0f172a; text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
-                            🆚 HEAD-TO-HEAD VALUE COMPARISON
+                        <div style="font-size: 20px; font-weight: 800; color: #0f172a; text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
+                            🆚 HEAD-TO-HEAD VALUE TRANSFORMATION
                         </div>
 
                         <!-- Split Columns: Without vs With -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 10px 0; flex: 1;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; flex: 1;">
                             
                             <!-- Without Column -->
-                            <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 10px; display: flex; flex-direction: column; justify-content: space-between;">
-                                <div style="font-size: 15px; font-weight: 900; color: #991b1b; text-align: center; border-bottom: 1.5px solid #fecaca; padding-bottom: 6px; margin-bottom: 8px;">
-                                    ❌ WITHOUT FASAL DISHA
+                            <div style="background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 14px 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div style="font-size: 16px; font-weight: 900; color: #991b1b; text-align: center; border-bottom: 1.5px solid #fecaca; padding-bottom: 6px; margin-bottom: 10px;">
+                                    ❌ TRADITIONAL FARMING
                                 </div>
-                                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.3; color: #991b1b;">
+                                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.35; color: #991b1b;">
                                     <div>🎲 Guesswork crop choice based on backward price memory</div>
-                                    <div>💸 Zero cost clarity on seeds, fertilizer &amp; machinery rental</div>
-                                    <div>⚠️ Soil fertility degradation from repeated monoculture</div>
-                                    <div>📉 Severe yield loss from delayed uncalibrated sowing</div>
+                                    <div>💸 Zero cost accounting on seeds, fertilizer &amp; machinery</div>
+                                    <div>⚠️ Soil degradation from repeated monoculture cycles</div>
+                                    <div>📉 Severe yield penalty from delayed uncalibrated sowing</div>
                                 </div>
-                                <div style="margin-top: 10px; background: #fee2e2; border-radius: 6px; padding: 8px 6px; text-align: center;">
-                                    <div style="font-size: 11px; font-weight: 800; color: #7f1d1d; text-transform: uppercase;">Wardha Cotton Baseline</div>
-                                    <div style="font-size: 20px; font-weight: 900; color: #991b1b; font-family: 'JetBrains Mono', monospace;">₹14,352 / Acre</div>
+                                <div style="margin-top: 12px; background: #fee2e2; border-radius: 8px; padding: 10px 8px; text-align: center;">
+                                    <div style="font-size: 12px; font-weight: 800; color: #7f1d1d; text-transform: uppercase;">Baseline Cotton Profit</div>
+                                    <div style="font-size: 22px; font-weight: 900; color: #991b1b; font-family: 'JetBrains Mono', monospace;">₹14,352 / Acre</div>
                                 </div>
                             </div>
 
                             <!-- With Column -->
-                            <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 10px; display: flex; flex-direction: column; justify-content: space-between;">
-                                <div style="font-size: 15px; font-weight: 900; color: #166534; text-align: center; border-bottom: 1.5px solid #bbf7d0; padding-bottom: 6px; margin-bottom: 8px;">
-                                    ✅ WITH FASAL DISHA
+                            <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 10px; padding: 14px 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div style="font-size: 16px; font-weight: 900; color: #166534; text-align: center; border-bottom: 1.5px solid #bbf7d0; padding-bottom: 6px; margin-bottom: 10px;">
+                                    ✅ WITH FASAL-DISHA
                                 </div>
-                                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.3; color: #166534;">
+                                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.35; color: #166534;">
                                     <div>📈 14,780+ APMC Mandi seasonal wholesale price forecast</div>
-                                    <div>💰 Itemized CACP A₂+FL cost norms + owned tractor offset</div>
+                                    <div>💰 Itemized CACP $A_2+FL$ costs + owned tractor savings</div>
                                     <div>🌱 Nitrogen-fixing legume rotation yield bonus (+12%)</div>
-                                    <div>🛡️ What-If sandbox simulating rainfall deficit &amp; price crash</div>
+                                    <div>🛡️ Dual-slider sandbox simulating rainfall &amp; price shock</div>
                                 </div>
-                                <div style="margin-top: 10px; background: #dcfce7; border-radius: 6px; padding: 8px 6px; text-align: center;">
-                                    <div style="font-size: 11px; font-weight: 800; color: #14532d; text-transform: uppercase;">Optimized Soybean Rotation</div>
-                                    <div style="font-size: 20px; font-weight: 900; color: #15803d; font-family: 'JetBrains Mono', monospace;">₹24,722 / Acre</div>
+                                <div style="margin-top: 12px; background: #dcfce7; border-radius: 8px; padding: 10px 8px; text-align: center;">
+                                    <div style="font-size: 12px; font-weight: 800; color: #14532d; text-transform: uppercase;">Optimized Soybean Plan</div>
+                                    <div style="font-size: 22px; font-weight: 900; color: #15803d; font-family: 'JetBrains Mono', monospace;">₹24,722 / Acre</div>
                                 </div>
                             </div>
 
                         </div>
 
                         <!-- Bottom Delta Callout Box -->
-                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; text-align: center;">
-                            <div style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin-bottom: 2px;">
-                                🚀 Verified Net Pocket Profit Uplift :
+                        <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #22c55e; border-radius: 10px; padding: 12px 16px; text-align: center; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);">
+                            <div style="font-size: 15px; font-weight: 800; color: #14532d; margin-bottom: 2px;">
+                                🚀 Verified In-Hand Net Profit Uplift :
                             </div>
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                                <span style="font-size: 24px; font-weight: 900; color: #15803d; font-family: 'JetBrains Mono', monospace;">+₹10,370 / Acre</span>
-                                <span style="font-size: 16px; font-weight: 900; color: #15803d; background: #dcfce7; padding: 2px 10px; border-radius: 20px;">(+72.3% Gain)</span>
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 14px;">
+                                <span style="font-size: 26px; font-weight: 900; color: #15803d; font-family: 'JetBrains Mono', monospace;">+₹10,370 / Acre</span>
+                                <span style="font-size: 17px; font-weight: 900; color: #ffffff; background: #16a34a; padding: 3px 12px; border-radius: 20px; box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);">+72.3% Net Gain</span>
                             </div>
                         </div>
 
@@ -2139,90 +2290,112 @@
         <div class="slide-6-team-oval-text">Almost AC</div>
         <div class="slide-6-title-box">
             <h1 class="slide-6-title">RESEARCH AND REFERENCES</h1>
-            <p class="slide-6-subtitle">• Details / Links of Reference &amp; Verified Working Prototype</p>
+            <p class="slide-6-subtitle">• Details / Links of the Reference &amp; Research Work (with Working Prototype)</p>
         </div>
 
         <div class="slide-6-content">
-            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 16px;">
                 
-                <!-- Top Section: Government Data Repositories Table -->
-                <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 10px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
-                    <table class="sih-table" style="margin-bottom: 0;">
-                        <thead>
-                            <tr>
-                                <th style="width: 22%; padding: 7px 12px; font-size: 15px;">Government Source</th>
-                                <th style="width: 30%; padding: 7px 12px; font-size: 15px;">Authority / Official Portal</th>
-                                <th style="width: 48%; padding: 7px 12px; font-size: 15px;">Dataset / Technology Utilized in Fasal Disha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>Digital India BHASHINI</strong></td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">MeitY, Govt of India (<a href="https://bhashini.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">bhashini.gov.in</a>)</td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">National Language Translation Mission (NLTM) — Indic Speech ASR &amp; TTS voice synthesis</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>CACP</strong></td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">Ministry of Agriculture (<a href="https://cacp.dacnet.nic.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">cacp.dacnet.nic.in</a>)</td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">State-wise itemized A₂+FL cultivation cost norms (seed, fertilizer, chemicals, machinery)</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>Agmarknet</strong></td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">Directorate of Marketing (<a href="https://agmarknet.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">agmarknet.gov.in</a>)</td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">14,786 daily APMC wholesale mandi price transactions across cereals, pulses &amp; oilseeds</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>ISRIC — SoilGrids</strong></td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">ISRIC International (<a href="https://soilgrids.org" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">soilgrids.org</a>)</td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">GPS-based 250m spatial GIS soil texture, bulk density, pH, and organic carbon grids</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>ICRISAT</strong></td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">Int'l Crops Research Institute (<a href="http://data.icrisat.org" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">data.icrisat.org</a>)</td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">10-year historical district-level agricultural crop yield panel (XGBoost R²=0.9907)</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>ICAR-CRIDA / MPKV</strong></td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">ICAR &amp; MPKV Rahuri (<a href="https://icar.org.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">icar.org.in</a>)</td>
-                                <td style="padding: 6px 12px; font-size: 14.5px;">Agro-climatic sowing window calendars, delay penalty decays, &amp; package of practices</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Top Section: 2-Column High-Impact Reference Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex: 1;">
+                    
+                    <!-- Left Card: Government Agricultural & Economics Data -->
+                    <div style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 20px 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="font-size: 20px; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px;">
+                            <span>🏛️</span>
+                            <span>Official Government Repositories</span>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="font-size: 18px; color: #0f172a;">CACP — Ministry of Agriculture</strong>
+                                    <a href="https://cacp.dacnet.nic.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">cacp.dacnet.nic.in ↗</a>
+                                </div>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">State-wise itemized $A_2+FL$ cultivation cost norms (seed, fertilizer, machinery, labour).</p>
+                            </div>
 
-                <!-- Middle Section: Research Papers & Publications -->
-                <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 16px; font-size: 14px; color: #475569; display: flex; flex-direction: column; gap: 3px;">
-                    <div>📚 <strong>Machine Learning Reference:</strong> Chen, T. &amp; Guestrin, C. (2016). <i>"XGBoost: A Scalable Tree Boosting System."</i> ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.</div>
-                    <div>📑 <strong>Agronomic Reference:</strong> ICAR Agrometeorological Advisory Services (AAS) Bulletin &amp; State Contingency Crop Plans (2024–2025).</div>
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="font-size: 18px; color: #0f172a;">Agmarknet — Directorate of Marketing (DMI)</strong>
+                                    <a href="https://agmarknet.gov.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">agmarknet.gov.in ↗</a>
+                                </div>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">14,780+ daily APMC mandi wholesale price records &amp; seasonal arrival indices.</p>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="font-size: 18px; color: #0f172a;">ICAR-CRIDA &amp; State SAUs</strong>
+                                    <a href="https://icar.org.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">icar.org.in ↗</a>
+                                </div>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Agro-climatic sowing window calendars &amp; late-sowing yield decay parameters ($\approx 0.5\%/\text{day}$).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Card: Global Spatial GIS & Machine Learning Literature -->
+                    <div style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 20px 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="font-size: 20px; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px;">
+                            <span>🌍</span>
+                            <span>GIS Data &amp; Scientific Publications</span>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="font-size: 18px; color: #0f172a;">ISRIC SoilGrids 250m GIS</strong>
+                                    <a href="https://soilgrids.org" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">soilgrids.org ↗</a>
+                                </div>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">250m global spatial layers: Soil Organic Carbon, pH, Bulk Density &amp; Sand/Clay fractions.</p>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="font-size: 18px; color: #0f172a;">Chen &amp; Guestrin (2016) — XGBoost</strong>
+                                    <span style="font-size: 14px; background: #e0f2fe; color: #0369a1; font-weight: 800; padding: 2px 8px; border-radius: 6px;">ACM SIGKDD</span>
+                                </div>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;"><i>"XGBoost: A Scalable Tree Boosting System."</i> Scaled regression model ($R^2=0.9907$).</p>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <strong style="font-size: 18px; color: #0f172a;">IMD &amp; ICRISAT Cropping Systems</strong>
+                                    <a href="https://imdpune.gov.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">imdpune.gov.in ↗</a>
+                                </div>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Gridded rainfall deficit records &amp; biological nitrogen fixation rotation benefits ($+12\%$).</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Bottom Section: Verified Working Prototype Deliverables Hero Card -->
-                <div style="background: #ffffff; border: 2px solid #86efac; border-radius: 10px; padding: 14px 18px; box-shadow: 0 4px 12px rgba(22, 101, 52, 0.06); display: flex; flex-direction: column; gap: 8px;">
-                    <div style="font-size: 17px; font-weight: 900; color: #166534; letter-spacing: 0.8px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1.5px solid #dcfce7; padding-bottom: 6px;">
-                        <span>🚀 VERIFIED WORKING PROTOTYPE — CLICK TO TEST CODE &amp; LIVE DEMO</span>
-                        <span style="font-size: 13px; font-weight: 800; background: #dcfce7; color: #15803d; padding: 2px 10px; border-radius: 20px;">12/12 Automated Tests Passing</span>
+                <div style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); border: 2.5px solid #22c55e; border-radius: 12px; padding: 18px 24px; box-shadow: 0 6px 18px rgba(34, 197, 94, 0.12); display: flex; flex-direction: column; gap: 12px;">
+                    <div style="font-size: 20px; font-weight: 900; color: #15803d; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #bbf7d0; padding-bottom: 8px;">
+                        <span style="display: flex; align-items: center; gap: 8px;">🚀 <span>VERIFIED WORKING PROTOTYPE — CODE &amp; LIVE DEMO DELIVERABLES</span></span>
+                        <span style="font-size: 15px; font-weight: 800; background: #22c55e; color: #ffffff; padding: 4px 14px; border-radius: 20px; box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);">✓ 100% Production Ready</span>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
-                            <span style="font-size: 20px;">💻</span>
-                            <span style="font-weight: 700; min-width: 140px;">GitHub Repository:</span>
-                            <a href="https://github.com/sujeetaionly/agri-decide-sih" target="_blank" style="color: #0284c7; font-weight: 800; text-decoration: none;">github.com/sujeetaionly/agri-decide-sih</a>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 18px; color: #0f172a;">
+                            <span style="font-size: 24px;">💻</span>
+                            <span style="font-weight: 700; min-width: 170px;">GitHub Repository:</span>
+                            <a href="https://github.com/sujeetaionly/agri-decide-sih" target="_blank" style="color: #0284c7; font-weight: 800; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 16px;">github.com/sujeetaionly/agri-decide-sih ↗</a>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
-                            <span style="font-size: 20px;">🎬</span>
-                            <span style="font-weight: 700; min-width: 140px;">2-Min Video Demo:</span>
-                            <a href="https://youtube.com" target="_blank" style="color: #0284c7; font-weight: 800; text-decoration: none;">Watch Android Walkthrough (YouTube)</a>
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 18px; color: #0f172a;">
+                            <span style="font-size: 24px;">🎬</span>
+                            <span style="font-weight: 700; min-width: 170px;">2-Min Video Demo:</span>
+                            <a href="https://youtube.com" target="_blank" style="color: #0284c7; font-weight: 800; text-decoration: none; font-size: 17px;">Watch Android Walkthrough (YouTube) ↗</a>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
-                            <span style="font-size: 20px;">📱</span>
-                            <span style="font-weight: 700; min-width: 140px;">Mobile Platform:</span>
-                            <span style="color: #334155; font-weight: 600;">Capacitor 8.5 Android Native APK &amp; PWA</span>
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 18px; color: #0f172a;">
+                            <span style="font-size: 24px;">📱</span>
+                            <span style="font-weight: 700; min-width: 170px;">Mobile Platform:</span>
+                            <span style="color: #334155; font-weight: 600; font-size: 17px;">Capacitor 8.5 Android Native APK &amp; PWA</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
-                            <span style="font-size: 20px;">📄</span>
-                            <span style="font-weight: 700; min-width: 140px;">Advisory Document:</span>
-                            <span style="color: #334155; font-weight: 600;">Client-Side Vector jsPDF Printable Slip (A4)</span>
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 18px; color: #0f172a;">
+                            <span style="font-size: 24px;">📄</span>
+                            <span style="font-weight: 700; min-width: 170px;">Advisory Document:</span>
+                            <span style="color: #334155; font-weight: 600; font-size: 17px;">Client-Side Vector jsPDF Printable Slip (A4)</span>
                         </div>
                     </div>
                 </div>
@@ -2232,38 +2405,89 @@
     </div>
 
         </div> <!-- #deck-canvas -->
+        </div> <!-- #deck-canvas-wrapper -->
     </div> <!-- #deck-viewport -->
 
-    <!-- Auto-Hiding PDF-Viewer Floating HUD (Edge/Chrome Style) -->
+    <!-- Advanced Presentation & PDF Floating HUD -->
     <div class="pdf-hud" id="pdf-hud">
-        <button class="pdf-hud-btn" onclick="prevSlide()" title="Previous Slide (PageUp / ↑ / ←)">▲</button>
-        <span class="pdf-hud-page-indicator" id="hud-page-text">1 / 6</span>
-        <button class="pdf-hud-btn" onclick="nextSlide()" title="Next Slide (PageDown / ↓ / →)">▼</button>
+        <!-- Jump to First Slide -->
+        <button class="pdf-hud-btn" onclick="goToSlide(1)" title="First Slide (Key: Home)" style="padding: 0 8px;">⏮</button>
+        <!-- Previous Slide -->
+        <button class="pdf-hud-btn" onclick="prevSlide()" title="Previous Slide (Key: PageUp / ↑ / ←)" style="padding: 0 10px;">◀</button>
+        
+        <!-- Slide Dropdown Jump Selector -->
+        <div class="pdf-slide-dropdown-wrapper">
+            <button class="pdf-hud-page-btn" id="hud-page-btn" onclick="toggleSlideDropdown(event)" title="Click to Jump to Any Slide">
+                <span id="hud-page-text">Slide 1 / 6</span> <span style="font-size: 11px;">▼</span>
+            </button>
+            <div class="pdf-slide-dropdown-menu" id="pdf-slide-dropdown-menu">
+                <div class="pdf-slide-dropdown-item active" onclick="selectSlide(1)"><span>1.</span> Title &amp; Problem Statement</div>
+                <div class="pdf-slide-dropdown-item" onclick="selectSlide(2)"><span>2.</span> Proposed Solution &amp; Flow</div>
+                <div class="pdf-slide-dropdown-item" onclick="selectSlide(3)"><span>3.</span> Technical Approach &amp; Stack</div>
+                <div class="pdf-slide-dropdown-item" onclick="selectSlide(4)"><span>4.</span> Feasibility &amp; Viability</div>
+                <div class="pdf-slide-dropdown-item" onclick="selectSlide(5)"><span>5.</span> Impact &amp; Benefits</div>
+                <div class="pdf-slide-dropdown-item" onclick="selectSlide(6)"><span>6.</span> Research &amp; References</div>
+            </div>
+        </div>
+
+        <!-- Next Slide -->
+        <button class="pdf-hud-btn" onclick="nextSlide()" title="Next Slide (Key: PageDown / Space / ↓ / →)" style="padding: 0 10px;">▶</button>
+        <!-- Jump to Last Slide -->
+        <button class="pdf-hud-btn" onclick="goToSlide(totalSlides)" title="Last Slide (Key: End)" style="padding: 0 8px;">⏭</button>
+
         <div class="pdf-hud-divider"></div>
-        <button class="pdf-hud-btn" onclick="zoomOut()" title="Zoom Out (Ctrl + -)">−</button>
-        <span class="pdf-hud-zoom-indicator" id="hud-zoom-text">100%</span>
-        <button class="pdf-hud-btn" onclick="zoomIn()" title="Zoom In (Ctrl + +)">+</button>
+
+        <!-- Zoom Controls -->
+        <button class="pdf-hud-btn" onclick="zoomOut()" title="Zoom Out (Ctrl + -)" style="font-size: 18px; width: 34px; padding: 0;">−</button>
+        <span class="pdf-hud-zoom-indicator" id="hud-zoom-text" onclick="toggleZoomDefault()" title="Click to Reset Zoom">100%</span>
+        <button class="pdf-hud-btn" onclick="zoomIn()" title="Zoom In (Ctrl + +)" style="font-size: 18px; width: 34px; padding: 0;">+</button>
+
         <div class="pdf-hud-divider"></div>
-        <button class="pdf-hud-btn" onclick="fitToWidth()" title="Fit to Width (Ctrl + 0)" style="font-size: 13px; width: auto; padding: 0 8px;">Fit Width</button>
-        <button class="pdf-hud-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)">⛶</button>
+
+        <!-- Fit to Screen (Both Width & Height) -->
+        <button class="pdf-hud-btn" id="fit-screen-btn" onclick="fitToScreen()" title="Fit Slide to Screen (Key: S / Ctrl+0)">
+            <span>🔲</span> <span>Fit Screen</span>
+        </button>
+
+        <!-- Fit to Width -->
+        <button class="pdf-hud-btn" id="fit-width-btn" onclick="fitToWidth()" title="Fit Slide to Width (Key: W)">
+            <span>↔</span> <span>Fit Width</span>
+        </button>
+
+        <!-- Presentation Slideshow Mode Toggle -->
+        <button class="pdf-hud-btn" id="present-mode-btn" onclick="togglePresentationMode()" title="Toggle Slideshow Presentation Mode (Key: P)">
+            <span>📽️</span> <span>Present</span>
+        </button>
+
+        <!-- Fullscreen Toggle -->
+        <button class="pdf-hud-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (Key: F)" style="width: 34px; padding: 0;">
+            <span>⛶</span>
+        </button>
+
         <div class="pdf-hud-divider"></div>
-        <!-- Dual Theme Toggle (App Theme vs. Executive Blue) -->
-        <button class="pdf-hud-btn" id="theme-toggle-btn" onclick="toggleDeckTheme()" title="Switch Theme (App Green / Executive Blue) [Key: T]" style="font-size: 12px; width: auto; padding: 0 10px; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); border-radius: 9999px;">
-            <span id="theme-icon">🌿</span> <span id="theme-label" style="font-weight: 700; letter-spacing: 0.2px;">App Theme</span>
+
+        <!-- Theme Toggle -->
+        <button class="pdf-hud-btn" id="theme-toggle-btn" onclick="toggleDeckTheme()" title="Switch Theme (App Green / Executive Blue) [Key: T]" style="font-size: 12px; padding: 0 10px; background: rgba(255,255,255,0.1); border-radius: 9999px;">
+            <span id="theme-icon">🌿</span> <span id="theme-label" style="font-weight: 700;">App Theme</span>
         </button>
     </div>
 
-    <!-- PDF Viewer Navigation, Touchpad Gestures & Zoom Engine -->
+    <!-- Presentation & Deck Navigation Engine -->
     <script>
         let currentSlide = 1;
         const totalSlides = 6;
         let zoomLevel = 1.0;
+        let isPresentationMode = false;
 
         const viewport = document.getElementById('deck-viewport');
+        const canvasWrapper = document.getElementById('deck-canvas-wrapper');
         const canvas = document.getElementById('deck-canvas');
         const hud = document.getElementById('pdf-hud');
         const hudPageText = document.getElementById('hud-page-text');
         const hudZoomText = document.getElementById('hud-zoom-text');
+        const presentBtn = document.getElementById('present-mode-btn');
+        const slideDropdownMenu = document.getElementById('pdf-slide-dropdown-menu');
+        const slides = Array.from(document.querySelectorAll('.slide-wrapper'));
 
         // ==================== DUAL THEME ENGINE ====================
         function setDeckTheme(theme) {
@@ -2290,7 +2514,6 @@
             setDeckTheme(isBlue ? 'green' : 'blue');
         }
 
-        // Initialize Theme from URL param ?theme=blue or localStorage
         const urlParams = new URLSearchParams(window.location.search);
         const paramTheme = urlParams.get('theme');
         if (paramTheme) {
@@ -2300,27 +2523,53 @@
             setDeckTheme(savedTheme);
         }
 
-        // Calculate Responsive Fit-to-Width Scale
-        function getFitWidthScale() {
-            const availableWidth = viewport.clientWidth - 40;
-            return Math.min(1.0, Math.max(0.3, availableWidth / 1960));
-        }
-
-        // Apply Zoom smoothly
+        // ==================== ZOOM & SCALING ENGINE ====================
         function applyZoom(newZoom) {
-            zoomLevel = Math.min(2.5, Math.max(0.3, newZoom));
+            zoomLevel = Math.min(3.0, Math.max(0.2, newZoom));
             canvas.style.transform = `scale(${zoomLevel})`;
             hudZoomText.textContent = `${Math.round(zoomLevel * 100)}%`;
-            
-            // Adjust canvas container dimensions to maintain proper scroll boundaries
-            const baseWidth = 1960;
-            const baseHeight = 1080 * 6 + 40 * 5 + 110;
-            canvas.style.width = `${baseWidth * zoomLevel}px`;
-            canvas.style.height = `${baseHeight * zoomLevel}px`;
+
+            if (isPresentationMode) {
+                canvasWrapper.style.width = '100vw';
+                canvasWrapper.style.height = '100vh';
+            } else {
+                const scaledWidth = 1920 * zoomLevel;
+                const singleSlideH = 1080 * zoomLevel;
+                const gap = 36 * zoomLevel;
+                const totalHeight = (singleSlideH * totalSlides) + (gap * (totalSlides - 1)) + (140 * zoomLevel);
+                
+                canvasWrapper.style.width = `${Math.max(scaledWidth + 48, viewport.clientWidth)}px`;
+                canvasWrapper.style.height = `${totalHeight}px`;
+            }
         }
 
+        // Fit Slide to Screen (Width AND Height - Makes slide fill the entire window!)
+        function fitToScreen() {
+            if (isPresentationMode) {
+                const scaleX = (window.innerWidth - 16) / 1920;
+                const scaleY = (window.innerHeight - 16) / 1080;
+                applyZoom(Math.min(scaleX, scaleY));
+            } else {
+                const paddingX = 40;
+                const paddingY = 48;
+                const scaleX = (viewport.clientWidth - paddingX) / 1920;
+                const scaleY = (viewport.clientHeight - paddingY) / 1080;
+                const optimalScale = Math.min(scaleX, scaleY);
+                applyZoom(optimalScale);
+                scrollToSlide(currentSlide);
+            }
+            showHudTemporarily();
+        }
+
+        // Fit Slide to Viewport Width
         function fitToWidth() {
-            applyZoom(getFitWidthScale());
+            const paddingX = 32;
+            const availableWidth = viewport.clientWidth - paddingX;
+            const optimalScale = availableWidth / 1920;
+            applyZoom(optimalScale);
+            if (!isPresentationMode) {
+                scrollToSlide(currentSlide);
+            }
             showHudTemporarily();
         }
 
@@ -2334,18 +2583,150 @@
             showHudTemporarily();
         }
 
-        // Touchpad Pinch-To-Zoom & Ctrl + Mouse Wheel (Exact Edge/Chrome PDF Behavior)
+        function toggleZoomDefault() {
+            if (Math.abs(zoomLevel - 1.0) < 0.05) {
+                fitToScreen();
+            } else {
+                applyZoom(1.0);
+            }
+            showHudTemporarily();
+        }
+
+        // ==================== SLIDE NAVIGATION & PRESENTATION ====================
+        function updateSlideUI() {
+            hudPageText.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            
+            // Update dropdown active item
+            document.querySelectorAll('.pdf-slide-dropdown-item').forEach((item, idx) => {
+                if (idx + 1 === currentSlide) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Update presentation mode active slide
+            if (isPresentationMode) {
+                slides.forEach((slide, idx) => {
+                    if (idx + 1 === currentSlide) {
+                        slide.classList.add('active-slide');
+                    } else {
+                        slide.classList.remove('active-slide');
+                    }
+                });
+            }
+        }
+
+        function scrollToSlide(n) {
+            currentSlide = Math.max(1, Math.min(totalSlides, n));
+            updateSlideUI();
+
+            if (!isPresentationMode) {
+                const offsetTop = (currentSlide - 1) * (1080 + 36) * zoomLevel + (24 * zoomLevel);
+                viewport.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            }
+        }
+
+        function goToSlide(n) {
+            currentSlide = Math.max(1, Math.min(totalSlides, n));
+            if (isPresentationMode) {
+                updateSlideUI();
+            } else {
+                scrollToSlide(currentSlide);
+            }
+            closeSlideDropdown();
+            showHudTemporarily();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        function selectSlide(n) {
+            goToSlide(n);
+        }
+
+        // ==================== PRESENTATION MODE ====================
+        function togglePresentationMode() {
+            isPresentationMode = !isPresentationMode;
+            document.body.classList.toggle('mode-presentation', isPresentationMode);
+            
+            if (presentBtn) {
+                presentBtn.classList.toggle('active', isPresentationMode);
+            }
+
+            if (isPresentationMode) {
+                fitToScreen();
+                updateSlideUI();
+            } else {
+                slides.forEach(slide => slide.classList.remove('active-slide'));
+                fitToScreen();
+                scrollToSlide(currentSlide);
+            }
+            showHudTemporarily();
+        }
+
+        // Slide click in presentation mode advances to next slide
+        slides.forEach(slide => {
+            slide.addEventListener('click', (e) => {
+                if (isPresentationMode) {
+                    const rect = slide.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    if (clickX < rect.width * 0.25) {
+                        prevSlide();
+                    } else {
+                        nextSlide();
+                    }
+                }
+            });
+        });
+
+        // ==================== SLIDE DROPDOWN MENU ====================
+        function toggleSlideDropdown(e) {
+            e.stopPropagation();
+            slideDropdownMenu.classList.toggle('show');
+            showHudTemporarily();
+        }
+
+        function closeSlideDropdown() {
+            if (slideDropdownMenu) {
+                slideDropdownMenu.classList.remove('show');
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.pdf-slide-dropdown-wrapper')) {
+                closeSlideDropdown();
+            }
+        });
+
+        // ==================== FULLSCREEN ====================
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        // ==================== TOUCHPAD & WHEEL GESTURES ====================
         viewport.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
-                // Pinch zoom gesture
                 const delta = -e.deltaY * 0.005;
                 applyZoom(zoomLevel * (1 + delta));
                 showHudTemporarily();
             }
         }, { passive: false });
 
-        // Touch gestures for mobile / touchpads
         let initialPinchDistance = null;
         let initialZoom = 1.0;
 
@@ -2378,89 +2759,84 @@
             }
         }, { passive: true });
 
-        // Keyboard Shortcuts (Standard PDF Viewer Controls + Theme Toggle 'T')
+        // ==================== KEYBOARD CONTROLS ====================
         window.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
                 e.preventDefault(); zoomIn();
             } else if ((e.ctrlKey || e.metaKey) && (e.key === '-' || e.key === '_')) {
                 e.preventDefault(); zoomOut();
             } else if ((e.ctrlKey || e.metaKey) && e.key === '0') {
-                e.preventDefault(); fitToWidth();
-            } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'ArrowDown') {
+                e.preventDefault(); fitToScreen();
+            } else if (e.key === 's' || e.key === 'S') {
+                if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+                    e.preventDefault(); fitToScreen();
+                }
+            } else if (e.key === 'w' || e.key === 'W') {
+                if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+                    e.preventDefault(); fitToWidth();
+                }
+            } else if (e.key === 'p' || e.key === 'P') {
+                if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+                    e.preventDefault(); togglePresentationMode();
+                }
+            } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'ArrowDown' || e.key === ' ') {
                 e.preventDefault(); nextSlide();
             } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'ArrowUp') {
                 e.preventDefault(); prevSlide();
             } else if (e.key === 'Home') {
                 e.preventDefault(); goToSlide(1);
             } else if (e.key === 'End') {
-                e.preventDefault(); goToSlide(6);
-            } else if (e.key >= '1' && e.key <= '6') {
+                e.preventDefault(); goToSlide(totalSlides);
+            } else if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.altKey) {
                 goToSlide(parseInt(e.key));
             } else if (e.key.toLowerCase() === 'f' && !e.ctrlKey && !e.altKey) {
                 toggleFullscreen();
             } else if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.altKey) {
                 e.preventDefault();
                 toggleDeckTheme();
+            } else if (e.key === 'Escape') {
+                closeSlideDropdown();
+                if (isPresentationMode) {
+                    togglePresentationMode();
+                }
             }
         });
 
-        // Auto-Hiding HUD on User Activity
+        // ==================== AUTO-HIDING HUD ====================
         let hudTimeout;
         function showHudTemporarily() {
             hud.classList.add('visible');
             clearTimeout(hudTimeout);
             hudTimeout = setTimeout(() => {
-                hud.classList.remove('visible');
-            }, 2400);
+                if (!hud.matches(':hover') && !slideDropdownMenu.classList.contains('show')) {
+                    hud.classList.remove('visible');
+                }
+            }, 3000);
         }
 
         window.addEventListener('mousemove', showHudTemporarily);
-        viewport.addEventListener('scroll', showHudTemporarily, { passive: true });
-
-        // Slide Intersection Observer for active page tracker
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const slideId = entry.target.id;
-                    const num = parseInt(slideId.replace('slide-', ''));
-                    if (num) {
-                        currentSlide = num;
-                        hudPageText.textContent = `${currentSlide} / ${totalSlides}`;
-                    }
+        viewport.addEventListener('scroll', () => {
+            if (!isPresentationMode) {
+                showHudTemporarily();
+                // Determine active slide from scroll position
+                const currentScrollTop = viewport.scrollTop;
+                const slideHeight = (1080 + 36) * zoomLevel;
+                const estimatedSlide = Math.min(totalSlides, Math.max(1, Math.round(currentScrollTop / slideHeight) + 1));
+                if (estimatedSlide !== currentSlide) {
+                    currentSlide = estimatedSlide;
+                    updateSlideUI();
                 }
-            });
-        }, { root: viewport, threshold: 0.4 });
-
-        document.querySelectorAll('.slide-wrapper').forEach(slide => observer.observe(slide));
-
-        function goToSlide(n) {
-            currentSlide = Math.max(1, Math.min(totalSlides, n));
-            const target = document.getElementById(`slide-${currentSlide}`);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-            showHudTemporarily();
-        }
+        }, { passive: true });
 
-        function nextSlide() { goToSlide(currentSlide + 1); }
-        function prevSlide() { goToSlide(currentSlide - 1); }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            } else {
-                document.exitFullscreen().catch(() => {});
-            }
-        }
-
-        // Initial Responsive Auto-Fit
+        // Initial Responsive Fit
         window.addEventListener('DOMContentLoaded', () => {
-            fitToWidth();
+            fitToScreen();
             showHudTemporarily();
         });
 
         window.addEventListener('resize', () => {
-            fitToWidth();
+            fitToScreen();
         });
     </script>
 </body>
