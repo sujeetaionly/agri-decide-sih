@@ -68,7 +68,7 @@ $$
 * **Head-to-Head Comparison (`आपकी पसंद vs AI सर्वोत्तम सुझाव`)**: Shows farmers the exact profit difference ($+\text{₹/Acre}$) between their planned crop and the AI's top agronomic alternative.
 * **Climate & Price Risk Simulator (What-If Sandbox)**: Real-time stress testing against rainfall deficits ($-30\%$ to $+30\%$) and APMC mandi price shocks ($-25\%$ to $+25\%$).
 * **120-Day Actionable Advisory Calendar**: Day-by-day guidance from basal fertilizing to harvest, complete with 1-click printable A4 PDF export for offline usage and Kisan Kendras.
-* **5-Language Indic Voice Assistant**: Full multimodal voice narration across Hindi, Marathi, Gujarati, Rajasthani, and English.
+* **Local Language Voice Assistant**: Seamless voice narration in the farmer's native local regional language.
 
 ---
 
@@ -81,7 +81,7 @@ $$
 | **🌦️ Sowing Window Decay Engine** | Evaluates planned sowing date against ICAR agro-climatic calendars and applies realistic yield decay curves for late sowing. | Automatically recommends early-maturing contingency crops (Bajra, Moong, Urad) during late-sowing windows. |
 | **🎛️ Interactive Risk Simulator** | Dual-slider sandbox modeling monsoon rainfall deviations and APMC mandi market crashes. | Empowers farmers to stress-test their harvest profit before purchasing costly inputs. |
 | **📄 1-Click Printable PDF Advisory** | Client-side jsPDF vector document engine generating standardized, branded A4 advisory slips. | Enables offline record-keeping and easy distribution at local Cooperative societies and CSCs. |
-| **🎙️ 3-Tier Multilingual Voice AI** | Universal narration engine combining BHASHINI API, Capacitor Native Android TTS, and Web Speech API. | High audio fidelity in regional dialects with zero lag. |
+| **🎙️ Local Language Voice Assistant** | Universal narration engine combining BHASHINI API, Capacitor Native Android TTS, and Web Speech API. | High audio fidelity in local regional dialects with zero lag. |
 
 ---
 
@@ -211,7 +211,7 @@ Where:
 
 ```mermaid
 flowchart TD
-    A["🌐 1. Language Selection\n(Hindi, Marathi, Gujarati, Rajasthani, English)"] --> B["🎙️ 2. BHASHINI Voice Audio Verification"]
+    A["🌐 1. Local Language Selection\n(Farmer's Native Dialect)"] --> B["🎙️ 2. BHASHINI Voice Audio Verification"]
     B --> C["🏠 3. Home Dashboard\n(AI Hero Card & Past Record Hub)"]
     
     subgraph WIZARD ["🚜 7-Step Farm Intake Wizard"]
