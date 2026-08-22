@@ -117,7 +117,8 @@ graph TD
     end
 
     %% Client Interactions
-    PWA <--> NativeBridge
+    PWA --> NativeBridge
+    NativeBridge --> PWA
     PWA --> PDFModule
     PWA -->|"POST /api/v1/crop/recommend"| RecEngine
     PWA -->|"POST /api/v1/crop/what-if-simulate"| WhatIfEngine
@@ -136,10 +137,10 @@ graph TD
     WhatIfEngine --> EconEngine
 
     %% External Data Grounding
-    EconEngine <..|"A2+FL Itemized Norms"| CACP
-    PriceModel <..|"5-Yr Modal Rates"| AgMarknet
-    GeoEngine <..|"250m GIS Rasters"| ISRIC
-    WindowEngine <..|"Crop Calendars"| ICAR
+    CACP -.->|"A2+FL Itemized Norms"| EconEngine
+    AgMarknet -.->|"5-Yr Modal Rates"| PriceModel
+    ISRIC -.->|"250m GIS Rasters"| GeoEngine
+    ICAR -.->|"Crop Calendars"| WindowEngine
 ```
 
 ---
