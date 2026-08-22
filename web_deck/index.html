@@ -570,7 +570,195 @@
             box-sizing: border-box;
             padding: 0 20px;
         }
-        .tech-badge {
+
+        /* Slide 4 Feasibility and Viability Master Layout (Official User-Cleaned Template) */
+        #slide-4 {
+            background: #ffffff url('presentation_assets/slide_4_template_clean.png') no-repeat center / 100% 100%;
+        }
+        .slide-4-team-oval-text {
+            position: absolute;
+            top: 40px;
+            left: 52px;
+            width: 197px;
+            height: 127px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #000000;
+            z-index: 30;
+            background: transparent;
+        }
+        .slide-4-title-box {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .slide-4-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 1.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .slide-4-subtitle {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--theme-primary);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .slide-4-content {
+            position: absolute;
+            top: 195px;
+            left: 48px;
+            width: 1824px;
+            height: 770px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 0 10px;
+        }
+
+        /* Slide 5 Impact and Benefits Master Layout (Official User-Cleaned Template) */
+        #slide-5 {
+            background: #ffffff url('presentation_assets/slide_5_template_clean.png') no-repeat center / 100% 100%;
+        }
+        .slide-5-team-oval-text {
+            position: absolute;
+            top: 40px;
+            left: 52px;
+            width: 197px;
+            height: 127px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #000000;
+            z-index: 30;
+            background: transparent;
+        }
+        .slide-5-title-box {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .slide-5-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 1.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .slide-5-subtitle {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--theme-primary);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .slide-5-content {
+            position: absolute;
+            top: 195px;
+            left: 48px;
+            width: 1824px;
+            height: 770px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 0 10px;
+        }
+
+        /* Slide 6 Research and References Master Layout (Official User-Cleaned Template) */
+        #slide-6 {
+            background: #ffffff url('presentation_assets/slide_6_template_clean.png') no-repeat center / 100% 100%;
+        }
+        .slide-6-team-oval-text {
+            position: absolute;
+            top: 40px;
+            left: 52px;
+            width: 197px;
+            height: 127px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            color: #000000;
+            z-index: 30;
+            background: transparent;
+        }
+        .slide-6-title-box {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .slide-6-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 1.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .slide-6-subtitle {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--theme-primary);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .slide-6-content {
+            position: absolute;
+            top: 195px;
+            left: 48px;
+            width: 1824px;
+            height: 770px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 0 10px;
+        }
             display: inline-flex;
             align-items: center;
             gap: 5px;
@@ -1688,47 +1876,18 @@
 
     <!-- SLIDE 4: FEASIBILITY AND VIABILITY -->
     <div class="slide-wrapper" id="slide-4">
-        <div class="team-oval">
-            <span>Almost AC</span>
+        <!-- Team Oval in Top-Left Template Oval -->
+        <div class="slide-4-team-oval-text">Almost AC</div>
+
+        <!-- Slide Title & Tagline -->
+        <div class="slide-4-title-box">
+            <h1 class="slide-4-title">FEASIBILITY AND VIABILITY</h1>
+            <p class="slide-4-subtitle">• Analysis of the feasibility of the idea &nbsp;|&nbsp; • Potential challenges and risks &nbsp;|&nbsp; • Strategies for overcoming these challenges</p>
         </div>
-        <div class="slide-title-serif">FEASIBILITY AND VIABILITY</div>
-        <!-- SIH Corner Logo (Inline SVG) -->
-        <svg class="sih-logo-top" viewBox="0 0 340 100" width="340" height="100" style="position: absolute; top: 20px; right: 40px; height: 80px; z-index: 30;">
-            <g transform="translate(12, 6) scale(0.85)">
-                <path d="M 45 15 C 30 15 20 25 20 40 C 20 50 25 58 32 65 C 38 71 42 76 43 82 L 47 82 L 47 15 Z" fill="#F37023"/>
-                <circle cx="30" cy="30" r="3" fill="#FFFFFF"/>
-                <circle cx="26" cy="45" r="2.5" fill="#FFFFFF"/>
-                <circle cx="36" cy="55" r="2.5" fill="#FFFFFF"/>
-                <path d="M 30 30 L 30 42 L 26 45 M 30 42 L 36 55 L 43 55" stroke="#FFFFFF" stroke-width="1.8" fill="none"/>
-                <circle cx="38" cy="24" r="2" fill="#FFFFFF"/>
-                <path d="M 38 24 L 45 24" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
-                
-                <path d="M 49 15 L 49 82 L 53 82 C 54 76 58 71 64 65 C 71 58 76 50 76 40 C 76 25 66 15 51 15 Z" fill="#009E4D"/>
-                <text x="53" y="27" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                <text x="53" y="38" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="49" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">1010</text>
-                <text x="53" y="60" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="71" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                
-                <rect x="41" y="84" width="14" height="3" rx="1" fill="#475569"/>
-                <rect x="43" y="88" width="10" height="3" rx="1" fill="#475569"/>
-                <path d="M 45 92 L 51 92 L 48 95 Z" fill="#475569"/>
-                <text x="48" y="104" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="10" fill="#1E293B" text-anchor="middle">SIH</text>
-            </g>
-            <g transform="translate(90, 20)">
-                <text x="0" y="20" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">SMART INDIA</text>
-                <text x="0" y="40" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">HACKATHON</text>
-                <text x="0" y="62" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="20" fill="#1E3A8A" letter-spacing="0.5">2025</text>
-            </g>
-        </svg>
 
-        <div class="content-area" style="padding-top: 0px; height: calc(100% - 110px); display: flex; flex-direction: column;">
-            <div class="sub-header-blue" style="text-decoration: none; margin-bottom: 8px; font-size: 15.5px; font-weight: 800; color: #1e3a8a;">
-                • Analysis of the feasibility of the idea &nbsp;|&nbsp; • Potential challenges and risks &nbsp;|&nbsp; • Strategies for overcoming these challenges
-            </div>
-
+        <div class="slide-4-content">
             <!-- Free-Flowing 2-Column Floating Points Grid -->
-            <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 36px; flex: 1; align-content: space-between; min-height: 0;">
+            <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 36px; height: 100%; align-content: space-between; min-height: 0;">
                 
                 <!-- LEFT COLUMN: Feasibility, Viability, and Challenges vs Solutions -->
                 <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
@@ -1838,263 +1997,237 @@
 
             </div>
         </div>
-
-        <div class="footer-banner-blue">
-            <span>@SIH Idea submission- Template</span>
-            <span>4</span>
-        </div>
     </div>
 
     <!-- SLIDE 5: IMPACT AND BENEFITS -->
     <div class="slide-wrapper" id="slide-5">
-        <div class="team-oval">
-            <span>Fasal Disha</span>
-            <span style="font-size: 15px; color: #475569;">(AGRI-DECIDE)</span>
+        <div class="slide-5-team-oval-text">Almost AC</div>
+        <div class="slide-5-title-box">
+            <h1 class="slide-5-title">IMPACT AND BENEFITS</h1>
+            <p class="slide-5-subtitle">• Potential Impact on Target Audience &amp; Multi-Dimensional Benefits of the Solution</p>
         </div>
-        <div class="slide-title-serif">IMPACT AND BENEFITS</div>
-        <!-- SIH Corner Logo (Inline SVG) -->
-        <svg class="sih-logo-top" viewBox="0 0 340 100" width="340" height="100" style="position: absolute; top: 20px; right: 40px; height: 80px; z-index: 30;">
-            <g transform="translate(12, 6) scale(0.85)">
-                <path d="M 45 15 C 30 15 20 25 20 40 C 20 50 25 58 32 65 C 38 71 42 76 43 82 L 47 82 L 47 15 Z" fill="#F37023"/>
-                <circle cx="30" cy="30" r="3" fill="#FFFFFF"/>
-                <circle cx="26" cy="45" r="2.5" fill="#FFFFFF"/>
-                <circle cx="36" cy="55" r="2.5" fill="#FFFFFF"/>
-                <path d="M 30 30 L 30 42 L 26 45 M 30 42 L 36 55 L 43 55" stroke="#FFFFFF" stroke-width="1.8" fill="none"/>
-                <circle cx="38" cy="24" r="2" fill="#FFFFFF"/>
-                <path d="M 38 24 L 45 24" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
-                
-                <path d="M 49 15 L 49 82 L 53 82 C 54 76 58 71 64 65 C 71 58 76 50 76 40 C 76 25 66 15 51 15 Z" fill="#009E4D"/>
-                <text x="53" y="27" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                <text x="53" y="38" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="49" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">1010</text>
-                <text x="53" y="60" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="71" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                
-                <rect x="41" y="84" width="14" height="3" rx="1" fill="#475569"/>
-                <rect x="43" y="88" width="10" height="3" rx="1" fill="#475569"/>
-                <path d="M 45 92 L 51 92 L 48 95 Z" fill="#475569"/>
-                <text x="48" y="104" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="10" fill="#1E293B" text-anchor="middle">SIH</text>
-            </g>
-            <g transform="translate(90, 20)">
-                <text x="0" y="20" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">SMART INDIA</text>
-                <text x="0" y="40" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">HACKATHON</text>
-                <text x="0" y="62" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="20" fill="#1E3A8A" letter-spacing="0.5">2025</text>
-            </g>
-        </svg>
 
-        <div class="content-area">
-            <div class="sub-header-blue" style="text-decoration: none;">
-                • Potential Impact, Multi-Dimensional Benefits & Value Comparison
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; height: calc(100% - 50px);">
-                <!-- Left 55%: Impact on Audience & Benefits -->
-                <div style="display: flex; flex-direction: column; justify-content: space-between;">
-                    <div>
-                        <div class="section-header">• Potential Impact on Target Audience</div>
-                        <ul class="bullet-list">
-                            <li><strong>120M+ Indian Smallholders (&lt;2 Hectares):</strong> Equips India's most vulnerable demographic with institutional-grade agro-economic intelligence.</li>
-                            <li><strong>Complete Decision Lifecycle:</strong> Not just "grow wheat" — complete economics, risk simulation, 120-day milestone calendar, and printable advisory slip.</li>
-                            <li><strong>Zero Barriers to Entry:</strong> No soil test kits, no login friction, zero fees — actionable recommendation in &lt; 90 seconds.</li>
-                            <li><strong>Season & Rotation-Aware:</strong> Auto-filters for Kharif/Rabi/Zaid and adjusts economics based on previous crop history.</li>
-                        </ul>
+        <div class="slide-5-content">
+            <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; height: 100%; box-sizing: border-box;">
+                <!-- Left Column: Impact on Target Audience & Multi-Dimensional Benefits -->
+                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    
+                    <!-- Section 1: Potential Impact on Target Audience -->
+                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                        <div style="font-size: 20px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">
+                            <span>👥</span> Potential Impact on Target Audience :
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 15px; line-height: 1.35; color: #334155;">
+                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">120M+ Indian Smallholder Farmers (&lt;2 Hectares):</strong> Equips India's most vulnerable agricultural demographic with institutional-grade agro-economic intelligence.</div>
+                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">Zero Lab-Test &amp; Capital Barrier:</strong> Eliminates dependency on expensive chemical N-P-K soil kits via 250m GIS SoilGrids; actionable advice in &lt;90 seconds.</div>
+                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">End-to-End Decision Lifecycle:</strong> Not just static crop picking — provides duration-adjusted ₹/Acre net profit, stress testing, 120-day milestone calendar, &amp; printable PDF slip.</div>
+                            <div>➔ <strong style="color: #0f172a; font-size: 15.5px;">Season &amp; Crop Rotation Awareness:</strong> Auto-filters for Kharif/Rabi/Zaid and incorporates historical crop rotation to disrupt pest cycles and replenish nitrogen.</div>
+                        </div>
                     </div>
 
-                    <div>
-                        <div class="section-header">• Benefits of the Solution</div>
-                        <ul class="bullet-list">
-                            <li>💰 <strong>Economic:</strong> ₹/Acre optimization + Head-to-Head vs intended crop + machinery savings (₹3,500–₹4,300/acre).</li>
-                            <li>🌍 <strong>Environmental:</strong> Sowing validation prevents wasteful planting; rotation intelligence restores soil health.</li>
-                            <li>🏛️ <strong>Social:</strong> Explainable reasoning in Hindi/local dialects; BHASHINI voice eliminates literacy barrier.</li>
-                            <li>📊 <strong>Institutional:</strong> 100% FOSS; deployable at scale by State Ag Depts, KVKs, and PACS cooperatives.</li>
-                        </ul>
+                    <!-- Section 2: Multi-Dimensional Benefits Matrix -->
+                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                        <div style="font-size: 20px; font-weight: 900; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px;">
+                            <span>🌱</span> Multi-Dimensional Benefits of the Solution :
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14.2px; line-height: 1.32;">
+                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 10px;">
+                                <div style="font-weight: 900; color: #15803d; font-size: 14.5px; margin-bottom: 2px;">💰 Economic Benefits</div>
+                                <div style="color: #166534;">+72.3% verified Wardha profit gain (+₹10,370/ac) + machinery rental offset saving ₹3,500–₹4,300/ac.</div>
+                            </div>
+                            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 8px 10px;">
+                                <div style="font-weight: 900; color: #1d4ed8; font-size: 14.5px; margin-bottom: 2px;">🗣️ Social &amp; Digital Inclusion</div>
+                                <div style="color: #1e40af;">Digital India BHASHINI Voice AI across 5 Indic regional languages eliminates rural literacy barrier.</div>
+                            </div>
+                            <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 8px 10px;">
+                                <div style="font-weight: 900; color: #a16207; font-size: 14.5px; margin-bottom: 2px;">🌾 Agronomic &amp; Soil Equity</div>
+                                <div style="color: #854d0e;">Legume rotation boost (+12%) restores organic nitrogen; monoculture penalty (-15%) prevents soil exhaustion.</div>
+                            </div>
+                            <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 8px 10px;">
+                                <div style="font-weight: 900; color: #7e22ce; font-size: 14.5px; margin-bottom: 2px;">🏛️ National Policy Alignment</div>
+                                <div style="color: #6b21a8;">100% FOSS open-source architecture; integratable with PM-Kisan, KVKs, PACS, &amp; AgriStack national DPI.</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- 3 Metric Badges -->
+                    <!-- Section 3: 3 Highlight Metric Cards -->
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                        <div style="background: #e8f5e9; border: 1.5px solid #81c784; border-radius: 8px; padding: 6px 8px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: 900; color: #1b5e20; font-family: 'JetBrains Mono', monospace;">120M+</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #2e7d32;">Smallholder Farmers</div>
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px 12px; text-align: center;">
+                            <div style="font-size: 26px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">120M+</div>
+                            <div style="font-size: 12.5px; font-weight: 800; color: #15803d; text-transform: uppercase;">Smallholder Farmers</div>
                         </div>
-                        <div style="background: #e8f5e9; border: 1.5px solid #81c784; border-radius: 8px; padding: 6px 8px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: 900; color: #1b5e20; font-family: 'JetBrains Mono', monospace;">+72.3%</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #2e7d32;">Field Profit Gain</div>
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px 12px; text-align: center;">
+                            <div style="font-size: 26px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">+72.3%</div>
+                            <div style="font-size: 12.5px; font-weight: 800; color: #15803d; text-transform: uppercase;">Field Profit Gain (+₹10.3k/ac)</div>
                         </div>
-                        <div style="background: #e8f5e9; border: 1.5px solid #81c784; border-radius: 8px; padding: 6px 8px; text-align: center;">
-                            <div style="font-size: 24px; font-weight: 900; color: #1b5e20; font-family: 'JetBrains Mono', monospace;">100%</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #2e7d32;">Real Govt Data</div>
+                        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px 12px; text-align: center;">
+                            <div style="font-size: 26px; font-weight: 900; color: #166534; font-family: 'JetBrains Mono', monospace;">100%</div>
+                            <div style="font-size: 12.5px; font-weight: 800; color: #15803d; text-transform: uppercase;">Real Govt Data Fidelity</div>
                         </div>
                     </div>
+
                 </div>
 
-                <!-- Right 45%: Before vs After Comparison Diagram -->
-                <div class="before-after-grid">
-                    <!-- Without Column -->
-                    <div class="ba-col" style="background: #ffebee; border: 2px solid #ef5350;">
-                        <div style="font-size: 18px; font-weight: 900; color: #b71c1c; text-align: center; border-bottom: 2px solid #ef9a9a; padding-bottom: 8px;">
-                            ❌ WITHOUT FASAL DISHA
+                <!-- Right Column: Before vs After Head-to-Head Comparison & Economic Proof -->
+                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    
+                    <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 16px; height: 100%; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                        
+                        <div style="font-size: 19px; font-weight: 900; color: #0f172a; text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
+                            🆚 HEAD-TO-HEAD VALUE COMPARISON
                         </div>
-                        <div class="ba-row-item" style="color: #b71c1c;">
-                            <span>🎲</span> Guesswork-based crop choice without mandi insight
+
+                        <!-- Split Columns: Without vs With -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 10px 0; flex: 1;">
+                            
+                            <!-- Without Column -->
+                            <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div style="font-size: 15px; font-weight: 900; color: #991b1b; text-align: center; border-bottom: 1.5px solid #fecaca; padding-bottom: 6px; margin-bottom: 8px;">
+                                    ❌ WITHOUT FASAL DISHA
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.3; color: #991b1b;">
+                                    <div>🎲 Guesswork crop choice based on backward price memory</div>
+                                    <div>💸 Zero cost clarity on seeds, fertilizer &amp; machinery rental</div>
+                                    <div>⚠️ Soil fertility degradation from repeated monoculture</div>
+                                    <div>📉 Severe yield loss from delayed uncalibrated sowing</div>
+                                </div>
+                                <div style="margin-top: 10px; background: #fee2e2; border-radius: 6px; padding: 8px 6px; text-align: center;">
+                                    <div style="font-size: 11px; font-weight: 800; color: #7f1d1d; text-transform: uppercase;">Wardha Cotton Baseline</div>
+                                    <div style="font-size: 20px; font-weight: 900; color: #991b1b; font-family: 'JetBrains Mono', monospace;">₹14,352 / Acre</div>
+                                </div>
+                            </div>
+
+                            <!-- With Column -->
+                            <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div style="font-size: 15px; font-weight: 900; color: #166534; text-align: center; border-bottom: 1.5px solid #bbf7d0; padding-bottom: 6px; margin-bottom: 8px;">
+                                    ✅ WITH FASAL DISHA
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.3; color: #166534;">
+                                    <div>📈 14,780+ APMC Mandi seasonal wholesale price forecast</div>
+                                    <div>💰 Itemized CACP A₂+FL cost norms + owned tractor offset</div>
+                                    <div>🌱 Nitrogen-fixing legume rotation yield bonus (+12%)</div>
+                                    <div>🛡️ What-If sandbox simulating rainfall deficit &amp; price crash</div>
+                                </div>
+                                <div style="margin-top: 10px; background: #dcfce7; border-radius: 6px; padding: 8px 6px; text-align: center;">
+                                    <div style="font-size: 11px; font-weight: 800; color: #14532d; text-transform: uppercase;">Optimized Soybean Rotation</div>
+                                    <div style="font-size: 20px; font-weight: 900; color: #15803d; font-family: 'JetBrains Mono', monospace;">₹24,722 / Acre</div>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="ba-row-item" style="color: #b71c1c;">
-                            <span>💸</span> Zero cost clarity on input expenses & machinery
+
+                        <!-- Bottom Delta Callout Box -->
+                        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; text-align: center;">
+                            <div style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin-bottom: 2px;">
+                                🚀 Verified Net Pocket Profit Uplift :
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                                <span style="font-size: 24px; font-weight: 900; color: #15803d; font-family: 'JetBrains Mono', monospace;">+₹10,370 / Acre</span>
+                                <span style="font-size: 16px; font-weight: 900; color: #15803d; background: #dcfce7; padding: 2px 10px; border-radius: 20px;">(+72.3% Gain)</span>
+                            </div>
                         </div>
-                        <div class="ba-row-item" style="color: #b71c1c;">
-                            <span>⚠️</span> Repeated monoculture soil fertility degradation
-                        </div>
-                        <div class="ba-row-item" style="color: #b71c1c; background: #ffcdd2; font-size: 17px; font-weight: 900; text-align: center; justify-content: center;">
-                            ₹14,352 / acre (Wardha Baseline)
-                        </div>
+
                     </div>
 
-                    <!-- With Column -->
-                    <div class="ba-col" style="background: #e8f5e9; border: 2px solid #4caf50;">
-                        <div style="font-size: 18px; font-weight: 900; color: #1b5e20; text-align: center; border-bottom: 2px solid #a5d6a7; padding-bottom: 8px;">
-                            ✅ WITH FASAL DISHA
-                        </div>
-                        <div class="ba-row-item" style="color: #1b5e20;">
-                            <span>📈</span> Data-driven ₹/Acre ranked optimization
-                        </div>
-                        <div class="ba-row-item" style="color: #1b5e20;">
-                            <span>💰</span> CACP itemized cost norms + machinery offset
-                        </div>
-                        <div class="ba-row-item" style="color: #1b5e20;">
-                            <span>🌱</span> Rotation-aware soil health & pest disruption
-                        </div>
-                        <div class="ba-row-item" style="color: #1b5e20; background: #c8e6c9; font-size: 17px; font-weight: 900; text-align: center; justify-content: center;">
-                            ₹24,722 / acre (+72.3% Uplift)
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="footer-banner-blue">
-            <span>@SIH Idea submission- Template</span>
-            <span>5</span>
         </div>
     </div>
 
     <!-- SLIDE 6: RESEARCH AND REFERENCES -->
     <div class="slide-wrapper" id="slide-6">
-        <div class="team-oval">
-            <span>Fasal Disha</span>
-            <span style="font-size: 15px; color: #475569;">(AGRI-DECIDE)</span>
-        </div>
-        <div class="slide-title-serif">RESEARCH AND REFERENCES</div>
-        <!-- SIH Corner Logo (Inline SVG) -->
-        <svg class="sih-logo-top" viewBox="0 0 340 100" width="340" height="100" style="position: absolute; top: 20px; right: 40px; height: 80px; z-index: 30;">
-            <g transform="translate(12, 6) scale(0.85)">
-                <path d="M 45 15 C 30 15 20 25 20 40 C 20 50 25 58 32 65 C 38 71 42 76 43 82 L 47 82 L 47 15 Z" fill="#F37023"/>
-                <circle cx="30" cy="30" r="3" fill="#FFFFFF"/>
-                <circle cx="26" cy="45" r="2.5" fill="#FFFFFF"/>
-                <circle cx="36" cy="55" r="2.5" fill="#FFFFFF"/>
-                <path d="M 30 30 L 30 42 L 26 45 M 30 42 L 36 55 L 43 55" stroke="#FFFFFF" stroke-width="1.8" fill="none"/>
-                <circle cx="38" cy="24" r="2" fill="#FFFFFF"/>
-                <path d="M 38 24 L 45 24" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
-                
-                <path d="M 49 15 L 49 82 L 53 82 C 54 76 58 71 64 65 C 71 58 76 50 76 40 C 76 25 66 15 51 15 Z" fill="#009E4D"/>
-                <text x="53" y="27" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                <text x="53" y="38" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="49" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">1010</text>
-                <text x="53" y="60" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">0101</text>
-                <text x="53" y="71" font-family="'Courier New', monospace" font-weight="900" font-size="9" fill="#FFFFFF">101</text>
-                
-                <rect x="41" y="84" width="14" height="3" rx="1" fill="#475569"/>
-                <rect x="43" y="88" width="10" height="3" rx="1" fill="#475569"/>
-                <path d="M 45 92 L 51 92 L 48 95 Z" fill="#475569"/>
-                <text x="48" y="104" font-family="'Arial Black', Arial, sans-serif" font-weight="900" font-size="10" fill="#1E293B" text-anchor="middle">SIH</text>
-            </g>
-            <g transform="translate(90, 20)">
-                <text x="0" y="20" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">SMART INDIA</text>
-                <text x="0" y="40" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="18" fill="#1E3A8A" letter-spacing="0.2">HACKATHON</text>
-                <text x="0" y="62" font-family="'Arial Black', 'Segoe UI', Arial, sans-serif" font-weight="900" font-size="20" fill="#1E3A8A" letter-spacing="0.5">2025</text>
-            </g>
-        </svg>
-
-        <div class="content-area">
-            <div class="sub-header-blue" style="text-decoration: none;">
-                • Details / Links of Reference & Verified Working Prototype
-            </div>
-
-            <!-- Top: Data Sources Table -->
-            <table class="sih-table" style="margin-bottom: 14px;">
-                <thead>
-                    <tr>
-                        <th style="width: 22%;">Government Source</th>
-                        <th style="width: 32%;">Authority / Portal</th>
-                        <th style="width: 46%;">Dataset / Technology Utilized in Fasal Disha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Digital India BHASHINI</strong></td>
-                        <td>MeitY, Govt of India (<a href="https://bhashini.gov.in" target="_blank" style="color: #0072bc; text-decoration: none;">bhashini.gov.in</a>)</td>
-                        <td>National Language Translation Mission — Indic Speech TTS voice narration</td>
-                    </tr>
-                    <tr>
-                        <td><strong>CACP</strong></td>
-                        <td>Ministry of Agriculture (<a href="https://cacp.dacnet.nic.in" target="_blank" style="color: #0072bc; text-decoration: none;">cacp.dacnet.nic.in</a>)</td>
-                        <td>State-wise A₂+FL itemized cultivation cost norms (seed, fertilizer, machinery)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Agmarknet</strong></td>
-                        <td>Directorate of Marketing (<a href="https://agmarknet.gov.in" target="_blank" style="color: #0072bc; text-decoration: none;">agmarknet.gov.in</a>)</td>
-                        <td>14,786 daily APMC wholesale mandi price transactions (2021–2025)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ISRIC — SoilGrids</strong></td>
-                        <td>ISRIC International (<a href="https://soilgrids.org" target="_blank" style="color: #0072bc; text-decoration: none;">soilgrids.org</a>)</td>
-                        <td>GPS-based 250m spatial soil texture, pH, and organic carbon grids</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ICRISAT</strong></td>
-                        <td>Int'l Crops Research (<a href="http://data.icrisat.org" target="_blank" style="color: #0072bc; text-decoration: none;">data.icrisat.org</a>)</td>
-                        <td>10-year historical district-level agricultural crop yield panel</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ICAR-CRIDA / MPKV</strong></td>
-                        <td>ICAR & MPKV Rahuri (<a href="https://icar.org.in" target="_blank" style="color: #0072bc; text-decoration: none;">icar.org.in</a>)</td>
-                        <td>Agro-climatic sowing window calendars and packages of practices</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div style="font-size: 15.5px; color: #475569; margin-bottom: 18px;">
-                📚 <strong>Research Reference:</strong> Chen, T. & Guestrin, C. (2016). <i>"XGBoost: A Scalable Tree Boosting System."</i> ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
-            </div>
-
-            <!-- Bottom: Prototype Hero Box -->
-            <div class="hero-link-box">
-                <div style="font-size: 17px; font-weight: 900; color: #1b5e20; letter-spacing: 1px;">
-                    🚀 VERIFIED WORKING PROTOTYPE — CLICK TO TEST CODE & DEMO
-                </div>
-
-                <div class="hero-link-row">
-                    <span>💻</span>
-                    <span style="min-width: 280px;">GitHub Repository (Public):</span>
-                    <a href="https://github.com/sujeetaionly/agri-decide-sih" target="_blank">github.com/sujeetaionly/agri-decide-sih</a>
-                    <span style="font-size: 15px; color: #15803d; font-weight: 700;">(12/12 Passing Automated Pytest Suite)</span>
-                </div>
-
-                <div class="hero-link-row">
-                    <span>🎬</span>
-                    <span style="min-width: 280px;">2-Minute Demo Video:</span>
-                    <a href="https://youtube.com" target="_blank">Watch Full Android Mobile App Walkthrough (YouTube)</a>
-                </div>
-
-                <div class="hero-link-row">
-                    <span>📱</span>
-                    <span style="min-width: 280px;">Native Android App:</span>
-                    <span style="font-size: 18px; font-weight: 700; color: #334155;">Capacitor 8.5 Native APK • Offline-Capable PWA • Digital India BHASHINI Voice</span>
-                </div>
-            </div>
+        <div class="slide-6-team-oval-text">Almost AC</div>
+        <div class="slide-6-title-box">
+            <h1 class="slide-6-title">RESEARCH AND REFERENCES</h1>
+            <p class="slide-6-subtitle">• Details / Links of Reference &amp; Verified Working Prototype</p>
         </div>
 
-        <div class="footer-banner-blue">
-            <span>@SIH Idea submission- Template</span>
-            <span>6</span>
+        <div class="slide-6-content">
+            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                
+                <!-- Top Section: Government Data Repositories Table -->
+                <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 10px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <table class="sih-table" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th style="width: 22%; padding: 7px 12px; font-size: 15px;">Government Source</th>
+                                <th style="width: 30%; padding: 7px 12px; font-size: 15px;">Authority / Official Portal</th>
+                                <th style="width: 48%; padding: 7px 12px; font-size: 15px;">Dataset / Technology Utilized in Fasal Disha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>Digital India BHASHINI</strong></td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">MeitY, Govt of India (<a href="https://bhashini.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">bhashini.gov.in</a>)</td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">National Language Translation Mission (NLTM) — Indic Speech ASR &amp; TTS voice synthesis</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>CACP</strong></td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">Ministry of Agriculture (<a href="https://cacp.dacnet.nic.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">cacp.dacnet.nic.in</a>)</td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">State-wise itemized A₂+FL cultivation cost norms (seed, fertilizer, chemicals, machinery)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>Agmarknet</strong></td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">Directorate of Marketing (<a href="https://agmarknet.gov.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">agmarknet.gov.in</a>)</td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">14,786 daily APMC wholesale mandi price transactions across cereals, pulses &amp; oilseeds</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>ISRIC — SoilGrids</strong></td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">ISRIC International (<a href="https://soilgrids.org" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">soilgrids.org</a>)</td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">GPS-based 250m spatial GIS soil texture, bulk density, pH, and organic carbon grids</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>ICRISAT</strong></td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">Int'l Crops Research Institute (<a href="http://data.icrisat.org" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">data.icrisat.org</a>)</td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">10-year historical district-level agricultural crop yield panel (XGBoost R²=0.9907)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 12px; font-size: 14.5px;"><strong>ICAR-CRIDA / MPKV</strong></td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">ICAR &amp; MPKV Rahuri (<a href="https://icar.org.in" target="_blank" style="color: #0284c7; text-decoration: none; font-weight: 700;">icar.org.in</a>)</td>
+                                <td style="padding: 6px 12px; font-size: 14.5px;">Agro-climatic sowing window calendars, delay penalty decays, &amp; package of practices</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Middle Section: Research Papers & Publications -->
+                <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 16px; font-size: 14px; color: #475569; display: flex; flex-direction: column; gap: 3px;">
+                    <div>📚 <strong>Machine Learning Reference:</strong> Chen, T. &amp; Guestrin, C. (2016). <i>"XGBoost: A Scalable Tree Boosting System."</i> ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.</div>
+                    <div>📑 <strong>Agronomic Reference:</strong> ICAR Agrometeorological Advisory Services (AAS) Bulletin &amp; State Contingency Crop Plans (2024–2025).</div>
+                </div>
+
+                <!-- Bottom Section: Verified Working Prototype Deliverables Hero Card -->
+                <div style="background: #ffffff; border: 2px solid #86efac; border-radius: 10px; padding: 14px 18px; box-shadow: 0 4px 12px rgba(22, 101, 52, 0.06); display: flex; flex-direction: column; gap: 8px;">
+                    <div style="font-size: 17px; font-weight: 900; color: #166534; letter-spacing: 0.8px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1.5px solid #dcfce7; padding-bottom: 6px;">
+                        <span>🚀 VERIFIED WORKING PROTOTYPE — CLICK TO TEST CODE &amp; LIVE DEMO</span>
+                        <span style="font-size: 13px; font-weight: 800; background: #dcfce7; color: #15803d; padding: 2px 10px; border-radius: 20px;">12/12 Automated Tests Passing</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
+                            <span style="font-size: 20px;">💻</span>
+                            <span style="font-weight: 700; min-width: 140px;">GitHub Repository:</span>
+                            <a href="https://github.com/sujeetaionly/agri-decide-sih" target="_blank" style="color: #0284c7; font-weight: 800; text-decoration: none;">github.com/sujeetaionly/agri-decide-sih</a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
+                            <span style="font-size: 20px;">🎬</span>
+                            <span style="font-weight: 700; min-width: 140px;">2-Min Video Demo:</span>
+                            <a href="https://youtube.com" target="_blank" style="color: #0284c7; font-weight: 800; text-decoration: none;">Watch Android Walkthrough (YouTube)</a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
+                            <span style="font-size: 20px;">📱</span>
+                            <span style="font-weight: 700; min-width: 140px;">Mobile Platform:</span>
+                            <span style="color: #334155; font-weight: 600;">Capacitor 8.5 Android Native APK &amp; PWA</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #0f172a;">
+                            <span style="font-size: 20px;">📄</span>
+                            <span style="font-weight: 700; min-width: 140px;">Advisory Document:</span>
+                            <span style="color: #334155; font-weight: 600;">Client-Side Vector jsPDF Printable Slip (A4)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
