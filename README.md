@@ -134,10 +134,7 @@ graph TD
 
 ---
 
-<details>
-<summary><b>🔬 4. Mathematical Formulations & Optimization Functions (Click to expand)</b></summary>
-
-<br />
+## 🔬 4. Mathematical Formulations & Optimization Functions
 
 ### 4.1. Net Profit Objective Function
 For any candidate crop $i$, the expected Net Profit per acre $\Pi_i$ is computed as:
@@ -198,8 +195,6 @@ Where:
 - $S_{i, m}$: Seasonal arrival index factor for harvest month $m$.
 - $\Delta_{\text{shock}}$: Real-time price shock adjustment from sensitivity simulator.
 
-</details>
-
 ---
 
 ## 📱 5. End-to-End User Journey
@@ -252,7 +247,7 @@ Backend:     FastAPI 0.110 • Python 3.11 • Uvicorn • Pydantic v2 • SQLAl
 ML / Data:   XGBoost 2.0 • Scikit-Learn 1.4 • Pandas 2.2 • NumPy 1.26
 Voice / TTS: BHASHINI Bridge • Capacitor Native TTS • Web Speech API
 Export:      jsPDF 4.2 (Client-Side Vector A4 PDF Generation)
-Database:    PostgreSQL 16 / SQLite (Local Embedded)
+Database:    PostgreSQL 16 (Production Relational DB with Connection Pooling)
 ```
 
 ---
