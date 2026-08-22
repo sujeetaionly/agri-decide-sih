@@ -53,9 +53,10 @@
         #deck-viewport {
             width: 100vw;
             height: 100vh;
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: auto;
             position: relative;
-            background-color: #1e2022;
+            background-color: #2b2d30;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -79,7 +80,7 @@
             gap: 36px;
             width: 1920px;
             transform-origin: top center;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.08s ease-out;
         }
 
         /* Slide Container (Strict 16:9 Widescreen) */
@@ -94,61 +95,18 @@
             page-break-after: always;
             break-after: page;
             flex-shrink: 0;
-            cursor: default;
         }
 
-        /* Single Slide Presentation Mode */
-        body.mode-presentation {
-            overflow: hidden !important;
-        }
-        body.mode-presentation #deck-viewport {
-            overflow: hidden !important;
-            align-items: center !important;
-            justify-content: center !important;
-            background-color: #0b0f19 !important;
-        }
-        body.mode-presentation #deck-canvas-wrapper {
-            padding: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-        body.mode-presentation #deck-canvas {
-            gap: 0 !important;
-            position: relative !important;
-            width: 1920px !important;
-            height: 1080px !important;
-            transform-origin: center center !important;
-        }
-        body.mode-presentation .slide-wrapper {
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            display: none !important;
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out;
-            margin: 0 !important;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
-            cursor: pointer;
-        }
-        body.mode-presentation .slide-wrapper.active-slide {
-            display: block !important;
-            opacity: 1 !important;
-            z-index: 10;
-        }
-
-        /* Floating HUD (Glassmorphism, High Usability) */
+        /* Floating HUD (Clean, Minimal, High Usability) */
         .pdf-hud {
             position: fixed;
             bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(18, 20, 24, 0.94);
+            background: rgba(28, 30, 34, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             padding: 6px 14px;
             border-radius: 9999px;
             display: flex;
@@ -171,23 +129,22 @@
             background: transparent;
             color: #e2e8f0;
             border: none;
-            height: 34px;
-            padding: 0 10px;
-            border-radius: 8px;
+            height: 32px;
+            padding: 0 8px;
+            border-radius: 6px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s ease;
             user-select: none;
             white-space: nowrap;
-            gap: 6px;
         }
 
         .pdf-hud-btn:hover {
-            background: rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.16);
             color: #ffffff;
         }
 
@@ -195,97 +152,28 @@
             transform: scale(0.96);
         }
 
-        .pdf-hud-btn.active {
-            background: rgba(34, 197, 94, 0.25);
-            border: 1px solid #22c55e;
-            color: #86efac;
-        }
-
         .pdf-hud-divider {
             width: 1px;
-            height: 20px;
+            height: 18px;
             background: rgba(255, 255, 255, 0.2);
             margin: 0 2px;
         }
 
-        /* Slide Dropdown Selector in HUD */
-        .pdf-slide-dropdown-wrapper {
-            position: relative;
-        }
-
-        .pdf-hud-page-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #f8fafc;
-            height: 32px;
-            padding: 0 10px;
-            border-radius: 6px;
+        .pdf-hud-page-indicator {
             font-size: 13.5px;
             font-weight: 800;
             font-family: 'JetBrains Mono', monospace;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.15s ease;
-        }
-
-        .pdf-hud-page-btn:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
-
-        .pdf-slide-dropdown-menu {
-            position: absolute;
-            bottom: 46px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(20, 24, 30, 0.98);
-            backdrop-filter: blur(24px);
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 8px;
-            width: 300px;
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
-            z-index: 1010;
-        }
-
-        .pdf-slide-dropdown-menu.show {
-            display: flex;
-        }
-
-        .pdf-slide-dropdown-item {
-            padding: 8px 12px;
-            border-radius: 6px;
-            color: #cbd5e1;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
-
-        .pdf-slide-dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.14);
-            color: #ffffff;
-        }
-
-        .pdf-slide-dropdown-item.active {
-            background: rgba(46, 125, 50, 0.4);
-            border: 1px solid #4ade80;
-            color: #86efac;
-            font-weight: 800;
+            padding: 0 8px;
+            color: #f8fafc;
+            min-width: 50px;
+            text-align: center;
         }
 
         .pdf-hud-zoom-indicator {
             font-size: 13px;
             font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
-            min-width: 52px;
+            min-width: 50px;
             text-align: center;
             color: #cbd5e1;
             cursor: pointer;
@@ -295,7 +183,7 @@
         }
 
         .pdf-hud-zoom-indicator:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.14);
             color: #ffffff;
         }
 
@@ -2173,7 +2061,7 @@
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 2px;">
                                     <strong style="font-size: 18.5px; color: #15803d;">Direct Economic Gain (+₹5,000 to ₹12,000 / Acre)</strong>
-                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Maximizes pocket net margin via CACP $A_2+FL$ input cost optimization and owned tractor/equipment rental deductions (-₹4,900/ac).</p>
+                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Maximizes pocket net margin via CACP A₂ + FL input cost optimization and owned tractor/equipment rental deductions (-₹4,900/ac).</p>
                                 </div>
                             </div>
 
@@ -2184,7 +2072,7 @@
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 2px;">
                                     <strong style="font-size: 18.5px; color: #1d4ed8;">Pre-Season Climate &amp; Price Risk Resilience</strong>
-                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Stress-tests outcomes against $-30\%$ monsoon deficit and $-25\%$ APMC market crashes before farmers invest working capital.</p>
+                                    <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Stress-tests outcomes against -30% monsoon deficit and -25% APMC market crashes before farmers invest working capital.</p>
                                 </div>
                             </div>
 
@@ -2255,7 +2143,7 @@
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.35; color: #166534;">
                                     <div>📈 14,780+ APMC Mandi seasonal wholesale price forecast</div>
-                                    <div>💰 Itemized CACP $A_2+FL$ costs + owned tractor savings</div>
+                                    <div>💰 Itemized CACP A₂ + FL costs + owned tractor savings</div>
                                     <div>🌱 Nitrogen-fixing legume rotation yield bonus (+12%)</div>
                                     <div>🛡️ Dual-slider sandbox simulating rainfall &amp; price shock</div>
                                 </div>
@@ -2312,7 +2200,7 @@
                                     <strong style="font-size: 18px; color: #0f172a;">CACP — Ministry of Agriculture</strong>
                                     <a href="https://cacp.dacnet.nic.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">cacp.dacnet.nic.in ↗</a>
                                 </div>
-                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">State-wise itemized $A_2+FL$ cultivation cost norms (seed, fertilizer, machinery, labour).</p>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">State-wise itemized A₂ + FL cultivation cost norms (seed, fertilizer, machinery, labour).</p>
                             </div>
 
                             <div style="display: flex; flex-direction: column; gap: 3px;">
@@ -2328,7 +2216,7 @@
                                     <strong style="font-size: 18px; color: #0f172a;">ICAR-CRIDA &amp; State SAUs</strong>
                                     <a href="https://icar.org.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">icar.org.in ↗</a>
                                 </div>
-                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Agro-climatic sowing window calendars &amp; late-sowing yield decay parameters ($\approx 0.5\%/\text{day}$).</p>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Agro-climatic sowing window calendars &amp; late-sowing yield decay parameters (≈ 0.5% / day).</p>
                             </div>
                         </div>
                     </div>
@@ -2354,7 +2242,7 @@
                                     <strong style="font-size: 18px; color: #0f172a;">Chen &amp; Guestrin (2016) — XGBoost</strong>
                                     <span style="font-size: 14px; background: #e0f2fe; color: #0369a1; font-weight: 800; padding: 2px 8px; border-radius: 6px;">ACM SIGKDD</span>
                                 </div>
-                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;"><i>"XGBoost: A Scalable Tree Boosting System."</i> Scaled regression model ($R^2=0.9907$).</p>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;"><i>"XGBoost: A Scalable Tree Boosting System."</i> Scaled regression model (R² = 0.9907).</p>
                             </div>
 
                             <div style="display: flex; flex-direction: column; gap: 3px;">
@@ -2362,7 +2250,7 @@
                                     <strong style="font-size: 18px; color: #0f172a;">IMD &amp; ICRISAT Cropping Systems</strong>
                                     <a href="https://imdpune.gov.in" target="_blank" style="font-size: 15px; color: #0284c7; font-weight: 700; text-decoration: none;">imdpune.gov.in ↗</a>
                                 </div>
-                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Gridded rainfall deficit records &amp; biological nitrogen fixation rotation benefits ($+12\%$).</p>
+                                <p style="font-size: 16.5px; color: #334155; margin: 0; line-height: 1.35;">Gridded rainfall deficit records &amp; biological nitrogen fixation rotation benefits (+12%).</p>
                             </div>
                         </div>
                     </div>
@@ -2409,59 +2297,28 @@
     </div> <!-- #deck-viewport -->
 
     <!-- Advanced Presentation & PDF Floating HUD -->
+    <!-- Floating PDF / Deck Navigation HUD -->
     <div class="pdf-hud" id="pdf-hud">
-        <!-- Jump to First Slide -->
-        <button class="pdf-hud-btn" onclick="goToSlide(1)" title="First Slide (Key: Home)" style="padding: 0 8px;">⏮</button>
-        <!-- Previous Slide -->
-        <button class="pdf-hud-btn" onclick="prevSlide()" title="Previous Slide (Key: PageUp / ↑ / ←)" style="padding: 0 10px;">◀</button>
+        <button class="pdf-hud-btn" onclick="prevSlide()" title="Previous Slide (PageUp / ↑ / ←)">▲</button>
+        <span class="pdf-hud-page-indicator" id="hud-page-text">1 / 6</span>
+        <button class="pdf-hud-btn" onclick="nextSlide()" title="Next Slide (PageDown / ↓ / →)">▼</button>
         
-        <!-- Slide Dropdown Jump Selector -->
-        <div class="pdf-slide-dropdown-wrapper">
-            <button class="pdf-hud-page-btn" id="hud-page-btn" onclick="toggleSlideDropdown(event)" title="Click to Jump to Any Slide">
-                <span id="hud-page-text">Slide 1 / 6</span> <span style="font-size: 11px;">▼</span>
-            </button>
-            <div class="pdf-slide-dropdown-menu" id="pdf-slide-dropdown-menu">
-                <div class="pdf-slide-dropdown-item active" onclick="selectSlide(1)"><span>1.</span> Title &amp; Problem Statement</div>
-                <div class="pdf-slide-dropdown-item" onclick="selectSlide(2)"><span>2.</span> Proposed Solution &amp; Flow</div>
-                <div class="pdf-slide-dropdown-item" onclick="selectSlide(3)"><span>3.</span> Technical Approach &amp; Stack</div>
-                <div class="pdf-slide-dropdown-item" onclick="selectSlide(4)"><span>4.</span> Feasibility &amp; Viability</div>
-                <div class="pdf-slide-dropdown-item" onclick="selectSlide(5)"><span>5.</span> Impact &amp; Benefits</div>
-                <div class="pdf-slide-dropdown-item" onclick="selectSlide(6)"><span>6.</span> Research &amp; References</div>
-            </div>
-        </div>
+        <div class="pdf-hud-divider"></div>
 
-        <!-- Next Slide -->
-        <button class="pdf-hud-btn" onclick="nextSlide()" title="Next Slide (Key: PageDown / Space / ↓ / →)" style="padding: 0 10px;">▶</button>
-        <!-- Jump to Last Slide -->
-        <button class="pdf-hud-btn" onclick="goToSlide(totalSlides)" title="Last Slide (Key: End)" style="padding: 0 8px;">⏭</button>
+        <button class="pdf-hud-btn" onclick="zoomOut()" title="Zoom Out (Ctrl + -)">−</button>
+        <span class="pdf-hud-zoom-indicator" id="hud-zoom-text" onclick="fitToWidth()" title="Click to Fit to Screen Width">100%</span>
+        <button class="pdf-hud-btn" onclick="zoomIn()" title="Zoom In (Ctrl + +)">+</button>
 
         <div class="pdf-hud-divider"></div>
 
-        <!-- Zoom Controls -->
-        <button class="pdf-hud-btn" onclick="zoomOut()" title="Zoom Out (Ctrl + -)" style="font-size: 18px; width: 34px; padding: 0;">−</button>
-        <span class="pdf-hud-zoom-indicator" id="hud-zoom-text" onclick="toggleZoomDefault()" title="Click to Reset Zoom">100%</span>
-        <button class="pdf-hud-btn" onclick="zoomIn()" title="Zoom In (Ctrl + +)" style="font-size: 18px; width: 34px; padding: 0;">+</button>
-
-        <div class="pdf-hud-divider"></div>
-
-        <!-- Fit to Screen (Both Width & Height) -->
-        <button class="pdf-hud-btn" id="fit-screen-btn" onclick="fitToScreen()" title="Fit Slide to Screen (Key: S / Ctrl+0)">
-            <span>🔲</span> <span>Fit Screen</span>
+        <!-- Fit to Width Button -->
+        <button class="pdf-hud-btn" id="fit-width-btn" onclick="fitToWidth()" title="Fit to Width (W / Ctrl+0)" style="font-size: 13.5px; padding: 0 12px; font-weight: 700;">
+            Fit Width
         </button>
 
-        <!-- Fit to Width -->
-        <button class="pdf-hud-btn" id="fit-width-btn" onclick="fitToWidth()" title="Fit Slide to Width (Key: W)">
-            <span>↔</span> <span>Fit Width</span>
-        </button>
-
-        <!-- Presentation Slideshow Mode Toggle -->
-        <button class="pdf-hud-btn" id="present-mode-btn" onclick="togglePresentationMode()" title="Toggle Slideshow Presentation Mode (Key: P)">
-            <span>📽️</span> <span>Present</span>
-        </button>
-
-        <!-- Fullscreen Toggle -->
-        <button class="pdf-hud-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (Key: F)" style="width: 34px; padding: 0;">
-            <span>⛶</span>
+        <!-- Fullscreen Button -->
+        <button class="pdf-hud-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="font-size: 16px; width: 34px; padding: 0;">
+            ⛶
         </button>
 
         <div class="pdf-hud-divider"></div>
@@ -2472,12 +2329,11 @@
         </button>
     </div>
 
-    <!-- Presentation & Deck Navigation Engine -->
+    <!-- PDF Viewer Navigation, Touchpad Gestures & Zoom Engine -->
     <script>
         let currentSlide = 1;
         const totalSlides = 6;
         let zoomLevel = 1.0;
-        let isPresentationMode = false;
 
         const viewport = document.getElementById('deck-viewport');
         const canvasWrapper = document.getElementById('deck-canvas-wrapper');
@@ -2485,9 +2341,6 @@
         const hud = document.getElementById('pdf-hud');
         const hudPageText = document.getElementById('hud-page-text');
         const hudZoomText = document.getElementById('hud-zoom-text');
-        const presentBtn = document.getElementById('present-mode-btn');
-        const slideDropdownMenu = document.getElementById('pdf-slide-dropdown-menu');
-        const slides = Array.from(document.querySelectorAll('.slide-wrapper'));
 
         // ==================== DUAL THEME ENGINE ====================
         function setDeckTheme(theme) {
@@ -2529,47 +2382,22 @@
             canvas.style.transform = `scale(${zoomLevel})`;
             hudZoomText.textContent = `${Math.round(zoomLevel * 100)}%`;
 
-            if (isPresentationMode) {
-                canvasWrapper.style.width = '100vw';
-                canvasWrapper.style.height = '100vh';
-            } else {
-                const scaledWidth = 1920 * zoomLevel;
-                const singleSlideH = 1080 * zoomLevel;
-                const gap = 36 * zoomLevel;
-                const totalHeight = (singleSlideH * totalSlides) + (gap * (totalSlides - 1)) + (140 * zoomLevel);
-                
-                canvasWrapper.style.width = `${Math.max(scaledWidth + 48, viewport.clientWidth)}px`;
-                canvasWrapper.style.height = `${totalHeight}px`;
-            }
+            // Adjust outer wrapper size so viewport scrolling has exact bounds
+            const scaledWidth = 1920 * zoomLevel;
+            const singleSlideH = 1080 * zoomLevel;
+            const gap = 36 * zoomLevel;
+            const totalHeight = (singleSlideH * totalSlides) + (gap * (totalSlides - 1)) + (120 * zoomLevel);
+
+            canvasWrapper.style.width = `${Math.max(scaledWidth, viewport.clientWidth)}px`;
+            canvasWrapper.style.height = `${totalHeight}px`;
         }
 
-        // Fit Slide to Screen (Width AND Height - Makes slide fill the entire window!)
-        function fitToScreen() {
-            if (isPresentationMode) {
-                const scaleX = (window.innerWidth - 16) / 1920;
-                const scaleY = (window.innerHeight - 16) / 1080;
-                applyZoom(Math.min(scaleX, scaleY));
-            } else {
-                const paddingX = 40;
-                const paddingY = 48;
-                const scaleX = (viewport.clientWidth - paddingX) / 1920;
-                const scaleY = (viewport.clientHeight - paddingY) / 1080;
-                const optimalScale = Math.min(scaleX, scaleY);
-                applyZoom(optimalScale);
-                scrollToSlide(currentSlide);
-            }
-            showHudTemporarily();
-        }
-
-        // Fit Slide to Viewport Width
+        // Fit Slide to Exact Available Screen Width (edge-to-edge)
         function fitToWidth() {
-            const paddingX = 32;
-            const availableWidth = viewport.clientWidth - paddingX;
-            const optimalScale = availableWidth / 1920;
-            applyZoom(optimalScale);
-            if (!isPresentationMode) {
-                scrollToSlide(currentSlide);
-            }
+            const availableWidth = viewport.clientWidth - 24;
+            const scale = Math.max(0.2, availableWidth / 1920);
+            applyZoom(scale);
+            scrollToSlide(currentSlide);
             showHudTemporarily();
         }
 
@@ -2583,58 +2411,18 @@
             showHudTemporarily();
         }
 
-        function toggleZoomDefault() {
-            if (Math.abs(zoomLevel - 1.0) < 0.05) {
-                fitToScreen();
-            } else {
-                applyZoom(1.0);
-            }
-            showHudTemporarily();
-        }
-
-        // ==================== SLIDE NAVIGATION & PRESENTATION ====================
-        function updateSlideUI() {
-            hudPageText.textContent = `Slide ${currentSlide} / ${totalSlides}`;
-            
-            // Update dropdown active item
-            document.querySelectorAll('.pdf-slide-dropdown-item').forEach((item, idx) => {
-                if (idx + 1 === currentSlide) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-
-            // Update presentation mode active slide
-            if (isPresentationMode) {
-                slides.forEach((slide, idx) => {
-                    if (idx + 1 === currentSlide) {
-                        slide.classList.add('active-slide');
-                    } else {
-                        slide.classList.remove('active-slide');
-                    }
-                });
-            }
-        }
-
+        // ==================== SCREEN NAVIGATION ENGINE ====================
         function scrollToSlide(n) {
             currentSlide = Math.max(1, Math.min(totalSlides, n));
-            updateSlideUI();
+            hudPageText.textContent = `${currentSlide} / ${totalSlides}`;
 
-            if (!isPresentationMode) {
-                const offsetTop = (currentSlide - 1) * (1080 + 36) * zoomLevel + (24 * zoomLevel);
-                viewport.scrollTo({ top: offsetTop, behavior: 'smooth' });
-            }
+            // Calculate precise pixel scroll offset
+            const offsetTop = (currentSlide - 1) * (1080 + 36) * zoomLevel + (24 * zoomLevel);
+            viewport.scrollTo({ top: offsetTop, behavior: 'smooth' });
         }
 
         function goToSlide(n) {
-            currentSlide = Math.max(1, Math.min(totalSlides, n));
-            if (isPresentationMode) {
-                updateSlideUI();
-            } else {
-                scrollToSlide(currentSlide);
-            }
-            closeSlideDropdown();
+            scrollToSlide(n);
             showHudTemporarily();
         }
 
@@ -2650,65 +2438,6 @@
             }
         }
 
-        function selectSlide(n) {
-            goToSlide(n);
-        }
-
-        // ==================== PRESENTATION MODE ====================
-        function togglePresentationMode() {
-            isPresentationMode = !isPresentationMode;
-            document.body.classList.toggle('mode-presentation', isPresentationMode);
-            
-            if (presentBtn) {
-                presentBtn.classList.toggle('active', isPresentationMode);
-            }
-
-            if (isPresentationMode) {
-                fitToScreen();
-                updateSlideUI();
-            } else {
-                slides.forEach(slide => slide.classList.remove('active-slide'));
-                fitToScreen();
-                scrollToSlide(currentSlide);
-            }
-            showHudTemporarily();
-        }
-
-        // Slide click in presentation mode advances to next slide
-        slides.forEach(slide => {
-            slide.addEventListener('click', (e) => {
-                if (isPresentationMode) {
-                    const rect = slide.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    if (clickX < rect.width * 0.25) {
-                        prevSlide();
-                    } else {
-                        nextSlide();
-                    }
-                }
-            });
-        });
-
-        // ==================== SLIDE DROPDOWN MENU ====================
-        function toggleSlideDropdown(e) {
-            e.stopPropagation();
-            slideDropdownMenu.classList.toggle('show');
-            showHudTemporarily();
-        }
-
-        function closeSlideDropdown() {
-            if (slideDropdownMenu) {
-                slideDropdownMenu.classList.remove('show');
-            }
-        }
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.pdf-slide-dropdown-wrapper')) {
-                closeSlideDropdown();
-            }
-        });
-
-        // ==================== FULLSCREEN ====================
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(() => {});
@@ -2766,20 +2495,12 @@
             } else if ((e.ctrlKey || e.metaKey) && (e.key === '-' || e.key === '_')) {
                 e.preventDefault(); zoomOut();
             } else if ((e.ctrlKey || e.metaKey) && e.key === '0') {
-                e.preventDefault(); fitToScreen();
-            } else if (e.key === 's' || e.key === 'S') {
-                if (!e.ctrlKey && !e.metaKey && !e.altKey) {
-                    e.preventDefault(); fitToScreen();
-                }
+                e.preventDefault(); fitToWidth();
             } else if (e.key === 'w' || e.key === 'W') {
                 if (!e.ctrlKey && !e.metaKey && !e.altKey) {
                     e.preventDefault(); fitToWidth();
                 }
-            } else if (e.key === 'p' || e.key === 'P') {
-                if (!e.ctrlKey && !e.metaKey && !e.altKey) {
-                    e.preventDefault(); togglePresentationMode();
-                }
-            } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'ArrowDown' || e.key === ' ') {
+            } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'ArrowDown') {
                 e.preventDefault(); nextSlide();
             } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'ArrowUp') {
                 e.preventDefault(); prevSlide();
@@ -2794,11 +2515,6 @@
             } else if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.altKey) {
                 e.preventDefault();
                 toggleDeckTheme();
-            } else if (e.key === 'Escape') {
-                closeSlideDropdown();
-                if (isPresentationMode) {
-                    togglePresentationMode();
-                }
             }
         });
 
@@ -2808,35 +2524,33 @@
             hud.classList.add('visible');
             clearTimeout(hudTimeout);
             hudTimeout = setTimeout(() => {
-                if (!hud.matches(':hover') && !slideDropdownMenu.classList.contains('show')) {
+                if (!hud.matches(':hover')) {
                     hud.classList.remove('visible');
                 }
-            }, 3000);
+            }, 2500);
         }
 
         window.addEventListener('mousemove', showHudTemporarily);
         viewport.addEventListener('scroll', () => {
-            if (!isPresentationMode) {
-                showHudTemporarily();
-                // Determine active slide from scroll position
-                const currentScrollTop = viewport.scrollTop;
-                const slideHeight = (1080 + 36) * zoomLevel;
-                const estimatedSlide = Math.min(totalSlides, Math.max(1, Math.round(currentScrollTop / slideHeight) + 1));
-                if (estimatedSlide !== currentSlide) {
-                    currentSlide = estimatedSlide;
-                    updateSlideUI();
-                }
+            showHudTemporarily();
+            // Determine active slide from scroll position
+            const currentScrollTop = viewport.scrollTop;
+            const slideHeight = (1080 + 36) * zoomLevel;
+            const estimatedSlide = Math.min(totalSlides, Math.max(1, Math.round((currentScrollTop - 10 * zoomLevel) / slideHeight) + 1));
+            if (estimatedSlide !== currentSlide) {
+                currentSlide = estimatedSlide;
+                hudPageText.textContent = `${currentSlide} / ${totalSlides}`;
             }
         }, { passive: true });
 
-        // Initial Responsive Fit
+        // Initial Responsive Fit to Width
         window.addEventListener('DOMContentLoaded', () => {
-            fitToScreen();
+            fitToWidth();
             showHudTemporarily();
         });
 
         window.addEventListener('resize', () => {
-            fitToScreen();
+            fitToWidth();
         });
     </script>
 </body>
