@@ -936,11 +936,11 @@ export const translations: Record<string, TranslationStrings> = {
     raj: 'अन्य फसल चुणो या खोजो',
   },
   searchCropPlaceholder: {
-    en: 'Search crop (Mustard, Moong, Sugarcane...)',
-    hi: 'फसल खोजें (उदा. सरसों, मूंग, गन्ना, प्याज...)',
-    mr: 'पीक शोधा (उदा. मोहरी, मूग, ऊस, कांदा...)',
-    gu: 'પાક શોધો (દા.ત. રાઈ, મગ, શેરડી, ડુંગળી...)',
-    raj: 'फसल खोजो (उदा. सरसों, मूंग, गन्नो, कांदो...)',
+    en: 'Search crop name...',
+    hi: 'फसल का नाम खोजें...',
+    mr: 'पिकाचे नाव शोधा...',
+    gu: 'પાકનું નામ શોધો...',
+    raj: 'फसल रो नाम खोजो...',
   },
   speakCropName: {
     en: 'Speak Crop Name',
@@ -1222,6 +1222,13 @@ export const translations: Record<string, TranslationStrings> = {
     raj: 'लॉगिन बिना चालो',
   },
   mobileNumberLabel: {
+    en: 'Mobile Number',
+    hi: 'मोबाइल नंबर',
+    mr: 'मोबाईल नंबर',
+    gu: 'મોબાઇલ નંબર',
+    raj: 'मोबाइल नंबर',
+  },
+  mobileNumber: {
     en: 'Mobile Number',
     hi: 'मोबाइल नंबर',
     mr: 'मोबाईल नंबर',

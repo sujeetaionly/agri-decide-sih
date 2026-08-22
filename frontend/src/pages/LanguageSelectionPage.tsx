@@ -136,8 +136,8 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-4 max-w-md mx-auto">
       
-      {/* Top Header with Safe Area Inset Support */}
-      <header className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3">
+      {/* Top Header with Clean Spacing */}
+      <header className="pt-1 pb-2">
         <div className="relative flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-3xl">translate</span>
@@ -176,7 +176,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
               className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
                 isSelected
                   ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/30'
-                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 hover:border-primary/40'
+                  : 'border-stone-300/90 dark:border-stone-700 bg-white dark:bg-stone-900 hover:border-primary/40 shadow-xs'
               }`}
             >
               {isSelected && (
@@ -224,7 +224,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
           className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
             isAdditionalSelected
               ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/30'
-              : 'border-dashed border-stone-300 dark:border-stone-700 bg-stone-50/70 dark:bg-stone-900/40 hover:border-primary/50 shadow-xs'
+              : 'border-dashed border-stone-400/80 dark:border-stone-600 bg-stone-50/70 dark:bg-stone-900/40 hover:border-primary/50 shadow-xs'
           }`}
         >
           {isAdditionalSelected && (
@@ -282,7 +282,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
       </div>
 
       {/* Bottom Action Button with Safe-Area Padding */}
-      <div className="pt-3 pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] flex justify-center">
+      <div className="pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] flex justify-center">
         <button
           type="button"
           onClick={handleProceed}
@@ -296,11 +296,11 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
       {/* Additional Languages Modal Sheet with Proper Visual Hierarchy */}
       {isMoreModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-          <div className="w-full max-w-md bg-white dark:bg-stone-900 rounded-[32px] p-6 shadow-2xl border border-stone-200 dark:border-stone-700 space-y-5 animate-scaleUp">
+          <div className="w-full max-w-md bg-white dark:bg-stone-900 rounded-[32px] p-5 sm:p-6 shadow-2xl border border-stone-200 dark:border-stone-700 space-y-3.5 animate-scaleUp">
             
             {/* Prominent Modal Header */}
-            <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-3.5">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-2.5">
+              <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-2xl">translate</span>
                 <h2 className="text-xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
                   अन्य भाषा चुनें
@@ -312,15 +312,15 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
                   setSearchQuery('');
                   setIsMoreModalOpen(false);
                 }}
-                className="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
-                <span className="material-symbols-outlined text-xl">close</span>
+                <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
 
             {/* Redesigned Search & Voice Bar */}
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               <div className="relative flex items-center">
                 <span className="material-symbols-outlined absolute left-3.5 text-stone-400 text-xl pointer-events-none">
                   search

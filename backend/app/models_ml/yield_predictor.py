@@ -20,8 +20,8 @@ BASE_YIELDS_QTL = {
     "URAD": 5.0,
     "SUNFLOWER": 6.5,
     "SUGARCANE": 380.0,
-    "ONION": 95.0,
-    "TOMATO": 110.0
+    "ONION": 75.0,
+    "TOMATO": 90.0
 }
 
 # Soil suitability multipliers per crop category
@@ -91,12 +91,14 @@ def predict_crop_yield(
     else:  # MEDIUM
         water_mult = 1.0
 
-    # 3. Sowing delay penalty (approx 1.5% to 3.0% loss per 7 days of delay beyond 5 days)
+    # 3. Sowing delay penalty (contingency crops like Bajra/Moong suffer minimal penalty)
     delay_penalty = 0.0
     if sowing_delay_days > 5:
-        # Sensitive crops like Cotton / Maize suffer higher delay penalty
-        loss_rate_per_day = 0.008 if crop_key in ["COTTON", "MAIZE", "SOYBEAN"] else 0.004
-        delay_penalty = min(0.40, (sowing_delay_days - 5) * loss_rate_per_day)
+        if crop_key in ["BAJRA", "MOONG", "URAD"]:
+            delay_penalty = min(0.12, max(0.0, (sowing_delay_days - 10) * 0.002))
+        else:
+            loss_rate_per_day = 0.008 if crop_key in ["COTTON", "MAIZE", "SOYBEAN"] else 0.004
+            delay_penalty = min(0.35, max(0.0, (sowing_delay_days - 5) * loss_rate_per_day))
 
     # 4. Rainfall deficit impact
     deficit_impact = 0.0

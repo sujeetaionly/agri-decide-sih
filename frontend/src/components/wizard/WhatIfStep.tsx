@@ -112,26 +112,15 @@ export const WhatIfStep: React.FC<WhatIfStepProps> = ({ onOpenMyCropPlan }) => {
   };
 
   return (
-    <div className="space-y-5 animate-fadeIn pb-24">
+    <div className="space-y-5 animate-fadeIn pb-6">
       
       {/* Clean Title & Description Header */}
-      <div className="space-y-2 pb-1">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
-            {t('whatIfCardBtn')}
-          </h2>
-
-          <button
-            type="button"
-            onClick={handleAudio}
-            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-primary bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
-          >
-            <span className="material-symbols-outlined text-base">volume_up</span>
-            <span>{t('listen')}</span>
-          </button>
-        </div>
-        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
-          स्लाइडर बदलकर देखें कि कम बारिश या भाव में बदलाव होने पर {cropName} कितनी सुरक्षित रहेगी।
+      <div className="space-y-1 pt-1 pb-1">
+        <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
+          {t('whatIfCardBtn')}
+        </h2>
+        <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
+          कम बारिश या मंडी भाव में उतार-चढ़ाव होने पर फसल की सुरक्षा और मुनाफे का आकलन करें।
         </p>
       </div>
 
@@ -156,8 +145,8 @@ export const WhatIfStep: React.FC<WhatIfStepProps> = ({ onOpenMyCropPlan }) => {
 
           <input
             type="range"
-            min="-35"
-            max="25"
+            min="-30"
+            max="30"
             step="5"
             value={rainfallOffset}
             onChange={(e) => {
@@ -169,7 +158,7 @@ export const WhatIfStep: React.FC<WhatIfStepProps> = ({ onOpenMyCropPlan }) => {
 
           <div className="grid grid-cols-3 text-[11px] font-semibold text-stone-500 dark:text-stone-400 pt-0.5">
             <div className="text-left">
-              <span className="font-bold text-stone-800 dark:text-stone-200 block">-35%</span>
+              <span className="font-bold text-stone-800 dark:text-stone-200 block">-30%</span>
               <span className="text-[10px] text-stone-400 block leading-tight">कम बारिश</span>
             </div>
             <div className="text-center">
@@ -177,7 +166,7 @@ export const WhatIfStep: React.FC<WhatIfStepProps> = ({ onOpenMyCropPlan }) => {
               <span className="text-[10px] text-stone-400 block leading-tight">सामान्य</span>
             </div>
             <div className="text-right">
-              <span className="font-bold text-stone-800 dark:text-stone-200 block">+25%</span>
+              <span className="font-bold text-stone-800 dark:text-stone-200 block">+30%</span>
               <span className="text-[10px] text-stone-400 block leading-tight">अधिक बारिश</span>
             </div>
           </div>
@@ -231,17 +220,13 @@ export const WhatIfStep: React.FC<WhatIfStepProps> = ({ onOpenMyCropPlan }) => {
         </div>
       </div>
 
-      {/* Harmonized Simulation Outcome Hero Card */}
+      {/* Outcome Hero Card */}
       <div className="rounded-3xl border-2 border-stone-300 dark:border-stone-700 bg-white dark:bg-[#1E231B] shadow-lg overflow-hidden animate-fadeIn">
         {/* Top Card Banner */}
         <div className="bg-primary text-white px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-xs">
-            <span className="material-symbols-outlined text-base text-amber-300">analytics</span>
-            <span>सिमुलेशन परिणाम ({cropName})</span>
-          </div>
-          <span className="text-xs font-black bg-white/20 px-3 py-0.5 rounded-full">
-            {isDroughtResilient ? 'सूखा सुरक्षित' : 'सामान्य स्थिति'}
-          </span>
+          <h3 className="text-sm font-black font-headline tracking-wide">
+            मौसम व भाव का असर
+          </h3>
         </div>
 
         {/* Card Body */}

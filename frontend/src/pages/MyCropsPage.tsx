@@ -40,6 +40,45 @@ interface MyCropsPageProps {
   onOpenAnalysisFromHistory?: (historyItem: SavedCropAnalysis) => void;
 }
 
+const SOIL_HINDI_MAP: Record<string, string> = {
+  BLACK: 'काली',
+  RED: 'लाल',
+  SANDY: 'बलुई',
+  CLAY: 'चिकनी',
+  LOAM: 'दोमट',
+  ALLUVIAL: 'जलोढ़',
+};
+
+const WATER_HINDI_MAP: Record<string, string> = {
+  WELL: 'कुआं',
+  OPEN_WELL: 'कुआं',
+  BOREWELL: 'ट्यूबवेल',
+  TUBEWELL: 'ट्यूबवेल',
+  CANAL: 'नहर',
+  RAINFED: 'वर्षा',
+  DRIP: 'ड्रिप',
+  SPRINKLER: 'स्प्रिंकलर',
+};
+
+const CROP_HINDI_MAP: Record<string, string> = {
+  SOYBEAN: 'सोयाबीन',
+  COTTON: 'कपास',
+  ONION: 'प्याज',
+  MAIZE: 'मक्का',
+  WHEAT: 'गेहूं',
+  CHICKPEA: 'चना',
+  GRAM: 'चना',
+  BAJRA: 'बाजरा',
+  GROUNDNUT: 'मूंगफली',
+  PADDY: 'धान',
+  RICE: 'धान',
+  TUR: 'अरहर',
+  MOONG: 'मूंग',
+  URAD: 'उड़द',
+  MUSTARD: 'सरसों',
+  SUGARCANE: 'गन्ना',
+};
+
 export const MyCropsPage: React.FC<MyCropsPageProps> = ({
   onStartNewRecommendation,
   onGoToHome,
@@ -61,7 +100,7 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
       crop_name_hi: candidateCrop.crop_name_hi,
       crop_name_mr: candidateCrop.crop_name_mr,
       suitability_pct: candidateCrop.suitability_pct,
-      duration_days: candidateCrop.duration_days,
+      duration_days: candidateCrop.duration_days || 95,
       expected_yield_qtl_per_acre: candidateCrop.expected_yield_qtl_per_acre,
       yield_range_qtl: `${candidateCrop.expected_yield_qtl_per_acre} क्विंटल`,
       total_cost_inr_per_acre: candidateCrop.total_cost_per_acre,
@@ -72,36 +111,50 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
       why_recommended: candidateCrop.recommendation_statement ? [candidateCrop.recommendation_statement] : [],
     };
     chooseCropForMyCropPlan(fullCrop);
-    setSelectedHistoryItem(null);
-    if (onOpenMyCropPlan) {
-      onOpenMyCropPlan();
-    } else {
-      window.location.hash = 'my-crop';
-    }
+    onOpenMyCropPlan();
   };
 
   useEffect(() => {
-    const fetchHistory = async () => {
+    const loadHistory = async () => {
       setIsLoading(true);
       try {
         const rawHistory = await apiService.getFarmerHistory();
         if (rawHistory && rawHistory.length > 0) {
           const mapped: SavedCropAnalysis[] = rawHistory.map((item: any) => {
-            const cId = item.top_recommended_crop || 'SOYBEAN';
+            const cId = String(item.top_recommended_crop || 'SOYBEAN').toUpperCase();
+            const soilCode = String(item.soil_type || '').toUpperCase().trim();
+            const waterCode = String(item.water_source || '').toUpperCase().trim();
+            const localizedSoil = SOIL_HINDI_MAP[soilCode] || item.soil_type || 'काली';
+            const localizedWater = WATER_HINDI_MAP[waterCode] || item.water_source || 'कुआं';
+            const cropNameHi = item.crop_name_hi && !/^[A-Z_]+$/.test(item.crop_name_hi) 
+              ? item.crop_name_hi 
+              : CROP_HINDI_MAP[cId] || item.crop_name_hi || cId;
+
             const winnerCropItem: ComparedCropItem = {
               crop_id: cId,
-              crop_name_hi: item.crop_name_hi || cId,
-              crop_name_mr: item.crop_name_mr || item.crop_name_hi || cId,
+              crop_name_hi: cropNameHi,
+              crop_name_mr: item.crop_name_mr || cropNameHi,
               suitability_pct: Math.round(item.match_score || 92),
               expected_profit_per_acre: item.expected_profit_per_acre || 24500,
               expected_yield_qtl_per_acre: item.expected_yield_qtl_per_acre || 9.5,
               total_cost_per_acre: item.total_cost_per_acre || 19412,
               duration_days: 95,
-              recommendation_statement: `${item.soil_type || 'काली'} मिट्टी व ${item.water_source || 'कुआं'} सिंचाई में न्यूनतम लागत पर अधिकतम लाभ।`,
+              recommendation_statement: `${localizedSoil} मिट्टी व ${localizedWater} सिंचाई में न्यूनतम लागत पर अधिकतम लाभ।`,
             };
 
             const compared: ComparedCropItem[] = item.compared_crops && item.compared_crops.length > 0
-              ? item.compared_crops
+              ? item.compared_crops.map((c: any) => {
+                  const compId = String(c.crop_id || '').toUpperCase();
+                  const compNameHi = c.crop_name_hi && !/^[A-Z_]+$/.test(c.crop_name_hi)
+                    ? c.crop_name_hi
+                    : CROP_HINDI_MAP[compId] || c.crop_name_hi || compId;
+                  return {
+                    ...c,
+                    crop_id: compId,
+                    crop_name_hi: compNameHi,
+                    crop_name_mr: c.crop_name_mr || compNameHi,
+                  };
+                })
               : [
                   winnerCropItem,
                   {
@@ -131,8 +184,8 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
             return {
               rec_id: item.rec_id,
               total_land_acres: item.total_land_acres || 2.5,
-              soil_type: item.soil_type || 'काली मिट्टी',
-              water_source: item.water_source || 'कुआं',
+              soil_type: localizedSoil + (localizedSoil.endsWith('मिट्टी') ? '' : ' मिट्टी'),
+              water_source: localizedWater + (localizedWater.endsWith('सिंचाई') ? '' : ' सिंचाई'),
               created_at: item.created_at || new Date().toISOString(),
               winner_crop: winnerCropItem,
               compared_crops: compared,
@@ -259,7 +312,7 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
       setIsLoading(false);
     };
 
-    fetchHistory();
+    loadHistory();
   }, []);
 
   const handleNavChange = (tab: NavTab) => {
@@ -283,21 +336,16 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
       <HomeTopAppBar audioText={audioText} />
 
       {/* Main Content */}
-      <main className="flex-1 px-4 pt-3 pb-28 max-w-md mx-auto w-full space-y-4 animate-fadeIn">
+      <main className="flex-1 px-4 pt-3 pb-20 max-w-md mx-auto w-full space-y-4 animate-fadeIn">
         
-        {/* Page Title Header with Emblem */}
-        <div className="flex items-center gap-3 pt-0.5 pb-1">
+        {/* Page Title Header with Emblem & Balanced Spacing */}
+        <div className="flex items-center gap-3 pt-1.5 pb-2">
           <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 shadow-2xs">
             <span className="material-symbols-outlined text-2xl font-bold">history</span>
           </div>
-          <div>
-            <h1 className="text-2xl font-black font-headline tracking-tight text-on-surface-light dark:text-on-surface-dark">
-              {t('historyTitle')}
-            </h1>
-            <p className="text-xs text-stone-500 font-medium">
-              पिछले विश्लेषण व सभी फसलों की तुलना देखें
-            </p>
-          </div>
+          <h1 className="text-2xl font-black font-headline tracking-tight text-on-surface-light dark:text-on-surface-dark">
+            {t('historyTitle')}
+          </h1>
         </div>
 
         {/* History List */}
@@ -307,7 +355,7 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
             <p className="text-xs mt-2 font-medium">इतिहास लोड हो रहा है...</p>
           </div>
         ) : historyList.length > 0 ? (
-          <div className="space-y-3.5 pt-1">
+          <div className="space-y-3.5 pt-0.5">
             {historyList.map((item) => {
               const winner = item.winner_crop;
               const winnerName = language === 'mr' ? winner.crop_name_mr : winner.crop_name_hi;
@@ -325,26 +373,26 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
                   }}
                   className="bg-white dark:bg-[#1E231B] border-2 border-stone-300 dark:border-stone-700 rounded-2xl p-4 shadow-xs space-y-3 cursor-pointer hover:border-primary/50 transition-all active:scale-[0.99]"
                 >
-                  {/* Top Row: Winner Crop & Top Match Badge */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-0.5 min-w-0">
-                      <h3 className="text-base font-black text-stone-900 dark:text-stone-100 font-headline leading-tight">
-                        {winnerName}
-                      </h3>
-                      <p className="text-xs text-stone-400 font-medium">
-                        {formatIndicDateTime(item.created_at)}
-                      </p>
-                    </div>
+                  {/* Top Meta Row: Date/Time on Left & Match Badge on Right */}
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs text-stone-400 dark:text-stone-500 font-medium">
+                      {formatIndicDateTime(item.created_at)}
+                    </p>
 
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/30 flex-shrink-0">
+                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/25 flex-shrink-0">
                       शीर्ष विकल्प ({winner.suitability_pct}% मैच)
                     </span>
                   </div>
 
-                  {/* Recommendation Insight */}
-                  <p className="text-xs text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-900/60 p-2.5 rounded-xl border border-stone-200 dark:border-stone-700 leading-relaxed">
+                  {/* Hero Crop Name: Prominent & Bold */}
+                  <h3 className="text-2xl font-black text-stone-900 dark:text-stone-100 font-headline tracking-tight">
+                    {winnerName}
+                  </h3>
+
+                  {/* Recommendation Insight: Clean Left-Accent Callout (No pinched pill roundedness) */}
+                  <div className="border-l-3 border-primary bg-stone-50 dark:bg-stone-900/50 pl-3 pr-2.5 py-2 rounded-r-xl text-xs text-stone-600 dark:text-stone-300 font-medium leading-relaxed">
                     {winner.recommendation_statement}
-                  </p>
+                  </div>
 
                   {/* Candidate Crops Compared Overview */}
                   <div className="space-y-1.5 pt-0.5">
@@ -497,7 +545,7 @@ export const MyCropsPage: React.FC<MyCropsPageProps> = ({
                     </div>
 
                     {/* Recommendation Statement */}
-                    <div className="text-xs text-stone-600 dark:text-stone-400 bg-white dark:bg-stone-800 p-2 rounded-xl border border-stone-200/80 dark:border-stone-700 leading-snug">
+                    <div className="border-l-3 border-primary bg-stone-50 dark:bg-stone-800/80 pl-3 pr-2.5 py-2 rounded-r-xl text-xs text-stone-600 dark:text-stone-300 font-medium leading-relaxed">
                       {crop.recommendation_statement}
                     </div>
 

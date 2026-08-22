@@ -17,9 +17,9 @@ DISTRICT_LOCAL_CROP_REGISTRY: Dict[str, Dict[str, Any]] = {
         "primary_mandi": "Baramati APMC / Pune APMC",
         "agro_climatic_zone": "Western Maharashtra Plain Zone (Scarcity to Assured Rainfall)",
         "seasons": {
-            "KHARIF": ["SOYBEAN", "MAIZE", "BAJRA", "TUR", "GROUNDNUT", "MOONG", "URAD", "COTTON", "ONION"],
-            "RABI": ["WHEAT", "GRAM", "JOWAR", "SUNFLOWER", "ONION", "MAIZE"],
-            "ZAID": ["GROUNDNUT", "MOONG", "TOMATO"]
+            "KHARIF": ["SOYBEAN", "MAIZE", "BAJRA", "TUR", "GROUNDNUT", "MOONG", "URAD", "COTTON"],
+            "RABI": ["WHEAT", "GRAM", "JOWAR", "SUNFLOWER", "MAIZE"],
+            "ZAID": ["GROUNDNUT", "MOONG", "URAD"]
         }
     },
     "NASHIK": {
@@ -27,9 +27,9 @@ DISTRICT_LOCAL_CROP_REGISTRY: Dict[str, Dict[str, Any]] = {
         "primary_mandi": "Lasalgaon APMC / Niphad APMC",
         "agro_climatic_zone": "North Maharashtra Ghat & Transition Zone",
         "seasons": {
-            "KHARIF": ["SOYBEAN", "MAIZE", "BAJRA", "GROUNDNUT", "TOMATO", "COTTON"],
-            "RABI": ["ONION", "WHEAT", "GRAM", "TOMATO"],
-            "ZAID": ["TOMATO", "MOONG"]
+            "KHARIF": ["SOYBEAN", "MAIZE", "BAJRA", "GROUNDNUT", "COTTON", "TUR"],
+            "RABI": ["WHEAT", "GRAM", "MAIZE", "SUNFLOWER"],
+            "ZAID": ["MOONG", "GROUNDNUT"]
         }
     },
     "JALGAON": {
@@ -48,8 +48,8 @@ DISTRICT_LOCAL_CROP_REGISTRY: Dict[str, Dict[str, Any]] = {
         "agro_climatic_zone": "Semi-Arid Eastern Plain Zone (IIIa)",
         "seasons": {
             "KHARIF": ["BAJRA", "MOONG", "GROUNDNUT", "MAIZE", "GUAR", "URAD"],
-            "RABI": ["MUSTARD", "WHEAT", "GRAM", "ONION"],
-            "ZAID": ["MOONG", "TOMATO"]
+            "RABI": ["MUSTARD", "WHEAT", "GRAM"],
+            "ZAID": ["MOONG", "GROUNDNUT"]
         }
     },
     "NAGAUR": {

@@ -62,7 +62,7 @@ DEFAULT_CACP_COSTS = {
     "URAD": 12202.0,
     "SUNFLOWER": 13152.0,
     "SUGARCANE": 57053.0,
-    "ONION": 41278.0,
+    "ONION": 56000.0,
     "TOMATO": 52002.0
 }
 
@@ -367,13 +367,20 @@ def recommend_crops_engine(
             "sowing_window_status": sowing_status_text,
             "rotation_benefit": rotation_eval.get("benefit_tag"),
             "rotation_reason": rotation_eval.get("reason"),
-            "sort_score": (suitability_pct * 0.5) + (profit_per_day * 0.5)
+            # Normalized profit score (0-100 scale, where ₹350/day = 100)
+            # Agronomic suitability is primary (75% weight), profit is secondary (25% weight)
+            # Heavy penalty if suitability is below 70% so unviable crops are never recommended #1
+            "sort_score": (
+                (suitability_pct * 0.75) + (min(100.0, max(0.0, profit_per_day / 3.5)) * 0.25)
+            ) * (1.0 if suitability_pct >= 70.0 else ((suitability_pct / 70.0) ** 2))
         })
 
     # Sort crops by composite score descending
     evaluated_crops.sort(key=lambda x: x["sort_score"], reverse=True)
 
-    top_crop = evaluated_crops[0]
+    # Top recommendation must satisfy minimum agronomic viability (>= 70%)
+    viable_candidates = [c for c in evaluated_crops if c["suitability_pct"] >= 70.0]
+    top_crop = viable_candidates[0] if viable_candidates else evaluated_crops[0]
     why_bullets = generate_why_recommended(
         crop_id=top_crop["crop_id"],
         soil_type=soil_type,

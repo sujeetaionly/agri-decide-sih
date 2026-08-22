@@ -6,6 +6,8 @@ import { formatCurrencyINR } from '../../lib/utils';
 import { getCropSchedule } from '../../data/cropMilestones';
 
 import { getDynamicCropDetail } from '../../data/cropAgronomics';
+import { generateAndDownloadCropPdf } from '../../lib/pdfGenerator';
+import { triggerHaptic } from '../../lib/utils';
 
 interface PrintableAdvisorySlipProps {
   isOpen: boolean;
@@ -92,6 +94,16 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
     window.open(url, '_blank');
   };
 
+  const handleDownloadPdf = () => {
+    triggerHaptic('success');
+    generateAndDownloadCropPdf({
+      crop,
+      cropName,
+      language,
+      farmData,
+    });
+  };
+
   const modalContent = (
     <div
       id="printable-slip-modal-backdrop"
@@ -105,6 +117,15 @@ export const PrintableAdvisorySlip: React.FC<PrintableAdvisorySlipProps> = ({
         </span>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
+            className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full bg-primary hover:bg-primary/90 text-white shadow-xs cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-sm">download</span>
+            <span>PDF</span>
+          </button>
+
           <button
             type="button"
             onClick={handleWhatsAppShareFromSlip}

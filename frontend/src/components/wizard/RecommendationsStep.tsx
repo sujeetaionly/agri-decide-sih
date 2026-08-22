@@ -41,8 +41,6 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
     selectedCropId,
     setSelectedCropId,
     chooseCropForMyCropPlan,
-    isLiveServerResponse,
-    serverLatencyMs,
   } = useWizard();
   const { language, t } = useLanguage();
 
@@ -129,76 +127,77 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
   };
 
   return (
-    <div className="space-y-5 animate-fadeIn pb-36">
+    <div className="space-y-5 animate-fadeIn pb-6">
       
-      {/* Clean Title & Description Header */}
-      <div className="space-y-2 pb-1">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="text-2xl font-black font-headline text-[#1A1C18] dark:text-[#E2E3DC] leading-snug flex-1">
-            {t('resultsTitle')}
-          </h2>
-
-          <button
-            type="button"
-            onClick={handleAudio}
-            className="flex-shrink-0 h-8 flex items-center gap-1.5 text-xs font-bold text-primary bg-stone-100 dark:bg-stone-800 px-3 rounded-full border border-stone-300 dark:border-stone-700 active:scale-95 hover:bg-stone-200 cursor-pointer shadow-2xs mt-0.5"
-          >
-            <span className="material-symbols-outlined text-base">volume_up</span>
-            <span>{t('listen')}</span>
-          </button>
-        </div>
-        <p className="text-xs text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
+      {/* Clean Title & Subtitle Header */}
+      <div className="space-y-1 pt-1 pb-1">
+        <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
+          {t('resultsTitle')}
+        </h2>
+        <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-medium leading-relaxed">
           आपकी मिट्टी, सिंचाई और मंडी भाव के आधार पर एआई द्वारा विश्लेषित परिणाम।
         </p>
       </div>
 
       {/* 🌟 FARMER'S CHOICE VS AI RECOMMENDATION (HEAD-TO-HEAD COMPARISON CARD) */}
       {intendedVsRecommended && intendedVsRecommended.has_intended_crops && intendedVsRecommended.intended_crop && (
-        <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/40 rounded-3xl p-5 shadow-sm space-y-4 animate-fadeIn">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                <span className="material-symbols-outlined text-lg">compare_arrows</span>
-              </div>
-              <h3 className="text-sm sm:text-base font-black font-headline text-stone-900 dark:text-stone-100">
-                {t('headToHeadTitle')}
-              </h3>
+        <div className="bg-white dark:bg-[#1E231B] border-2 border-primary/40 rounded-3xl p-4 sm:p-5 shadow-sm space-y-3.5 animate-fadeIn">
+          {/* Full-Width Header */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-lg">compare_arrows</span>
             </div>
-
-            <span className={`text-[11px] font-black px-3 py-1 rounded-full uppercase ${
-              intendedVsRecommended.is_intended_already_best
-                ? 'bg-primary text-white'
-                : 'bg-amber-500 text-white'
-            }`}>
-              {intendedVsRecommended.is_intended_already_best
-                ? t('alreadyBestBadge')
-                : `+₹${Math.round(intendedVsRecommended.profit_difference_per_acre_inr).toLocaleString('en-IN')} ${t('profitGain')}`}
-            </span>
+            <h3 className="text-base font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
+              {t('headToHeadTitle')}
+            </h3>
           </div>
+
+          {/* Profit Difference Callout Banner */}
+          {!intendedVsRecommended.is_intended_already_best && intendedVsRecommended.profit_difference_per_acre_inr > 0 && (
+            <div className="bg-amber-500/10 dark:bg-amber-500/20 border border-amber-400/40 dark:border-amber-600/40 rounded-2xl p-2.5 px-3.5 flex items-center justify-between gap-2 shadow-2xs">
+              <span className="text-xs font-extrabold text-amber-950 dark:text-amber-200">
+                AI विकल्प चुनने पर अतिरिक्त लाभ:
+              </span>
+              <span className="text-xs font-black bg-amber-600 text-white px-3 py-1 rounded-full whitespace-nowrap shadow-xs">
+                +₹{Math.round(intendedVsRecommended.profit_difference_per_acre_inr).toLocaleString('en-IN')} / एकड़
+              </span>
+            </div>
+          )}
 
           {/* Side-by-Side Comparison Columns */}
           <div className="grid grid-cols-2 gap-3">
             {/* Farmer's Intended Crop Card */}
-            <div className="bg-stone-50 dark:bg-stone-900/60 p-3.5 rounded-2xl border border-stone-300 dark:border-stone-700 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500">
+            <div className="bg-stone-50 dark:bg-stone-900/60 p-3.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-stone-500 block mb-1">
                   {t('yourChoice')}
                 </span>
-                <span className="text-xs font-bold text-stone-600 dark:text-stone-400">
-                  {intendedVsRecommended.intended_crop.suitability_pct}% अनुकूल
-                </span>
-              </div>
-              <h4 className="text-base font-black font-headline text-stone-900 dark:text-stone-100 truncate">
-                {getLocalizedCropName(intendedVsRecommended.intended_crop, language)}
-              </h4>
-              <div className="space-y-1 text-xs pt-1 border-t border-stone-200/60 dark:border-stone-800">
-                <div className="flex justify-between">
-                  <span className="text-stone-500 font-medium">शुद्ध लाभ:</span>
-                  <span className="font-bold text-stone-800 dark:text-stone-200">
+
+                {/* Hero Crop Name */}
+                <h4 className="text-xl font-black font-headline text-stone-950 dark:text-stone-50 tracking-tight leading-tight truncate">
+                  {getLocalizedCropName(intendedVsRecommended.intended_crop, language)}
+                </h4>
+
+                {/* Clean Match Rate Pill */}
+                <div className="mt-1.5 mb-2.5">
+                  <span className="inline-block text-[11px] font-black text-stone-700 dark:text-stone-300 bg-stone-200/90 dark:bg-stone-800 px-2.5 py-0.5 rounded-full border border-stone-300/70 dark:border-stone-700 whitespace-nowrap">
+                    {intendedVsRecommended.intended_crop.suitability_pct}% मैच
+                  </span>
+                </div>
+
+                {/* Dedicated Profit Box */}
+                <div className="bg-white dark:bg-stone-800/80 p-2.5 rounded-xl border border-stone-200/80 dark:border-stone-700/80 mb-2.5">
+                  <span className="text-[10px] font-bold text-stone-500 block leading-tight">
+                    अनुमानित शुद्ध लाभ
+                  </span>
+                  <span className="text-base font-black text-stone-950 dark:text-stone-50 font-headline block leading-tight mt-1">
                     {formatCurrencyINR(intendedVsRecommended.intended_crop.expected_net_profit_per_acre_inr)}
                   </span>
                 </div>
+              </div>
+
+              {/* Secondary Cost & Duration Specs */}
+              <div className="space-y-1.5 text-[11px] pt-2 border-t border-stone-200 dark:border-stone-800">
                 <div className="flex justify-between">
                   <span className="text-stone-500 font-medium">लागत:</span>
                   <span className="font-semibold text-stone-600 dark:text-stone-400">
@@ -215,25 +214,37 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
             </div>
 
             {/* AI Recommended Crop Card */}
-            <div className="bg-primary/10 dark:bg-primary/20 p-3.5 rounded-2xl border-2 border-primary shadow-xs space-y-2 relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-wider text-primary dark:text-primary-fixed">
-                  {t('aiRecommendation')}
+            <div className="bg-primary/5 dark:bg-primary/20 p-3.5 rounded-2xl border-2 border-primary shadow-xs flex flex-col justify-between relative overflow-hidden">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-primary dark:text-primary-fixed block mb-1">
+                  AI सिफारिश ⭐
                 </span>
-                <span className="text-xs font-extrabold text-primary dark:text-primary-fixed bg-white/80 dark:bg-black/30 px-1.5 py-0.5 rounded-md border border-primary/20">
-                  {intendedVsRecommended.recommended_crop?.suitability_pct || bestAiCrop.suitability_pct}% अनुकूल
-                </span>
-              </div>
-              <h4 className="text-base font-black font-headline text-primary dark:text-primary-fixed truncate">
-                {getLocalizedCropName(intendedVsRecommended.recommended_crop || bestAiCrop, language)}
-              </h4>
-              <div className="space-y-1 text-xs pt-1 border-t border-primary/20">
-                <div className="flex justify-between">
-                  <span className="text-primary/80 font-bold">शुद्ध लाभ:</span>
-                  <span className="font-black text-primary dark:text-primary-fixed">
+
+                {/* Hero Crop Name */}
+                <h4 className="text-xl font-black font-headline text-primary dark:text-primary-fixed tracking-tight leading-tight truncate">
+                  {getLocalizedCropName(intendedVsRecommended.recommended_crop || bestAiCrop, language)}
+                </h4>
+
+                {/* Clean Match Rate Pill */}
+                <div className="mt-1.5 mb-2.5">
+                  <span className="inline-block text-[11px] font-black text-primary dark:text-primary-fixed bg-white dark:bg-stone-900 px-2.5 py-0.5 rounded-full border border-primary/30 shadow-2xs whitespace-nowrap">
+                    {intendedVsRecommended.recommended_crop?.suitability_pct || bestAiCrop.suitability_pct}% मैच
+                  </span>
+                </div>
+
+                {/* Dedicated Profit Box */}
+                <div className="bg-primary/10 dark:bg-primary/25 p-2.5 rounded-xl border border-primary/25 mb-2.5">
+                  <span className="text-[10px] font-bold text-primary/80 block leading-tight">
+                    अनुमानित शुद्ध लाभ
+                  </span>
+                  <span className="text-base font-black text-primary dark:text-primary-fixed font-headline block leading-tight mt-1">
                     {formatCurrencyINR(intendedVsRecommended.recommended_crop?.expected_net_profit_per_acre_inr || bestAiCrop.expected_net_profit_per_acre_inr)}
                   </span>
                 </div>
+              </div>
+
+              {/* Secondary Cost & Duration Specs */}
+              <div className="space-y-1.5 text-[11px] pt-2 border-t border-primary/20">
                 <div className="flex justify-between">
                   <span className="text-stone-600 dark:text-stone-400 font-medium">लागत:</span>
                   <span className="font-semibold text-stone-700 dark:text-stone-300">
@@ -251,18 +262,18 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
           </div>
 
           {/* Financial Takeaway Banner */}
-          <div className={`p-3 rounded-2xl text-xs font-bold flex items-start gap-2 border ${
+          <div className={`p-3 rounded-2xl text-xs font-bold flex items-center gap-2 border ${
             intendedVsRecommended.is_intended_already_best
               ? 'bg-primary/10 text-primary border-primary/20'
               : 'bg-amber-500/10 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700'
           }`}>
-            <span className="material-symbols-outlined text-base flex-shrink-0 mt-0.5">
-              {intendedVsRecommended.is_intended_already_best ? 'verified' : 'savings'}
+            <span className="material-symbols-outlined text-base flex-shrink-0">
+              {intendedVsRecommended.is_intended_already_best ? 'verified' : 'trending_up'}
             </span>
-            <span className="leading-relaxed">
-              {language === 'en'
-                ? (intendedVsRecommended.recommendation_insight_en || intendedVsRecommended.recommendation_insight)
-                : intendedVsRecommended.recommendation_insight}
+            <span className="leading-snug">
+              {intendedVsRecommended.is_intended_already_best
+                ? 'शानदार निर्णय! आपकी सोची हुई फसल ही आपकी जमीन के लिए सबसे उत्तम विकल्प है।'
+                : `AI अनुशंसित फसल (${getLocalizedCropName(intendedVsRecommended.recommended_crop || bestAiCrop, language)}) लगाने से प्रति एकड़ ₹${Math.round(intendedVsRecommended.profit_difference_per_acre_inr).toLocaleString('en-IN')} अधिक शुद्ध लाभ मिल सकता है।`}
             </span>
           </div>
         </div>
@@ -290,13 +301,6 @@ export const RecommendationsStep: React.FC<RecommendationsStepProps> = ({
             <span className="bg-primary/10 text-primary dark:text-primary-fixed border border-primary/30 text-[11px] font-extrabold px-2.5 py-1 rounded-full">
               {activeCrop.suitability_pct}% अनुकूलता
             </span>
-
-            {isLiveServerResponse && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-[10px] font-black border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>लाइव सर्वर ({serverLatencyMs}ms)</span>
-              </span>
-            )}
           </div>
 
           <span className="text-xs font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800/80 px-2.5 py-1 rounded-full border border-stone-300 dark:border-stone-700">
