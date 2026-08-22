@@ -7,7 +7,14 @@ export interface VoiceRecognitionSession {
   stop: () => void;
 }
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'https://fasal-disha.onrender.com/api/v1';
+function getApiBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://127.0.0.1:8000/api/v1';
+    }
+  }
+  return (import.meta as any).env?.VITE_API_URL || 'https://fasal-disha.onrender.com/api/v1';
+}
 
 let activeAudio: HTMLAudioElement | null = null;
 let activeUtterance: SpeechSynthesisUtterance | null = null;
@@ -146,8 +153,50 @@ export async function speakText(
     }
   }
 
-  // 2. Browser Environment: Web Speech API with atomic session check
-  playViaWebSpeech(cleanText, lang, sessionId, onStart, onEnd, onError);
+  // 2. High-Fidelity Audio Stream (Backend MP3 TTS Proxy)
+  const ttsLang = lang === 'mr' ? 'mr' : lang === 'gu' ? 'gu' : lang === 'en' ? 'en' : 'hi';
+  let hasStarted = false;
+
+  try {
+    const audioUrl = `${getApiBaseUrl()}/tts?text=${encodeURIComponent(cleanText)}&lang=${ttsLang}`;
+    const audio = new Audio(audioUrl);
+    activeAudio = audio;
+
+    audio.onplay = () => {
+      if (sessionId !== currentSessionId) {
+        audio.pause();
+        return;
+      }
+      hasStarted = true;
+      if (onStart) onStart();
+    };
+
+    audio.onended = () => {
+      if (activeAudio === audio) activeAudio = null;
+      if (sessionId === currentSessionId && onEnd) onEnd();
+    };
+
+    audio.onerror = () => {
+      if (activeAudio === audio) activeAudio = null;
+      if (!hasStarted && sessionId === currentSessionId) {
+        playViaWebSpeech(cleanText, lang, sessionId, onStart, onEnd, onError);
+      }
+    };
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        if (activeAudio === audio) activeAudio = null;
+        if (!hasStarted && sessionId === currentSessionId) {
+          playViaWebSpeech(cleanText, lang, sessionId, onStart, onEnd, onError);
+        }
+      });
+    }
+  } catch {
+    if (!hasStarted && sessionId === currentSessionId) {
+      playViaWebSpeech(cleanText, lang, sessionId, onStart, onEnd, onError);
+    }
+  }
 }
 
 export function stopSpeaking(): void {
