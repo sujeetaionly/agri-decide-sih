@@ -89,57 +89,47 @@ $$
 
 ```mermaid
 graph TD
-    subgraph ClientLayer ["📱 Client & Presentation Tier (Mobile & Web)"]
+    subgraph TIER1 ["1️⃣ Client & Presentation Tier (Mobile & Web)"]
+        direction LR
         PWA["React 18 + Vite PWA\n[TypeScript • Tailwind CSS]"]
         NativeBridge["Capacitor Android Container\n[Haptics • Native TTS • GPS]"]
         PDFModule["Vector PDF Engine\n[jsPDF A4 Advisory Slip]"]
+        PWA --- NativeBridge
+        PWA --> PDFModule
     end
 
-    subgraph ServiceLayer ["⚡ Application Service Tier (FastAPI Gateway)"]
+    subgraph TIER2 ["2️⃣ Application Service Tier (FastAPI Gateway)"]
+        direction TB
         RecEngine["Recommendation Orchestrator\n[recommendation_service.py]"]
         EconEngine["CACP Economics Engine\n[economics_service.py]"]
         WindowEngine["Sowing Window Service\n[sowing_window_service.py]"]
         GeoEngine["Local Crop Discovery\n[local_crop_service.py]"]
         AudioEngine["Indic Voice Stream Engine\n[tts_routes.py]"]
+        RecEngine --> EconEngine
+        RecEngine --> WindowEngine
+        RecEngine --> GeoEngine
     end
 
-    subgraph MLInferenceLayer ["🤖 Machine Learning & Sensitivity Layer"]
+    subgraph TIER3 ["3️⃣ Machine Learning & Sensitivity Tier"]
+        direction LR
         YieldModel["Yield Predictor\n[XGBoost Regressor • ICAR Baseline]"]
         PriceModel["Mandi Price Forecaster\n[5-Yr APMC Modal • Seasonal Indices]"]
         WhatIfEngine["Sensitivity Simulator\n[Rainfall Deficit & Price Shock]"]
     end
 
-    subgraph DataRepositories ["🗄️ Ground-Truth Data Repositories"]
+    subgraph TIER4 ["4️⃣ Ground-Truth Data Repositories"]
+        direction LR
         ISRIC["ISRIC SoilGrids 250m GIS\n[Organic Carbon • pH • Bulk Density]"]
         AgMarknet["AgMarknet APMC Mandi DB\n[14,780+ Historical Records]"]
         CACP["CACP Production Cost Norms\n[Itemized A2+FL Database]"]
         ICAR["ICAR Agro-Climatic Zones\n[State Sowing Calendars]"]
     end
 
-    %% Client Interactions
-    PWA <--> NativeBridge
-    PWA --> PDFModule
-    PWA -->|"POST /api/v1/crop/recommend"| RecEngine
-    PWA -->|"POST /api/v1/crop/what-if-simulate"| WhatIfEngine
-    PWA -->|"GET /api/v1/tts"| AudioEngine
-
-    %% Service Layer Orchestration
-    RecEngine --> EconEngine
-    RecEngine --> WindowEngine
-    RecEngine --> GeoEngine
-    RecEngine --> YieldModel
-    RecEngine --> PriceModel
-
-    %% ML Sensitivity Connections
-    WhatIfEngine --> YieldModel
-    WhatIfEngine --> PriceModel
-    WhatIfEngine --> EconEngine
-
-    %% External Data Grounding
-    EconEngine <..|"A2+FL Itemized Norms"| CACP
-    PriceModel <..|"5-Yr Modal Rates"| AgMarknet
-    GeoEngine <..|"250m GIS Rasters"| ISRIC
-    WindowEngine <..|"Crop Calendars"| ICAR
+    %% Clean Top-Down Vertical Flow
+    TIER1 ==>|"REST API Requests (JSON)"| TIER2
+    TIER2 <==>|"Inference & Simulation"| TIER3
+    TIER4 -.->|"Ground-Truth Data Ingestion"| TIER2
+    TIER4 -.->|"Model Training & Weights"| TIER3
 ```
 
 ---
@@ -257,7 +247,7 @@ Backend:     FastAPI 0.110 • Python 3.11 • Uvicorn • Pydantic v2 • SQLAl
 ML / Data:   XGBoost 2.0 • Scikit-Learn 1.4 • Pandas 2.2 • NumPy 1.26
 Voice / TTS: BHASHINI Bridge • Capacitor Native TTS • Web Speech API
 Export:      jsPDF 4.2 (Client-Side Vector A4 PDF Generation)
-Database:    PostgreSQL 16 / SQLite (Local Embedded)
+Database:    PostgreSQL 16 (Production Relational DB with Connection Pooling)
 ```
 
 ---
