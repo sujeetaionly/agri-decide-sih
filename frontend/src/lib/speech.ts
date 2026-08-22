@@ -56,7 +56,7 @@ function playViaWebSpeech(
     if (sessionId !== currentSessionId) return;
 
     const targetLang = getSpeechSynthesisLang(lang);
-    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const utterance = new SpeechSynthesisUtterance(',  ' + cleanText);
     utterance.lang = targetLang;
     utterance.rate = 0.95;
     utterance.pitch = 1.0;

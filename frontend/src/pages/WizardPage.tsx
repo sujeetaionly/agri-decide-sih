@@ -30,8 +30,75 @@ export const WizardPage: React.FC<WizardPageProps> = ({
   onOpenSettings,
   openedFromHistory = false,
 }) => {
-  const { currentCard, prevCard } = useWizard();
+  const {
+    currentCard,
+    prevCard,
+    nextCard,
+    farmData,
+    updateFarmData,
+    fetchRecommendations,
+    isLoadingRecommendation,
+  } = useWizard();
   const { language, t } = useLanguage();
+
+  const isCurrentCardValid = React.useMemo(() => {
+    if (currentCard === 1) {
+      return (
+        farmData.landAcres !== null &&
+        !isNaN(farmData.landAcres) &&
+        farmData.landAcres > 0 &&
+        farmData.landAcres <= 500
+      );
+    }
+    if (currentCard === 2) {
+      return farmData.soilType !== null;
+    }
+    if (currentCard === 3) {
+      return farmData.waterCapacity !== null;
+    }
+    if (currentCard === 4) {
+      return true;
+    }
+    if (currentCard === 5) {
+      return (farmData.previousCrops || []).length > 0;
+    }
+    if (currentCard === 6) {
+      return true;
+    }
+    if (currentCard === 7) {
+      return (farmData.intendedCrops || []).length > 0;
+    }
+    return true;
+  }, [currentCard, farmData]);
+
+  const handleBottomContinue = async () => {
+    if (!isCurrentCardValid || isLoadingRecommendation) return;
+    triggerHaptic('success');
+    if (currentCard === 4 && (!farmData.equipments || farmData.equipments.length === 0)) {
+      updateFarmData({ equipments: ['MANUAL_TOOLS'] });
+    }
+    if (currentCard === 6 && !farmData.plannedSowingDate) {
+      const d = new Date();
+      d.setDate(d.getDate() + 3);
+      updateFarmData({ season: 'KHARIF', plannedSowingDate: d.toISOString().split('T')[0] });
+    }
+    if (currentCard === 7) {
+      await fetchRecommendations();
+    } else {
+      nextCard();
+    }
+  };
+
+  const handleBottomBack = () => {
+    triggerHaptic('light');
+    if (openedFromHistory && (currentCard === 8 || currentCard === 7)) {
+      onOpenHistory();
+    } else if (currentCard <= 1) {
+      onReturnHome();
+    } else {
+      prevCard();
+    }
+  };
 
   const getQuestionProgressText = (current: number, total: number = 7) => {
     const DEVANAGARI_DIGITS = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
@@ -70,12 +137,10 @@ export const WizardPage: React.FC<WizardPageProps> = ({
 
   const handleHeaderBack = () => {
     triggerHaptic('light');
-    if (openedFromHistory && (currentCard === 8 || currentCard === 7)) {
+    if (openedFromHistory) {
       onOpenHistory();
-    } else if (currentCard <= 1) {
-      onReturnHome();
     } else {
-      prevCard();
+      onReturnHome();
     }
   };
 
@@ -107,31 +172,33 @@ export const WizardPage: React.FC<WizardPageProps> = ({
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col font-body">
       
       {/* Top Sticky Header */}
-      <header className="sticky top-0 z-40 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 pt-[calc(env(safe-area-inset-top,32px)+0.5rem)] shadow-2xs">
+      <header className="sticky top-0 z-40 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1 shadow-2xs">
         <div className="flex items-center justify-between h-12 px-4 max-w-md mx-auto">
           <button
             onClick={handleHeaderBack}
-            className="w-9 h-9 rounded-full flex items-center justify-center bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:bg-stone-200 active:scale-95 cursor-pointer transition-colors"
+            className="w-9 h-9 rounded-full flex items-center justify-center bg-white dark:bg-stone-800 text-stone-800 dark:text-stone-200 border-2 border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-700 active:scale-95 cursor-pointer transition-all shadow-2xs"
             title={t('back')}
           >
-            <span className="material-symbols-outlined text-lg">arrow_back</span>
+            <span className="material-symbols-outlined text-lg font-bold">arrow_back</span>
           </button>
 
           <span className="font-black text-base text-on-surface-light dark:text-on-surface-dark font-headline">
             {t('appName')}
           </span>
 
+          {/* Right Action: Voice Narrator Button with Greenish Tint & Border */}
           <button
             type="button"
             onClick={handleHeaderSpeak}
-            aria-label="Listen"
-            className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all cursor-pointer aspect-square ${
+            aria-label={t('listen')}
+            className={`flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full border transition-all cursor-pointer ${
               isSpeakingHeader
                 ? 'bg-primary text-white border-primary animate-pulse shadow-md'
-                : 'bg-stone-100 dark:bg-stone-800 text-primary border-stone-200 dark:border-stone-700 hover:bg-primary/10'
+                : 'bg-primary/10 text-primary border-primary/25 hover:bg-primary/20 active:scale-95'
             }`}
           >
-            <span className="material-symbols-outlined text-lg">volume_up</span>
+            <span className="material-symbols-outlined text-base">volume_up</span>
+            <span>{t('listen')}</span>
           </button>
         </div>
 
@@ -163,7 +230,7 @@ export const WizardPage: React.FC<WizardPageProps> = ({
       </header>
 
       {/* Main Questionnaire / Recommendations / Action Plan Step */}
-      <main className="flex-1 max-w-md mx-auto w-full px-4 pt-3 pb-28 animate-fadeIn">
+      <main className={`flex-1 max-w-md mx-auto w-full px-4 pt-3 ${currentCard <= 7 ? 'pb-32' : 'pb-20'} animate-fadeIn`}>
         {currentCard === 1 && <FarmSizeCard />}
         {currentCard === 2 && <SoilTypeCard />}
         {currentCard === 3 && <WaterSourceCard />}
@@ -175,6 +242,52 @@ export const WizardPage: React.FC<WizardPageProps> = ({
         {currentCard === 9 && <WhatIfStep onOpenMyCropPlan={onOpenMyCropPlan} />}
         {currentCard === 10 && <MilestoneCalendarStep onReturnHome={onReturnHome} />}
       </main>
+
+      {/* Seamless Floating Action Bar with Compact Subtle Fade for Steps 1-7 */}
+      {currentCard <= 7 && (
+        <div className="fixed bottom-[calc(4rem+max(0.5rem,env(safe-area-inset-bottom)))] left-0 right-0 z-30 pointer-events-none bg-gradient-to-t from-surface-light via-surface-light/85 to-transparent dark:from-surface-dark dark:via-surface-dark/85 dark:to-transparent pt-6 pb-2.5 px-4">
+          <div className="max-w-md mx-auto flex items-center justify-between gap-3 pointer-events-auto">
+            {/* Back Button */}
+            <button
+              type="button"
+              onClick={handleBottomBack}
+              className="h-12 min-h-[48px] px-6 rounded-full bg-white dark:bg-stone-850 border-2 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 font-extrabold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs hover:bg-stone-50"
+            >
+              <span className="material-symbols-outlined text-base font-bold">arrow_back</span>
+              <span>{t('back')}</span>
+            </button>
+
+            {/* Continue / Submit Button */}
+            <button
+              type="button"
+              onClick={handleBottomContinue}
+              disabled={!isCurrentCardValid || isLoadingRecommendation}
+              className={`flex-1 h-12 min-h-[48px] px-6 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+                isCurrentCardValid && !isLoadingRecommendation
+                  ? 'bg-primary hover:bg-primary/95 text-white active:scale-95 cursor-pointer shadow-md'
+                  : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed opacity-60'
+              }`}
+            >
+              {isLoadingRecommendation ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>{t('calculating')}</span>
+                </>
+              ) : currentCard === 7 ? (
+                <>
+                  <span>{t('getCropRecButton')}</span>
+                  <span className="material-symbols-outlined text-base">auto_awesome</span>
+                </>
+              ) : (
+                <>
+                  <span>{t('continue')}</span>
+                  <span className="material-symbols-outlined text-base font-bold">arrow_forward</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Persistent Bottom Navigation Bar on Every Page */}
       <HomeBottomNav

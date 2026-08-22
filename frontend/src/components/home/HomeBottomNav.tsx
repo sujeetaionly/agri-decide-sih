@@ -29,8 +29,8 @@ export const HomeBottomNav: React.FC<HomeBottomNavProps> = ({
   ];
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-50 bg-white/95 dark:bg-[#1A1E17]/95 backdrop-blur-md border-t-2 border-stone-300 dark:border-stone-700 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
-      <div className="flex justify-around items-center h-16 max-w-md mx-auto px-2">
+    <nav className="fixed bottom-0 inset-x-0 z-50 bg-white/95 dark:bg-[#1A1E17]/95 backdrop-blur-md border-t border-stone-300/90 dark:border-stone-700/90 pt-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+      <div className="flex justify-around items-center h-14 max-w-md mx-auto px-2">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           return (

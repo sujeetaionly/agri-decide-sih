@@ -2,7 +2,6 @@ import React from 'react';
 import { useWizard } from '../../../context/WizardContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { triggerHaptic } from '../../../lib/utils';
-import { speakText } from '../../../lib/speech';
 
 export const WaterSourceCard: React.FC = () => {
   const { farmData, updateFarmData, nextCard, prevCard } = useWizard();
@@ -39,47 +38,11 @@ export const WaterSourceCard: React.FC = () => {
     updateFarmData({ waterCapacity: levelId, waterSource: sourceId });
   };
 
-  const selectedObj = WATER_LEVELS.find((w) => w.id === farmData.waterCapacity);
-
-  const handleAudio = () => {
-    triggerHaptic('light');
-    const msg = isSelectedAny
-      ? `${t('card3Title')}। ${t('appName')}: ${selectedObj?.title || ''}`
-      : `${t('card3Title')}। ${t('card3Sub')}`;
-    speakText(msg, language);
-  };
-
-  const handleContinue = () => {
-    if (!isSelectedAny) return;
-    triggerHaptic('success');
-    nextCard();
-  };
-
-  const handleBack = () => {
-    triggerHaptic('light');
-    prevCard();
-  };
-
   return (
     <div className="space-y-4 animate-fadeIn">
       
-      {/* Question Title & Reassurance Subtitle with Audio */}
-      <div className="space-y-2 pt-1 pb-1">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
-            {t('card3Category')}
-          </span>
-          <button
-            type="button"
-            onClick={handleAudio}
-            aria-label={t('listen')}
-            className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15 active:scale-95 transition-all cursor-pointer shadow-none"
-          >
-            <span className="material-symbols-outlined text-base">volume_up</span>
-            <span>{t('listen')}</span>
-          </button>
-        </div>
-
+      {/* Question Title & Reassurance Subtitle */}
+      <div className="space-y-1.5 pt-1 pb-1">
         <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
           {t('card3Title')}
         </h2>
@@ -143,32 +106,6 @@ export const WaterSourceCard: React.FC = () => {
             </button>
           );
         })}
-      </div>
-
-      {/* Inline Pill Action Buttons (Tight to Card) */}
-      <div className="pt-4 pb-4 flex items-center justify-center gap-3 max-w-[300px] mx-auto w-full">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="h-13 min-h-[50px] px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-extrabold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs"
-        >
-          <span className="material-symbols-outlined text-base">arrow_back</span>
-          <span>{t('back')}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={!isSelectedAny}
-          className={`flex-1 h-13 min-h-[50px] px-6 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
-            isSelectedAny
-              ? 'bg-primary hover:bg-primary/95 text-white active:scale-95 cursor-pointer shadow-md'
-              : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed opacity-60'
-          }`}
-        >
-          <span>{t('continue')}</span>
-          <span className="material-symbols-outlined text-base">arrow_forward</span>
-        </button>
       </div>
     </div>
   );

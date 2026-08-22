@@ -97,8 +97,8 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Header with Title & Speaker Button & Safe Area Top Inset */}
-      <header className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3 space-y-2 text-center">
+      {/* Top Header with Title & Speaker Button & Clean Spacing */}
+      <header className="pt-1 pb-2 space-y-1.5 text-center">
         <div className="flex items-center justify-center gap-2">
           <h1 className="text-2xl font-black font-headline text-on-surface-light dark:text-on-surface-dark tracking-tight">
             {getTranslation('audioGuideTitle', language)}
@@ -152,7 +152,7 @@ export const AudioGuidePage: React.FC<AudioGuidePageProps> = ({
       </div>
 
       {/* Bottom Action Button with Sleek Width & Safe Area Padding */}
-      <div className="pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] flex justify-center">
+      <div className="pb-[max(1rem,env(safe-area-inset-bottom))] flex justify-center">
         <button
           type="button"
           onClick={handleContinue}

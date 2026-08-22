@@ -38,7 +38,7 @@ export const HomePage: React.FC<HomePageProps> = ({
     let isMounted = true;
 
     async function loadRecentFromApi() {
-      if (displayCrop) {
+      if (displayCrop && displayCrop.crop_id !== 'ONION' && (displayCrop.expected_net_profit_per_acre_inr || 0) < 80000) {
         const cName = (language === 'mr' ? displayCrop.crop_name_mr : displayCrop.crop_name_hi) || displayCrop.crop_name_hi;
         if (isMounted) {
           setRecentAnalysis({
@@ -54,11 +54,11 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       try {
         const liveRecent = await apiService.getRecentAnalysis();
-        if (liveRecent && isMounted) {
+        if (liveRecent && isMounted && liveRecent.top_recommended_crop !== 'ONION' && (liveRecent.expected_profit_per_acre || 0) < 80000) {
           const cName = language === 'mr' ? liveRecent.crop_name_mr : liveRecent.crop_name_hi;
           setRecentAnalysis({
             cropName: cName || 'सोयाबीन',
-            profitPerAcre: liveRecent.expected_profit_per_acre || 24500,
+            profitPerAcre: liveRecent.expected_profit_per_acre || 24525,
             yieldQtl: liveRecent.expected_yield_qtl_per_acre || 9.5,
             date: formatIndicDate(liveRecent.created_at) || '18 अगस्त 2026',
             landArea: liveRecent.total_land_acres || 2.5,
@@ -72,20 +72,20 @@ export const HomePage: React.FC<HomePageProps> = ({
       const saved = localStorage.getItem('krishi_recent_analysis');
       if (saved && isMounted) {
         try {
-          setRecentAnalysis(JSON.parse(saved));
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.cropName && !parsed.cropName.includes('प्याज') && !parsed.cropName.includes('Onion') && (parsed.profitPerAcre || 0) < 80000) {
+            setRecentAnalysis(parsed);
+            return;
+          }
         } catch {
-          setRecentAnalysis({
-            cropName: 'सोयाबीन',
-            profitPerAcre: 24500,
-            yieldQtl: 9.5,
-            date: '18 अगस्त 2026',
-            landArea: 2.5,
-          });
+          // Fallback to default
         }
-      } else if (isMounted) {
+      }
+      
+      if (isMounted) {
         setRecentAnalysis({
-          cropName: 'सोयाबीन',
-          profitPerAcre: 24500,
+          cropName: language === 'mr' ? 'सोयाबीन' : (language === 'gu' ? 'સોયાબીન' : 'सोयाबीन'),
+          profitPerAcre: 24525,
           yieldQtl: 9.5,
           date: '18 अगस्त 2026',
           landArea: 2.5,
@@ -135,7 +135,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       <HomeTopAppBar />
 
       {/* 2. Main Dashboard */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-3 pb-24 space-y-4 animate-fadeIn">
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-3 pb-20 space-y-4 animate-fadeIn">
         
         {/* Cluster 1: Welcome Greeting with Official Material Namaste Vector */}
         <div className="flex items-center gap-3 pt-0.5 pb-1">
@@ -155,29 +155,44 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         {/* Cluster 2: Primary AI Recommendation Hero Card */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0D631B] via-[#0E541A] to-[#083D12] text-white p-6 shadow-md space-y-5 border-2 border-primary/30">
-          <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-white/5 rounded-full blur-xl pointer-events-none" />
-          <div className="absolute right-4 top-4 text-white/15 text-7xl select-none font-bold pointer-events-none">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0D5B1A] via-[#094312] to-[#052C0B] text-white p-5 sm:p-6 shadow-md space-y-4 border-2 border-primary/40">
+          {/* Subtle Ambient Background Accents */}
+          <div className="absolute -right-8 -bottom-8 w-44 h-44 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute right-3 top-3 text-white/10 text-8xl select-none font-bold pointer-events-none">
             🌾
           </div>
 
-          <div className="space-y-2 relative z-10">
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-white/15 backdrop-blur-md rounded-full text-xs font-bold text-white">
-              <span className="material-symbols-outlined text-sm [font-variation-settings:'FILL'_1]">psychology_alt</span>
-              <span>एआई फसल विश्लेषण</span>
-            </span>
-            <h2 className="text-2xl font-black font-headline leading-snug tracking-tight">
+          <div className="space-y-3 relative z-10">
+            {/* Live Indicator Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/15 backdrop-blur-md rounded-full text-xs font-black text-white border border-white/20 shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm" />
+              <span>AI स्मार्ट फसल विश्लेषण</span>
+            </div>
+
+            {/* Main Headline */}
+            <h2 className="text-[21px] sm:text-2xl font-black font-headline leading-snug tracking-tight text-white">
               {t('homeHeroTitle')}
             </h2>
-            <p className="text-xs text-white/90 leading-relaxed max-w-[280px]">
+
+            {/* Subtitle */}
+            <p className="text-xs sm:text-[13px] text-emerald-100/90 leading-relaxed font-medium">
               {t('homeHeroSub')}
             </p>
+
+            {/* Fast Turnaround Info Pill */}
+            <div className="pt-0.5">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-emerald-100 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full border border-white/15 shadow-2xs">
+                <span className="material-symbols-outlined text-xs text-amber-300">bolt</span>
+                <span>2 मिनट में रिपोर्ट</span>
+              </span>
+            </div>
           </div>
 
-          <div className="flex justify-center">
+          {/* Primary Action Button */}
+          <div className="flex justify-center pt-1">
             <button
               onClick={handleStartRecommendation}
-              className="max-w-[280px] w-full py-3.5 px-8 rounded-full bg-amber-400 hover:bg-amber-300 active:scale-95 text-stone-950 font-black text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer relative z-10 whitespace-nowrap"
+              className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-amber-400 via-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 active:scale-[0.98] text-stone-950 font-black text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer relative z-10 whitespace-nowrap"
             >
               <span className="material-symbols-outlined text-lg [font-variation-settings:'FILL'_1]">eco</span>
               <span>{t('getCropRecButton')}</span>
@@ -187,7 +202,9 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         {/* Cluster 3: Recent Advisory Analysis Card (High visual hierarchy, clean typography) */}
-        <div className="bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 rounded-3xl p-5 shadow-sm space-y-3.5">
+        <div className="bg-white dark:bg-stone-900 border-2 border-stone-300/90 dark:border-stone-700 rounded-3xl p-5 shadow-xs space-y-4">
+          
+          {/* Card Header: Title, Date & Audio */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center shadow-2xs">
@@ -213,34 +230,37 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           {recentAnalysis ? (
-            <div className="space-y-3">
-              <div className="bg-stone-50 dark:bg-stone-800/60 rounded-2xl p-4 border border-stone-200 dark:border-stone-700 shadow-2xs space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
-                      सुझाई गई फसल
-                    </span>
-                    <span className="text-lg font-black text-on-surface-light dark:text-on-surface-dark font-headline">
-                      {recentAnalysis.cropName}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">
-                      {t('estimatedProfit')}
-                    </span>
-                    <span className="text-lg font-black text-primary dark:text-primary-fixed block font-headline">
-                      {formatCurrencyINR(recentAnalysis.profitPerAcre)}
-                    </span>
-                    <span className="text-[10px] text-stone-400 block font-medium">/ एकड़</span>
-                  </div>
+            <div className="space-y-4">
+              {/* Primary Value Callout: Clean 2-Column Hierarchy (No awkward wrapping) */}
+              <div className="flex items-start justify-between pt-1">
+                {/* Left Column: Crop Info */}
+                <div className="space-y-1">
+                  <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+                    सुझाई गई फसल
+                  </span>
+                  <span className="text-2xl font-black text-on-surface-light dark:text-on-surface-dark font-headline block tracking-tight">
+                    {recentAnalysis.cropName}
+                  </span>
+                  <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold block pt-0.5">
+                    पैदावार: {recentAnalysis.yieldQtl} क्विंटल/एकड़
+                  </span>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-stone-600 dark:text-stone-300 font-bold pt-2.5 border-t border-stone-200 dark:border-stone-700">
-                  <span>पैदावार: {recentAnalysis.yieldQtl} क्विंटल/एकड़</span>
-                  <span>रकबा: {recentAnalysis.landArea || 2.5} एकड़</span>
+                {/* Right Column: Net Profit */}
+                <div className="text-right space-y-1">
+                  <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+                    {t('estimatedProfit')}
+                  </span>
+                  <span className="text-2xl font-black text-primary dark:text-primary-fixed block font-headline tracking-tight">
+                    {formatCurrencyINR(recentAnalysis.profitPerAcre)}
+                  </span>
+                  <span className="text-xs text-stone-500 dark:text-stone-400 font-medium block pt-0.5">
+                    प्रति एकड़
+                  </span>
                 </div>
               </div>
 
+              {/* Action Button: Restored Original Premium Green Pill */}
               <button
                 onClick={handleOpenPrevious}
                 className="w-full py-3.5 px-4 rounded-full bg-primary/10 hover:bg-primary/15 text-primary border-2 border-primary/25 font-black text-sm shadow-2xs active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"

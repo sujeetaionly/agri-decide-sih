@@ -64,9 +64,11 @@ async def fetch_bhashini_tts(text: str, target_lang: str) -> bytes | None:
     return None
 
 def fetch_indic_tts_stream(text: str, lang: str) -> bytes:
-    """Ultra-reliable high-speed Indic TTS stream proxy."""
+    """Ultra-reliable high-speed Indic TTS stream proxy with pre-roll buffer."""
     target_lang = LANG_CODE_MAP.get(lang.lower(), "hi")
-    encoded_text = urllib.parse.quote(text[:300])
+    # Prepend a gentle pause so the browser's audio DAC/speaker hardware doesn't clip the first syllable
+    padded_text = f",  {text.strip()}"[:300]
+    encoded_text = urllib.parse.quote(padded_text)
     
     url = f"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl={target_lang}&q={encoded_text}"
     req = urllib.request.Request(

@@ -78,8 +78,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark text-on-surface-light dark:text-on-surface-dark flex flex-col justify-between p-6 max-w-md mx-auto">
       
-      {/* Top Branding Bar with Safe Area Top Inset for Camera Punch-hole & Dynamic Island */}
-      <div className="pt-[calc(env(safe-area-inset-top,48px)+1.5rem)] pb-3 flex items-center justify-between">
+      {/* Top Branding Bar with Clean Spacing */}
+      <div className="pt-1 pb-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center shadow-xs flex-shrink-0">
             <span className="material-symbols-outlined text-3xl">agriculture</span>
@@ -283,7 +283,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       </div>
 
       {/* Reassurance Footer with Safe Area Bottom Inset */}
-      <footer className="pt-3 pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] text-center">
+      <footer className="pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] text-center">
         <div className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs text-stone-400 dark:text-stone-500 font-medium">
           <span className="material-symbols-outlined text-lg">verified_user</span>
           <span>सुरक्षित एवं गोपनीयता संरक्षित</span>

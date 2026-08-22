@@ -47,7 +47,7 @@ export const ActiveCropPlanPage: React.FC<ActiveCropPlanPageProps> = ({
       <HomeTopAppBar audioText={audioText} />
 
       {/* 2. Main Content */}
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-3 pb-28 animate-fadeIn">
+      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-3 pb-20 animate-fadeIn">
         {/* 120-Day Action Plan Component */}
         <MilestoneCalendarStep onReturnHome={onGoToHome} />
       </main>

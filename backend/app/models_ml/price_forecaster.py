@@ -20,8 +20,8 @@ HISTORICAL_AVG_MANDI_PRICE = {
     "URAD": 7100.0,
     "SUNFLOWER": 6200.0,
     "SUGARCANE": 315.0,    # Per quintal FRP
-    "ONION": 1850.0,
-    "TOMATO": 1600.0
+    "ONION": 1350.0,
+    "TOMATO": 1400.0
 }
 
 # Standard harvest arrival seasonal factors
@@ -39,8 +39,8 @@ HARVEST_SEASONAL_FACTORS = {
     "URAD": 1.03,
     "SUNFLOWER": 1.02,
     "SUGARCANE": 1.00,
-    "ONION": 1.15,
-    "TOMATO": 1.20
+    "ONION": 1.00,
+    "TOMATO": 1.05
 }
 
 # Volatility categorization

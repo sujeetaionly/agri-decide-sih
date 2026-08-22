@@ -176,7 +176,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
               className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
                 isSelected
                   ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/30'
-                  : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 hover:border-primary/40'
+                  : 'border-stone-300/90 dark:border-stone-700 bg-white dark:bg-stone-900 hover:border-primary/40 shadow-xs'
               }`}
             >
               {isSelected && (
@@ -224,7 +224,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
           className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
             isAdditionalSelected
               ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/30'
-              : 'border-dashed border-stone-300 dark:border-stone-700 bg-stone-50/70 dark:bg-stone-900/40 hover:border-primary/50 shadow-xs'
+              : 'border-dashed border-stone-400/80 dark:border-stone-600 bg-stone-50/70 dark:bg-stone-900/40 hover:border-primary/50 shadow-xs'
           }`}
         >
           {isAdditionalSelected && (
@@ -282,7 +282,7 @@ export const LanguageSelectionPage: React.FC<LanguageSelectionPageProps> = ({
       </div>
 
       {/* Bottom Action Button with Safe-Area Padding */}
-      <div className="pt-3 pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)] flex justify-center">
+      <div className="pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] flex justify-center">
         <button
           type="button"
           onClick={handleProceed}

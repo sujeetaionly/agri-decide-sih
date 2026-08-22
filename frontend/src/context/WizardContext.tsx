@@ -29,8 +29,6 @@ interface WizardContextType {
   comparisonMatrix: ComparisonCropItem[];
   intendedVsRecommended: IntendedVsRecommendedComparison | null;
   isLoadingRecommendation: boolean;
-  isLiveServerResponse: boolean;
-  serverLatencyMs: number | null;
   fetchRecommendations: () => Promise<void>;
   goToCard: (card: number) => void;
   nextCard: () => void;
@@ -158,7 +156,10 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       const saved = localStorage.getItem('krishi_active_crop_plan');
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.crop_id !== 'ONION' && (parsed.expected_net_profit_per_acre_inr || 0) < 80000) {
+          return parsed;
+        }
       }
     } catch (e) {
       console.warn('Failed to parse krishi_active_crop_plan', e);
@@ -223,12 +224,8 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     });
   };
 
-  const [isLiveServerResponse, setIsLiveServerResponse] = useState<boolean>(false);
-  const [serverLatencyMs, setServerLatencyMs] = useState<number | null>(null);
-
   const fetchRecommendations = async () => {
     setIsLoadingRecommendation(true);
-    const start = performance.now();
     try {
       const eqList = farmData.equipments || [];
       const data = await apiService.recommendCrops({
@@ -250,11 +247,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         lang: 'hi',
       });
 
-      const elapsed = Math.round(performance.now() - start);
-
       if (data && data.top_recommendation) {
-        setIsLiveServerResponse(true);
-        setServerLatencyMs(elapsed);
         setTopRecommendation(data.top_recommendation);
         setSelectedCropId(data.top_recommendation.crop_id);
         // If the farmer has not chosen a specific crop yet, seed it once
@@ -272,7 +265,6 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     } catch (e) {
       console.warn('API error, using cached benchmark recommendations:', e);
-      setIsLiveServerResponse(false);
       // Fallback: Compute dynamic recommendation adjusting for soil, water & equipment
       const fallbackTop = getDynamicCropDetail('SOYBEAN', farmData);
       setTopRecommendation(fallbackTop);
@@ -300,8 +292,6 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         comparisonMatrix,
         intendedVsRecommended,
         isLoadingRecommendation,
-        isLiveServerResponse,
-        serverLatencyMs,
         fetchRecommendations,
         goToCard,
         nextCard,

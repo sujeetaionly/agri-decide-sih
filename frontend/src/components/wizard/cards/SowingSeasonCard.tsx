@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useWizard } from '../../../context/WizardContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { triggerHaptic } from '../../../lib/utils';
-import { speakText } from '../../../lib/speech';
 
 type TimingChoice = 'THIS_WEEK' | 'NEXT_MONTH' | 'CUSTOM_DATE';
 
 export const SowingSeasonCard: React.FC = () => {
-  const { farmData, updateFarmData, nextCard, prevCard } = useWizard();
-  const { language, t } = useLanguage();
+  const { farmData, updateFarmData } = useWizard();
+  const { t } = useLanguage();
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   // Helper to format ISO date strings (YYYY-MM-DD)
   const getOffsetDateIso = (daysAhead: number) => {
@@ -53,6 +53,22 @@ export const SowingSeasonCard: React.FC = () => {
     updateFarmData({ season: 'KHARIF', plannedSowingDate: val });
   };
 
+  const openDatePicker = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleSelectTiming('CUSTOM_DATE');
+    if (dateInputRef.current) {
+      if ('showPicker' in HTMLInputElement.prototype) {
+        try {
+          dateInputRef.current.showPicker();
+        } catch {
+          dateInputRef.current.focus();
+        }
+      } else {
+        dateInputRef.current.focus();
+      }
+    }
+  };
+
   const formatDisplayDate = (isoStr: string) => {
     try {
       const parts = isoStr.split('-');
@@ -66,54 +82,11 @@ export const SowingSeasonCard: React.FC = () => {
     }
   };
 
-  const handleAudio = () => {
-    triggerHaptic('light');
-    let msg = `${t('card5Title')}। सही बुवाई समय से मानसूनी बारिश का अधिकतम लाभ और कीट-रोग का जोखिम कम होता है। `;
-    if (selectedTiming === 'THIS_WEEK') msg += 'वर्तमान चयन: इसी हफ्ते।';
-    else if (selectedTiming === 'NEXT_MONTH') msg += 'वर्तमान चयन: अगले एक महीने में।';
-    else if (selectedTiming === 'CUSTOM_DATE') msg += `वर्तमान चयन: तारीख ${formatDisplayDate(customDate)}।`;
-    speakText(msg, language);
-  };
-
-  const handleSubmit = () => {
-    triggerHaptic('success');
-    if (selectedTiming === 'CUSTOM_DATE') {
-      updateFarmData({ season: 'KHARIF', plannedSowingDate: customDate || getOffsetDateIso(14) });
-    } else if (selectedTiming === 'NEXT_MONTH') {
-      const date = getOffsetDateIso(25);
-      updateFarmData({ season: 'KHARIF', plannedSowingDate: date });
-    } else {
-      const date = getOffsetDateIso(3);
-      updateFarmData({ season: 'KHARIF', plannedSowingDate: date });
-    }
-    nextCard();
-  };
-
-  const handleBack = () => {
-    triggerHaptic('light');
-    prevCard();
-  };
-
   return (
     <div className="space-y-4 animate-fadeIn">
       
-      {/* Question Title & Reassurance Subtitle with Audio */}
-      <div className="space-y-2 pt-1 pb-1">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
-            {t('card5Category')}
-          </span>
-          <button
-            type="button"
-            onClick={handleAudio}
-            aria-label={t('listen')}
-            className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15 active:scale-95 transition-all cursor-pointer shadow-none"
-          >
-            <span className="material-symbols-outlined text-base">volume_up</span>
-            <span>{t('listen')}</span>
-          </button>
-        </div>
-
+      {/* Question Title & Subtitle */}
+      <div className="space-y-1.5 pt-1 pb-1">
         <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
           {t('card5Title')}
         </h2>
@@ -130,19 +103,19 @@ export const SowingSeasonCard: React.FC = () => {
         <button
           type="button"
           onClick={() => handleSelectTiming('THIS_WEEK')}
-          className={`w-full text-left p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer ${
+          className={`w-full text-left p-4 sm:p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer ${
             selectedTiming === 'THIS_WEEK'
               ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-md ring-2 ring-primary/20'
               : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
           }`}
         >
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
-            <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">bolt</span>
+          <div className="w-13 h-13 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
+            <span className="material-symbols-outlined text-2xl sm:text-3xl [font-variation-settings:'FILL'_1]">bolt</span>
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-lg sm:text-xl font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
+              <h3 className="text-base sm:text-lg font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
                 {t('sowingTimingWeek')}
               </h3>
               <div
@@ -157,8 +130,8 @@ export const SowingSeasonCard: React.FC = () => {
                 )}
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1.5 leading-relaxed">
-              तुरंत बुवाई की तैयारी के लिए मौसम अनुसार उपयुक्त विकल्प
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1 leading-relaxed">
+              तुरंत बुवाई की तैयारी (सटीक व तत्काल सिफारिश)
             </p>
           </div>
         </button>
@@ -167,19 +140,19 @@ export const SowingSeasonCard: React.FC = () => {
         <button
           type="button"
           onClick={() => handleSelectTiming('NEXT_MONTH')}
-          className={`w-full text-left p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer ${
+          className={`w-full text-left p-4 sm:p-5 rounded-3xl border-2 transition-all active:scale-[0.98] flex gap-4 items-center cursor-pointer ${
             selectedTiming === 'NEXT_MONTH'
               ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-md ring-2 ring-primary/20'
               : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
           }`}
         >
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
-            <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">cloud_sync</span>
+          <div className="w-13 h-13 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
+            <span className="material-symbols-outlined text-2xl sm:text-3xl [font-variation-settings:'FILL'_1]">calendar_add_on</span>
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-lg sm:text-xl font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
+              <h3 className="text-base sm:text-lg font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
                 {t('sowingTimingMonth')}
               </h3>
               <div
@@ -194,29 +167,29 @@ export const SowingSeasonCard: React.FC = () => {
                 )}
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1.5 leading-relaxed">
-              मानसूनी बारिश के आगमन अनुसार योजना
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1 leading-relaxed">
+              आगामी बुवाई की अग्रिम तैयारी व फसल योजना
             </p>
           </div>
         </button>
 
-        {/* Option 3: CUSTOM CALENDAR DATE (Fully Integrated & Interactive) */}
+        {/* Option 3: CUSTOM CALENDAR DATE */}
         <div
           onClick={() => handleSelectTiming('CUSTOM_DATE')}
-          className={`w-full p-5 rounded-3xl border-2 transition-all cursor-pointer space-y-3 ${
+          className={`w-full p-4 sm:p-5 rounded-3xl border-2 transition-all cursor-pointer space-y-3 ${
             selectedTiming === 'CUSTOM_DATE'
               ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-md ring-2 ring-primary/20'
               : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
           }`}
         >
           <div className="flex gap-4 items-center">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
-              <span className="material-symbols-outlined text-3xl [font-variation-settings:'FILL'_1]">calendar_month</span>
+            <div className="w-13 h-13 rounded-2xl flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary border border-primary/20 shadow-xs">
+              <span className="material-symbols-outlined text-2xl sm:text-3xl [font-variation-settings:'FILL'_1]">calendar_month</span>
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="text-lg sm:text-xl font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
+                <h3 className="text-base sm:text-lg font-black font-headline text-stone-950 dark:text-stone-50 leading-snug tracking-tight">
                   {t('sowingTimingCustomDate')}
                 </h3>
                 <div
@@ -232,71 +205,49 @@ export const SowingSeasonCard: React.FC = () => {
                 </div>
               </div>
               <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 font-medium mt-1 leading-relaxed">
-                कैलेंडर से अपनी सुविधानुसार सटीक तारीख चुनें
+                कैलेंडर से अपनी सुविधानुसार कोई भी तारीख तय करें
               </p>
             </div>
           </div>
 
-          {/* Interactive Date Picker Container */}
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="pt-2 border-t border-stone-200/80 dark:border-stone-800 space-y-2"
-          >
-            <div className="flex items-center justify-between text-xs font-bold text-stone-600 dark:text-stone-300">
-              <span className="flex items-center gap-1.5 text-primary">
-                <span className="material-symbols-outlined text-base">event</span>
-                <span>चयनित बुवाई तारीख:</span>
-              </span>
-              <span className="text-sm font-black text-stone-900 dark:text-stone-100 bg-stone-100 dark:bg-stone-800 px-3 py-1 rounded-xl">
-                {formatDisplayDate(customDate)}
-              </span>
-            </div>
-
-            <div className="relative">
-              <div className="w-full bg-white dark:bg-stone-900 border-2 border-primary/50 rounded-2xl px-4 py-3 flex items-center justify-between shadow-2xs">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-xl">calendar_today</span>
-                  <span className="text-base font-black text-stone-900 dark:text-stone-100 tracking-wider">
-                    {customDate.split('-').length === 3
-                      ? `${customDate.split('-')[2]}/${customDate.split('-')[1]}/${customDate.split('-')[0]}`
-                      : customDate}
+          {/* Interactive Unified Date Selector Box */}
+          {selectedTiming === 'CUSTOM_DATE' && (
+            <div
+              onClick={openDatePicker}
+              className="relative mt-2 p-3.5 bg-white dark:bg-stone-900 border-2 border-primary/40 hover:border-primary rounded-2xl flex items-center justify-between shadow-2xs cursor-pointer active:scale-[0.99] transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                  <span className="material-symbols-outlined text-xl">event</span>
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-stone-400 dark:text-stone-500 block uppercase tracking-wider">
+                    बुवाई की चुनी गई तारीख
+                  </span>
+                  <span className="text-base font-black text-stone-950 dark:text-stone-50 font-headline">
+                    {formatDisplayDate(customDate)}
                   </span>
                 </div>
-                <span className="text-[11px] font-bold text-stone-400">DD/MM/YYYY</span>
               </div>
+
+              <div className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 group-hover:bg-primary group-hover:text-white transition-colors">
+                <span className="material-symbols-outlined text-sm">edit_calendar</span>
+                <span>बदलें</span>
+              </div>
+
               <input
+                ref={dateInputRef}
                 type="date"
                 min={todayIso}
                 max={maxDateIso}
                 value={customDate}
                 onChange={(e) => handleCustomDateChange(e.target.value)}
-                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer pointer-events-auto z-10"
               />
             </div>
-          </div>
+          )}
         </div>
 
-      </div>
-
-      {/* Inline Pill Action Buttons (Tight to Card) */}
-      <div className="pt-4 pb-4 flex items-center justify-center gap-3 max-w-[300px] mx-auto w-full">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="h-13 min-h-[50px] px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-extrabold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs"
-        >
-          <span className="material-symbols-outlined text-base">arrow_back</span>
-          <span>{t('back')}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="flex-1 h-13 min-h-[50px] px-6 rounded-full bg-primary hover:bg-primary/95 text-white font-extrabold text-sm transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-md whitespace-nowrap"
-        >
-          <span>{t('continue')}</span>
-          <span className="material-symbols-outlined text-base">arrow_forward</span>
-        </button>
       </div>
     </div>
   );

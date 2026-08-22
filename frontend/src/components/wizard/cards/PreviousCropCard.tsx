@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useWizard } from '../../../context/WizardContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { triggerHaptic } from '../../../lib/utils';
-import { speakText, startVoiceRecognition, VoiceRecognitionSession } from '../../../lib/speech';
+import { startVoiceRecognition, VoiceRecognitionSession } from '../../../lib/speech';
 
 interface CropItem {
   id: string;
@@ -10,6 +10,7 @@ interface CropItem {
   titleMr: string;
   titleGu: string;
   titleRaj: string;
+  emoji?: string;
   category: string;
   categoryMr: string;
   categoryGu: string;
@@ -37,6 +38,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'गहू',
       titleGu: 'ઘઉં',
       titleRaj: 'गेहूं',
+      emoji: '🌾',
       category: 'रबी अनाज',
       categoryMr: 'रब्बी धान्य',
       categoryGu: 'રવી ધાન્ય',
@@ -49,6 +51,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'हरभरा (चना)',
       titleGu: 'ચણા',
       titleRaj: 'चणो',
+      emoji: '🫘',
       category: 'दलहन फसल',
       categoryMr: 'कडधान्य पीक',
       categoryGu: 'કઠોળ પાક',
@@ -61,6 +64,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'भात (धान)',
       titleGu: 'ડાંગર (ચોખા)',
       titleRaj: 'धान (चावल)',
+      emoji: '🌾',
       category: 'खरीफ खाद्यान्न',
       categoryMr: 'खरीप धान्य',
       categoryGu: 'ખરીફ અનાજ',
@@ -73,6 +77,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'सोयाबीन',
       titleGu: 'સોયાબીન',
       titleRaj: 'सोयाबीन',
+      emoji: '🌱',
       category: 'तिलहन फसल',
       categoryMr: 'गळीतधान्य',
       categoryGu: 'તેલીબિયાં પાક',
@@ -85,6 +90,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'कापूस',
       titleGu: 'કપાસ',
       titleRaj: 'कपास (रूई)',
+      emoji: '☁️',
       category: 'नकदी फसल',
       categoryMr: 'नगदी पीक',
       categoryGu: 'રોકડિયો પાક',
@@ -97,6 +103,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'मका',
       titleGu: 'મકાઈ',
       titleRaj: 'मक्की',
+      emoji: '🌽',
       category: 'मोटा अनाज',
       categoryMr: 'तृणधान्य',
       categoryGu: 'જાડું ધાન્ય',
@@ -109,6 +116,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'बाजरी',
       titleGu: 'બાજરી',
       titleRaj: 'बाजरी',
+      emoji: '🌾',
       category: 'शुष्क अनाज',
       categoryMr: 'कोरडवाहू धान्य',
       categoryGu: 'બાજરી પાક',
@@ -121,6 +129,7 @@ export const PreviousCropCard: React.FC = () => {
       titleMr: 'पडीक शेत (रिकामे)',
       titleGu: 'પડતર / ખાલી ખેતર',
       titleRaj: 'खाली खेत (पड़त)',
+      emoji: '🍂',
       category: 'कोई फसल नहीं थी',
       categoryMr: 'कोणतेही पीक नव्हते',
       categoryGu: 'કોઈ પાક નહોતો',
@@ -350,54 +359,19 @@ export const PreviousCropCard: React.FC = () => {
   };
 
   const isOtherActive = selectedList.some((id) => !PRIMARY_CROPS.map((p) => p.id).includes(id));
-  const activeOtherNames = selectedList.filter((id) => !PRIMARY_CROPS.map((p) => p.id).includes(id));
-
   const allKnownCrops = [...PRIMARY_CROPS, ...EXTENDED_CROPS];
-  const selectedCropObjs = allKnownCrops.filter((c) => selectedList.includes(c.id));
-  const selectedTitles = [
-    ...selectedCropObjs.map((c) => getCropTitle(c)),
-    ...activeOtherNames.filter((id) => !allKnownCrops.some((c) => c.id === id)),
-  ];
-
-  const handleAudio = () => {
-    triggerHaptic('light');
-    const msg = isSelectedAny
-      ? `${t('card4Title')}। वर्तमान चयन: ${selectedTitles.join(', ')} है।`
-      : `${t('card4Title')}। ${t('card4Sub')}`;
-    speakText(msg, language);
-  };
-
-  const handleContinue = () => {
-    if (!isSelectedAny) return;
-    triggerHaptic('success');
-    nextCard();
-  };
-
-  const handleBack = () => {
-    triggerHaptic('light');
-    prevCard();
-  };
+  const otherSelectedCropObjs = selectedList
+    .filter((id) => !PRIMARY_CROPS.some((p) => p.id === id))
+    .map((id) => {
+      const found = allKnownCrops.find((c) => c.id === id);
+      return found ? getCropTitle(found) : id;
+    });
 
   return (
     <div className="space-y-4 animate-fadeIn">
       
-      {/* Question Title & Reassurance Subtitle with Audio */}
-      <div className="space-y-2 pt-1 pb-1">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-black uppercase tracking-wider text-stone-500 dark:text-stone-400">
-            {t('card4Category')}
-          </span>
-          <button
-            type="button"
-            onClick={handleAudio}
-            aria-label={t('listen')}
-            className="flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15 active:scale-95 transition-all cursor-pointer shadow-none"
-          >
-            <span className="material-symbols-outlined text-base">volume_up</span>
-            <span>{t('listen')}</span>
-          </button>
-        </div>
-
+      {/* Question Title & Reassurance Subtitle */}
+      <div className="space-y-1.5 pt-1 pb-1">
         <h2 className="text-2xl font-black font-headline text-stone-900 dark:text-stone-100 leading-snug">
           {t('card4Title')}
         </h2>
@@ -407,41 +381,35 @@ export const PreviousCropCard: React.FC = () => {
         </p>
       </div>
 
-      {/* 2-Column Primary Crop Selection Tiles with Clear Hierarchy */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 2-Column Clean, Compact Crop Tiles */}
+      <div className="grid grid-cols-2 gap-2.5">
         {PRIMARY_CROPS.map((c) => {
           const isSelected = selectedList.includes(c.id);
           const cropTitle = getCropTitle(c);
-          const cropCategory = getCropCategory(c);
 
           return (
             <div
               key={c.id}
               onClick={() => handleToggleCrop(c.id)}
-              className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between ${
+              className={`py-3.5 px-4 rounded-2xl border-2 transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between gap-2 shadow-2xs ${
                 isSelected
-                  ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-sm ring-2 ring-primary/20'
+                  ? 'bg-primary/5 border-primary dark:bg-primary/20 dark:border-primary shadow-xs ring-2 ring-primary/15'
                   : 'bg-white dark:bg-[#1E231B] border-stone-200 dark:border-stone-800 hover:border-primary/40'
               }`}
             >
-              <div className="min-w-0 pr-2">
-                <h3 className="text-base font-black font-headline text-stone-950 dark:text-stone-50 leading-tight">
-                  {cropTitle}
-                </h3>
-                <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mt-0.5">
-                  {cropCategory}
-                </span>
-              </div>
+              <h3 className="text-sm sm:text-base font-black font-headline text-stone-900 dark:text-stone-100 leading-tight">
+                {cropTitle}
+              </h3>
 
               <div
                 className={`w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all ${
                   isSelected
-                    ? 'bg-primary border-primary text-white'
+                    ? 'bg-primary border-primary text-white shadow-xs'
                     : 'border-stone-300 dark:border-stone-600 bg-transparent'
                 }`}
               >
                 {isSelected && (
-                  <span className="material-symbols-outlined text-xs font-black">
+                  <span className="material-symbols-outlined text-xs font-black leading-none">
                     check
                   </span>
                 )}
@@ -468,8 +436,8 @@ export const PreviousCropCard: React.FC = () => {
             </div>
             <div>
               <h3 className="text-base font-black font-headline text-stone-950 dark:text-stone-50 leading-tight">
-                {isOtherActive && activeOtherNames.length > 0
-                  ? `अन्य: ${activeOtherNames.join(', ')}`
+                {isOtherActive && otherSelectedCropObjs.length > 0
+                  ? `अन्य: ${otherSelectedCropObjs.join(', ')}`
                   : t('otherCrop')}
               </h3>
               <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 block mt-0.5">
@@ -574,7 +542,6 @@ export const PreviousCropCard: React.FC = () => {
                 {filteredExtendedCrops.map((c) => {
                   const isSelected = selectedList.includes(c.id);
                   const cropTitle = getCropTitle(c);
-                  const cropCategory = getCropCategory(c);
 
                   return (
                     <div
@@ -583,30 +550,25 @@ export const PreviousCropCard: React.FC = () => {
                         handleToggleCrop(c.id);
                         setIsOtherModalOpen(false);
                       }}
-                      className={`p-3 rounded-2xl border-2 transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between ${
+                      className={`py-3 px-3.5 rounded-2xl border-2 transition-all cursor-pointer select-none active:scale-[0.98] flex items-center justify-between gap-1.5 ${
                         isSelected
                           ? 'bg-primary/10 border-primary dark:bg-primary/20 dark:border-primary shadow-xs ring-2 ring-primary/20'
                           : 'bg-stone-50 dark:bg-stone-800/80 border-stone-200 dark:border-stone-700 hover:border-primary/40'
                       }`}
                     >
-                      <div className="min-w-0 pr-1">
-                        <h4 className="text-sm font-black font-headline text-stone-900 dark:text-stone-100 leading-tight">
-                          {cropTitle}
-                        </h4>
-                        <span className="text-[10px] font-semibold text-stone-500 dark:text-stone-400 block mt-0.5 truncate">
-                          {cropCategory}
-                        </span>
-                      </div>
+                      <h4 className="text-sm font-black font-headline text-stone-900 dark:text-stone-100 leading-tight">
+                        {cropTitle}
+                      </h4>
 
                       <div
                         className={`w-5 h-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all ${
                           isSelected
-                            ? 'bg-primary border-primary text-white'
+                            ? 'bg-primary border-primary text-white shadow-xs'
                             : 'border-stone-300 dark:border-stone-600 bg-transparent'
                         }`}
                       >
                         {isSelected && (
-                          <span className="material-symbols-outlined text-xs font-black">
+                          <span className="material-symbols-outlined text-xs font-black leading-none">
                             check
                           </span>
                         )}
@@ -630,32 +592,6 @@ export const PreviousCropCard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Inline Pill Action Buttons (Tight to Card) */}
-      <div className="pt-4 pb-4 flex items-center justify-center gap-3 max-w-[300px] mx-auto w-full">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="h-13 min-h-[50px] px-6 rounded-full bg-white dark:bg-stone-900 border-2 border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-extrabold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap shadow-2xs"
-        >
-          <span className="material-symbols-outlined text-base">arrow_back</span>
-          <span>{t('back')}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={!isSelectedAny}
-          className={`flex-1 h-13 min-h-[50px] px-6 rounded-full font-extrabold text-sm transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
-            isSelectedAny
-              ? 'bg-primary hover:bg-primary/95 text-white active:scale-95 cursor-pointer shadow-md'
-              : 'bg-stone-200 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed opacity-60'
-          }`}
-        >
-          <span>{t('continue')}</span>
-          <span className="material-symbols-outlined text-base">arrow_forward</span>
-        </button>
-      </div>
     </div>
   );
 };

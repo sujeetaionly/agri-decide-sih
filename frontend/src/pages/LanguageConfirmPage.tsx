@@ -110,7 +110,7 @@ export const LanguageConfirmPage: React.FC<LanguageConfirmPageProps> = ({
       </div>
 
       {/* Action Buttons with Sleek Width & Safe Area Inset */}
-      <div className="space-y-3 max-w-[290px] w-full mx-auto pb-[calc(env(safe-area-inset-bottom,16px)+1.5rem)]">
+      <div className="space-y-3 max-w-[290px] w-full mx-auto pb-[max(1rem,env(safe-area-inset-bottom))]">
         <button
           type="button"
           onClick={handleYes}
