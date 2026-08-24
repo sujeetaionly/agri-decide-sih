@@ -41,3 +41,8 @@ Thumbs.db
 *.db
 *.sqlite3
 
+# Previews & Temp Builds
+web_deck/_preview/
+presentation/_hq_build/
+opencode.json
+

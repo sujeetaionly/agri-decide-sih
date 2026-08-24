@@ -269,6 +269,60 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const fallbackTop = getDynamicCropDetail('SOYBEAN', farmData);
       setTopRecommendation(fallbackTop);
       setSelectedCropId('SOYBEAN');
+      const cleanIntended = (farmData.intendedCrops || []).filter(
+        (c) => c && c !== 'NOT_SURE' && c !== 'OTHER' && MASTER_CROP_MAP[c]
+      );
+      if (cleanIntended.length > 0) {
+        const intendedBest = getDynamicCropDetail(cleanIntended[0], farmData);
+        const profitDiff = Math.max(
+          0,
+          Math.round(fallbackTop.expected_net_profit_per_acre_inr - intendedBest.expected_net_profit_per_acre_inr)
+        );
+        const isAlreadyBest = fallbackTop.crop_id === intendedBest.crop_id || profitDiff <= 200;
+        const gainPct =
+          !isAlreadyBest && intendedBest.expected_net_profit_per_acre_inr > 0
+            ? Math.round((profitDiff / intendedBest.expected_net_profit_per_acre_inr) * 1000) / 10
+            : 0;
+
+        setIntendedVsRecommended({
+          has_intended_crops: true,
+          is_intended_already_best: isAlreadyBest,
+          profit_difference_per_acre_inr: profitDiff,
+          profit_gain_pct: gainPct,
+          intended_crop: {
+            crop_id: intendedBest.crop_id,
+            crop_name_en: intendedBest.crop_name_en,
+            crop_name_hi: intendedBest.crop_name_hi,
+            crop_name_mr: intendedBest.crop_name_mr,
+            crop_name_gu: intendedBest.crop_name_gu,
+            crop_name_raj: intendedBest.crop_name_raj,
+            suitability_pct: intendedBest.suitability_pct,
+            total_cost_inr_per_acre: intendedBest.total_cost_inr_per_acre,
+            expected_yield_qtl_per_acre: intendedBest.expected_yield_qtl_per_acre,
+            expected_net_profit_per_acre_inr: intendedBest.expected_net_profit_per_acre_inr,
+            duration_days: intendedBest.duration_days,
+          },
+          recommended_crop: {
+            crop_id: fallbackTop.crop_id,
+            crop_name_en: fallbackTop.crop_name_en,
+            crop_name_hi: fallbackTop.crop_name_hi,
+            crop_name_mr: fallbackTop.crop_name_mr,
+            crop_name_gu: fallbackTop.crop_name_gu,
+            crop_name_raj: fallbackTop.crop_name_raj,
+            suitability_pct: fallbackTop.suitability_pct,
+            total_cost_inr_per_acre: fallbackTop.total_cost_inr_per_acre,
+            expected_yield_qtl_per_acre: fallbackTop.expected_yield_qtl_per_acre,
+            expected_net_profit_per_acre_inr: fallbackTop.expected_net_profit_per_acre_inr,
+            duration_days: fallbackTop.duration_days,
+          },
+          recommendation_insight: isAlreadyBest
+            ? `शानदार निर्णय! आपकी सोची हुई फसल (${intendedBest.crop_name_hi}) ही आपकी जमीन के लिए सबसे उत्तम और सर्वाधिक मुनाफा देने वाली है।`
+            : `अगर आप अपनी सोची हुई फसल (${intendedBest.crop_name_hi}) की जगह AI अनुशंसित (${fallbackTop.crop_name_hi}) लगाते हैं, तो आपको प्रति एकड़ ₹${profitDiff.toLocaleString('en-IN')} (+${gainPct}%) अधिक शुद्ध मुनाफा मिल सकता है!`,
+          recommendation_insight_en: isAlreadyBest
+            ? `Great choice! Your considered crop (${intendedBest.crop_name_en}) is already optimal.`
+            : `Switching from your intended ${intendedBest.crop_name_en} to AI recommended ${fallbackTop.crop_name_en} can yield ₹${profitDiff.toLocaleString('en-IN')} (+${gainPct}%) extra net profit per acre!`,
+        });
+      }
     } finally {
       setIsLoadingRecommendation(false);
       goToCard(8); // Move to recommendations view (Step 8)

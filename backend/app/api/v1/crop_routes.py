@@ -118,21 +118,24 @@ def recommend_crops(payload: RecommendCropRequest, db: Session = Depends(get_db)
     state = payload.state or "Maharashtra"
     lang = payload.lang or "hi"
 
-    if payload.farmer_id:
-        farmer = db.query(Farmer).filter(Farmer.farmer_id == payload.farmer_id).first()
-        if farmer and farmer.farms:
-            farm = farmer.farms[0]
-            soil = farm.soil_type
-            water_source = farm.water_source
-            water_capacity = farm.water_capacity_level
-            capital = farm.working_capital_inr
-            previous_crop = farm.previous_season_crop
-            owns_tractor = farm.owns_tractor
-            owns_sprayer = farm.owns_sprayer
-            if farmer.district:
-                district = farmer.district
-            if farmer.state:
-                state = farmer.state
+    if payload.farmer_id and db is not None:
+        try:
+            farmer = db.query(Farmer).filter(Farmer.farmer_id == payload.farmer_id).first()
+            if farmer and farmer.farms:
+                farm = farmer.farms[0]
+                soil = farm.soil_type
+                water_source = farm.water_source
+                water_capacity = farm.water_capacity_level
+                capital = farm.working_capital_inr
+                previous_crop = farm.previous_season_crop
+                owns_tractor = farm.owns_tractor
+                owns_sprayer = farm.owns_sprayer
+                if farmer.district:
+                    district = farmer.district
+                if farmer.state:
+                    state = farmer.state
+        except Exception:
+            pass
 
     result = recommend_crops_engine(
         soil_type=soil,

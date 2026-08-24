@@ -20,15 +20,20 @@
 
 <div align="center">
 
-### 📱 2-Minute Android App Demonstration
+### 📱 2-Minute Android App Demonstration & Working Prototype
 
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
-  <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=640&q=80" alt="Fasal-Disha Android App Demo Walkthrough" width="340" style="border-radius: 24px; box-shadow: 0 12px 36px rgba(0,0,0,0.25); border: 4px solid #1E5622;" />
+<a href="https://www.youtube.com/watch?v=a_G_IizFmDI" target="_blank">
+  <img src="https://img.youtube.com/vi/a_G_IizFmDI/maxresdefault.jpg" alt="Fasal-Disha Android App Live Demo Walkthrough" width="720" style="border-radius: 16px; box-shadow: 0 12px 36px rgba(0,0,0,0.28); border: 3px solid #1E5622;" />
 </a>
 
+<br />
+
+[![Watch on YouTube](https://img.shields.io/badge/YouTube-Watch%20Working%20Prototype%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/a_G_IizFmDI)
+[![Live Codebase](https://img.shields.io/badge/GitHub-Verified%20Codebase-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sujeetaionly/agri-decide-sih)
+
 <p>
-  <strong>🎬 Watch the 2-minute silent walkthrough video (Android Portrait View)</strong><br />
-  <em>Demonstrating the 7-Step Zero-Lab Wizard, Live Mandi Trends, and Head-to-Head Crop Comparison.</em>
+  <strong>🎬 Click above to watch the end-to-end interactive demo video on YouTube</strong><br />
+  <em>Demonstrating: 7-Step Zero-Lab Farm Intake Wizard, ISRIC SoilGrids 250m GIS Ingestion, Real-Time CACP Net Profit Optimization Engine, What-If Risk Sandbox, and 120-Day Action Advisory Calendar.</em>
 </p>
 
 </div>
@@ -46,7 +51,8 @@
 8. [Repository Directory Structure](#-8-repository-directory-structure)
 9. [Local Development & Quick Start](#-9-local-development--quick-start)
 10. [Native Android Packaging & Production Deployment](#-10-native-android-packaging--production-deployment)
-11. [License & Attribution](#-11-license--attribution)
+11. [Screenshots of Real Working Prototype](#-11-screenshots-of-real-working-prototype)
+12. [License & Attribution](#-12-license--attribution)
 
 ---
 
@@ -393,7 +399,65 @@ cd android
 
 ---
 
-## 📜 11. License & Attribution
+## 📱 11. Screenshots of Real Working Prototype
+
+<div align="center">
+
+![Fasal-Disha End-to-End User Experience & Flow](presentation/slide_7_hq.png)
+
+</div>
+
+### 🔍 Step-by-Step Mobile Experience & Feature Highlights
+
+<table>
+  <thead>
+    <tr>
+      <th width="20%" align="center"><strong>Step 1: Home & Voice AI</strong></th>
+      <th width="20%" align="center"><strong>Step 2: Zero-Lab GIS Profile</strong></th>
+      <th width="20%" align="center"><strong>Step 3: Head-to-Head Decision</strong></th>
+      <th width="20%" align="center"><strong>Step 4: What-If Risk Sandbox</strong></th>
+      <th width="20%" align="center"><strong>Step 5: 120-Day Action Plan</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <img src="web_deck/presentation_assets/flow_step_1_home.png" width="100%" alt="Home Dashboard" />
+        <br /><br />
+        <strong>All Regional Languages</strong><br />
+        <sub>Voice guidance in 12+ Indian languages via BHASHINI AI, live Mandi ticker &amp; 1-tap 2-min assessment.</sub>
+      </td>
+      <td align="center" valign="top">
+        <img src="web_deck/presentation_assets/flow_step_2_soil.png" width="100%" alt="Soil Profiler" />
+        <br /><br />
+        <strong>Zero-Lab Satellite GIS</strong><br />
+        <sub>Auto-fetches SoilGrids 250m texture &amp; pH. Factorizes owned tools (tractor −₹3.5k/ac) &amp; crop rotation.</sub>
+      </td>
+      <td align="center" valign="top">
+        <img src="web_deck/presentation_assets/flow_step_3_comparison.png" width="100%" alt="Head to Head Comparison" />
+        <br /><br />
+        <strong>Intended vs AI Best</strong><br />
+        <sub>Farmer Cotton (₹3,887) vs AI Moong (₹18,903). Itemized CACP A₂+FL cost breakdown &amp; profit delta.</sub>
+      </td>
+      <td align="center" valign="top">
+        <img src="web_deck/presentation_assets/flow_step_4_whatif.png" width="100%" alt="What-If Risk Sandbox" />
+        <br /><br />
+        <strong>Pre-Sowing Stress-Test</strong><br />
+        <sub>Dynamic sliders for −30% rain deficit &amp; −25% price crash. Instant sensitivity recalibration (₹19,060/ac).</sub>
+      </td>
+      <td align="center" valign="top">
+        <img src="web_deck/presentation_assets/flow_step_5_calendar.png" width="100%" alt="Action Calendar" />
+        <br /><br />
+        <strong>Operational Guidance</strong><br />
+        <sub>Day-by-day seed treatment, weeding &amp; harvest plan + 1-Click offline printable QR slip for CSCs.</sub>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## 📜 12. License & Attribution
 
 * **Project**: **फसल-दिशा (Fasal-Disha)**
 * **Initiative**: **Smart India Hackathon (SIH)**

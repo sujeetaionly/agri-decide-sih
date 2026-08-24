@@ -180,36 +180,101 @@ export const apiService = {
     }
 
     // Graceful Offline / Client-Side Fallback Engine
-    const targetCrop = (payload.intended_crops && payload.intended_crops[0]) || 'SOYBEAN';
-    const topRec = getDynamicCropDetail(targetCrop, {
+    const evaluatedCandidates = (payload.candidate_crops || ['SOYBEAN', 'MAIZE', 'BAJRA', 'MOONG', 'TUR', 'COTTON']).map((cId) => {
+      return getDynamicCropDetail(cId, {
+        soilType: payload.soil_type || 'BLACK',
+        waterCapacity: payload.water_capacity_level || 'MEDIUM',
+        landAcres: payload.total_land_acres || 1.0,
+      });
+    });
+    evaluatedCandidates.sort((a, b) => b.suitability_pct - a.suitability_pct);
+
+    const topRec = evaluatedCandidates[0] || getDynamicCropDetail('SOYBEAN', {
       soilType: payload.soil_type || 'BLACK',
       waterCapacity: payload.water_capacity_level || 'MEDIUM',
       landAcres: payload.total_land_acres || 1.0,
     });
 
-    const comparisonList: ComparisonCropItem[] = (payload.candidate_crops || ['SOYBEAN', 'MAIZE', 'BAJRA', 'MOONG', 'TUR']).map((cId) => {
-      const c = getDynamicCropDetail(cId, {
+    const comparisonList: ComparisonCropItem[] = evaluatedCandidates.map((c) => ({
+      crop_id: c.crop_id,
+      crop_name_en: c.crop_name_en,
+      crop_name_hi: c.crop_name_hi,
+      crop_name_mr: c.crop_name_mr,
+      crop_name_gu: c.crop_name_gu,
+      crop_name_raj: c.crop_name_raj,
+      suitability_pct: c.suitability_pct,
+      sowing_window_status: 'Optimal',
+      total_cost_inr_per_acre: c.total_cost_inr_per_acre,
+      cost_breakdown: c.cost_breakdown,
+      expected_yield_qtl_per_acre: c.expected_yield_qtl_per_acre,
+      forecasted_mandi_price_inr_per_qtl: c.forecasted_mandi_price_inr_per_qtl,
+      expected_net_profit_per_acre_inr: c.expected_net_profit_per_acre_inr,
+      duration_days: c.duration_days,
+      net_profit_per_day_inr: c.net_profit_per_day_inr,
+    }));
+
+    // Compute Head-to-Head Intended vs Recommended Comparison in fallback
+    let intendedVsRecommended: IntendedVsRecommendedComparison | null = null;
+    const cleanIntended = (payload.intended_crops || []).filter(
+      (c) => c && c !== 'NOT_SURE' && c !== 'OTHER' && MASTER_CROP_MAP[c]
+    );
+
+    if (cleanIntended.length > 0) {
+      const intendedBest = getDynamicCropDetail(cleanIntended[0], {
         soilType: payload.soil_type || 'BLACK',
         waterCapacity: payload.water_capacity_level || 'MEDIUM',
+        landAcres: payload.total_land_acres || 1.0,
       });
-      return {
-        crop_id: c.crop_id,
-        crop_name_en: c.crop_name_en,
-        crop_name_hi: c.crop_name_hi,
-        crop_name_mr: c.crop_name_mr,
-        crop_name_gu: c.crop_name_gu,
-        crop_name_raj: c.crop_name_raj,
-        suitability_pct: c.suitability_pct,
-        sowing_window_status: 'Optimal',
-        total_cost_inr_per_acre: c.total_cost_inr_per_acre,
-        cost_breakdown: c.cost_breakdown,
-        expected_yield_qtl_per_acre: c.expected_yield_qtl_per_acre,
-        forecasted_mandi_price_inr_per_qtl: c.forecasted_mandi_price_inr_per_qtl,
-        expected_net_profit_per_acre_inr: c.expected_net_profit_per_acre_inr,
-        duration_days: c.duration_days,
-        net_profit_per_day_inr: c.net_profit_per_day_inr,
+
+      const profitDiff = Math.max(
+        0,
+        Math.round(topRec.expected_net_profit_per_acre_inr - intendedBest.expected_net_profit_per_acre_inr)
+      );
+      const isAlreadyBest = topRec.crop_id === intendedBest.crop_id || profitDiff <= 200;
+      const gainPct =
+        !isAlreadyBest && intendedBest.expected_net_profit_per_acre_inr > 0
+          ? Math.round((profitDiff / intendedBest.expected_net_profit_per_acre_inr) * 1000) / 10
+          : 0;
+
+      intendedVsRecommended = {
+        has_intended_crops: true,
+        is_intended_already_best: isAlreadyBest,
+        profit_difference_per_acre_inr: profitDiff,
+        profit_gain_pct: gainPct,
+        intended_crop: {
+          crop_id: intendedBest.crop_id,
+          crop_name_en: intendedBest.crop_name_en,
+          crop_name_hi: intendedBest.crop_name_hi,
+          crop_name_mr: intendedBest.crop_name_mr,
+          crop_name_gu: intendedBest.crop_name_gu,
+          crop_name_raj: intendedBest.crop_name_raj,
+          suitability_pct: intendedBest.suitability_pct,
+          total_cost_inr_per_acre: intendedBest.total_cost_inr_per_acre,
+          expected_yield_qtl_per_acre: intendedBest.expected_yield_qtl_per_acre,
+          expected_net_profit_per_acre_inr: intendedBest.expected_net_profit_per_acre_inr,
+          duration_days: intendedBest.duration_days,
+        },
+        recommended_crop: {
+          crop_id: topRec.crop_id,
+          crop_name_en: topRec.crop_name_en,
+          crop_name_hi: topRec.crop_name_hi,
+          crop_name_mr: topRec.crop_name_mr,
+          crop_name_gu: topRec.crop_name_gu,
+          crop_name_raj: topRec.crop_name_raj,
+          suitability_pct: topRec.suitability_pct,
+          total_cost_inr_per_acre: topRec.total_cost_inr_per_acre,
+          expected_yield_qtl_per_acre: topRec.expected_yield_qtl_per_acre,
+          expected_net_profit_per_acre_inr: topRec.expected_net_profit_per_acre_inr,
+          duration_days: topRec.duration_days,
+        },
+        recommendation_insight: isAlreadyBest
+          ? `शानदार निर्णय! आपकी सोची हुई फसल (${intendedBest.crop_name_hi}) ही आपकी जमीन के लिए सबसे उत्तम और सर्वाधिक मुनाफा देने वाली है।`
+          : `अगर आप अपनी सोची हुई फसल (${intendedBest.crop_name_hi}) की जगह AI अनुशंसित (${topRec.crop_name_hi}) लगाते हैं, तो आपको प्रति एकड़ ₹${profitDiff.toLocaleString('en-IN')} (+${gainPct}%) अधिक शुद्ध मुनाफा मिल सकता है!`,
+        recommendation_insight_en: isAlreadyBest
+          ? `Great choice! Your considered crop (${intendedBest.crop_name_en}) is already the optimal choice for your farm.`
+          : `Switching from your intended ${intendedBest.crop_name_en} to AI recommended ${topRec.crop_name_en} can yield ₹${profitDiff.toLocaleString('en-IN')} (+${gainPct}%) extra net profit per acre!`,
       };
-    });
+    }
 
     return {
       status: 'success',
@@ -222,6 +287,7 @@ export const apiService = {
       },
       top_recommendation: topRec,
       comparison_matrix: comparisonList,
+      intended_vs_recommended: intendedVsRecommended,
     };
   },
 
