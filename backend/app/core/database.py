@@ -21,10 +21,17 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def get_db():
-    """FastAPI Dependency for database sessions with safe teardown."""
-    db = SessionLocal()
+    """FastAPI Dependency for database sessions with safe teardown and fallback."""
+    db = None
     try:
+        db = SessionLocal()
         yield db
+    except Exception:
+        yield None
     finally:
-        db.close()
+        if db:
+            try:
+                db.close()
+            except Exception:
+                pass
 
